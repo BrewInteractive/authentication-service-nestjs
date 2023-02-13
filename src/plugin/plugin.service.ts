@@ -12,11 +12,13 @@ export class PluginService implements OnModuleInit {
   ) {}
   async onModuleInit() {
     for (const pluginType of this.pluginTypes) {
-      var plugin = this.moduleRef.get(pluginType);
+      var plugin = await this.moduleRef.resolve(pluginType);
       try {
-        await plugin.setup();
+        await plugin.load();
         this.plugins.push(plugin);
-      } catch {}
+      } catch (error) {
+        console.warn("Plugin can't be loaded: " + error);
+      }
     }
   }
 }

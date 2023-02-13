@@ -4,8 +4,9 @@ import { Module } from "@nestjs/common";
 import { PluginModule } from "./plugin/plugin.module";
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
   imports: [PluginModule.registerAsync()],
+  providers: [AppService],
+  exports: [AppService],
+  controllers: [AppController],
 })
 export class AppModule {}
