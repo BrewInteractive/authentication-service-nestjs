@@ -2,12 +2,19 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AppService {
-  constructor() {}
+  private textsToAppend: string[];
+  constructor() {
+    this.textsToAppend = [];
+  }
   getHello(): string {
-    return "Hello World!" + this.appendText();
+    return this.getHelloWorld() + this.textsToAppend.join(" ");
   }
 
-  appendText(): string {
-    return "";
+  getHelloWorld(): string {
+    return "Hello World!";
+  }
+
+  appendText(text: string): void {
+    this.textsToAppend.push(text);
   }
 }

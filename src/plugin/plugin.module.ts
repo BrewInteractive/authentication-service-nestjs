@@ -1,18 +1,21 @@
+import {} from "@nestjs/common";
+
 import * as Plugins from "./plugins";
 
-import { DynamicModule, Module } from "@nestjs/common";
+import { DynamicModule, Module, forwardRef } from "@nestjs/common";
 
-import { AppService } from "../app.service";
+import { AppModule } from "../app.module";
 import { PluginService } from "./plugin.service";
 
-@Module({})
+@Module({
+  imports: [forwardRef(() => AppModule)],
+})
 export class PluginModule {
   public static async registerAsync(): Promise<DynamicModule> {
     var pluginTypes = Object.values(Plugins);
     return {
       module: PluginModule,
       providers: [
-        AppService,
         {
           provide: "PLUGINTYPES",
           useValue: pluginTypes,
@@ -20,7 +23,6 @@ export class PluginModule {
         PluginService,
         ...pluginTypes,
       ],
-      exports: [PluginService, ...pluginTypes],
     };
   }
 }

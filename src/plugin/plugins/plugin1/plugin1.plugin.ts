@@ -1,25 +1,17 @@
-import { Injectable, Module, OnModuleInit } from "@nestjs/common";
+import { Inject, Injectable, Module } from "@nestjs/common";
 
 import { AppService } from "../../../app.service";
-import { ModuleRef } from "@nestjs/core";
 import { Plugin } from "../../interfaces/plugin.interface";
 
 @Injectable()
-@Module({
-  providers: [
-    AppService,
-    {
-      provide: AppService,
-      useClass: class extends AppService {
-        appendText(): string {
-          return "Test1";
-        }
-      },
-      useExisting: AppService,
-    },
-  ],
-  exports: [],
-})
 export class Plugin1Plugin implements Plugin {
-  async setup() {}
+  @Inject(AppService)
+  private readonly appService: AppService;
+  load(): Promise<void> {
+    this.appService.getHelloWorld = function () {
+      return "Hello World overriden!";
+    };
+    this.appService.appendText("Text1");
+    return Promise.resolve();
+  }
 }
