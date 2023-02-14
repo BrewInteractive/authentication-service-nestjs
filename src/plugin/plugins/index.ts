@@ -13,7 +13,7 @@ fs.readdirSync(pluginsDirectory)
       directory,
       `${directory}.plugin`
     );
-    console.log(modulePath);
+
     try {
       const module = require(modulePath);
       Object.keys(module).forEach((key) => {
