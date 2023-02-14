@@ -1,4 +1,4 @@
-import { Inject, Injectable, Module } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 
 import { AppService } from "../../../app.service";
 import { Plugin } from "../../interfaces/plugin.interface";
