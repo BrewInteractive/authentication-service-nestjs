@@ -5,9 +5,10 @@ import { DynamicModule, Module, Provider, forwardRef } from "@nestjs/common";
 import { AppModule } from "../app.module";
 import { Plugin } from "./interfaces/plugin.interface";
 import { PluginService } from "./plugin.service";
+import { PluginTestModule } from "../plugin-test/plugin-test.module";
 
 @Module({
-  imports: [forwardRef(() => AppModule)],
+  imports: [forwardRef(() => AppModule), PluginTestModule],
 })
 export class PluginModule {
   public static async registerAsync(): Promise<DynamicModule> {

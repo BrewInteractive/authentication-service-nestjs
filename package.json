@@ -2,9 +2,14 @@
   "name": "brew-authentication-api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "Brew",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "main": "dist/test.js",
+  "files": [
+    "dist/**/*",
+    "*.md"
+  ],
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -19,6 +24,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
+  "keywords": [
+    "authentication"
+  ],
+  "publishConfig": {
+    "registry": "https://www.myget.org/F/brewww/npm/"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0"
+  },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
@@ -26,6 +40,10 @@
     "reflect-metadata": "^0.1.13",
     "require-dir": "^1.2.0",
     "rxjs": "^7.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/brewinteractive/brew-authentication-api-sample-plugin"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
