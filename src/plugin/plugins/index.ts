@@ -3,47 +3,68 @@ import * as path from "path";
 
 function traverseDirectory(...parentDirectories: string[]) {
   parentDirectories.forEach((parentDirectory) => {
-    const directories = fs
-      .readdirSync(parentDirectory, { withFileTypes: true })
+    fs.readdirSync(parentDirectory, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name)
-      .filter((dirName) =>
-        fs.existsSync(path.join(parentDirectory, dirName, "package.json"))
-      );
-
-    for (const directoryName of directories) {
-      const packageJsonPath = path.join(
-        pluginsDir,
-        directoryName,
-        "package.json"
-      );
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-      if (
-        packageJson.brewAuthenticationApi &&
-        packageJson.brewAuthenticationApi.type === "plugin"
-      ) {
-        const modulePath = path.join(
-          parentDirectory,
-          directoryName,
-          `${directoryName}.plugin`
+      .filter((directoryName) =>
+        packageJsonExists(parentDirectory, directoryName)
+      )
+      .forEach((directoryName) => {
+        const packageJson = parsePackageJson(
+          createPackageJsonPath(parentDirectory, directoryName)
         );
-
-        try {
-          const module = require(modulePath);
-          Object.keys(module).forEach((key) => {
-            exports[key] = module[key];
-          });
-        } catch (error) {
-          console.error(
-            `Unable to import module at path: ${modulePath}.`,
-            error
-          );
-        }
-      }
-    }
+        if (isBrewAuthenticationApiPlugin(packageJson))
+          exportModule(createModulePath(parentDirectory, directoryName));
+      });
   });
 }
 
-const pluginsDir = path.join(__dirname, "./");
+function packageJsonExists(
+  parentDirectory: string,
+  directoryName: string
+): boolean {
+  return fs.existsSync(
+    path.join(parentDirectory, directoryName, "package.json")
+  );
+}
 
-traverseDirectory(pluginsDir);
+function createPackageJsonPath(
+  parentDirectory: string,
+  directoryName: string
+): string {
+  return path.join(parentDirectory, directoryName, "package.json");
+}
+
+function parsePackageJson(packageJsonPath: string): any {
+  return JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+}
+
+function isBrewAuthenticationApiPlugin(packageJson: any): boolean {
+  return (
+    packageJson.brewAuthenticationApi &&
+    packageJson.brewAuthenticationApi.type === "plugin"
+  );
+}
+
+function createModulePath(
+  parentDirectory: string,
+  directoryName: string
+): string {
+  return path.join(parentDirectory, directoryName, `${directoryName}.plugin`);
+}
+
+function exportModule(modulePath: string): void {
+  try {
+    const module = require(modulePath);
+    Object.keys(module).forEach((key) => {
+      exports[key] = module[key];
+    });
+  } catch (error) {
+    console.error(`Unable to import module at path: ${modulePath}.`, error);
+  }
+}
+
+const pluginsDir = path.join(__dirname, "./");
+const nodeModulesDir = path.join(__dirname, "../../../node_modules");
+
+traverseDirectory(pluginsDir, nodeModulesDir);
