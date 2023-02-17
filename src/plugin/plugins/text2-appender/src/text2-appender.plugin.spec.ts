@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { PluginTestModule } from "../../../plugin-test/plugin-test.module";
-import { PluginTestService } from "../../../plugin-test/plugin-test.service";
-import { Text2AppenderPlugin } from "./text2-appender.plugin";
+import { PluginTestModule } from "../../../../plugin-test/plugin-test.module";
+import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
+import { Text2AppenderPlugin } from "../src/text2-appender.plugin";
 
 describe("Text2AppenderPlugin", () => {
   let plugin: Text2AppenderPlugin;

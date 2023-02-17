@@ -50,7 +50,12 @@ function createModulePath(
   parentDirectory: string,
   directoryName: string
 ): string {
-  return path.join(parentDirectory, directoryName, `${directoryName}.plugin`);
+  return path.join(
+    parentDirectory,
+    directoryName,
+    "src",
+    `${directoryName}.plugin`
+  );
 }
 
 function exportModule(modulePath: string): void {

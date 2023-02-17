@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 
-import { Plugin } from "../../interfaces/plugin.interface";
-import { PluginTestService } from "../../../plugin-test/plugin-test.service";
-import { brewAuthenticationApi } from "./package.json";
+import { Plugin } from "../../../interfaces/plugin.interface";
+import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
+import { brewAuthenticationApi } from "../package.json";
 
 @Injectable()
 export class Text2AppenderPlugin implements Plugin {

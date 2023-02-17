@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { HelloWorldOverriderPlugin } from "./hello-world-overrider.plugin";
-import { PluginTestModule } from "../../../plugin-test/plugin-test.module";
-import { PluginTestService } from "../../../plugin-test/plugin-test.service";
+import { HelloWorldOverriderPlugin } from "../src/hello-world-overrider.plugin";
+import { PluginTestModule } from "../../../../plugin-test/plugin-test.module";
+import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
 
 describe("HelloWorldOverriderPlugin", () => {
   let plugin: HelloWorldOverriderPlugin;
