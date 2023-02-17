@@ -4,7 +4,7 @@ import { PluginTestModule } from "../../../plugin-test/plugin-test.module";
 import { PluginTestService } from "../../../plugin-test/plugin-test.service";
 import { Text2AppenderPlugin } from "./text2-appender.plugin";
 
-describe("HelloWorldOverriderPlugin", () => {
+describe("Text2AppenderPlugin", () => {
   let plugin: Text2AppenderPlugin;
   let pluginTestService: PluginTestService;
 
