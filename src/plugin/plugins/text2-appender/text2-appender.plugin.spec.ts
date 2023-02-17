@@ -1,20 +1,20 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { HelloWorldOverriderPlugin } from "./hello-world-overrider.plugin";
 import { PluginTestModule } from "../../../plugin-test/plugin-test.module";
 import { PluginTestService } from "../../../plugin-test/plugin-test.service";
+import { Text2AppenderPlugin } from "./text2-appender.plugin";
 
 describe("HelloWorldOverriderPlugin", () => {
-  let plugin: HelloWorldOverriderPlugin;
+  let plugin: Text2AppenderPlugin;
   let pluginTestService: PluginTestService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [PluginTestModule],
-      providers: [HelloWorldOverriderPlugin],
+      providers: [Text2AppenderPlugin],
     }).compile();
 
-    plugin = module.get<HelloWorldOverriderPlugin>(HelloWorldOverriderPlugin);
+    plugin = module.get<Text2AppenderPlugin>(Text2AppenderPlugin);
     plugin.load();
     pluginTestService = module.get<PluginTestService>(PluginTestService);
   });
@@ -23,11 +23,7 @@ describe("HelloWorldOverriderPlugin", () => {
     expect(plugin).toBeDefined();
   });
 
-  it("should override getHelloWorld method of PluginTestService", () => {
-    expect(pluginTestService.getHelloWorld()).toBe("Hello World overriden!");
-  });
-
   it("should override getHello method of PluginTestService", () => {
-    expect(pluginTestService.getHello()).toBe("Hello World overriden!Text1");
+    expect(pluginTestService.getHello()).toBe("Hello World!Text2");
   });
 });
