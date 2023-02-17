@@ -1,14 +1,15 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppService } from "../../../app.service";
 import { HelloWorldOverriderPlugin } from "./hello-world-overrider.plugin";
+import { PluginTestModule } from "../../../plugin-test/plugin-test.module";
 
 describe("HelloWorldOverriderPlugin", () => {
   let service: HelloWorldOverriderPlugin;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [HelloWorldOverriderPlugin, AppService],
+      imports: [PluginTestModule],
+      providers: [HelloWorldOverriderPlugin],
     }).compile();
 
     service = module.get<HelloWorldOverriderPlugin>(HelloWorldOverriderPlugin);
