@@ -1,7 +1,7 @@
 {
   "name": "@brew-authentication-api/hello-world-overrider",
   "version": "1.0.0",
-  "description": "Sample plugin to override AppService",
+  "description": "Sample plugin to override PluginTestService",
   "main": "index.js",
   "scripts": {
     "test": "jest",

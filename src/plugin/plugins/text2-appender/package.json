@@ -1,7 +1,7 @@
 {
   "name": "@brew-authentication-api/text2-appender",
   "version": "1.0.0",
-  "description": "Sample plugin for brew-authentication-api. It appends the \"Text2\" text using appendText method of SamplePluginService.",
+  "description": "Sample plugin for brew-authentication-api. It appends the \"Text2\" text using appendText method of PluginTestService.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
