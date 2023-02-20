@@ -354,6 +354,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@brew-authentication-api/text3-appender-plugin@1.0.0":
+  version "1.0.0"
+  resolved "https://www.myget.org/F/brewww/npm/@brew-authentication-api/text3-appender-plugin/-/@brew-authentication-api/text3-appender-plugin-1.0.0.tgz#805227f55cc21b768c169e2866737b7870a5fcaa"
+  integrity sha1-gFIn9VzCG3aMFp4oZnN7eHCl/Ko=
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
