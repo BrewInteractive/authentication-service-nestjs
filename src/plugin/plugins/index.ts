@@ -23,9 +23,8 @@ function packageJsonExists(
   parentDirectory: string,
   directoryName: string
 ): boolean {
-  return fs.existsSync(
-    path.join(parentDirectory, directoryName, "package.json")
-  );
+  console.log(directoryName);
+  return fs.existsSync(createPackageJsonPath(parentDirectory, directoryName));
 }
 
 function createPackageJsonPath(
@@ -70,6 +69,10 @@ function exportModule(modulePath: string): void {
 }
 
 const pluginsDir = path.join(__dirname, "./");
-const nodeModulesDir = path.join(__dirname, "../../../node_modules");
-
+const nodeModulesDir = path.join(
+  __dirname,
+  "../../../node_modules/@brew-authentication-api"
+);
 traverseDirectory(pluginsDir, nodeModulesDir);
+// traverseDirectory(nodeModulesDir);
+// traverseDirectory(pluginsDir);
