@@ -5,7 +5,7 @@ import { PluginModule } from "./plugin/plugin.module";
 import { PluginTestModule } from "./plugin-test/plugin-test.module";
 
 @Module({
-  imports: [PluginModule.registerAsync(), PluginTestModule],
+  imports: [PluginTestModule, PluginModule.registerAsync()],
   providers: [AppService],
   exports: [AppService],
   controllers: [AppController],

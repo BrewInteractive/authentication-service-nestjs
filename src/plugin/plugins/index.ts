@@ -14,7 +14,13 @@ function traverseDirectory(...parentDirectories: string[]) {
           createPackageJsonPath(parentDirectory, directoryName)
         );
         if (isBrewAuthenticationApiPlugin(packageJson))
-          exportModule(createModulePath(parentDirectory, directoryName));
+          exportModule(
+            createModulePath(
+              parentDirectory,
+              directoryName,
+              packageJson.brewAuthenticationApi.name
+            )
+          );
       });
   });
 }
@@ -23,7 +29,6 @@ function packageJsonExists(
   parentDirectory: string,
   directoryName: string
 ): boolean {
-  console.log(directoryName);
   return fs.existsSync(createPackageJsonPath(parentDirectory, directoryName));
 }
 
@@ -41,20 +46,23 @@ function parsePackageJson(packageJsonPath: string): any {
 function isBrewAuthenticationApiPlugin(packageJson: any): boolean {
   return (
     packageJson.brewAuthenticationApi &&
-    packageJson.brewAuthenticationApi.type === "plugin"
+    packageJson.brewAuthenticationApi.type === "plugin" &&
+    packageJson.brewAuthenticationApi.name
   );
 }
 
 function createModulePath(
   parentDirectory: string,
-  directoryName: string
+  directoryName: string,
+  pluginName: string
 ): string {
-  return path.join(
-    parentDirectory,
-    directoryName,
-    "src",
-    `${directoryName}.plugin`
-  );
+  const directoryPath = path.join(parentDirectory, directoryName);
+  const srcFolder = path.join(directoryPath, "./src");
+  const dirSrcFolder = path.join(directoryPath, "./dist/src");
+  if (fs.existsSync(srcFolder))
+    return path.join(srcFolder, `${pluginName}.plugin`);
+
+  return path.join(dirSrcFolder, `${pluginName}.plugin`);
 }
 
 function exportModule(modulePath: string): void {

@@ -1,22 +1,17 @@
 import { Inject, Injectable } from "@nestjs/common";
 
-import { Plugin } from "../../../interfaces/plugin.interface";
+import { BasePlugin } from "../../../abstract/base-plugin.plugin";
 import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
 import { brewAuthenticationApi } from "../package.json";
 
 @Injectable()
-export class Text2AppenderPlugin implements Plugin {
+export class Text2AppenderPlugin extends BasePlugin {
   @Inject(PluginTestService)
-  private readonly pluginTestService: PluginTestService;
-
+  private pluginTestService: PluginTestService;
   constructor() {
-    this.name = brewAuthenticationApi.name;
-    this.displayName = brewAuthenticationApi.displayName;
+    super(brewAuthenticationApi);
   }
-  name: string;
-  displayName: string;
-
-  load(): Promise<void> {
+  async load(): Promise<void> {
     this.pluginTestService.appendText("Text2");
     return Promise.resolve();
   }
