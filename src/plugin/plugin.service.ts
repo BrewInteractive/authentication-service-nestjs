@@ -15,9 +15,9 @@ export class PluginService implements OnModuleInit {
   }
   async onModuleInit() {
     for (const pluginType of this.pluginTypes) {
-      const plugin = await this.moduleRef.resolve(pluginType);
+      const plugin = this.moduleRef.get(pluginType);
       try {
-        await plugin.load();
+        await plugin.load(this.moduleRef);
         this.plugins.push(plugin);
 
         this.logger.log(`${plugin.displayName} plugin is loaded.`);

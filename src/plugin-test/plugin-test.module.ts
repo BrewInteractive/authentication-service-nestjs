@@ -6,7 +6,7 @@ import { PluginTestService } from "./plugin-test.service";
 
 @Module({
   controllers: [PluginTestController],
-  providers: [PluginTestService],
-  exports: [PluginTestService],
+  providers: [{ provide: "PluginTestService", useClass: PluginTestService }],
+  exports: ["PluginTestService"],
 })
 export class PluginTestModule {}

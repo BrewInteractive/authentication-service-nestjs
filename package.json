@@ -1,6 +1,6 @@
 {
   "name": "brew-authentication-api",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Authenticator api for Brew projects.",
   "author": "Brew",
   "license": "MIT",
@@ -8,7 +8,6 @@
   "main": "dist/main.js",
   "files": [
     "dist/**/*",
-    "src/**/*",
     "*.md"
   ],
   "scripts": {
@@ -35,7 +34,7 @@
     "@nestjs/common": "^9.0.0"
   },
   "dependencies": {
-    "@brew-authentication-api/text3-appender-plugin": "^1.0.23",
+    "@brew-authentication-api/text3-appender-plugin": "^1.0.25",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",

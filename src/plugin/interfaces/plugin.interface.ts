@@ -1,5 +1,7 @@
+import { ModuleRef } from "@nestjs/core";
+
 export interface IPlugin {
   name: string;
   displayName: string;
-  load(): Promise<void>;
+  load(moduleRef: ModuleRef): Promise<void>;
 }
