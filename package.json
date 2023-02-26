@@ -1,6 +1,6 @@
 {
   "name": "brew-authentication-api",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Authenticator api for Brew projects.",
   "author": "Brew",
   "license": "MIT",
