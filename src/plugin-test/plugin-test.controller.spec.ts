@@ -9,7 +9,9 @@ describe("PluginTestController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PluginTestController],
-      providers: [PluginTestService],
+      providers: [
+        { provide: "PluginTestService", useClass: PluginTestService },
+      ],
     }).compile();
 
     controller = module.get<PluginTestController>(PluginTestController);
@@ -19,9 +21,7 @@ describe("PluginTestController", () => {
     expect(controller).toBeDefined();
   });
 
-  describe("root", () => {
-    it('should return "Hello World!"', () => {
-      expect(controller.getHello()).toBe("Hello World!");
-    });
+  it('should return "Hello World!"', () => {
+    expect(controller.getHello()).toBe("Hello World!");
   });
 });

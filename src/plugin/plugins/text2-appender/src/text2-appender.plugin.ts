@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 
 import { BasePlugin } from "../../../abstract/base-plugin.plugin";
-import { ModuleRef } from "@nestjs/core";
 import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
 import { brewAuthenticationApi } from "../package.json";
 
@@ -12,7 +11,7 @@ export class Text2AppenderPlugin extends BasePlugin {
   constructor() {
     super(brewAuthenticationApi);
   }
-  async load(moduleRef: ModuleRef): Promise<void> {
+  async load(): Promise<void> {
     this.pluginTestService.appendText("Text2");
     return Promise.resolve();
   }

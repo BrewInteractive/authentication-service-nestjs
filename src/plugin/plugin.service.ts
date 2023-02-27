@@ -17,12 +17,14 @@ export class PluginService implements OnModuleInit {
     for (const pluginType of this.pluginTypes) {
       const plugin = this.moduleRef.get(pluginType);
       try {
-        await plugin.load(this.moduleRef);
+        await plugin.load();
         this.plugins.push(plugin);
 
         this.logger.log(`${plugin.displayName} plugin is loaded.`);
       } catch (error) {
-        this.logger.error("Plugin can't be loaded: " + error);
+        this.logger.warn(
+          `${plugin.displayName} plugin can't be loaded.: ${error}`
+        );
       }
     }
   }

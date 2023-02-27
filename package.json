@@ -34,7 +34,7 @@
     "@nestjs/common": "^9.0.0"
   },
   "dependencies": {
-    "@brew-authentication-api/text3-appender-plugin": "^1.0.25",
+    "@brew-authentication-api/text3-appender-plugin": "^1.0.26",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",

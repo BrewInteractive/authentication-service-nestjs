@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { PluginTestModule } from "@/plugin-test/plugin-test.module";
-import { PluginTestService } from "@/plugin-test/plugin-test.service";
+import { PluginTestModule } from "../../../../plugin-test/plugin-test.module";
+import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
 import { Text2AppenderPlugin } from "../src/text2-appender.plugin";
 
 describe("Text2AppenderPlugin", () => {
@@ -16,7 +16,7 @@ describe("Text2AppenderPlugin", () => {
 
     plugin = module.get<Text2AppenderPlugin>(Text2AppenderPlugin);
     await plugin.load();
-    pluginTestService = module.get<PluginTestService>(PluginTestService);
+    pluginTestService = module.get<PluginTestService>("PluginTestService");
   });
 
   it("should be defined", () => {
