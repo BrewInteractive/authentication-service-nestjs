@@ -3,25 +3,27 @@ import * as path from "path";
 
 function traverseDirectory(...parentDirectories: string[]) {
   parentDirectories.forEach((parentDirectory) => {
-    fs.readdirSync(parentDirectory, { withFileTypes: true })
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => dirent.name)
-      .filter((directoryName) =>
-        packageJsonExists(parentDirectory, directoryName)
-      )
-      .forEach((directoryName) => {
-        const packageJson = parsePackageJson(
-          createPackageJsonPath(parentDirectory, directoryName)
-        );
-        if (isAuthenticationServicePlugin(packageJson))
-          exportModule(
-            createModulePath(
-              parentDirectory,
-              directoryName,
-              packageJson.authenticationService.name
-            )
+    if (fs.existsSync(parentDirectory)) {
+      fs.readdirSync(parentDirectory, { withFileTypes: true })
+        .filter((dirent) => dirent.isDirectory())
+        .map((dirent) => dirent.name)
+        .filter((directoryName) =>
+          packageJsonExists(parentDirectory, directoryName)
+        )
+        .forEach((directoryName) => {
+          const packageJson = parsePackageJson(
+            createPackageJsonPath(parentDirectory, directoryName)
           );
-      });
+          if (isAuthenticationServicePlugin(packageJson))
+            exportModule(
+              createModulePath(
+                parentDirectory,
+                directoryName,
+                packageJson.authenticationService.name
+              )
+            );
+        });
+    }
   });
 }
 
