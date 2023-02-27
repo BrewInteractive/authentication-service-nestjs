@@ -13,12 +13,12 @@ function traverseDirectory(...parentDirectories: string[]) {
         const packageJson = parsePackageJson(
           createPackageJsonPath(parentDirectory, directoryName)
         );
-        if (isBrewAuthenticationApiPlugin(packageJson))
+        if (isAuthenticationServicePlugin(packageJson))
           exportModule(
             createModulePath(
               parentDirectory,
               directoryName,
-              packageJson.brewAuthenticationApi.name
+              packageJson.authenticationService.name
             )
           );
       });
@@ -43,11 +43,11 @@ function parsePackageJson(packageJsonPath: string): any {
   return JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 }
 
-function isBrewAuthenticationApiPlugin(packageJson: any): boolean {
+function isAuthenticationServicePlugin(packageJson: any): boolean {
   return (
-    packageJson.brewAuthenticationApi &&
-    packageJson.brewAuthenticationApi.type === "plugin" &&
-    packageJson.brewAuthenticationApi.name
+    packageJson.authenticationService &&
+    packageJson.authenticationService.type === "plugin" &&
+    packageJson.authenticationService.name
   );
 }
 
@@ -82,5 +82,3 @@ const nodeModulesDir = path.join(
   "../../../node_modules/@brew-authentication-api"
 );
 traverseDirectory(pluginsDir, nodeModulesDir);
-// traverseDirectory(nodeModulesDir);
-// traverseDirectory(pluginsDir);
