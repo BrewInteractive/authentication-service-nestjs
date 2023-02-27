@@ -79,8 +79,5 @@ function exportModule(modulePath: string): void {
 }
 
 const pluginsDir = path.join(__dirname, "./");
-const nodeModulesDir = path.join(
-  __dirname,
-  "../../../node_modules/@brew-authentication-api"
-);
+const nodeModulesDir = path.join(__dirname, "../../../node_modules/@brewww");
 traverseDirectory(pluginsDir, nodeModulesDir);
