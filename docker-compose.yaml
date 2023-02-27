@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  pgadmin:
+    image: dpage/pgadmin4:6.18
+    depends_on:
+      - 'postgres'
+    ports:
+      - 29738:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: info@brewwww.com
+      PGADMIN_DEFAULT_PASSWORD: brew
+  postgres:
+    image: postgres:15
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  brew-authentication-api:
+    build: .
+    ports:
+      - '80:3000'
+    depends_on:
+      - 'postgres'
+    restart: always
+
+volumes:
+  pgadmin_data:

@@ -1,0 +1,21 @@
+{
+  "name": "@brew-authentication-api/hello-world-overrider",
+  "version": "1.0.0",
+  "description": "Sample plugin to override PluginTestService",
+  "main": "./dist/src",
+  "typings": "./dist/src",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "brewAuthenticationApi":{
+    "name": "hello-world-overrider",
+    "type":"plugin",
+    "displayName": "Hello World Overrider"
+  },
+  "author": "Brew",
+  "license": "ISC"
+}
