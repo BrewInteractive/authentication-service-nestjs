@@ -1,7 +1,7 @@
 {
-  "name": "brew-authentication-api",
-  "version": "0.0.8",
-  "description": "Authenticator api for Brew projects.",
+  "name": "@brewww/authentication-service",
+  "version": "1.0.0",
+  "description": "Authenticator service for Brew projects.",
   "author": "Brew",
   "license": "MIT",
   "readmeFilename": "README.md",
@@ -27,9 +27,6 @@
   "keywords": [
     "authentication"
   ],
-  "publishConfig": {
-    "registry": "https://www.myget.org/F/brewww/npm/"
-  },
   "peerDependencies": {
     "@nestjs/common": "^9.0.0"
   },
@@ -43,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/brewinteractive/brew-authentication-api-sample-plugin"
+    "url": "https://github.com/BrewInteractive/authentication-service-nestjs"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

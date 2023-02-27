@@ -2,14 +2,14 @@ import { Inject, Injectable } from "@nestjs/common";
 
 import { BasePlugin } from "../../../abstract/base-plugin.plugin";
 import { PluginTestService } from "../../../../plugin-test/plugin-test.service";
-import { brewAuthenticationApi } from "../package.json";
+import { authenticationService } from "../package.json";
 
 @Injectable()
 export class HelloWorldOverriderPlugin extends BasePlugin {
   @Inject("PluginTestService")
   private pluginTestService: PluginTestService;
   constructor() {
-    super(brewAuthenticationApi);
+    super(authenticationService);
   }
 
   async load(): Promise<void> {

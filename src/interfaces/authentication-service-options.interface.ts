@@ -1,4 +1,4 @@
-export interface BrewAuthenticationApiOptions {
+export interface AuthenticationServiceOptions {
   name: string;
   displayName: string;
   type: string;

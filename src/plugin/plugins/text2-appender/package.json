@@ -1,7 +1,7 @@
 {
-  "name": "@brew-authentication-api/text2-appender",
+  "name": "@brewww/authentication-service-text2-appender",
   "version": "1.0.0",
-  "description": "Sample plugin for brew-authentication-api. It appends the \"Text2\" text using appendText method of PluginTestService.",
+  "description": "Sample plugin for Brew Authentication Service. It appends the \"Text2\" text using appendText method of PluginTestService.",
   "main": "./dist/src",
   "typings": "./dist/src",
   "scripts": {
@@ -11,7 +11,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
-  "brewAuthenticationApi":{
+  "authenticationService":{
     "name": "text2-appender",
     "displayName": "Text2 Appender",
     "type":"plugin"
