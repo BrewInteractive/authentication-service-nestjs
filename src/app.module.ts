@@ -6,6 +6,7 @@ import { PluginTestModule } from "./plugin-test/plugin-test.module";
 import { TokenService } from "./token/token.service";
 import { TokenModule } from "./token/token.module";
 import { AuthModule } from "./auth/auth.module";
+import { UserService } from "./user/user.service";
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { AuthModule } from "./auth/auth.module";
     TokenModule,
     AuthModule,
   ],
-  providers: [AppService, TokenService],
+  providers: [AppService, TokenService, UserService],
   exports: [AppService],
   controllers: [AppController],
 })
