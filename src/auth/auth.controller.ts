@@ -1,10 +1,11 @@
 import { Controller, Post } from "@nestjs/common";
-import { UserCredentials } from "./auth.types";
+
+import { LoginDto } from "./dto/login.dto";
 
 @Controller()
 export class AuthController {
   @Post("login")
-  async login(userCredentials: UserCredentials) {}
+  async login(loginDto: LoginDto) {}
 
   @Post("signup")
   async signUp() {}
