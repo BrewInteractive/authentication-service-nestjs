@@ -19,24 +19,20 @@ describe("AuthController", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  describe("login", () => {
-    it("should return user when login is successful", async () => {
-      const loginDto = { username: "testuser", password: "testpass" };
-      const user = { id: 1, username: "testuser" };
+  it("should return user when login is successful", async () => {
+    const loginDto = { userName: "testuser", password: "testpass" };
+    const user = { id: 1, userName: "testuser" };
 
-      jest
-        .spyOn(authService, "validateUser")
-        .mockImplementation(async () => user);
+    jest
+      .spyOn(authService, "validateUser")
+      .mockImplementation(async () => user);
 
-      const result = await controller.login(loginDto);
+    const result = await controller.login(loginDto);
 
-      expect(result).toBe(user);
-    });
+    expect(result).toBe(user);
   });
-  describe("signUp", () => {
-    it('should return "User has been registered successfully"', () => {
-      const result = controller.signUp();
-      expect(result).toBeDefined();
-    });
+  it("should return user has been registered successfully", () => {
+    const result = controller.signUp();
+    expect(result).toBeDefined();
   });
 });

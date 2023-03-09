@@ -8,7 +8,7 @@ export class AuthController {
 
   @Post("login")
   async login(loginDto: LoginDto) {
-    return this.authService.validateUser(loginDto.username, loginDto.password);
+    return this.authService.validateUser(loginDto.userName, loginDto.password);
   }
 
   @Post("signup")
