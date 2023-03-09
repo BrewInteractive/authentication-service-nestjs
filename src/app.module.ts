@@ -13,7 +13,7 @@ import { AuthModule } from "./auth/auth.module";
     TokenModule,
     AuthModule,
   ],
-  providers: [AppService, TokenService],
+  providers: [AppService],
   exports: [AppService],
   controllers: [AppController],
 })
