@@ -3,7 +3,7 @@ import { TokenService } from "./token.service";
 import * as jwt from "jsonwebtoken";
 
 jest.mock("jsonwebtoken", () => ({
-  sign: jest.fn(() => "mockedToken"),
+  sign: jest.fn(() => "fakeToken"),
 }));
 
 describe("TokenService", () => {
@@ -24,7 +24,7 @@ describe("TokenService", () => {
   describe("createToken", () => {
     it("should call jwt.sign with the correct arguments", () => {
       const expiresIn = 3600;
-      const expectedToken = "mockedToken";
+      const expectedToken = "fakeToken";
       const expectedCustomClaims = {};
       const expectedJwtSecret = "testSecret";
       const expectedJwtAlgorithm = "HS256";
@@ -58,11 +58,11 @@ describe("TokenService", () => {
   describe("addCustomClaims", () => {
     it("should add custom claims to the TokenService instance", () => {
       const expectedCustomClaims = {
-        testName: "test",
-        testValue: "test2",
+        claim1: "test",
+        claim2: { objKey: "test2" },
       };
-      tokenService.addCustomClaims("testName", "test");
-      tokenService.addCustomClaims("testValue", "test2");
+      tokenService.addCustomClaims("claim1", "test");
+      tokenService.addCustomClaims("claim2", { objKey: "test2" });
 
       expect(tokenService["customClaims"]).toEqual(expectedCustomClaims);
     });

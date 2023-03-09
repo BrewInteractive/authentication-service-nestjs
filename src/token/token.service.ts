@@ -9,17 +9,13 @@ export class TokenService {
   }
 
   createToken(expiresIn: number) {
-    const token = jwt.sign(
-      this.customClaims,
-      process.env.JWT_SECRET as string,
-      {
-        algorithm: process.env.JWT_ALGORITHM as jwt.Algorithm,
-        audience: process.env.JWT_AUDIENCE,
-        subject: process.env.JWT_SUBJECT,
-        issuer: process.env.JWT_ISSUER,
-        expiresIn,
-      }
-    );
+    const token = jwt.sign(this.customClaims, process.env.JWT_SECRET, {
+      algorithm: process.env.JWT_ALGORITHM as jwt.Algorithm,
+      audience: process.env.JWT_AUDIENCE,
+      subject: process.env.JWT_SUBJECT,
+      issuer: process.env.JWT_ISSUER,
+      expiresIn,
+    });
     return token;
   }
 
