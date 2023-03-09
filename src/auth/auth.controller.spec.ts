@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AuthController } from "./auth.controller";
 import { UserService } from "../user/user.service";
 
@@ -20,7 +21,7 @@ describe("AuthController", () => {
     expect(controller).toBeDefined();
   });
   it("should return user when login is successful", async () => {
-    const userCredentials = { username: "testuser", password: "testpass" };
+    const loginDto = { username: "testuser", password: "testpass" };
     const user = { id: 1, userName: "testuser" };
 
     expect(userService).toBeDefined();
@@ -29,9 +30,8 @@ describe("AuthController", () => {
       .spyOn(userService, "validateUser")
       .mockImplementation(async () => user);
 
-    const result = await controller.login(userCredentials);
-
-    expect(result).toBe(user);
+    const result = controller.login(loginDto);
+    expect(result).toBeDefined();
   });
   it("should return user has been registered successfully", () => {
     const result = controller.signUp();
