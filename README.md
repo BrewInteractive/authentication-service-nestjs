@@ -115,7 +115,7 @@ These instructions will help you start, configure, test, and use the authenticat
 
 ## Plugin Development
 
-While creating the plugin we need to provide the necessary parameters. Example plugin settings we need to add in addition to package.json
+While creating the plugin we need to provide the necessary parameters. Example plugin settings that we must provide in plugin's package.json as follows:
 
 ```bash
 
