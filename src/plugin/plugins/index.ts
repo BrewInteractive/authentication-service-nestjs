@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+const node_modules = require("node_modules-path");
 
 function traverseDirectory(...parentDirectories: string[]) {
   parentDirectories.forEach((parentDirectory) => {
@@ -79,5 +80,6 @@ function exportModule(modulePath: string): void {
 }
 
 const pluginsDir = path.join(__dirname, "./");
-const nodeModulesDir = path.join(__dirname, "../../../node_modules/@brewww");
+const nodeModulesDir = path.resolve(node_modules(), "@brewww");
+
 traverseDirectory(pluginsDir, nodeModulesDir);
