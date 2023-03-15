@@ -118,7 +118,7 @@ These instructions will help you start, configure, test, and use the authenticat
 
 
 
-## Plugin Instructions
+## Plugin Development
 
 While creating the plugin we need to provide the necessary parameters. Example plugin settings we need to add in addition to package.json
 
