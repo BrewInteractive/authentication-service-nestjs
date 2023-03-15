@@ -134,7 +134,7 @@ While creating the plugin we need to provide the necessary parameters. Example p
 -  `"displayName"`: This key is the human readable name of the plugin.
 
 
-You can call the plugin with the command `peerDependencies` you add to `package.json` from another project.
+@brewww/authentication-service package needs to be added to plugin as peer dependency to reach authentication service modules, providers, controllers etc. We also define the version of authentication service that our plugin is developed for.
 
 ```bash
 
