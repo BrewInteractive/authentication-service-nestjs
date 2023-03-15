@@ -1,5 +1,6 @@
 
 
+
 <p  align="center">
 <a  href="http://brewww.com/"  target="_blank"><img  src="https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/Brew-Logo-Small.png?raw=true"  width="300"  alt="Brew Logo"  /></a>
 </p>
@@ -34,13 +35,11 @@ Authentication Service can be used in any project that requires user authenticat
   
 ## Usage Instructions
 
-  
 These instructions provide information on how to use the authentication-service-nestjs project.
 
   
 ### Installation
 
-  
 1. Download or clone the project's Github repository.
 
 2. Install Node.js and npm.
@@ -53,10 +52,6 @@ These instructions provide information on how to use the authentication-service-
 1. Before running the project, copy the `.env.example` file as `.env`.
 
 2. Configure the database connection and JWT settings in the `.env` file.
-
-  
-
-  
 
 ### Usage
 
@@ -95,28 +90,15 @@ $ yarn run test
 $ yarn run test:cov
 ```
 
-  
-
 3. All tests are expected to pass.
-
-  
-
-  
 
 ### API Documentation
 
-  
-
 The API documentation can be accessed via Swagger UI at the `localhost:3000/docs` address. The API documentation provides information on how to use the endpoints.
-
-  
 
 ## Conclusion
 
-  
 These instructions will help you start, configure, test, and use the authentication-service-nestjs project. The project can be used in any project that requires user authentication functions.
-
-
 
 ## Plugin Development
 
@@ -149,12 +131,18 @@ While creating the plugin we need to provide the necessary parameters. Example p
 
 ```
 
-Plugin development is based on dependency injection feature of NestJs. 
+Plugin development is based on dependency injection feature of NestJs.
+
+### Sample Plugins: 
 
 Example plugin package for the project [authentication-service-nestjs-sample-plugin](https://github.com/BrewInteractive/authentication-service-nestjs-sample-plugin)
- 
-  
 
+Also, plugins can be developed under`src/plugin/plugins` path.
+
+ - [Hello World Overrider Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/tree/main/src/plugin/plugins/hello-world-overrider)
+ - [Text2 Appender Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/tree/main/src/plugin/plugins/text2-appender)
+
+ 
 ## Publishing as Package
 
 While publishing the package, we need to adjust the package.json file settings.
@@ -175,16 +163,9 @@ While publishing the package, we need to adjust the package.json file settings.
 
 -  `"files"`: An array of file patterns that should be included in the package when it's published.
 
-  
-
 ## Stay in touch
 
-  
-
 [LinkedIn](https://www.linkedin.com/company/brew-interactive/) - [Twitter](https://twitter.com/BrewInteractive ) - [Instagram](https://www.instagram.com/brew_interactive/)
-
-  
-  
 
 ## License
 
