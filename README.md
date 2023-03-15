@@ -1,21 +1,17 @@
 
 
 <p  align="center">
-<a  href="http://brewww.com/"  target="blank"><img  src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b80d525d-0026-4c9f-bfa5-7c32f8e9250c/Brew-Logo-Small.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230313%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230313T110207Z&X-Amz-Expires=86400&X-Amz-Signature=20ba5981b9341e0cbd4a0d62570e759fd899a8a2abe9451b28c5dd219124c3a2&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Brew-Logo-Small.png%22&x-id=GetObject"  width="300"  alt="Brew Logo"  /></a>
+<a  href="http://brewww.com/"  target="blank"><img  src="https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/Brew-Logo-Small.png?raw=true"  width="300"  alt="Brew Logo"  /></a>
 </p>
-
-  
 
 <h1  align="center">Authentication Service</h1>
 
-  
-
-Authentication Service is a Nest.js based web service designed to provide user authentication functions securely. The project has been outsourced by Brew.
-  
+ 
+Authentication Service is a Nest.js based rest api designed to provide authentication operations by Brew Interactive.  
+ 
 
 ### Purpose
 
-  
 
 The purpose of the project is to manage user authentication processes and securely register them. The main features of the project are:
 
@@ -131,13 +127,12 @@ While creating the plugin we need to provide the necessary parameters. Example p
 
 ```
 
--  `"name"`: This key contains the value "hello-world-overrider" and specifies the name of the operation that is defined as part of the "authenticationService" object.
+-  `"name"`: This key is the plugin name. It can be used as 
 
--  `"type"`: This key contains the value "plugin" and specifies that the "authenticationService" object is a plugin.
+-  `"type"`: This key contains the value "plugin" and specifies that the package is an authentication-service plugin.
 
--  `"displayName"`: This key contains the value "Hello World Overrider" and specifies the name that will be displayed in a user interface for the "authenticationService" object.
+-  `"displayName"`: This key is the human readable name of the plugin.
 
-  
 
 You can call the plugin with the command `peerDependencies` you add to `package.json` from another project.
 
@@ -149,9 +144,9 @@ You can call the plugin with the command `peerDependencies` you add to `package.
 
 ```
 
-If a manupile is required we can manipulate services with dependency injection
+Plugin development is based on dependency injection feature of NestJs. 
 
-Example project using the plugin [authentication-service-nestjs-sample-plugin](https://github.com/BrewInteractive/authentication-service-nestjs-sample-plugin)
+Example plugin package for the project [authentication-service-nestjs-sample-plugin](https://github.com/BrewInteractive/authentication-service-nestjs-sample-plugin)
  
   
 
