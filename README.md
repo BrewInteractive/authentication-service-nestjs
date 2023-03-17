@@ -14,10 +14,15 @@
 <a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=coverage"/></a>
 <a href="https://www.npmjs.com/package/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/v/@brewww/authentication-service.svg" alt="NPM Version" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/l/@brewww/authentication-service.svg" alt="Package License" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/dm/@brewww/authentication-service.svg" alt="NPM Downloads" /></a>
 </p>
+<p align="center">
+<a href="https://www.instagram.com/brew_interactive/" target="_blank"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" /></a>
+<a href="https://www.linkedin.com/company/brew-interactive/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Linkedin" /></a>
+<a href="https://twitter.com/BrewInteractive" target="_blank"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" /></a>
+
+</p>
 
 
-### Purpose
-
+## Purpose
 
 The purpose of the project is to manage user authentication processes and securely register them. The main features of the project are:
 
@@ -40,61 +45,113 @@ These instructions provide information on how to use the authentication-service-
   
 ### Installation
 
-1. Download or clone the project's Github repository.
+```bash
+$ npm install
+```
 
-2. Install Node.js and npm.
+### Migrations
+The Authentication Service provides database relationships using Typeorm. Database modeling is performed thanks to the migration support provided by Typeorm. You can provide migration management with the commands listed below.
 
-3. Run `yarn install` command to install all necessary packages required to run the project.
+#### Migration Run
+```bash
+# Postgres migration run
+$ npm run migration-postgres:run
 
-  
-### Configuration
+# Mysql migration run
+$ npm run migration-mysql:run
 
-1. Before running the project, copy the `.env.example` file as `.env`.
+# Postgres and Mysql migration run
+$ npm run migration-all:run
+```
 
-2. Configure the database connection and JWT settings in the `.env` file.
+#### Migration Generate
+```bash
+# Postgres migration generate
+$ npm run migration-postgres:generate
 
-### Usage
+# Mysql migration generate
+$ npm run migration-mysql:generate
 
-1. To run your project.
+# Postgres and Mysql migration run
+$ npm run migration-all:generate
+```
+
+> :large_blue_circle: For local de migration operations, it is possible to upload a database via docker using the commands found below.
+
+```bash
+# You can use the command listed below to install the Postgres database.
+$ docker-compose -f .docker/docker-compose-postgres.yml --env-file .env up -d
+
+# You can use the command listed below to install the Mysql database.
+$ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
+
+# You can install it on Adminer docker with the command below to manage databases.
+$ docker-compose -f .docker/docker-compose-adminer.yml --env-file .env up -d
+```
+
+### Running the app
 
 ```bash
 # development
-
-$ yarn run start  
+$ npm run start
 
 # watch mode
+$ npm run start:dev
 
-$ yarn run start:dev
-
-# production mode  
-
-$ yarn run start:prod
+# production mode
+$ npm run start:prod
 ```
 
-3. You can use the project's functions by sending a REST API request.  
-
-4. Send a GET request to `localhost:3000/docs` to access the API documentation.
-
-  
-### Testing
-
-1. To test your project.
+### Test
 
 ```bash
 # unit tests
+$ npm run test
 
-$ yarn run test
+# e2e tests
+$ npm run test:e2e
 
 # test coverage
-
-$ yarn run test:cov
+$ npm run test:cov
 ```
 
-3. All tests are expected to pass.
+### Docker Compose
+By creating the `docker-compose.yml` file, it is possible to deploy the project with `docker` commands below. You can visit the [Docker Hub Repository](https://hub.docker.com/r/brewery/authentication-service/tags) to review the versions.
+```yml
+version: "3"
+services:
+  serve:
+    container_name: export-service
+    image: brewery/authentication-service:latest
+    expose:
+      - ${PORT}
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+```
 
-### API Documentation
+```bash
+$ docker-compose up -d
+```
 
-The API documentation can be accessed via Swagger UI at the `localhost:3000/docs` address. The API documentation provides information on how to use the endpoints.
+## Environment Variables
+
+| Variable Name           | Description                                                                                             | Required | Default  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- | -------- | -------- |
+| DB_DRIVE                | Determines which database type to use. `mysql` and `postgres` database are supported.                   | YES      | -        |
+| DB_HOST                 | Represents the url or ip address of the database that needs to be connected.                            | YES      | -        |
+| DB_PORT                 | Represents the port of the database that needs to be connected.                                         | YES      | -        |
+| DB_NAME                 | Represents the name of the database that needs to be connected.                                         | YES      | -        |
+| DB_USER                 | Represents the user of the database that needs to be connected.                                         | YES      | -        |
+| DB_PASSWORD             | Represents the password of the database that needs to be connected.                                     | YES      | -        |
+| DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history.     | NO       | auth_service_migration |
+
+
+## API Documentation
+
+The API documentation can be accessed via Swagger UI at the `localhost:3000/swagger` address. The API documentation provides information on how to use the endpoints.
 
 ## Conclusion
 
@@ -102,70 +159,7 @@ These instructions will help you start, configure, test, and use the authenticat
 
 ## Plugin Development
 
-While creating the plugin we need to provide the necessary parameters. Example plugin settings that we must provide in plugin's package.json as follows:
-
-```bash
-
-"authenticationService": {
-	"name": "hello-world-overrider",
-	"type":"plugin",
-	"displayName": "Hello World Overrider"
-},
-
-```
-
--  `"name"`: This key is the plugin name. It can be used as 
-
--  `"type"`: This key contains the value "plugin" and specifies that the package is an authentication-service plugin.
-
--  `"displayName"`: This key is the human readable name of the plugin.
-
-
-@brewww/authentication-service package needs to be added to plugin as peer dependency to reach authentication service modules, providers, controllers etc. We also define the version of authentication service that our plugin is developed for.
-
-```bash
-
-"peerDependencies": {
-	"@brewww/authentication-service": "^1.1.2"
-}
-
-```
-
-Plugin development is based on dependency injection feature of NestJs.
-
-### Sample Plugins: 
-
-Example plugin package for the project [authentication-service-nestjs-sample-plugin](https://github.com/BrewInteractive/authentication-service-nestjs-sample-plugin)
-
-Also, plugins can be developed under`src/plugin/plugins` path.
-
- - [Hello World Overrider Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/tree/main/src/plugin/plugins/hello-world-overrider)
- - [Text2 Appender Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/tree/main/src/plugin/plugins/text2-appender)
-
- 
-## Publishing as Package
-
-While publishing the package, we need to adjust the package.json file settings.
-
--  `"name"`: The name of the package, which includes the scope if it's published under one.
-
--  `"version"`: The version number of the package. The version number should be incremented every time changes are made to the package.
-
--  `"description"`: A short description of what the package does.
-
--  `"author"`: The name and/or email address of the author(s) of the package.
-
--  `"license"`: The license under which the package is distributed.
-
--  `"readmeFilename"`: The name of the file that contains the package's readme.
-
--  `"main"`: The entry point of the package. This is the file that is loaded when someone requires the package.
-
--  `"files"`: An array of file patterns that should be included in the package when it's published.
-
-## Stay in touch
-
-[LinkedIn](https://www.linkedin.com/company/brew-interactive/) - [Twitter](https://twitter.com/BrewInteractive ) - [Instagram](https://www.instagram.com/brew_interactive/)
+In addition to the service, the plugin can be developed. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
 
 ## License
 

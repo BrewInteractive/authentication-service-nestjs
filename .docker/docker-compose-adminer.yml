@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  adminer:
+    container_name: adminer
+    image: adminer:latest
+    environment:
+      ADMINER_DEFAULT_SERVER: localhost
+      ADMINER_DEFAULT_USER: ${DB_USER}
+    ports:
+      - 8126:8080
