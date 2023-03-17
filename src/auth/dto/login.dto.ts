@@ -25,7 +25,7 @@ export class LoginDto {
   @MaxLength(20, {
     message: "password too long",
   })
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  @Matches(/(?=.*\d|\W)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*/, {
     message: "password too weak",
   })
   @IsNotEmpty()

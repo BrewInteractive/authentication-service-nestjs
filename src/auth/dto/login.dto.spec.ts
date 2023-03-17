@@ -54,7 +54,7 @@ describe("LoginDto Validation", () => {
   it("should fail validation when LoginDto has a weak password", async () => {
     const user = new LoginDto();
     user.username = faker.internet.userName();
-    user.password = faker.internet.password(10, true, /[A-Z]/);
+    user.password = faker.internet.password(10, false, /[A-Z]/);
     const errors = await validate(user);
 
     expect(errors.length).toBe(1);
