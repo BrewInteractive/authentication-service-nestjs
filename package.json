@@ -32,9 +32,11 @@
     "@nestjs/common": "^9.0.0"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "class-validator": "^0.14.0",
     "jsonwebtoken": "^9.0.0",
     "node_modules-path": "^2.0.7",
     "reflect-metadata": "^0.1.13",
