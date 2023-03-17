@@ -7,8 +7,8 @@ import config from './utils/config';
 function initSwagger(app: INestApplication) {
   if (config().environment === 'dev') {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('Authentication Service')
-      .setDescription('Authentication Service is a Nest.js based rest api designed to provide authentication operations by Brew Interactive.')
+      .setTitle(config().name)
+      .setDescription(config().description)
       .setVersion(config().version)
       .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
