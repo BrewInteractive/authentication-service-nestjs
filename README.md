@@ -1,13 +1,9 @@
-
-
-
 <p  align="center">
 <a  href="http://brewww.com/"  target="_blank"><img  src="https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/Brew-Logo-Small.png?raw=true"  width="300"  alt="Brew Logo"  /></a>
 </p>
 
 <h1  align="center">Authentication Service</h1>
 
- 
 <p align="center">Authentication Service is a Nest.js based rest api designed to provide authentication operations by Brew Interactive. </p>
 <p align="center">
 <a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=alert_status"/></a>
@@ -21,7 +17,6 @@
 
 </p>
 
-
 ## Purpose
 
 The purpose of the project is to manage user authentication processes and securely register them. The main features of the project are:
@@ -34,15 +29,12 @@ The purpose of the project is to manage user authentication processes and secure
 
 4. Customizable: The structure and functions of the project can be customized to fit different use cases.
 
-  
 Authentication Service can be used in any project that requires user authentication functions, making it easy for projects to manage user accounts and securely register and log in users.
 
-  
 ## Usage Instructions
 
 These instructions provide information on how to use the authentication-service-nestjs project.
 
-  
 ### Installation
 
 ```bash
@@ -50,9 +42,11 @@ $ npm install
 ```
 
 ### Migrations
+
 The Authentication Service provides database relationships using Typeorm. Database modeling is performed thanks to the migration support provided by Typeorm. You can provide migration management with the commands listed below.
 
 #### Migration Run
+
 ```bash
 # Postgres migration run
 $ npm run migration-postgres:run
@@ -65,6 +59,7 @@ $ npm run migration-all:run
 ```
 
 #### Migration Generate
+
 ```bash
 # Postgres migration generate
 $ npm run migration-postgres:generate
@@ -76,7 +71,7 @@ $ npm run migration-mysql:generate
 $ npm run migration-all:generate
 ```
 
-> :large_blue_circle: For local de migration operations, it is possible to upload a database via docker using the commands found below.
+> :large_blue_circle: You can use below commands to run databases for applying migration in your local environment.
 
 ```bash
 # You can use the command listed below to install the Postgres database.
@@ -116,12 +111,14 @@ $ npm run test:cov
 ```
 
 ### Docker Compose
+
 By creating the `docker-compose.yml` file, it is possible to deploy the project with `docker` commands below. You can visit the [Docker Hub Repository](https://hub.docker.com/r/brewery/authentication-service/tags) to review the versions.
+
 ```yml
 version: "3"
 services:
   serve:
-    container_name: export-service
+    container_name: authentication-service
     image: brewery/authentication-service:latest
     expose:
       - ${PORT}
@@ -138,16 +135,15 @@ $ docker-compose up -d
 
 ## Environment Variables
 
-| Variable Name           | Description                                                                                             | Required | Default  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------- | -------- | -------- |
-| DB_DRIVE                | Determines which database type to use. `mysql` and `postgres` database are supported.                   | YES      | -        |
-| DB_HOST                 | Represents the url or ip address of the database that needs to be connected.                            | YES      | -        |
-| DB_PORT                 | Represents the port of the database that needs to be connected.                                         | YES      | -        |
-| DB_NAME                 | Represents the name of the database that needs to be connected.                                         | YES      | -        |
-| DB_USER                 | Represents the user of the database that needs to be connected.                                         | YES      | -        |
-| DB_PASSWORD             | Represents the password of the database that needs to be connected.                                     | YES      | -        |
-| DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history.     | NO       | auth_service_migration |
-
+| Variable Name           | Description                                                                           | Required | Default                |
+| ----------------------- | ------------------------------------------------------------------------------------- | -------- | ---------------------- |
+| DB_DRIVE                | Determines which database type to use. `mysql` and `postgres` database are supported. | YES      | -                      |
+| DB_HOST                 | Represents the url or ip address of the database that needs to be connected.          | YES      | -                      |
+| DB_PORT                 | Represents the port of the database that needs to be connected.                       | YES      | -                      |
+| DB_NAME                 | Represents the name of the database that needs to be connected.                       | YES      | -                      |
+| DB_USER                 | Represents the user of the database that needs to be connected.                       | YES      | -                      |
+| DB_PASSWORD             | Represents the password of the database that needs to be connected.                   | YES      | -                      |
+| DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
 
 ## API Documentation
 
