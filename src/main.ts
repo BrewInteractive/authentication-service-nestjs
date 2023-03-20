@@ -1,7 +1,8 @@
-import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from "./app.module";
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
+import { NestFactory } from "@nestjs/core";
 import config from './utils/config';
 
 function initSwagger(app: INestApplication) {
@@ -12,7 +13,7 @@ function initSwagger(app: INestApplication) {
       .setVersion(config().version)
       .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup('swagger', app, document);
+    SwaggerModule.setup('docs', app, document);
   }
 }
 async function bootstrap() {
