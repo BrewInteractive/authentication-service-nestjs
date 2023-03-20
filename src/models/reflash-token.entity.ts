@@ -11,14 +11,14 @@ import {
 
 @Entity({ name: "refresh_tokens" })
 export class RefreshToken {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @Column({ name: "recovery_key" })
-  recoveryKey?: string;
+  @Column({ name: "refresh_token" })
+  refreshToken?: string;
 
-  @Column({ name: "recovery_key_expiry" })
-  recoveryKeyExpiry?: Date;
+  @Column({ name: "expires_at" })
+  expiresAt?: Date;
 
   @OneToOne((type: User) => User, (user) => user.id)
   @JoinColumn({ name: "user_id" })
