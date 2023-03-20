@@ -1,3 +1,4 @@
+import { Snowflake } from "../utils/snowflake";
 import {
   Entity,
   Column,
@@ -15,12 +16,8 @@ export class User {
   id: number;
 
   @AfterInsert()
-  addId() {
-    this.id = Number(
-      ((BigInt(Date.now()) - BigInt(1577836800000)) << BigInt(23)) |
-        (BigInt(1) << BigInt(10)) |
-        BigInt(this.id)
-    );
+  createSnowflakeId() {
+    this.id = Snowflake.generate(this.id);
   }
 
   @Column({ unique: true, nullable: true })
