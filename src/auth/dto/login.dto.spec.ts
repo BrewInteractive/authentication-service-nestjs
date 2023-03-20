@@ -3,7 +3,7 @@ import { LoginDto } from "./login.dto";
 import { faker } from "@faker-js/faker";
 
 describe("LoginDto Validation", () => {
-  const passwordRegex = /[A-Za-z0-9.,!?]/;
+  const passwordRegex = /[A-Za-z]/;
 
   it("should get email if username is empty", async () => {
     const user = new LoginDto();
@@ -43,11 +43,11 @@ describe("LoginDto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password too weak",
+      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
       isNotEmpty: "password should not be empty",
       isString: "password must be a string",
-      maxLength: "password too long",
-      minLength: "password too short",
+      maxLength: "password must be shorter than or equal to 20 characters",
+      minLength: "password must be longer than or equal to 8 characters",
     });
   });
 
@@ -59,7 +59,7 @@ describe("LoginDto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password too weak",
+      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
     });
   });
 

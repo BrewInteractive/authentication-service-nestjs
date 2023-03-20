@@ -1,7 +1,6 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from "./app.module";
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { INestApplication } from '@nestjs/common';
 import { NestFactory } from "@nestjs/core";
 import config from './utils/config';
 
