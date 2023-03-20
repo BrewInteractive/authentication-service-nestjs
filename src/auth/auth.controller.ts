@@ -2,7 +2,9 @@ import { Inject, Controller, Post } from "@nestjs/common";
 
 import { LoginDto } from "./dto/login.dto";
 import { UserService } from "../user/user.service";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('authentication')
 @Controller()
 export class AuthController {
   constructor(
