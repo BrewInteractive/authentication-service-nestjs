@@ -9,8 +9,8 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
-@Entity({ name: "reflash_tokens" })
-export class ReflashToken {
+@Entity({ name: "refresh_tokens" })
+export class RefreshToken {
   @PrimaryGeneratedColumn()
   id: number;
 
