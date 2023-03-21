@@ -1,11 +1,11 @@
-import { validate } from "class-validator";
 import { LoginDto } from "./login.dto";
 import { faker } from "@faker-js/faker";
+import { validate } from "class-validator";
 
 describe("LoginDto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
 
-  it("should get email if username is empty", async () => {
+  it("should success validation if username is empty but not email", async () => {
     const user = new LoginDto();
     user.email = faker.internet.email();
     user.password = faker.internet.password(10, false, passwordRegex);
@@ -14,7 +14,7 @@ describe("LoginDto Validation", () => {
     expect(errors.length).toBe(0);
   });
 
-  it("should get username if email is empty", async () => {
+  it("should success validation if email is empty but not username", async () => {
     const user = new LoginDto();
     user.password = faker.internet.password(10, false, passwordRegex);
     user.username = faker.internet.userName();
@@ -35,7 +35,7 @@ describe("LoginDto Validation", () => {
     });
   });
 
-  it("should fail validation when LoginDto has empty password field", async () => {
+  it("should fail validation when password is empty", async () => {
     const user = new LoginDto();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
@@ -43,7 +43,8 @@ describe("LoginDto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
+      matches:
+        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
       isNotEmpty: "password should not be empty",
       isString: "password must be a string",
       maxLength: "password must be shorter than or equal to 20 characters",
@@ -51,7 +52,7 @@ describe("LoginDto Validation", () => {
     });
   });
 
-  it("should fail validation when LoginDto has a weak password", async () => {
+  it("should fail validation when password is weak", async () => {
     const user = new LoginDto();
     user.username = faker.internet.userName();
     user.password = faker.internet.password(10, false, /[A-Z]/);
@@ -59,11 +60,12 @@ describe("LoginDto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
+      matches:
+        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
     });
   });
 
-  it("should fail validation when LoginDto has an invalid email address", async () => {
+  it("should fail validation when email address is invalid", async () => {
     const user = new LoginDto();
     user.email = faker.random.word();
     user.password = faker.internet.password(10, false, passwordRegex);
