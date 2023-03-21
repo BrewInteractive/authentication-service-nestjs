@@ -1,7 +1,7 @@
-import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
+import { Module } from "@nestjs/common";
 import { TokenModule } from "../token/token.module";
-import { UserService } from "src/user/user.service";
+import { UserService } from "../user/user.service";
 
 @Module({
   imports: [TokenModule],
