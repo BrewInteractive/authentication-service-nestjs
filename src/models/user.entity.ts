@@ -1,13 +1,14 @@
-import { Snowflake } from "../utils/snowflake";
 import {
-  Entity,
-  Column,
-  Check,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
   AfterInsert,
+  Check,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
+
+import { SnowflakeId } from "../utils/snowflake-id";
 
 @Entity({ name: "users" })
 @Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
@@ -17,7 +18,7 @@ export class User {
 
   @AfterInsert()
   createSnowflakeId() {
-    this.id = Snowflake.generate(this.id);
+    this.id = SnowflakeId.generate(this.id);
   }
 
   @Column({ unique: true, nullable: true })

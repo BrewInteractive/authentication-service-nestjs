@@ -1,4 +1,4 @@
-export class Snowflake {
+export class SnowflakeId {
   static generate(
     sequence: number,
     timestamp: number = 1577836800000,
