@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "roles" })
 export class Role {
