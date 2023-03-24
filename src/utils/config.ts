@@ -1,4 +1,4 @@
-const { version, name, description } = require("../../package.json");
+import { version, name, description } from "../../package.json";
 
 export default () => ({
   environment: process.env.ENVIRONMENT || "dev",

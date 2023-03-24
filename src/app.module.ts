@@ -5,8 +5,10 @@ import { PluginModule } from "./plugin/plugin.module";
 import { PluginTestModule } from "./plugin-test/plugin-test.module";
 import { TokenModule } from "./token/token.module";
 import { AuthModule } from "./auth/auth.module";
-import config from './utils/config';
-import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { dataSourceOptions } from "../db/data-source";
+import config from "./utils/config";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     PluginModule.registerAsync(),
     TokenModule,
     AuthModule,
+    TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],
