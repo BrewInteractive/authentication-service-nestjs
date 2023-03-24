@@ -1,17 +1,20 @@
 import * as request from "supertest";
-
 import { Test, TestingModule } from "@nestjs/testing";
-
 import { AppModule } from "./../src/app.module";
 import { INestApplication } from "@nestjs/common";
+import { DataSource } from "typeorm";
+import { createTestDbAsync } from "./test-db";
 
 describe("AppController (e2e)", () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(DataSource)
+      .useValue(await createTestDbAsync())
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
