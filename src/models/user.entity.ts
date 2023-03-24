@@ -14,7 +14,7 @@ import { SnowflakeId } from "../utils/snowflake-id";
 @Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
 export class User {
   @PrimaryGeneratedColumn("increment", { type: "bigint" })
-  id: number;
+  id: bigint;
 
   @AfterInsert()
   createSnowflakeId() {
