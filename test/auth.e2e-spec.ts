@@ -2,10 +2,9 @@ import * as request from "supertest";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AppModule } from "./../src/app.module";
 import { INestApplication } from "@nestjs/common";
-import { DataSource, getMetadataArgsStorage } from "typeorm";
+import { DataSource } from "typeorm";
 import { createTestDbAsync } from "./test-db";
 import { faker } from "@faker-js/faker";
-import * as bcrypt from "bcrypt";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;
@@ -31,9 +30,9 @@ describe("AuthController (e2e)", () => {
   describe("POST /signup", () => {
     it("should create a new user and return a token", async () => {
       const signUpDto = {
-        email: faker.internet.email(),
-        usernam: faker.internet.userName(),
-        password: faker.internet.password(),
+        email: "test@test.com",
+        username: "testUser",
+        password: "TestPassword1!",
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
       };
@@ -57,15 +56,15 @@ describe("AuthController (e2e)", () => {
       const response = await request(app.getHttpServer())
         .post("/signup")
         .send(signUpDto)
-        .expect(400);
+        .expect(409);
 
-      expect(response.body.message).toEqual("Email or username already exists");
+      expect(response.body.message).toEqual("email or username already exists");
     });
 
     it("should return 400 if username already exists", async () => {
       const signUpDto = {
         email: faker.internet.email(),
-        username: "testuser",
+        username: "testUser",
         password: faker.internet.password(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
@@ -74,15 +73,14 @@ describe("AuthController (e2e)", () => {
       const response = await request(app.getHttpServer())
         .post("/signup")
         .send(signUpDto)
-        .expect(400);
+        .expect(409);
 
-      expect(response.body.message).toEqual("Email or username already exists");
+      expect(response.body.message).toEqual("email or username already exists");
     });
 
     it("should return 400 if email is invalid", async () => {
       const signUpDto = {
         email: "invalid_email",
-        username: faker.internet.userName(),
         password: faker.internet.password(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
@@ -93,14 +91,14 @@ describe("AuthController (e2e)", () => {
         .send(signUpDto)
         .expect(400);
 
-      expect(response.body.message).toEqual("Email must be an email");
+      expect(response.body.message).toEqual("email must be an email");
     });
 
     it("should return 400 if password is too short", async () => {
       const signUpDto = {
         email: faker.internet.email(),
         username: faker.internet.userName(),
-        password: "1234",
+        password: "TPass",
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
       };
@@ -111,48 +109,46 @@ describe("AuthController (e2e)", () => {
         .expect(400);
 
       expect(response.body.message).toEqual(
-        "Password must be at least 8 characters long"
+        "password must be longer than or equal to 8 characters"
       );
     });
   });
 
   describe("POST /login", () => {
-    it("should return a token if user credentials are valid", async () => {
-      // create a user with known credentials
-      const password = faker.internet.password();
-      const user = {
-        email: faker.internet.email(),
-        username: faker.internet.userName(),
-        passwordHash: await bcrypt.hash(password, 10),
-      };
-      await app.getHttpServer().post("/signup").send(user).expect(201);
-
-      // log in with the known credentials
-      const loginDto = { email: user.email, password: password };
-      const response = await request(app.getHttpServer())
+    it("should return a token if user email credentials are valid", async () => {
+      const loginEmailDto = { email: "test@test.com", password: "TestPassword1!" };
+      const responseEmail = await request(app.getHttpServer())
         .post("/login")
-        .send(loginDto)
+        .send(loginEmailDto)
         .expect(201);
 
-      expect(response.body).toHaveProperty("id_token");
+      expect(responseEmail.body).toHaveProperty("id_token");
+
+      const loginUsernameDto = { username: "testUser", password: "TestPassword1!" };
+      const responseUsername = await request(app.getHttpServer())
+        .post("/login")
+        .send(loginUsernameDto)
+        .expect(201);
+
+      expect(responseUsername.body).toHaveProperty("id_token");
     });
 
     it("should return an error if email is invalid", async () => {
       const loginDto = {
         email: "invalid-email",
-        password: faker.internet.password(),
+        password: "TestPassword1!",
       };
       const response = await request(app.getHttpServer())
         .post("/login")
         .send(loginDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid email or password");
+      expect(response.body.message).toEqual("invalid email or password");
     });
 
     it("should return an error if password is invalid", async () => {
       const loginDto = {
-        email: faker.internet.email(),
+        email: "test@test.com",
         password: "wrong-password",
       };
       const response = await request(app.getHttpServer())
@@ -160,7 +156,7 @@ describe("AuthController (e2e)", () => {
         .send(loginDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid email or password");
+      expect(response.body.message).toEqual("invalid email or password");
     });
   });
 });
