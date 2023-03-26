@@ -9,7 +9,7 @@ import {
   } from "class-validator";
   import config from "../../utils/config";
   
-  export class SingUpDto {
+  export class SignUpDto {
     @ValidateIf((o) => !o.email)
     @IsNotEmpty()
     @IsString()

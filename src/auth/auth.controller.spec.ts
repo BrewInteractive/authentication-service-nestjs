@@ -1,48 +1,112 @@
-import { Test, TestingModule } from "@nestjs/testing";
-
+import { Test } from "@nestjs/testing";
 import { AuthController } from "./auth.controller";
+import { TokenService } from "../token/token.service";
 import { UserService } from "../user/user.service";
-import { TokenModule } from "../token/token.module";
+import { UnauthorizedException } from "@nestjs/common";
+import * as bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 
 describe("AuthController", () => {
-  let controller: AuthController;
+  let authController: AuthController;
+  let tokenService: TokenService;
   let userService: UserService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [TokenModule],
-      providers: [{ provide: "UserService", useClass: UserService }],
+    const moduleRef = await Test.createTestingModule({
       controllers: [AuthController],
+      providers: [
+        {
+          provide: "TokenService",
+          useValue: {
+            addCustomClaims: jest.fn(),
+            createToken: jest.fn(),
+          },
+        },
+        {
+          provide: "UserService",
+          useValue: {
+            validateUser: jest.fn(),
+            createUser: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
-    userService = module.get<UserService>("UserService");
+    authController = moduleRef.get<AuthController>(AuthController);
+    tokenService = moduleRef.get<TokenService>("TokenService");
+    userService = moduleRef.get<UserService>("UserService");
   });
 
-  it("should be defined", () => {
-    expect(controller).toBeDefined();
-  });
-  it("should return user when login is successful", async () => {
-    const usernameFaker = faker.internet.userName();
+  it("should throw an UnauthorizedException if the email is invalid", async () => {
     const loginDto = {
-      username: usernameFaker,
-      password: faker.internet.password(),
+      username: faker.internet.userName(),
       email: faker.internet.email(),
+      password: faker.internet.password(),
     };
-    const user = { id: 1, userName: usernameFaker };
+    userService.getUser = jest.fn().mockResolvedValue(null);
 
-    expect(userService).toBeDefined();
-
-    jest
-      .spyOn(userService, "validateUser")
-      .mockImplementation(async () => user);
-
-    const result = controller.login(loginDto);
-    expect(result).toBeDefined();
+    await expect(authController.login(loginDto)).rejects.toThrow(
+      UnauthorizedException
+    );
   });
-  it("should return user has been registered successfully", () => {
-    const result = controller.signUp();
-    expect(result).toBeDefined();
+
+  it("should throw an UnauthorizedException if the password is invalid", async () => {
+    const loginDto = {
+      username: faker.internet.userName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+    const user = {
+      id: "1",
+      email: loginDto.email,
+      passwordHash: await bcrypt.hash(faker.internet.password(), 10),
+    };
+    userService.getUser = jest.fn().mockResolvedValue(user);
+    bcrypt.compare = jest.fn().mockResolvedValue(false);
+
+    await expect(authController.login(loginDto)).rejects.toThrow(
+      UnauthorizedException
+    );
+  });
+
+  it("should return a token if the email and password are valid", async () => {
+    const loginDto = {
+      username: faker.internet.userName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+    const user = {
+      id: "1",
+      email: loginDto.email,
+      passwordHash: await bcrypt.hash(loginDto.password, 10),
+    };
+    userService.getUser = jest.fn().mockResolvedValue(user);
+    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    tokenService.addCustomClaims = jest.fn();
+    tokenService.createToken = jest.fn().mockResolvedValue("token");
+
+    await expect(authController.login(loginDto)).resolves.toEqual({
+      id_token: "token",
+    });
+  });
+
+  it("should return a token if the sign-up process is successful", async () => {
+    const fakerPassword = faker.internet.password();
+    const signUpDto = {
+      username: faker.internet.userName(),
+      lastName: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      password: fakerPassword,
+      email: faker.internet.email(),
+      passwordHash: await bcrypt.hash(fakerPassword, 10),
+    };
+    const user = { id: "1" };
+    userService.createUser = jest.fn().mockResolvedValue(user);
+    tokenService.addCustomClaims = jest.fn();
+    tokenService.createToken = jest.fn().mockResolvedValue("token");
+
+    await expect(authController.signUp(signUpDto)).resolves.toEqual({
+      id_token: "token",
+    });
   });
 });

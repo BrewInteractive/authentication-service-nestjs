@@ -10,8 +10,8 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ["../src/**/*.entity.ts"],
-  migrations: [`./${DB_DRIVE}/migrations/*.ts`],
+  entities: [`${__dirname}/../**/*.entity.{js,ts}`],
+  migrations: [`${__dirname}/${DB_DRIVE}/migrations/*.ts`],
   migrationsTableName:
     process.env.DB_MIGRATION_TABLE_NAME || "auth_service_migration",
 };

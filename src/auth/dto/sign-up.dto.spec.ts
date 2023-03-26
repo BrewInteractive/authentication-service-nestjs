@@ -1,12 +1,12 @@
 import { validate } from "class-validator";
-import { SingUpDto } from "./sign-up.dto";
+import { SignUpDto } from "./sign-up.dto";
 import { faker } from "@faker-js/faker";
 
 describe("SingUp Dto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
 
   it("should get email if username is empty", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -17,7 +17,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should get username if email is empty", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.password = faker.internet.password(10, false, passwordRegex);
@@ -28,7 +28,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty password field", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -46,7 +46,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has a weak password", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -61,7 +61,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has an invalid email address", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.email = faker.random.word();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
@@ -75,7 +75,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty firstName field", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
@@ -90,7 +90,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty lastName field", async () => {
-    const user = new SingUpDto();
+    const user = new SignUpDto();
     user.firstName = faker.name.firstName();
     user.email = faker.internet.email();
     user.password = faker.internet.password(10, false, passwordRegex);
