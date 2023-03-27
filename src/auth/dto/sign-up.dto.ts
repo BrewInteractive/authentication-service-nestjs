@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
     IsString,
     MinLength,
@@ -20,6 +21,9 @@ import {
     @IsEmail()
     email: string;
     
+    @ApiProperty({
+      description: 'Has to match a regular expression: ' + config().passwordRegex +'',
+    })
     @MinLength(8)
     @MaxLength(20)
     @Matches(config().passwordRegex)
