@@ -144,10 +144,11 @@ $ docker-compose up -d
 | DB_USER                 | Represents the user of the database that needs to be connected.                       | YES      | -                      |
 | DB_PASSWORD             | Represents the password of the database that needs to be connected.                   | YES      | -                      |
 | DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
+| SWAGGER_ENABLE          | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
 
 ## API Documentation
 
-The API documentation can be accessed via Swagger UI at the `localhost:3000/swagger` address. The API documentation provides information on how to use the endpoints.
+The API documentation can be accessed via Swagger UI at the `localhost:3000/docs` address. The API documentation provides information on how to use the endpoints.
 
 ## Conclusion
 
