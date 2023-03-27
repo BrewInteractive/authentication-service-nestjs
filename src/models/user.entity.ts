@@ -1,4 +1,5 @@
 import { SnowflakeId } from "../utils/snowflake-id";
+import * as crypto from "crypto";
 import {
   BeforeInsert,
   Check,
@@ -18,7 +19,7 @@ export class User {
   @BeforeInsert()
   createSnowflakeId() {
     this.id = SnowflakeId.generate(
-      BigInt(Math.floor(Math.random() * 4096))
+      BigInt(crypto.randomBytes(1).readUInt32BE())
     ).toString();
   }
 
