@@ -19,7 +19,7 @@ export class User {
   @BeforeInsert()
   createSnowflakeId() {
     this.id = SnowflakeId.generate(
-      BigInt(crypto.randomBytes(1).readUInt32BE())
+      BigInt(crypto.randomBytes(4).readUInt32BE())
     ).toString();
   }
 
