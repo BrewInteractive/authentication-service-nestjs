@@ -9,7 +9,7 @@ function initValidationPipe(app: INestApplication) {
 }
 
 function initSwagger(app: INestApplication) {  
-  if (config().swaggerEnable == true) {
+  if (config().swaggerEnable) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle(config().name)
       .setDescription(config().description)
