@@ -9,4 +9,5 @@ export default () => ({
   passwordRegex: new RegExp(
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),
+  swaggerEnable: process.env.SWAGGER_ENABLE === "true" || false,
 });
