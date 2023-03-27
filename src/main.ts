@@ -8,8 +8,8 @@ function initValidationPipe(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());
 }
 
-function initSwagger(app: INestApplication) {
-  if (config().environment === 'dev') {
+function initSwagger(app: INestApplication) {  
+  if (config().swaggerEnable == true) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle(config().name)
       .setDescription(config().description)
