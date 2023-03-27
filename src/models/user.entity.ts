@@ -1,24 +1,25 @@
+import { SnowflakeId } from "../utils/snowflake-id";
 import {
-  AfterInsert,
+  BeforeInsert,
   Check,
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
-
-import { SnowflakeId } from "../utils/snowflake-id";
 
 @Entity({ name: "users" })
 @Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
 export class User {
-  @PrimaryGeneratedColumn("increment", { type: "bigint" })
-  id: bigint;
+  @PrimaryColumn()
+  id: string;
 
-  @AfterInsert()
+  @BeforeInsert()
   createSnowflakeId() {
-    this.id = SnowflakeId.generate(this.id);
+    this.id = SnowflakeId.generate(
+      BigInt(Math.floor(Math.random() * 4096))
+    ).toString();
   }
 
   @Column({ unique: true, nullable: true })
