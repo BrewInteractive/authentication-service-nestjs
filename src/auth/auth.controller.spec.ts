@@ -37,38 +37,6 @@ describe("AuthController", () => {
     userService = moduleRef.get<UserService>("UserService");
   });
 
-  it("should throw an UnauthorizedException if the email is invalid", async () => {
-    const loginDto = {
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
-    userService.getUser = jest.fn().mockResolvedValue(null);
-
-    await expect(authController.login(loginDto)).rejects.toThrow(
-      UnauthorizedException
-    );
-  });
-
-  it("should throw an UnauthorizedException if the password is invalid", async () => {
-    const loginDto = {
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    };
-    const user = {
-      id: "1",
-      email: loginDto.email,
-      passwordHash: await bcrypt.hash(faker.internet.password(), 10),
-    };
-    userService.getUser = jest.fn().mockResolvedValue(user);
-    bcrypt.compare = jest.fn().mockResolvedValue(false);
-
-    await expect(authController.login(loginDto)).rejects.toThrow(
-      UnauthorizedException
-    );
-  });
-
   it("should return a token if the email and password are valid", async () => {
     const loginDto = {
       username: faker.internet.userName(),

@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { TokenService } from "./token.service";
+import { faker } from "@faker-js/faker";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -23,10 +24,17 @@ describe("TokenService", () => {
     jest.clearAllMocks();
   });
 
-  it("should create token by calling jwt.sign with the correct arguments", () => {
+  it("should create token by calling jwt.sign with the correct arguments", async () => {
+    const id = faker.random.numeric();
+    const email = faker.internet.email();
+    const username = faker.internet.userName();
     const expiresIn = 3600;
     const expectedToken = "fakeToken";
-    const expectedCustomClaims = {};
+    const expectedCustomClaims = {
+      user_id: id,
+      email: email,
+      username: username,
+    };
     const expectedJwtSecret = "testSecret";
     const expectedJwtAlgorithm = "HS256";
     const expectedJwtAudience = "testAudience";
@@ -39,7 +47,12 @@ describe("TokenService", () => {
     process.env.JWT_SUBJECT = expectedJwtSubject;
     process.env.JWT_ISSUER = expectedJwtIssuer;
 
-    const token = tokenService.createToken(expiresIn);
+    const user = {
+      id: id,
+      email: email,
+      username: username,
+    };
+    const token = await tokenService.createToken(user, expiresIn);
 
     expect(token).toBe(expectedToken);
     expect(jwt.sign).toHaveBeenCalledWith(

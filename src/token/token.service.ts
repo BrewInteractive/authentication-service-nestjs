@@ -8,7 +8,10 @@ export class TokenService {
     this.customClaims = {};
   }
 
-  createToken(expiresIn: number) {
+  async createToken(user, expiresIn: number) {
+    this.addCustomClaims("user_id", user.id);
+    this.addCustomClaims("email", user.email);
+    this.addCustomClaims("username", user.username);
     const token = jwt.sign(this.customClaims, process.env.JWT_SECRET, {
       algorithm: process.env.JWT_ALGORITHM as jwt.Algorithm,
       audience: process.env.JWT_AUDIENCE,
