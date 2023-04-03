@@ -1,10 +1,12 @@
 import * as request from "supertest";
+
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AppModule } from "./../src/app.module";
-import { INestApplication } from "@nestjs/common";
 import { DataSource } from "typeorm";
-import { createTestDbAsync } from "./test-db";
+import { INestApplication } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
+import { setupTestDataSourceAsync } from "./test-db";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;
@@ -15,7 +17,7 @@ describe("AuthController (e2e)", () => {
       imports: [AppModule],
     })
       .overrideProvider(DataSource)
-      .useValue(await createTestDbAsync())
+      .useValue(await setupTestDataSourceAsync())
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -116,7 +118,10 @@ describe("AuthController (e2e)", () => {
 
   describe("POST /login", () => {
     it("should return a token if user email credentials are valid", async () => {
-      const loginEmailDto = { email: "test@test.com", password: "TestPassword1!" };
+      const loginEmailDto = {
+        email: "test@test.com",
+        password: "TestPassword1!",
+      };
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
         .send(loginEmailDto)
@@ -124,7 +129,10 @@ describe("AuthController (e2e)", () => {
 
       expect(responseEmail.body).toHaveProperty("id_token");
 
-      const loginUsernameDto = { username: "testUser", password: "TestPassword1!" };
+      const loginUsernameDto = {
+        username: "testUser",
+        password: "TestPassword1!",
+      };
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
         .send(loginUsernameDto)

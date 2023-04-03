@@ -1,9 +1,11 @@
 import * as request from "supertest";
+
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AppModule } from "./../src/app.module";
-import { INestApplication } from "@nestjs/common";
 import { DataSource } from "typeorm";
-import { createTestDbAsync } from "./test-db";
+import { INestApplication } from "@nestjs/common";
+import { setupTestDataSourceAsync } from "./test-db";
 
 describe("AppController (e2e)", () => {
   let app: INestApplication;
@@ -13,7 +15,7 @@ describe("AppController (e2e)", () => {
       imports: [AppModule],
     })
       .overrideProvider(DataSource)
-      .useValue(await createTestDbAsync())
+      .useValue(await setupTestDataSourceAsync())
       .compile();
 
     app = moduleFixture.createNestApplication();
