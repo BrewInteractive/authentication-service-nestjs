@@ -28,5 +28,5 @@ jobs:
           JWT_ALGORITHM: ${{ env.JWT_ALGORITHM }}
           JWT_AUDIENCE: ${{ env.JWT_AUDIENCE }}
           JWT_ISSUER: ${{ env.JWT_ISSUER }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: ${{ env.JWT_SECRET }}
 
