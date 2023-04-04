@@ -15,7 +15,7 @@ export class TokenService {
     const token = jwt.sign(this.customClaims, process.env.JWT_SECRET, {
       algorithm: process.env.JWT_ALGORITHM as jwt.Algorithm,
       audience: process.env.JWT_AUDIENCE,
-      subject: process.env.JWT_SUBJECT,
+      subject: user.id,
       issuer: process.env.JWT_ISSUER,
       expiresIn,
     });
