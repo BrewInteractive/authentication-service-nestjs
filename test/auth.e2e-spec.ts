@@ -4,7 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "./../src/app.module";
 import { DataSource } from "typeorm";
-import { INestApplication } from "@nestjs/common";
+import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";
 
@@ -21,6 +21,7 @@ describe("AuthController (e2e)", () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
@@ -60,7 +61,7 @@ describe("AuthController (e2e)", () => {
         .send(signUpDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("email or username already exists");
+      expect(response.body.message).toEqual("Username or email already exists");
     });
 
     it("should return 400 if username already exists", async () => {
@@ -77,12 +78,12 @@ describe("AuthController (e2e)", () => {
         .send(signUpDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("email or username already exists");
+      expect(response.body.message).toEqual("Username or email already exists");
     });
 
     it("should return 400 if email is invalid", async () => {
       const signUpDto = {
-        email: "invalid_email",
+        email: "inv-email",
         password: faker.internet.password(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
@@ -93,7 +94,7 @@ describe("AuthController (e2e)", () => {
         .send(signUpDto)
         .expect(400);
 
-      expect(response.body.message).toEqual("email must be an email");
+      expect(response.body.message).toEqual(["email must be an email"]);
     });
 
     it("should return 400 if password is too short", async () => {
@@ -110,9 +111,9 @@ describe("AuthController (e2e)", () => {
         .send(signUpDto)
         .expect(400);
 
-      expect(response.body.message).toEqual(
-        "password must be longer than or equal to 8 characters"
-      );
+      expect(response.body.message).toEqual([
+        "password must be longer than or equal to 8 characters",
+      ]);
     });
   });
 
@@ -143,7 +144,7 @@ describe("AuthController (e2e)", () => {
 
     it("should return an error if email is invalid", async () => {
       const loginDto = {
-        email: "invalid-email",
+        email: "invalid@email.com",
         password: "TestPassword1!",
       };
       const response = await request(app.getHttpServer())
@@ -151,20 +152,20 @@ describe("AuthController (e2e)", () => {
         .send(loginDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("invalid email or password");
+      expect(response.body.message).toEqual("Invalid credentials");
     });
 
     it("should return an error if password is invalid", async () => {
       const loginDto = {
         email: "test@test.com",
-        password: "wrong-password",
+        password: "Wrong-Password",
       };
       const response = await request(app.getHttpServer())
         .post("/login")
         .send(loginDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("invalid email or password");
+      expect(response.body.message).toEqual("Invalid credentials");
     });
   });
 });
