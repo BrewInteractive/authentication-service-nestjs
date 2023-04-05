@@ -22,14 +22,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: echo
-        run: echo ${{ vars.JWT_ALGORITHM }}
-      - name: echo
-        run: echo ${{ vars.JWT_AUDIENCE }}
-      - name: echo
-        run: echo ${{ vars.JWT_AUDIENCE }}
-      - name: echo
-        run: echo ${{ secrets.JWT_SECRET }}
       - name: Install dependencies
         run: yarn install
       - name: Test E2E
