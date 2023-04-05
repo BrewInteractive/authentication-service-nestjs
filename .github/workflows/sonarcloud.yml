@@ -17,12 +17,12 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            JWT_ALGORITHM: ${{ env.JWT_ALGORITHM }}
-            JWT_AUDIENCE: ${{ env.JWT_AUDIENCE }}
-            JWT_ISSUER: ${{ env.JWT_ISSUER }}
-            JWT_SECRET: ${{ env.JWT_SECRET }}
+            JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
+            JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
+            JWT_ISSUER: ${{ vars.JWT_ISSUER }}
+            JWT_SECRET: ${{ vars.JWT_SECRET }}
       - name: echo
-        run: echo ${{ env.JWT_SECRET }}
+        run: echo ${{ vars.JWT_SECRET }}
       - name: Install dependencies
         run: yarn install
       - name: Test E2E
