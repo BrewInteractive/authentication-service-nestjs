@@ -38,7 +38,7 @@ describe("TokenService", () => {
     const expectedJwtSecret = "testSecret";
     const expectedJwtAlgorithm = "HS256";
     const expectedJwtAudience = "testAudience";
-    const expectedJwtSubject = "testSubject";
+    const expectedJwtSubject = expectedCustomClaims.user_id;
     const expectedJwtIssuer = "testIssuer";
 
     process.env.JWT_SECRET = expectedJwtSecret;
