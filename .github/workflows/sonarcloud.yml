@@ -20,8 +20,16 @@ jobs:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
             JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
-            JWT_ISSUER: ${{ vars.JWT_ISSUER }}
+            JWT_ISSUER: ${{ vars.JWT_AUDIENCE }}
             JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: echo
+        run: echo ${{ vars.JWT_ALGORITHM }}
+      - name: echo
+        run: echo ${{ vars.JWT_AUDIENCE }}
+      - name: echo
+        run: echo ${{ vars.JWT_AUDIENCE }}
+      - name: echo
+        run: echo ${{ secrets.JWT_SECRET }}
       - name: Install dependencies
         run: yarn install
       - name: Test E2E
