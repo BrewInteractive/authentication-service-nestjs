@@ -21,6 +21,8 @@ jobs:
             JWT_AUDIENCE: ${{ env.JWT_AUDIENCE }}
             JWT_ISSUER: ${{ env.JWT_ISSUER }}
             JWT_SECRET: ${{ env.JWT_SECRET }}
+      - name: echo
+        run: echo ${{ env.JWT_SECRET }}
       - name: Install dependencies
         run: yarn install
       - name: Test E2E
