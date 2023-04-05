@@ -10,7 +10,7 @@ on:
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: sonarcloud
     steps:
       - uses: actions/checkout@v3
         with:
@@ -21,13 +21,7 @@ jobs:
             JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
             JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
             JWT_ISSUER: ${{ vars.JWT_ISSUER }}
-            JWT_SECRET: ${{ vars.JWT_SECRET }}
-      - name: echo
-        run: echo ${{ secrets.JWT_SECRET }}
-      - name: echo
-        run: echo ${{ vars.JWT_SECRET }}
-      - name: echo
-        run: echo ${{ env.JWT_SECRET }}
+            JWT_SECRET: ${{ secrets.JWT_SECRET }}
       - name: Install dependencies
         run: yarn install
       - name: Test E2E
