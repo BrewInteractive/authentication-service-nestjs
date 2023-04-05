@@ -25,6 +25,7 @@ services:
     depends_on:
       - 'postgres'
     restart: always
-
+    env_file:
+      - .env
 volumes:
   pgadmin_data:
