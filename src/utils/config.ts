@@ -1,4 +1,4 @@
-import { version, name, description } from "../../package.json";
+import { description, name, version } from "../../package.json";
 
 export default () => ({
   environment: process.env.ENVIRONMENT || "dev",
@@ -9,7 +9,7 @@ export default () => ({
   passwordRegex: new RegExp(
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),
-  swaggerEnable: process.env.SWAGGER_ENABLE === "true" || false,
+  swaggerEnabled: process.env.SWAGGER_ENABLED === "true" || false,
   jwtAlgorithm: process.env.JWT_ALGORITHM,
   jwtAudience: process.env.JWT_AUDIENCE,
   jwtIssuer: process.env.JWT_ISSUER,

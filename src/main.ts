@@ -1,6 +1,7 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from "./app.module";
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+
+import { AppModule } from "./app.module";
 import { NestFactory } from "@nestjs/core";
 import config from './utils/config';
 
@@ -9,7 +10,7 @@ function initValidationPipe(app: INestApplication) {
 }
 
 function initSwagger(app: INestApplication) {  
-  if (config().swaggerEnable) {
+  if (config().swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle(config().name)
       .setDescription(config().description)
