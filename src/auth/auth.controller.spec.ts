@@ -1,9 +1,9 @@
-import { Test } from "@nestjs/testing";
+import * as bcrypt from "bcrypt";
+
 import { AuthController } from "./auth.controller";
+import { Test } from "@nestjs/testing";
 import { TokenService } from "../token/token.service";
 import { UserService } from "../user/user.service";
-import { UnauthorizedException } from "@nestjs/common";
-import * as bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 
 describe("AuthController", () => {
