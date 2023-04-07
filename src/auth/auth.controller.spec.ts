@@ -48,13 +48,16 @@ describe("AuthController", () => {
       email: loginDto.email,
       passwordHash: await bcrypt.hash(loginDto.password, 10),
     };
+
+    const token = faker.random.alphaNumeric(32);
+
     userService.getUser = jest.fn().mockResolvedValue(user);
     bcrypt.compare = jest.fn().mockResolvedValue(true);
     tokenService.addCustomClaims = jest.fn();
-    tokenService.createToken = jest.fn().mockResolvedValue("token");
+    tokenService.createToken = jest.fn().mockResolvedValue(token);
 
     await expect(authController.login(loginDto)).resolves.toEqual({
-      id_token: "token",
+      id_token: token,
     });
   });
 
@@ -69,12 +72,14 @@ describe("AuthController", () => {
       passwordHash: await bcrypt.hash(fakerPassword, 10),
     };
     const user = { id: "1" };
+    const token = faker.random.alphaNumeric(32);
+
     userService.createUser = jest.fn().mockResolvedValue(user);
     tokenService.addCustomClaims = jest.fn();
-    tokenService.createToken = jest.fn().mockResolvedValue("token");
+    tokenService.createToken = jest.fn().mockResolvedValue(token);
 
     await expect(authController.signUp(signUpDto)).resolves.toEqual({
-      id_token: "token",
+      id_token: token,
     });
   });
 });
