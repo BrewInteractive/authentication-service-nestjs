@@ -1,9 +1,11 @@
-import { Test } from "@nestjs/testing";
-import { UserService } from "./user.service";
-import { User } from "../models/user.entity";
-import { ConflictException, UnauthorizedException } from "@nestjs/common";
-import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+
+import { ConflictException, UnauthorizedException } from "@nestjs/common";
+
+import { Repository } from "typeorm";
+import { Test } from "@nestjs/testing";
+import { User } from "../models/user.entity";
+import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
 
 describe("UserService", () => {
@@ -37,9 +39,7 @@ describe("UserService", () => {
 
     jest.spyOn(userService, "getUser").mockResolvedValue(user);
 
-    expect(await userService.getUser(username, email)).toBe(
-      user
-    );
+    expect(await userService.getUser(username, email)).toBe(user);
   });
   it("should return a user if the email exists", async () => {
     const email = faker.internet.email();
@@ -82,8 +82,11 @@ describe("UserService", () => {
       password: faker.internet.password(),
     };
     userRepository.findOne = jest.fn().mockResolvedValue(null);
-    bcrypt.genSalt = jest.fn().mockResolvedValue("salt");
-    bcrypt.hash = jest.fn().mockResolvedValue("passwordHash");
+    jest.mock("bcrypt", () => ({
+      genSalt: jest.fn().mockReturnValue("salt"),
+      hash: jest.fn().mockResolvedValue("passwordHash"),
+    }));
+
     userRepository.save = jest.fn().mockResolvedValue({ id: "1" });
 
     await expect(userService.createUser(signUpDto)).resolves.toEqual({
@@ -116,13 +119,15 @@ describe("UserService", () => {
       passwordHash: await bcrypt.hash(faker.internet.password(), 10),
     };
     userService.getUser = jest.fn().mockResolvedValue(user);
-    bcrypt.compare = jest.fn().mockResolvedValue(false);
+    jest.mock("bcrypt", () => ({
+      compare: jest.fn().mockResolvedValue(true),
+    }));
 
     await expect(userService.validateUser(loginDto)).rejects.toThrow(
       UnauthorizedException
     );
   });
-  
+
   it("should return a user if the email and password are valid", async () => {
     const loginDto = {
       username: faker.internet.userName(),
@@ -135,7 +140,9 @@ describe("UserService", () => {
       passwordHash: await bcrypt.hash(loginDto.password, 10),
     };
     userService.getUser = jest.fn().mockResolvedValue(user);
-    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    jest.mock("bcrypt", () => ({
+      compare: jest.fn().mockResolvedValue(true),
+    }));
 
     await expect(userService.validateUser(loginDto)).resolves.toEqual({
       id: "1",

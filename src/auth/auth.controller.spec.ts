@@ -52,7 +52,9 @@ describe("AuthController", () => {
     const token = faker.random.alphaNumeric(32);
 
     userService.getUser = jest.fn().mockResolvedValue(user);
-    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    jest.mock("bcrypt", () => ({
+      compare: jest.fn().mockResolvedValue(true),
+    }));
     tokenService.addCustomClaims = jest.fn();
     tokenService.createToken = jest.fn().mockResolvedValue(token);
 
