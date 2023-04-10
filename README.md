@@ -143,7 +143,7 @@ These instructions will help you start, configure, test, and use the authenticat
 
 ## Plugin Development
 
-In addition to the service, the plugin can be developed. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
+You can extend the service capabilities with developing plugins. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
 
 ## License
 
