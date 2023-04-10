@@ -6,8 +6,8 @@
 
 <p align="center">Authentication Service is a Nest.js based rest api designed to provide authentication operations by Brew Interactive. </p>
 <p align="center">
-<a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=alert_status"/></a>
-<a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=coverage"/></a>
+<a href="https://sonarcloud.io/summary/overall?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=alert_status"/></a>
+<a href="https://sonarcloud.io/summary/overall?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=coverage"/></a>
 <a href="https://www.npmjs.com/package/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/v/@brewww/authentication-service.svg" alt="NPM Version" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/l/@brewww/authentication-service.svg" alt="Package License" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/dm/@brewww/authentication-service.svg" alt="NPM Downloads" /></a>
 </p>
 <p align="center">
