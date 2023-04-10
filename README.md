@@ -35,17 +35,19 @@ Authentication Service can be used in any project that requires user authenticat
 
 These instructions provide information on how to use the authentication-service-nestjs project.
 
-### Dependency Installation
+### Running Locally
+
+#### Dependency Installation
 
 ```bash
 $ npm install
 ```
 
-### Migrations
+#### Migrations
 
 The Authentication Service provides database relationships using Typeorm. Database modeling is performed thanks to the migration support provided by Typeorm. You can provide migration management with the commands listed below.
 
-#### Migration Run
+##### Migration Run
 
 ```bash
 # Postgres migration run
@@ -58,7 +60,7 @@ $ npm run migration-mysql:run
 $ npm run migration-all:run
 ```
 
-#### Migration Generate
+##### Migration Generate
 
 ```bash
 # Postgres migration generate
@@ -84,7 +86,7 @@ $ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
 $ docker-compose -f .docker/docker-compose-adminer.yml --env-file .env up -d
 ```
 
-### Running the app
+#### Starting the app
 
 ```bash
 # development
@@ -97,7 +99,15 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-### Test
+### Running with Docker
+
+You can also run the service with Docker.
+
+```bash
+$ docker-compose up -d
+```
+
+### Running Tests
 
 ```bash
 # unit tests
@@ -108,12 +118,6 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-```
-
-### Running with Docker
-
-```bash
-$ docker-compose up -d
 ```
 
 ## Environment Variables
