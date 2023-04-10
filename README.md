@@ -110,24 +110,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-### Docker Compose
-
-By creating the `docker-compose.yml` file, it is possible to deploy the project with `docker` commands below. You can visit the [Docker Hub Repository](https://hub.docker.com/r/brewery/authentication-service/tags) to review the versions.
-
-```yml
-version: "3"
-services:
-  serve:
-    container_name: authentication-service
-    image: brewery/authentication-service:latest
-    expose:
-      - ${PORT}
-    restart: always
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - .env
-```
+### Running with Docker
 
 ```bash
 $ docker-compose up -d
