@@ -35,7 +35,7 @@ Authentication Service can be used in any project that requires user authenticat
 
 These instructions provide information on how to use the authentication-service-nestjs project.
 
-### Installation
+### Dependency Installation
 
 ```bash
 $ npm install
