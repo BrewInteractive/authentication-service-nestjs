@@ -1,5 +1,3 @@
-import * as bcrypt from "bcrypt";
-
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
 
 import { Repository } from "typeorm";
@@ -82,11 +80,6 @@ describe("UserService", () => {
       password: faker.internet.password(),
     };
     userRepository.findOne = jest.fn().mockResolvedValue(null);
-    jest.mock("bcrypt", () => ({
-      genSalt: jest.fn().mockReturnValue("salt"),
-      hash: jest.fn().mockResolvedValue("passwordHash"),
-    }));
-
     userRepository.save = jest.fn().mockResolvedValue({ id: "1" });
 
     await expect(userService.createUser(signUpDto)).resolves.toEqual({
@@ -111,17 +104,14 @@ describe("UserService", () => {
     const loginDto = {
       username: faker.internet.userName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: "TestPassword",
     };
     const user = {
       id: "1",
       email: loginDto.email,
-      passwordHash: await bcrypt.hash(faker.internet.password(), 10),
+      passwordHash: "wrongPasswordHash",
     };
     userService.getUser = jest.fn().mockResolvedValue(user);
-    jest.mock("bcrypt", () => ({
-      compare: jest.fn().mockResolvedValue(true),
-    }));
 
     await expect(userService.validateUser(loginDto)).rejects.toThrow(
       UnauthorizedException
@@ -132,22 +122,17 @@ describe("UserService", () => {
     const loginDto = {
       username: faker.internet.userName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: "TestPassword",
     };
     const user = {
       id: "1",
       email: loginDto.email,
-      passwordHash: await bcrypt.hash(loginDto.password, 10),
+      passwordHash: "$2b$10$tYuwajCP1m27h9ZFn2KQR..catIXOzgkucU3mIh9JZbXBnX7Fc5Ji",
     };
     userService.getUser = jest.fn().mockResolvedValue(user);
-    jest.mock("bcrypt", () => ({
-      compare: jest.fn().mockResolvedValue(true),
-    }));
 
     await expect(userService.validateUser(loginDto)).resolves.toEqual({
-      id: "1",
-      email: loginDto.email,
-      passwordHash: await bcrypt.hash(loginDto.password, 10),
+      ...user
     });
   });
 });

@@ -1,5 +1,3 @@
-import * as bcrypt from "bcrypt";
-
 import { AuthController } from "./auth.controller";
 import { Test } from "@nestjs/testing";
 import { TokenService } from "../token/token.service";
@@ -41,20 +39,17 @@ describe("AuthController", () => {
     const loginDto = {
       username: faker.internet.userName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: "TestPassword",
     };
     const user = {
       id: "1",
       email: loginDto.email,
-      passwordHash: await bcrypt.hash(loginDto.password, 10),
+      passwordHash: "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
     };
-
+    
     const token = faker.random.alphaNumeric(32);
 
     userService.getUser = jest.fn().mockResolvedValue(user);
-    jest.mock("bcrypt", () => ({
-      compare: jest.fn().mockResolvedValue(true),
-    }));
     tokenService.addCustomClaims = jest.fn();
     tokenService.createToken = jest.fn().mockResolvedValue(token);
 
@@ -64,14 +59,14 @@ describe("AuthController", () => {
   });
 
   it("should return a token if the sign-up process is successful", async () => {
-    const fakerPassword = faker.internet.password();
+    const fakerPassword = "TestPassword";
     const signUpDto = {
       username: faker.internet.userName(),
       lastName: faker.name.lastName(),
       firstName: faker.name.firstName(),
       password: fakerPassword,
       email: faker.internet.email(),
-      passwordHash: await bcrypt.hash(fakerPassword, 10),
+      passwordHash: "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
     };
     const user = { id: "1" };
     const token = faker.random.alphaNumeric(32);

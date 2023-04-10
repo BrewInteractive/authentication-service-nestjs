@@ -3,7 +3,6 @@ import * as jwt from "jsonwebtoken";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { TokenService } from "./token.service";
-import { User } from "../models/user.entity";
 import { faker } from "@faker-js/faker";
 
 jest.mock("jsonwebtoken", () => ({
