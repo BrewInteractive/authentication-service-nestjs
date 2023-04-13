@@ -6,8 +6,8 @@
 
 <p align="center">Authentication Service is a Nest.js based rest api designed to provide authentication operations by Brew Interactive. </p>
 <p align="center">
-<a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=alert_status"/></a>
-<a href="https://sonarcloud.io/summary/new_code?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=coverage"/></a>
+<a href="https://sonarcloud.io/summary/overall?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=alert_status"/></a>
+<a href="https://sonarcloud.io/summary/overall?id=BrewInteractive_authentication-service-nestjs" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=BrewInteractive_authentication-service-nestjs&metric=coverage"/></a>
 <a href="https://www.npmjs.com/package/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/v/@brewww/authentication-service.svg" alt="NPM Version" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/l/@brewww/authentication-service.svg" alt="Package License" /></a> <a href="https://www.npmjs.com/@brewww/authentication-service" target="_blank"><img src="https://img.shields.io/npm/dm/@brewww/authentication-service.svg" alt="NPM Downloads" /></a>
 </p>
 <p align="center">
@@ -35,17 +35,19 @@ Authentication Service can be used in any project that requires user authenticat
 
 These instructions provide information on how to use the authentication-service-nestjs project.
 
-### Installation
+### Running Locally
+
+#### Dependency Installation
 
 ```bash
 $ npm install
 ```
 
-### Migrations
+#### Migrations
 
 The Authentication Service provides database relationships using Typeorm. Database modeling is performed thanks to the migration support provided by Typeorm. You can provide migration management with the commands listed below.
 
-#### Migration Run
+##### Migration Run
 
 ```bash
 # Postgres migration run
@@ -58,7 +60,7 @@ $ npm run migration-mysql:run
 $ npm run migration-all:run
 ```
 
-#### Migration Generate
+##### Migration Generate
 
 ```bash
 # Postgres migration generate
@@ -84,7 +86,7 @@ $ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
 $ docker-compose -f .docker/docker-compose-adminer.yml --env-file .env up -d
 ```
 
-### Running the app
+#### Starting the app
 
 ```bash
 # development
@@ -97,7 +99,15 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-### Test
+### Running with Docker
+
+You can also run the service with Docker.
+
+```bash
+$ docker-compose up -d
+```
+
+### Running Tests
 
 ```bash
 # unit tests
@@ -108,29 +118,6 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-```
-
-### Docker Compose
-
-By creating the `docker-compose.yml` file, it is possible to deploy the project with `docker` commands below. You can visit the [Docker Hub Repository](https://hub.docker.com/r/brewery/authentication-service/tags) to review the versions.
-
-```yml
-version: "3"
-services:
-  serve:
-    container_name: authentication-service
-    image: brewery/authentication-service:latest
-    expose:
-      - ${PORT}
-    restart: always
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - .env
-```
-
-```bash
-$ docker-compose up -d
 ```
 
 ## Environment Variables
@@ -144,7 +131,7 @@ $ docker-compose up -d
 | DB_USER                 | Represents the user of the database that needs to be connected.                       | YES      | -                      |
 | DB_PASSWORD             | Represents the password of the database that needs to be connected.                   | YES      | -                      |
 | DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
-| SWAGGER_ENABLED          | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
+| SWAGGER_ENABLED         | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
 
 ## API Documentation
 
@@ -156,7 +143,7 @@ These instructions will help you start, configure, test, and use the authenticat
 
 ## Plugin Development
 
-In addition to the service, the plugin can be developed. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
+You can extend the service capabilities with developing plugins. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
 
 ## License
 
