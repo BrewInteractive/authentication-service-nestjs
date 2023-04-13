@@ -1,3 +1,4 @@
+import { AutoMap } from "@automapper/classes";
 import { SnowflakeId } from "../utils/snowflake-id";
 import * as crypto from "crypto";
 import {
@@ -23,15 +24,19 @@ export class User {
     ).toString();
   }
 
+  @AutoMap()
   @Column({ unique: true, nullable: true })
   username?: string;
 
+  @AutoMap()
   @Column({ unique: true, nullable: true })
   email?: string;
 
+  @AutoMap()
   @Column({ name: "first_name" })
   firstName: string;
 
+  @AutoMap()
   @Column({ name: "last_name" })
   lastName: string;
 
@@ -40,6 +45,9 @@ export class User {
 
   @Column({ name: "password_salt" })
   passwordSalt: string;
+
+  @AutoMap()
+  password: string;
 
   @Column({ name: "email_verified", default: false })
   emailVerified: boolean;
