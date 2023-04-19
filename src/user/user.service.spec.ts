@@ -43,7 +43,8 @@ describe("UserService", () => {
     const email = faker.internet.email();
     const username = faker.internet.userName();
     const user = { id: "1", email };
-    userRepository.findOne = jest.fn().mockResolvedValue(user);
+
+    jest.spyOn(userRepository, "findOne").mockResolvedValue(user as User);
 
     await expect(userService.getUserAsync(username, email)).resolves.toEqual(user);
   });
@@ -51,7 +52,8 @@ describe("UserService", () => {
   it("should return null if the email does not exist", async () => {
     const email = faker.internet.email();
     const username = faker.internet.userName();
-    userRepository.findOne = jest.fn().mockResolvedValue(null);
+
+    jest.spyOn(userRepository, "findOne").mockResolvedValue(null);
 
     await expect(userService.getUserAsync(username, email)).resolves.toBeNull();
   });
@@ -64,7 +66,7 @@ describe("UserService", () => {
     user.email = faker.internet.email();
     user.password = faker.internet.password();
 
-    userRepository.findOne = jest.fn().mockResolvedValue(user);
+    jest.spyOn(userRepository, "findOne").mockResolvedValue(user as User);
 
     await expect(userService.createUserAsync(user)).rejects.toThrow(
       ConflictException
@@ -79,9 +81,9 @@ describe("UserService", () => {
     user.email = faker.internet.email();
     user.password = faker.internet.password();
 
-    userRepository.findOne = jest.fn().mockResolvedValue(null);
-    userRepository.save = jest.fn().mockResolvedValue({ id: "1" });
-
+    jest.spyOn(userRepository, "findOne").mockResolvedValue(null);
+    jest.spyOn(userRepository, "save").mockResolvedValue({ id: "1" } as User);
+    
     await expect(userService.createUserAsync(user)).resolves.toEqual({
       id: "1",
     });
@@ -92,7 +94,8 @@ describe("UserService", () => {
     user.username = faker.internet.userName();
     user.email = faker.internet.email();
     user.password = faker.internet.password();
-    userService.getUserAsync = jest.fn().mockResolvedValue(null);
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
 
     await expect(userService.validateUserAsync(user)).rejects.toThrow(
       UnauthorizedException
@@ -111,7 +114,7 @@ describe("UserService", () => {
     mockUser.email = user.email;
     mockUser.passwordHash = "wrongPasswordHash";
 
-    userService.getUserAsync= jest.fn().mockResolvedValue(mockUser);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(mockUser);
 
     await expect(userService.validateUserAsync(user)).rejects.toThrow(
       UnauthorizedException
@@ -131,7 +134,7 @@ describe("UserService", () => {
     mockUser.passwordHash =
       "$2b$10$tYuwajCP1m27h9ZFn2KQR..catIXOzgkucU3mIh9JZbXBnX7Fc5Ji";
 
-    userService.getUserAsync = jest.fn().mockResolvedValue(mockUser);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(mockUser);
 
     await expect(userService.validateUserAsync(user)).resolves.toEqual({
       ...mockUser,

@@ -7,6 +7,10 @@ import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
 import { LoginProfile } from "./mapping-profiles/login.profile";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
+import { UserModule } from "../user/user.module";
+import { TokenModule } from "../token/token.module";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { User } from "../models/user.entity";
 
 describe("AuthController", () => {
   let authController: AuthController;
@@ -19,27 +23,18 @@ describe("AuthController", () => {
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
+        UserModule,
+        TokenModule,
       ],
       controllers: [AuthController],
-      providers: [
-        SignUpProfile,
-        LoginProfile,
-        {
-          provide: "TokenService",
-          useValue: {
-            addCustomClaims: jest.fn(),
-            createToken: jest.fn(),
-          },
-        },
-        {
-          provide: "UserService",
-          useValue: {
-            validateUserAsync: jest.fn(),
-            createUserAsync: jest.fn(),
-          },
-        },
-      ],
-    }).compile();
+      providers: [SignUpProfile, LoginProfile],
+    })
+      .overrideProvider(getRepositoryToken(User))
+      .useValue({
+        findOne: jest.fn(),
+        save: jest.fn(),
+      })
+      .compile();
 
     authController = moduleRef.get<AuthController>(AuthController);
     tokenService = moduleRef.get<TokenService>("TokenService");
@@ -58,12 +53,17 @@ describe("AuthController", () => {
       passwordHash:
         "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
     };
-    
-    const token = faker.random.alphaNumeric(32);
 
-    userService.getUserAsync = jest.fn().mockResolvedValue(user);
-    tokenService.addCustomClaims = jest.fn();
-    tokenService.createToken = jest.fn().mockResolvedValue(token);
+    const token = faker.random.alphaNumeric(32);
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockReturnValueOnce(Promise.resolve(user as User));
+
+    jest.spyOn(tokenService, "addCustomClaims").mockReturnValueOnce();
+
+    jest
+      .spyOn(tokenService, "createToken")
+      .mockReturnValueOnce(Promise.resolve(token));
 
     await expect(authController.login(loginDto)).resolves.toEqual({
       id_token: token,
@@ -81,12 +81,17 @@ describe("AuthController", () => {
       passwordHash:
         "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
     };
-    const user = { id: "1" };
     const token = faker.random.alphaNumeric(32);
 
-    userService.createUserAsync = jest.fn().mockResolvedValue(user);
-    tokenService.addCustomClaims = jest.fn();
-    tokenService.createToken = jest.fn().mockResolvedValue(token);
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockReturnValueOnce(null);
+
+    jest.spyOn(tokenService, "addCustomClaims").mockReturnValueOnce();
+
+    jest
+      .spyOn(tokenService, "createToken")
+      .mockReturnValueOnce(Promise.resolve(token));
 
     await expect(authController.signUp(signUpDto)).resolves.toEqual({
       id_token: token,
