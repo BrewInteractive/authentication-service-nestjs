@@ -34,8 +34,8 @@ describe("AuthController", () => {
         {
           provide: "UserService",
           useValue: {
-            validateUser: jest.fn(),
-            createUser: jest.fn(),
+            validateUserAsync: jest.fn(),
+            createUserAsync: jest.fn(),
           },
         },
       ],
@@ -61,7 +61,7 @@ describe("AuthController", () => {
     
     const token = faker.random.alphaNumeric(32);
 
-    userService.getUser = jest.fn().mockResolvedValue(user);
+    userService.getUserAsync = jest.fn().mockResolvedValue(user);
     tokenService.addCustomClaims = jest.fn();
     tokenService.createToken = jest.fn().mockResolvedValue(token);
 
@@ -84,7 +84,7 @@ describe("AuthController", () => {
     const user = { id: "1" };
     const token = faker.random.alphaNumeric(32);
 
-    userService.createUser = jest.fn().mockResolvedValue(user);
+    userService.createUserAsync = jest.fn().mockResolvedValue(user);
     tokenService.addCustomClaims = jest.fn();
     tokenService.createToken = jest.fn().mockResolvedValue(token);
 

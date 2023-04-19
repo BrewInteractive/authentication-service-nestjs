@@ -15,14 +15,14 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async getUser(username: string, email: string): Promise<User> {
+  async getUserAsync(username: string, email: string): Promise<User> {
     return this.userRepository.findOne({
       where: [{ username }, { email }],
     });
   }
 
-  async validateUser(user: User): Promise<User> {
-    const userInformation = await this.getUser(user.username, user.email);
+  async validateUserAsync(user: User): Promise<User> {
+    const userInformation = await this.getUserAsync(user.username, user.email);
 
     if (!userInformation) {
       throw new UnauthorizedException("Invalid credentials");
@@ -37,10 +37,10 @@ export class UserService {
     return userInformation;
   }
 
-  async createUser(user: User): Promise<User> {
+  async createUserAsync(user: User): Promise<User> {
     const { username, email, password } = user;
 
-    const existingUser = await this.getUser(username, email);
+    const existingUser = await this.getUserAsync(username, email);
 
     if (existingUser) {
       throw new ConflictException("Username or email already exists");
