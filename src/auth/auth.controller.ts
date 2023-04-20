@@ -19,7 +19,7 @@ export class AuthController {
   ) {}
 
   @Post("login")
-  async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
+  async loginAsync(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.mapper.mapAsync(loginDto, LoginDto, User);
     const responseUser = await this.userService.validateUserAsync(user);
     const id_token = await this.tokenService.createToken(responseUser, 3600);
@@ -27,7 +27,7 @@ export class AuthController {
   }
 
   @Post("signup")
-  async signUp(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
+  async signUpAsync(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
     const user = await this.mapper.mapAsync(signUpDto, SignUpDto, User);
     const responseUser = await this.userService.createUserAsync(user);
     const id_token = await this.tokenService.createToken(responseUser, 3600);

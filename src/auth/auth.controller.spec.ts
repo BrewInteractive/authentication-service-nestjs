@@ -11,6 +11,9 @@ import { UserModule } from "../user/user.module";
 import { TokenModule } from "../token/token.module";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { User } from "../models/user.entity";
+import { MockFactory } from "mockingbird";
+import { UserFixture, LoginFixture, SignUpFixture } from "../../test/fixtures";
+import { UnauthorizedException } from "@nestjs/common";
 
 describe("AuthController", () => {
   let authController: AuthController;
@@ -42,58 +45,50 @@ describe("AuthController", () => {
   });
 
   it("should return a token if the email and password are valid", async () => {
-    const loginDto = {
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: "TestPassword",
-    };
-    const user = {
-      id: "1",
-      email: loginDto.email,
-      passwordHash:
-        "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
-    };
+    const loginDto = MockFactory(LoginFixture).one();
+    const user = MockFactory(UserFixture).one();
 
     const token = faker.random.alphaNumeric(32);
     jest
-      .spyOn(userService, "getUserAsync")
+      .spyOn(userService, "validateUserAsync")
       .mockReturnValueOnce(Promise.resolve(user as User));
-
-    jest.spyOn(tokenService, "addCustomClaims").mockReturnValueOnce();
 
     jest
       .spyOn(tokenService, "createToken")
       .mockReturnValueOnce(Promise.resolve(token));
 
-    await expect(authController.login(loginDto)).resolves.toEqual({
+    await expect(authController.loginAsync(loginDto)).resolves.toEqual({
       id_token: token,
     });
   });
 
+  it("should return a token if the email and password are invalid", async () => {
+    const loginDto = MockFactory(LoginFixture).one();
+
+    const expectedResult = new UnauthorizedException("Invalid credentials");
+    jest
+      .spyOn(userService, "validateUserAsync")
+      .mockRejectedValueOnce(expectedResult);
+
+    await expect(authController.loginAsync(loginDto)).rejects.toThrow(
+      expectedResult
+    );
+  });
+
   it("should return a token if the sign-up process is successful", async () => {
-    const fakerPassword = "TestPassword";
-    const signUpDto = {
-      username: faker.internet.userName(),
-      lastName: faker.name.lastName(),
-      firstName: faker.name.firstName(),
-      password: fakerPassword,
-      email: faker.internet.email(),
-      passwordHash:
-        "$2b$10$u1E.BPg.ZglghX.wo79r0OFn97022aLCYaQMMlR0hAnaqeus5r9PG",
-    };
+    const loginDto = MockFactory(SignUpFixture).one();
+    const user = MockFactory(UserFixture).one() as User;
     const token = faker.random.alphaNumeric(32);
 
     jest
-      .spyOn(userService, "getUserAsync")
-      .mockReturnValueOnce(null);
-
-    jest.spyOn(tokenService, "addCustomClaims").mockReturnValueOnce();
+      .spyOn(userService, "createUserAsync")
+      .mockReturnValueOnce(Promise.resolve(user));
 
     jest
       .spyOn(tokenService, "createToken")
       .mockReturnValueOnce(Promise.resolve(token));
 
-    await expect(authController.signUp(signUpDto)).resolves.toEqual({
+    await expect(authController.signUpAsync(loginDto)).resolves.toEqual({
       id_token: token,
     });
   });
