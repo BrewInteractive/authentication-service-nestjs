@@ -6,12 +6,11 @@ import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { Repository } from "typeorm";
-import * as bcrypt from "bcrypt";
+const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
   let userService: UserService;
   let userRepository: Repository<User>;
-  let mockBcrypt: typeof bcrypt;
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -22,10 +21,6 @@ describe("UserService", () => {
             findOne: jest.fn(),
             save: jest.fn(),
           },
-        },
-        {
-          provide: "BCRYPT",
-          useValue: mockBcrypt,
         },
       ],
     }).compile();
@@ -102,16 +97,14 @@ describe("UserService", () => {
     );
   });
 
-  /*
   it("should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
 
-    jest.spyOn(mockBcrypt, "compare").mockResolvedValue(Promise.resolve(true));
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
     await expect(userService.validateUserAsync(user)).resolves.toEqual({
-      user,
+      ...user,
     });
-  }); TODO */
-  
+  });
 });

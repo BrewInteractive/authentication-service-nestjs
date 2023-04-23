@@ -7,6 +7,8 @@ import { DataSource } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";
+import { MockFactory } from "mockingbird";
+import { LoginFixture, SignUpFixture } from "../test/fixtures";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;
@@ -32,13 +34,13 @@ describe("AuthController (e2e)", () => {
 
   describe("POST /signup", () => {
     it("should create a new user and return a token", async () => {
-      const signUpDto = {
-        email: "test@test.com",
-        username: "testUser",
-        password: "TestPassword1!",
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-      };
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          email: "test@test.com",
+          username: "testUser",
+          password: "TestPassword1!",
+        })
+        .one();
 
       const response = await request(app.getHttpServer())
         .post("/signup")
@@ -48,13 +50,11 @@ describe("AuthController (e2e)", () => {
       expect(response.body).toHaveProperty("id_token");
     });
     it("should return 400 if email already exists", async () => {
-      const signUpDto = {
-        email: "test@test.com",
-        username: faker.internet.userName(),
-        password: faker.internet.password(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-      };
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          email: "test@test.com",
+        })
+        .one();
 
       const response = await request(app.getHttpServer())
         .post("/signup")
@@ -65,14 +65,11 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should return 400 if username already exists", async () => {
-      const signUpDto = {
-        email: faker.internet.email(),
-        username: "testUser",
-        password: faker.internet.password(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-      };
-
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          username: "testUser",
+        })
+        .one();
       const response = await request(app.getHttpServer())
         .post("/signup")
         .send(signUpDto)
@@ -82,12 +79,12 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should return 400 if email is invalid", async () => {
-      const signUpDto = {
-        email: "inv-email",
-        password: faker.internet.password(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-      };
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          email: "inv-email",
+        })
+        .one();
+        signUpDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/signup")
@@ -98,14 +95,11 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should return 400 if password is too short", async () => {
-      const signUpDto = {
-        email: faker.internet.email(),
-        username: faker.internet.userName(),
-        password: "TPass",
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-      };
-
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          password: "TPass",
+        })
+        .one();
       const response = await request(app.getHttpServer())
         .post("/signup")
         .send(signUpDto)
@@ -119,10 +113,12 @@ describe("AuthController (e2e)", () => {
 
   describe("POST /login", () => {
     it("should return a token if user email credentials are valid", async () => {
-      const loginEmailDto = {
-        email: "test@test.com",
-        password: "TestPassword1!",
-      };
+      const loginEmailDto = MockFactory(LoginFixture)
+        .mutate({
+          email: "test@test.com",
+          password: "TestPassword1!",
+        })
+        .one();
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
         .send(loginEmailDto)
@@ -143,10 +139,12 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should return an error if email is invalid", async () => {
-      const loginDto = {
-        email: "invalid@email.com",
-        password: "TestPassword1!",
-      };
+      const loginDto = MockFactory(LoginFixture)
+        .mutate({
+          email: "invalid@email.com",
+          password: "TestPassword1!",
+        })
+        .one();
       const response = await request(app.getHttpServer())
         .post("/login")
         .send(loginDto)
@@ -156,10 +154,13 @@ describe("AuthController (e2e)", () => {
     });
 
     it("should return an error if password is invalid", async () => {
-      const loginDto = {
-        email: "test@test.com",
-        password: "Wrong-Password",
-      };
+      const loginDto = MockFactory(LoginFixture)
+        .mutate({
+          email: "test@test.com",
+          password: "Wrong-Password",
+        })
+        .one();
+
       const response = await request(app.getHttpServer())
         .post("/login")
         .send(loginDto)

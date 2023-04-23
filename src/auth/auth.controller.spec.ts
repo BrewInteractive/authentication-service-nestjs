@@ -76,7 +76,7 @@ describe("AuthController", () => {
   });
 
   it("should return a token if the sign-up process is successful", async () => {
-    const loginDto = MockFactory(SignUpFixture).one();
+    const signUpDto = MockFactory(SignUpFixture).one();
     const user = MockFactory(UserFixture).one() as User;
     const token = faker.random.alphaNumeric(32);
 
@@ -88,7 +88,7 @@ describe("AuthController", () => {
       .spyOn(tokenService, "createToken")
       .mockReturnValueOnce(Promise.resolve(token));
 
-    await expect(authController.signUpAsync(loginDto)).resolves.toEqual({
+    await expect(authController.signUpAsync(signUpDto)).resolves.toEqual({
       id_token: token,
     });
   });

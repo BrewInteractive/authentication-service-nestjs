@@ -2,10 +2,10 @@ import { Mock } from "mockingbird";
 
 export class SignUpFixture {
   @Mock((faker) => faker.internet.userName())
-  username: string;
+  username: string | null;
 
   @Mock((faker) => faker.internet.email())
-  email: string;
+  email: string | null;
 
   @Mock((faker) => faker.internet.password())
   password: string;
