@@ -10,7 +10,7 @@ export class TokenService {
     this.customClaims = {};
   }
 
-  async createToken(user, expiresIn: number) {
+  createToken(user, expiresIn: number) {
     this.addCustomClaims("user_id", user.id);
     if (user.email) this.addCustomClaims("email", user.email);
     if (user.username) this.addCustomClaims("username", user.username);

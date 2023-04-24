@@ -16,7 +16,7 @@ export class UserService {
   ) {}
 
   async getUserAsync(username: string, email: string): Promise<User> {
-    const user = this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: [{ username }, { email }],
     });
     if (user) return user;

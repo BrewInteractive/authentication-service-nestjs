@@ -32,7 +32,7 @@ describe("AuthController (e2e)", () => {
     await moduleFixture.close();
   });
 
-  describe("POST /signup", () => {
+  describe("POST /sign-up", () => {
     it("should create a new user and return a token", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
@@ -43,7 +43,7 @@ describe("AuthController (e2e)", () => {
         .one();
 
       const response = await request(app.getHttpServer())
-        .post("/signup")
+        .post("/sign-up")
         .send(signUpDto)
         .expect(201);
 
@@ -57,7 +57,7 @@ describe("AuthController (e2e)", () => {
         .one();
 
       const response = await request(app.getHttpServer())
-        .post("/signup")
+        .post("/sign-up")
         .send(signUpDto)
         .expect(409);
 
@@ -71,7 +71,7 @@ describe("AuthController (e2e)", () => {
         })
         .one();
       const response = await request(app.getHttpServer())
-        .post("/signup")
+        .post("/sign-up")
         .send(signUpDto)
         .expect(409);
 
@@ -87,7 +87,7 @@ describe("AuthController (e2e)", () => {
         signUpDto.username = null;
 
       const response = await request(app.getHttpServer())
-        .post("/signup")
+        .post("/sign-up")
         .send(signUpDto)
         .expect(400);
 
@@ -101,7 +101,7 @@ describe("AuthController (e2e)", () => {
         })
         .one();
       const response = await request(app.getHttpServer())
-        .post("/signup")
+        .post("/sign-up")
         .send(signUpDto)
         .expect(400);
 

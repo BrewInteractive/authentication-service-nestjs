@@ -22,15 +22,15 @@ export class AuthController {
   async loginAsync(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.mapper.mapAsync(loginDto, LoginDto, User);
     const responseUser = await this.userService.validateUserAsync(user);
-    const id_token = await this.tokenService.createToken(responseUser, 3600);
+    const id_token = this.tokenService.createToken(responseUser, 3600);
     return { id_token };
   }
 
-  @Post("signup")
+  @Post("sign-up")
   async signUpAsync(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
     const user = await this.mapper.mapAsync(signUpDto, SignUpDto, User);
     const responseUser = await this.userService.createUserAsync(user);
-    const id_token = await this.tokenService.createToken(responseUser, 3600);
+    const id_token = this.tokenService.createToken(responseUser, 3600);
     return { id_token };
   }
 }

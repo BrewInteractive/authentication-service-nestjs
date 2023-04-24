@@ -55,7 +55,7 @@ describe("AuthController", () => {
 
     jest
       .spyOn(tokenService, "createToken")
-      .mockReturnValueOnce(Promise.resolve(token));
+      .mockReturnValueOnce(token);
 
     await expect(authController.loginAsync(loginDto)).resolves.toEqual({
       id_token: token,
@@ -86,7 +86,7 @@ describe("AuthController", () => {
 
     jest
       .spyOn(tokenService, "createToken")
-      .mockReturnValueOnce(Promise.resolve(token));
+      .mockReturnValueOnce(token);
 
     await expect(authController.signUpAsync(signUpDto)).resolves.toEqual({
       id_token: token,
