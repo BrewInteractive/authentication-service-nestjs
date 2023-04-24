@@ -16,16 +16,16 @@ jobs:
           # Version Spec of the version to use in SemVer notation.
           # It also emits such aliases as lts, latest, nightly and canary builds
           # Examples: 12.x, 10.15.1, >=10.15.0, lts/Hydrogen, 16-nightly, latest, node
-          node-version: "14.x"
+          node-version: "16.x"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: yarn install
+        run: npm install
       - name: Test E2E
-        run: yarn test:e2e
+        run: npm run test:e2e
       - name: Test and coverage
-        run: yarn test:cov
+        run: npm run test:cov
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
