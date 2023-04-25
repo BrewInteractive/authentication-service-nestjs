@@ -6,6 +6,7 @@ import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { Repository } from "typeorm";
+import { faker } from "@faker-js/faker";
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -81,9 +82,10 @@ describe("UserService", () => {
     const user = MockFactory(UserFixture).one() as User;
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
 
-    await expect(userService.validateUserAsync(user)).rejects.toThrow(
-      UnauthorizedException
-    );
+    const password = faker.internet.password();
+    await expect(
+      userService.validateUserAsync(user.username, user.email, password)
+    ).rejects.toThrow(UnauthorizedException);
   });
 
   it("should throw an UnauthorizedException if the password is invalid", async () => {
@@ -92,18 +94,27 @@ describe("UserService", () => {
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
 
-    await expect(userService.validateUserAsync(validateUser)).rejects.toThrow(
-      UnauthorizedException
-    );
+    const password = faker.internet.password();
+
+    await expect(
+      userService.validateUserAsync(
+        validateUser.username,
+        validateUser.email,
+        password
+      )
+    ).rejects.toThrow(UnauthorizedException);
   });
 
   it("should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
 
+    const password = faker.internet.password();
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
-    await expect(userService.validateUserAsync(user)).resolves.toEqual({
+    await expect(
+      userService.validateUserAsync(user.username, user.email, password)
+    ).resolves.toEqual({
       ...user,
     });
   });

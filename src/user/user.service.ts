@@ -23,14 +23,18 @@ export class UserService {
     return null;
   }
 
-  async validateUserAsync(user: User): Promise<User> {
-    const userInformation = await this.getUserAsync(user.username, user.email);
+  async validateUserAsync(
+    username: string,
+    email: string,
+    password: string
+  ): Promise<User> {
+    const userInformation = await this.getUserAsync(username, email);
 
     if (!userInformation) {
       throw new UnauthorizedException("Invalid credentials");
     }
     const isPasswordValid = await bcrypt.compare(
-      user.password,
+      password,
       userInformation.passwordHash
     );
     if (!isPasswordValid) {
@@ -40,16 +44,11 @@ export class UserService {
   }
 
   async createUserAsync(user: User): Promise<User> {
-    const { username, email, password } = user;
-
-    const existingUser = await this.getUserAsync(username, email);
+    const existingUser = await this.getUserAsync(user.username, user.email);
 
     if (existingUser) {
       throw new ConflictException("Username or email already exists");
     }
-
-    user.passwordSalt = await bcrypt.genSalt();
-    user.passwordHash = await bcrypt.hash(password, user.passwordSalt);
 
     return this.userRepository.save(user);
   }

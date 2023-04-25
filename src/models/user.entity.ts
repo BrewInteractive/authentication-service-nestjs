@@ -46,9 +46,6 @@ export class User {
   @Column({ name: "password_salt" })
   passwordSalt: string;
 
-  @AutoMap()
-  password: string;
-
   @Column({ name: "email_verified", default: false })
   emailVerified: boolean;
 

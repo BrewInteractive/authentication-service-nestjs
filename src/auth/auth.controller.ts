@@ -20,8 +20,11 @@ export class AuthController {
 
   @Post("login")
   async loginAsync(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
-    const user = await this.mapper.mapAsync(loginDto, LoginDto, User);
-    const responseUser = await this.userService.validateUserAsync(user);
+    const responseUser = await this.userService.validateUserAsync(
+      loginDto.username,
+      loginDto.email,
+      loginDto.password
+    );
     const id_token = this.tokenService.createToken(responseUser, 3600);
     return { id_token };
   }
