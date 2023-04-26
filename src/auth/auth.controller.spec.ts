@@ -50,7 +50,7 @@ describe("AuthController", () => {
 
     const token = faker.random.alphaNumeric(32);
     jest
-      .spyOn(userService, "validateUserAsync")
+      .spyOn(userService, "validateUserPasswordAsync")
       .mockReturnValueOnce(Promise.resolve(user as User));
 
     jest
@@ -67,7 +67,7 @@ describe("AuthController", () => {
 
     const expectedResult = new UnauthorizedException("Invalid credentials");
     jest
-      .spyOn(userService, "validateUserAsync")
+      .spyOn(userService, "validateUserPasswordAsync")
       .mockRejectedValueOnce(expectedResult);
 
     await expect(authController.loginAsync(loginDto)).rejects.toThrow(

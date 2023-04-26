@@ -84,7 +84,7 @@ describe("AuthController (e2e)", () => {
           email: "inv-email",
         })
         .one();
-        signUpDto.username = null;
+      signUpDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
@@ -112,24 +112,31 @@ describe("AuthController (e2e)", () => {
   });
 
   describe("POST /login", () => {
-    it("should return a token if user email credentials are valid", async () => {
+    it("should return a token if email credentials are valid", async () => {
       const loginEmailDto = MockFactory(LoginFixture)
         .mutate({
           email: "test@test.com",
           password: "TestPassword1!",
         })
         .one();
+      loginEmailDto.username = null;
+
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
         .send(loginEmailDto)
         .expect(201);
 
       expect(responseEmail.body).toHaveProperty("id_token");
+    });
+    it("should return a token if username credentials are valid", async () => {
+      const loginUsernameDto = MockFactory(LoginFixture)
+        .mutate({
+          username: "testUser",
+          password: "TestPassword1!",
+        })
+        .one();
 
-      const loginUsernameDto = {
-        username: "testUser",
-        password: "TestPassword1!",
-      };
+      loginUsernameDto.email = null;
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
         .send(loginUsernameDto)
