@@ -1,4 +1,4 @@
-name: Release
+name: NPM Release
 on:
   release:
     types: [published]
@@ -26,4 +26,4 @@ jobs:
       - run: npm run build
       - uses: JS-DevTools/npm-publish@v1
         with:
-          token: ${{ secrets.NPM_ACCESS_KEY }}
+          token: ${{ secrets.NPM_TOKEN }}
