@@ -15,7 +15,7 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async getUserByUsernameAndEmail(
+  async getUserByUsernameAndEmailAsync(
     username: string,
     email: string
   ): Promise<User> {
@@ -26,15 +26,15 @@ export class UserService {
     return null;
   }
 
-  async getUserByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
-    return this.getUserByUsernameAndEmail(usernameOrEmail, usernameOrEmail);
+  async getUserByUsernameOrEmailAsync(usernameOrEmail: string): Promise<User> {
+    return this.getUserByUsernameAndEmailAsync(usernameOrEmail, usernameOrEmail);
   }
 
   async validateUserPasswordAsync(
     usernameOrEmail: string,
     password: string
   ): Promise<User> {
-    const userInformation = await this.getUserByUsernameOrEmail(
+    const userInformation = await this.getUserByUsernameOrEmailAsync(
       usernameOrEmail
     );
 
@@ -52,7 +52,7 @@ export class UserService {
   }
 
   async createUserAsync(user: User): Promise<User> {
-    const existingUser = await this.getUserByUsernameAndEmail(
+    const existingUser = await this.getUserByUsernameAndEmailAsync(
       user.username,
       user.email
     );
