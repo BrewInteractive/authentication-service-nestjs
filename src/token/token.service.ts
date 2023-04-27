@@ -1,5 +1,7 @@
-import { Injectable } from "@nestjs/common";
 import * as jwt from "jsonwebtoken";
+
+import { Injectable } from "@nestjs/common";
+import config from "../utils/config";
 
 @Injectable()
 export class TokenService {
@@ -8,12 +10,15 @@ export class TokenService {
     this.customClaims = {};
   }
 
-  createToken(expiresIn: number) {
-    const token = jwt.sign(this.customClaims, process.env.JWT_SECRET, {
-      algorithm: process.env.JWT_ALGORITHM as jwt.Algorithm,
-      audience: process.env.JWT_AUDIENCE,
-      subject: process.env.JWT_SUBJECT,
-      issuer: process.env.JWT_ISSUER,
+  createToken(user, expiresIn: number) {
+    this.addCustomClaims("user_id", user.id);
+    if (user.email) this.addCustomClaims("email", user.email);
+    if (user.username) this.addCustomClaims("username", user.username);
+    const token = jwt.sign(this.customClaims, config().jwtSecret, {
+      algorithm: config().jwtAlgorithm as jwt.Algorithm,
+      audience: config().jwtAudience,
+      subject: user.id,
+      issuer: config().jwtIssuer,
       expiresIn,
     });
     return token;

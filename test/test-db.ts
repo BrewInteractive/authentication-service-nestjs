@@ -1,18 +1,40 @@
-import { DataType, newDb } from "pg-mem";
-import { TypeOrmOptionsFactory } from "@nestjs/typeorm";
+import * as path from "path";
 
-export function createTestDbAsync() {
-  const db = newDb();
-  db.public.registerFunction({
-    name: "current_database",
-    args: [],
-    returns: DataType.text,
-    implementation: (x) => `hello world ${x}`,
+import { DataType, newDb } from "pg-mem";
+
+import { DataSource } from "typeorm";
+import { v4 } from "uuid";
+
+export async function setupTestDataSourceAsync() {
+  const db = newDb({
+    autoCreateForeignKeyIndices: true,
   });
 
-  return db.adapters.createTypeormDataSource({
+  db.public.registerFunction({
+    implementation: () => "test",
+    name: "current_database",
+  });
+
+  db.public.registerFunction({
+    implementation: () => "test",
+    name: "version",
+  });
+
+  db.registerExtension("uuid-ossp", (schema) => {
+    schema.registerFunction({
+      name: "uuid_generate_v4",
+      returns: DataType.uuid,
+      implementation: v4,
+      impure: true,
+    });
+  });
+
+  const ds: DataSource = await db.adapters.createTypeormConnection({
     type: "postgres",
-    entities: ["../src/**/*.entity.ts"],
-    synchronize: true,
-  }) as TypeOrmOptionsFactory;
+    entities: [path.join(__dirname, "/../src/models/*.entity{.ts,.js}")],
+  });
+
+  await ds.synchronize();
+
+  return ds;
 }
