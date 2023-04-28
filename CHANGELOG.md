@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.2.1...v1.3.0) (2023-04-28)
+
+
+### Features
+
+* add module tests ([2348392](https://github.com/BrewInteractive/authentication-service-nestjs/commit/234839281b0f750a3834a23fed18fb1b31be9599))
+* add swagger value for login and signup services ([41175e5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/41175e5a9dcce69e1888e4c7203b7dab5664d516))
+* **SHBD-357, SHBD-356:** add login and signup implement with test ([df1bc56](https://github.com/BrewInteractive/authentication-service-nestjs/commit/df1bc56f9a0fd119642c985dba25751b9ba4909e))
+
+
+### Bug Fixes
+
+* fix bcrypt mock for test and e2e test to fixture variable ([db7fdd5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/db7fdd5f955a2563ab3a8fdb4cc59cc2cac1623a))
+* fix for auth and user test mock jest ([b9e288d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b9e288d118d4de6678af5ffcab3574125fcd7f89))
+* fix for auth e2e test ([f9c50bb](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f9c50bb26c4525b095f9201fc90f96cb962c9bbc))
+* fix for data source config ([a5a9516](https://github.com/BrewInteractive/authentication-service-nestjs/commit/a5a9516e421cfe4b2f891a95244f72fa7b6e8264))
+* fix for dto transfer with automapper ([c566a94](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c566a94709847e58791673f00bb64d58aae212ee))
+* fix for e2e test ([30bd4c0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/30bd4c0842c1a1f25054d5d330dd4cac840c82c9))
+* fix for tests mock convert to fixture ([6bf7c7f](https://github.com/BrewInteractive/authentication-service-nestjs/commit/6bf7c7fdeb734cb4cec4a55e34681937312ada6d))
+* fix for user service getUser method ([ed0b2a9](https://github.com/BrewInteractive/authentication-service-nestjs/commit/ed0b2a9f5f72718974ac4ca89551b67eea4f51e0))
+* remove bcrypt dependencies in testing. ([be9e0a7](https://github.com/BrewInteractive/authentication-service-nestjs/commit/be9e0a775ba2a28bdbd4637eaa241f18ead65c22))
+
 ### [1.2.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.2.0...v1.2.1) (2023-04-25)
 
 ## [1.2.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.1.2...v1.2.0) (2023-04-25)
