@@ -1,0 +1,15 @@
+.docker
+.vscode
+.github
+test
+docs
+src
+Dockerfile
+.env
+.env.example
+.dockerignore
+tsconfig.build.json
+nest-cli.json
+tsconfig.json
+sonar-project.properties
+docker-compose.yml

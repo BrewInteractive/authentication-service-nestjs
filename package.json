@@ -7,7 +7,7 @@
   "readmeFilename": "README.md",
   "main": "dist/src/main.js",
   "scripts": {
-    "build": "nest build && cp *.md dist",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
