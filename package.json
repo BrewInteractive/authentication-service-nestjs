@@ -6,12 +6,8 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "main": "dist/src/main.js",
-  "files": [
-    "dist",
-    "*.md"
-  ],
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && cp *.md dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
