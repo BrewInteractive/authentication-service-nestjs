@@ -19,6 +19,6 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "db"],
   "exclude": ["node_modules"]
 }

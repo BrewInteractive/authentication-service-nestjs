@@ -14,6 +14,7 @@ export const dataSourceOptions: DataSourceOptions = {
   migrations: [`${__dirname}/${DB_DRIVE}/migrations/*.ts`],
   migrationsTableName:
     process.env.DB_MIGRATION_TABLE_NAME || "auth_service_migration",
+  synchronize: true,
 };
 
 export default new DataSource(dataSourceOptions);
