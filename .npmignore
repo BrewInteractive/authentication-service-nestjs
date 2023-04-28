@@ -13,3 +13,4 @@ nest-cli.json
 tsconfig.json
 sonar-project.properties
 docker-compose.yml
+db
