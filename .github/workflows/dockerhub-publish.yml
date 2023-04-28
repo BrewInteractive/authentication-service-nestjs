@@ -6,6 +6,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: action-test
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
+      JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
+      JWT_ISSUER: ${{ vars.JWT_AUDIENCE }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

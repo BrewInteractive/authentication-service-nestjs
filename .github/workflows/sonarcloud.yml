@@ -10,14 +10,14 @@ on:
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
-    environment: sonarcloud
+    environment: action-test
     env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
-            JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
-            JWT_ISSUER: ${{ vars.JWT_AUDIENCE }}
-            JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
+      JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
+      JWT_ISSUER: ${{ vars.JWT_AUDIENCE }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/setup-node@v3
         with:
@@ -36,4 +36,3 @@ jobs:
         run: npm run test:cov
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
-
