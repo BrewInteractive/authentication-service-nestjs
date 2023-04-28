@@ -15,7 +15,11 @@ export const dataSourceOptions: DataSourceOptions = {
   migrationsTableName:
     process.env.DB_MIGRATION_TABLE_NAME || "auth_service_migration",
   synchronize: true,
-  ssl: JSON.parse(process.env.DB_SSL || "false"),
+  ssl: process.env.DB_SSL_CA
+    ? {
+        ca: process.env.DB_SSL_CA,
+      }
+    : JSON.parse(process.env.DB_SSL || "false"),
 };
 
 export default new DataSource(dataSourceOptions);
