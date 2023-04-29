@@ -11,10 +11,10 @@ export const dataSourceOptions: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   entities: [`${__dirname}/../**/*.entity.{js,ts}`],
-  migrations: [`${__dirname}/${DB_DRIVE}/migrations/*.ts`],
+  migrations: [`${__dirname}/${DB_DRIVE}/migrations/*.{js,ts}`],
   migrationsTableName:
     process.env.DB_MIGRATION_TABLE_NAME || "auth_service_migration",
-  synchronize: true,
+  migrationsRun: true,
   ssl: process.env.DB_SSL_CA
     ? {
         ca: process.env.DB_SSL_CA,
