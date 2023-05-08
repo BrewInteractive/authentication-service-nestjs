@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { Injectable } from "@nestjs/common";
 import config from "../utils/config";
 
-@Injectable()
+@Injectable({})
 export class TokenService {
   private customClaims: {};
   constructor() {
