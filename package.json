@@ -27,7 +27,7 @@
     "migration-postgres:generate": "npm run migration:generate --name=$npm_config_name --drive=postgres",
     "migration-mysql:generate": "npm run migration:generate --name=$npm_config_name --drive=mysql",
     "migration-all:generate": "npm run migration-postgres:generate && npm run migration-mysql:generate",
-    "migration-all:run": "npm run migration:run --drive=postgres && npm run migration:run --drive=mysql",
+    "migration-all:run": "npm run migration-mysql:run && npm run migration-postgres:run",
     "migration:run": "npm run typeorm migration:run",
     "migration-mysql:run": "npm run typeorm-mysql migration:run",
     "migration-postgres:run": "npm run typeorm-postgres migration:run",
