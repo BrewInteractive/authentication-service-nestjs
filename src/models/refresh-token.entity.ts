@@ -20,7 +20,7 @@ export class RefreshToken {
   @Column({ name: "expires_at" })
   expiresAt?: Date;
 
-  @OneToOne((type: User) => User, (user) => user.id)
+  @OneToOne((type: User) => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: "user_id" })
   user: User;
 
