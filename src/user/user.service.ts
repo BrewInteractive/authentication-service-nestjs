@@ -21,13 +21,17 @@ export class UserService {
   ): Promise<User> {
     const user = await this.userRepository.findOne({
       where: [{ username }, { email }],
+      relations: ["roles", "roles.role"],
     });
     if (user) return user;
     return null;
   }
 
   async getUserByUsernameOrEmailAsync(usernameOrEmail: string): Promise<User> {
-    return this.getUserByUsernameAndEmailAsync(usernameOrEmail, usernameOrEmail);
+    return this.getUserByUsernameAndEmailAsync(
+      usernameOrEmail,
+      usernameOrEmail
+    );
   }
 
   async validateUserPasswordAsync(

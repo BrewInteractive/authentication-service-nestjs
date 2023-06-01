@@ -1,12 +1,14 @@
 import { AutoMap } from "@automapper/classes";
 import { SnowflakeId } from "../utils/snowflake-id";
 import * as crypto from "crypto";
+import { UserRole } from "./user-role.entity";
 import {
   BeforeInsert,
   Check,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -54,4 +56,7 @@ export class User {
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
+
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  roles: Array<UserRole>;
 }
