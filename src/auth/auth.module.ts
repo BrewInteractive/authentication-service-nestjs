@@ -17,6 +17,5 @@ import { classes } from "@automapper/classes";
   ],
   controllers: [AuthController],
   providers: [SignUpProfile, LoginProfile],
-  exports: [TokenModule, "TokenService"],
 })
 export class AuthModule {}

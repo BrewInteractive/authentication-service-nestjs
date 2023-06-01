@@ -6,6 +6,7 @@ import { IPlugin } from "./interfaces/plugin.interface";
 import { PluginService } from "./plugin.service";
 import { PluginTestModule } from "../plugin-test/plugin-test.module";
 import { Provider } from "@nestjs/common";
+import { TokenModule } from "../token/token.module";
 
 describe("PluginService", () => {
   let service: PluginService;
@@ -13,7 +14,7 @@ describe("PluginService", () => {
   beforeEach(async () => {
     const pluginTypes: Provider<IPlugin>[] = Object.values(Plugins);
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PluginTestModule],
+      imports: [PluginTestModule, TokenModule],
       providers: [
         {
           provide: "PLUGINTYPES",
@@ -27,7 +28,7 @@ describe("PluginService", () => {
     service = module.get<PluginService>(PluginService);
   });
 
-  it("should be defined", () => {
+  it("Should be defined", () => {
     expect(service).toBeDefined();
   });
 });

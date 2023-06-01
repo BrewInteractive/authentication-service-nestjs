@@ -4,6 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { TokenService } from "./token.service";
 import { faker } from "@faker-js/faker";
+import { User } from "../models/user.entity";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -51,7 +52,7 @@ describe("TokenService", () => {
       id: id,
       email: email,
       username: username,
-    };
+    } as User;
     const token = await tokenService.createToken(user, expiresIn);
 
     expect(token).toBe(expectedToken);
@@ -61,7 +62,6 @@ describe("TokenService", () => {
       {
         algorithm: expectedJwtAlgorithm,
         audience: expectedJwtAudience,
-        subject: expectedJwtSubject,
         issuer: expectedJwtIssuer,
         expiresIn,
       }
