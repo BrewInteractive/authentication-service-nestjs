@@ -5,6 +5,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { TokenService } from "./token.service";
 import { faker } from "@faker-js/faker";
 import { User } from "../models/user.entity";
+import { UserFixture } from "../../test/fixtures";
+import { MockFactory } from "mockingbird";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -26,15 +28,14 @@ describe("TokenService", () => {
   });
 
   it("should create token by calling jwt.sign with the correct arguments", async () => {
-    const id = faker.random.numeric();
-    const email = faker.internet.email();
-    const username = faker.internet.userName();
+    const user = MockFactory(UserFixture).one().withRoles() as User;
     const expiresIn = 3600;
     const expectedToken = "fakeToken";
     const expectedCustomClaims = {
-      user_id: id,
-      email: email,
-      username: username,
+      user_id: user.id,
+      email: user.email,
+      username: user.username,
+      roles: user.roles.map((userRole) => userRole.role.name),
     };
     const expectedJwtSecret = "testSecret";
     const expectedJwtAlgorithm = "HS256";
@@ -48,11 +49,6 @@ describe("TokenService", () => {
     process.env.JWT_SUBJECT = expectedJwtSubject;
     process.env.JWT_ISSUER = expectedJwtIssuer;
 
-    const user = {
-      id: id,
-      email: email,
-      username: username,
-    } as User;
     const token = await tokenService.createToken(user, expiresIn);
 
     expect(token).toBe(expectedToken);

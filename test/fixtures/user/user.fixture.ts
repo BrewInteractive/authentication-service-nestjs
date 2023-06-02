@@ -1,5 +1,7 @@
-import { Mock } from "mockingbird";
+import { Mock, MockFactory } from "mockingbird";
 import { User } from "../../../src/models/user.entity";
+import { UserRole } from "../../../src/models/user-role.entity";
+import { UserRoleFixture } from "./user-role.fixture";
 
 export class UserFixture extends User {
   @Mock((faker) => faker.random.alpha())
@@ -34,4 +36,11 @@ export class UserFixture extends User {
 
   @Mock((faker) => faker.date.future())
   updatedAt: Date;
+
+  roles: Array<UserRole>;
+
+  withRoles(size: number = 2) {
+    this.roles = MockFactory(UserRoleFixture).many(size);
+    return this;
+  }
 }
