@@ -64,6 +64,42 @@ describe("TokenService", () => {
     );
   });
 
+  it("should create token by calling jwt.sign with the correct arguments(Not Role)", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const expiresIn = 3600;
+    const expectedToken = "fakeToken";
+    const expectedCustomClaims = {
+      user_id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+    const expectedJwtSecret = "testSecret";
+    const expectedJwtAlgorithm = "HS256";
+    const expectedJwtAudience = "testAudience";
+    const expectedJwtSubject = expectedCustomClaims.user_id;
+    const expectedJwtIssuer = "testIssuer";
+
+    process.env.JWT_SECRET = expectedJwtSecret;
+    process.env.JWT_ALGORITHM = expectedJwtAlgorithm;
+    process.env.JWT_AUDIENCE = expectedJwtAudience;
+    process.env.JWT_SUBJECT = expectedJwtSubject;
+    process.env.JWT_ISSUER = expectedJwtIssuer;
+
+    const token = await tokenService.createToken(user, expiresIn);
+
+    expect(token).toBe(expectedToken);
+    expect(jwt.sign).toHaveBeenCalledWith(
+      expectedCustomClaims,
+      expectedJwtSecret,
+      {
+        algorithm: expectedJwtAlgorithm,
+        audience: expectedJwtAudience,
+        issuer: expectedJwtIssuer,
+        expiresIn,
+      }
+    );
+  });
+
   it("should add custom claims to the TokenService instance", () => {
     const expectedCustomClaims = {
       claim1: "test",
