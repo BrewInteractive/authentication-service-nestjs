@@ -6,6 +6,7 @@ export default () => ({
   version,
   name,
   description,
+  apiKey: process.env.API_KEY,
   passwordRegex: new RegExp(
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),
