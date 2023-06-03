@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import config from "../../config";
-import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
