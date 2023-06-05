@@ -14,7 +14,7 @@ describe("PluginService", () => {
   beforeEach(async () => {
     const pluginTypes: Provider<IPlugin>[] = Object.values(Plugins);
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PluginTestModule, TokenModule],
+      imports: [PluginTestModule],
       providers: [
         {
           provide: "PLUGINTYPES",
