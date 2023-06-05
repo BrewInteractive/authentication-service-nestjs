@@ -1,25 +1,25 @@
 import * as jwt from "jsonwebtoken";
+
+import { CustomClaim } from "./concrete/custom-claim.type";
+import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { Injectable } from "@nestjs/common";
-import config from "../utils/config";
 import { User } from "../models/user.entity";
+import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
+import config from "../utils/config";
 
 @Injectable({})
 export class TokenService {
   private customClaims: {};
+  private customClaimImporters: ICustomClaimsImporter[] = [];
+
   constructor() {
     this.customClaims = {};
   }
 
-  createToken(user: User, expiresIn: number): string {
-    this.customClaims = { ...this.customClaims, ...this.getCustomClaims(user) };
-    this.addCustomClaims("user_id", user.id);
-    if (user.email) this.addCustomClaims("email", user.email);
-    if (user.username) this.addCustomClaims("username", user.username);
-    if (user?.roles?.length > 0)
-      this.addCustomClaims(
-        "roles",
-        user.roles.map((userRole) => userRole.role.name)
-      );
+  async createTokenAsync(user: User, expiresIn: number): Promise<string> {
+    this.customClaimImporters.push(new UserCustomClaimsImporter());
+    await this.loadCustomClaimImportersAsync(user);
+
     return jwt.sign(this.customClaims, config().jwtSecret, {
       algorithm: config().jwtAlgorithm as jwt.Algorithm,
       audience: config().jwtAudience,
@@ -28,11 +28,20 @@ export class TokenService {
     });
   }
 
-  addCustomClaims(claimsName: string, claimsValue: any) {
-    this.customClaims[claimsName] = claimsValue;
+  addCustomClaimImporter(customClaimImporter: ICustomClaimsImporter) {
+    this.customClaimImporters.push(customClaimImporter);
   }
 
-  getCustomClaims(user: User): object {
-    return {};
+  private async loadCustomClaimImportersAsync(user: User) {
+    this.customClaimImporters.forEach(async (customClaimImporter) => {
+      var customClaims = await customClaimImporter.getCustomClaimsAsync(user);
+      customClaims.forEach((customClaim) => {
+        this.addCustomClaim(customClaim);
+      });
+    });
+  }
+
+  addCustomClaim(customClaim: CustomClaim) {
+    this.customClaims[customClaim.name] = customClaim.value;
   }
 }

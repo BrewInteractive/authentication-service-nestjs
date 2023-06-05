@@ -1,12 +1,14 @@
 import * as jwt from "jsonwebtoken";
 
 import { Test, TestingModule } from "@nestjs/testing";
+import { instance, mock } from "ts-mockito";
 
+import { CustomClaim } from "./concrete/custom-claim.type";
+import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
+import { MockFactory } from "mockingbird";
 import { TokenService } from "./token.service";
-import { faker } from "@faker-js/faker";
 import { User } from "../models/user.entity";
 import { UserFixture } from "../../test/fixtures";
-import { MockFactory } from "mockingbird";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -49,7 +51,7 @@ describe("TokenService", () => {
     process.env.JWT_SUBJECT = expectedJwtSubject;
     process.env.JWT_ISSUER = expectedJwtIssuer;
 
-    const token = await tokenService.createToken(user, expiresIn);
+    const token = await tokenService.createTokenAsync(user, expiresIn);
 
     expect(token).toBe(expectedToken);
     expect(jwt.sign).toHaveBeenCalledWith(
@@ -85,7 +87,7 @@ describe("TokenService", () => {
     process.env.JWT_SUBJECT = expectedJwtSubject;
     process.env.JWT_ISSUER = expectedJwtIssuer;
 
-    const token = await tokenService.createToken(user, expiresIn);
+    const token = await tokenService.createTokenAsync(user, expiresIn);
 
     expect(token).toBe(expectedToken);
     expect(jwt.sign).toHaveBeenCalledWith(
@@ -105,9 +107,21 @@ describe("TokenService", () => {
       claim1: "test",
       claim2: { objKey: "test2" },
     };
-    tokenService.addCustomClaims("claim1", "test");
-    tokenService.addCustomClaims("claim2", { objKey: "test2" });
+    tokenService.addCustomClaim(new CustomClaim("claim1", "test"));
+    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey: "test2" }));
 
     expect(tokenService["customClaims"]).toEqual(expectedCustomClaims);
+  });
+
+  it("should add custom claim importer", () => {
+    const mockedCustomClaimImporter: ICustomClaimsImporter =
+      mock<ICustomClaimsImporter>();
+    const fakeCustomClaimImporter = instance(mockedCustomClaimImporter);
+
+    tokenService.addCustomClaimImporter(fakeCustomClaimImporter);
+
+    expect(tokenService["customClaimImporters"]).toContain(
+      fakeCustomClaimImporter
+    );
   });
 });

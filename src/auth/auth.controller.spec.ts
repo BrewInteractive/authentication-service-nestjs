@@ -1,19 +1,20 @@
+import { LoginFixture, SignUpFixture, UserFixture } from "../../test/fixtures";
+
 import { AuthController } from "./auth.controller";
-import { Test } from "@nestjs/testing";
-import { TokenService } from "../token/token.service";
-import { UserService } from "../user/user.service";
-import { faker } from "@faker-js/faker";
-import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
-import { LoginProfile } from "./mapping-profiles/login.profile";
 import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
-import { UserModule } from "../user/user.module";
-import { TokenModule } from "../token/token.module";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { User } from "../models/user.entity";
+import { LoginProfile } from "./mapping-profiles/login.profile";
 import { MockFactory } from "mockingbird";
-import { UserFixture, LoginFixture, SignUpFixture } from "../../test/fixtures";
+import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
+import { Test } from "@nestjs/testing";
+import { TokenModule } from "../token/token.module";
+import { TokenService } from "../token/token.service";
 import { UnauthorizedException } from "@nestjs/common";
+import { User } from "../models/user.entity";
+import { UserModule } from "../user/user.module";
+import { UserService } from "../user/user.service";
+import { classes } from "@automapper/classes";
+import { faker } from "@faker-js/faker";
+import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("AuthController", () => {
   let authController: AuthController;
@@ -54,8 +55,8 @@ describe("AuthController", () => {
       .mockReturnValueOnce(Promise.resolve(user as User));
 
     jest
-      .spyOn(tokenService, "createToken")
-      .mockReturnValueOnce(token);
+      .spyOn(tokenService, "createTokenAsync")
+      .mockReturnValueOnce(Promise.resolve(token));
 
     await expect(authController.loginAsync(loginDto)).resolves.toEqual({
       id_token: token,
@@ -85,8 +86,8 @@ describe("AuthController", () => {
       .mockReturnValueOnce(Promise.resolve(user));
 
     jest
-      .spyOn(tokenService, "createToken")
-      .mockReturnValueOnce(token);
+      .spyOn(tokenService, "createTokenAsync")
+      .mockReturnValueOnce(Promise.resolve(token));
 
     await expect(authController.signUpAsync(signUpDto)).resolves.toEqual({
       id_token: token,
