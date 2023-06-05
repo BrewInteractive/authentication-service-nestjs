@@ -4,7 +4,7 @@ import { User } from "src/models/user.entity";
 
 export class UserCustomClaimsImporter implements ICustomClaimsImporter {
   async getCustomClaimsAsync(user: User): Promise<CustomClaim[]> {
-    var customClaims: CustomClaim[] = [];
+    const customClaims: CustomClaim[] = [];
 
     customClaims.push(new CustomClaim("user_id", user.id));
     if (user.email) customClaims.push(new CustomClaim("email", user.email));
