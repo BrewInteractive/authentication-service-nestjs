@@ -12,8 +12,8 @@ import { ConfigModule } from "@nestjs/config";
 @Module({
   imports: [
     PluginTestModule,
-    PluginModule.registerAsync(),
     AuthModule,
+    PluginModule.registerAsync(),
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
