@@ -1,18 +1,18 @@
 import * as request from "supertest";
-
 import { Test, TestingModule } from "@nestjs/testing";
-
 import { AppModule } from "./../src/app.module";
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";
 import { MockFactory } from "mockingbird";
-import { LoginFixture, SignUpFixture } from "../test/fixtures";
+import { LoginFixture, SignUpFixture, UserFixture } from "../test/fixtures";
+import { User } from "../src/models/user.entity";
+const bcrypt = require("bcrypt");
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
+  let userRepository: Repository<User>;
 
   beforeAll(async () => {
     moduleFixture = await Test.createTestingModule({
@@ -25,6 +25,7 @@ describe("AuthController (e2e)", () => {
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
+    userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
 
   afterAll(async () => {
@@ -49,12 +50,17 @@ describe("AuthController (e2e)", () => {
 
       expect(response.body).toHaveProperty("id_token");
     });
-    it("should return 400 if email already exists", async () => {
+
+    it("should return 409 if email already exists", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
           email: "test@test.com",
         })
         .one();
+
+      jest
+        .spyOn(userRepository, "findOne")
+        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
@@ -64,12 +70,17 @@ describe("AuthController (e2e)", () => {
       expect(response.body.message).toEqual("Username or email already exists");
     });
 
-    it("should return 400 if username already exists", async () => {
+    it("should return 409 if username already exists", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
           username: "testUser",
         })
         .one();
+
+      jest
+        .spyOn(userRepository, "findOne")
+        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+
       const response = await request(app.getHttpServer())
         .post("/sign-up")
         .send(signUpDto)
@@ -112,14 +123,20 @@ describe("AuthController (e2e)", () => {
   });
 
   describe("POST /login", () => {
-    it("should return a token if email credentials are valid", async () => {
+    it("Should return a token if email credentials are valid", async () => {
       const loginEmailDto = MockFactory(LoginFixture)
         .mutate({
           email: "test@test.com",
           password: "TestPassword1!",
+          username: null,
         })
         .one();
-      loginEmailDto.username = null;
+
+      jest
+        .spyOn(userRepository, "findOne")
+        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
@@ -128,15 +145,22 @@ describe("AuthController (e2e)", () => {
 
       expect(responseEmail.body).toHaveProperty("id_token");
     });
+
     it("should return a token if username credentials are valid", async () => {
       const loginUsernameDto = MockFactory(LoginFixture)
         .mutate({
           username: "testUser",
           password: "TestPassword1!",
+          email: null,
         })
         .one();
 
-      loginUsernameDto.email = null;
+      jest
+        .spyOn(userRepository, "findOne")
+        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
         .send(loginUsernameDto)
@@ -152,6 +176,9 @@ describe("AuthController (e2e)", () => {
           password: "TestPassword1!",
         })
         .one();
+
+      jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+
       const response = await request(app.getHttpServer())
         .post("/login")
         .send(loginDto)
