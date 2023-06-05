@@ -33,12 +33,12 @@ export class TokenService {
   }
 
   private async loadCustomClaimImportersAsync(user: User) {
-    this.customClaimImporters.forEach(async (customClaimImporter) => {
-      var customClaims = await customClaimImporter.getCustomClaimsAsync(user);
+    for (const customClaimImporter of this.customClaimImporters) {
+      const customClaims = await customClaimImporter.getCustomClaimsAsync(user);
       customClaims.forEach((customClaim) => {
         this.addCustomClaim(customClaim);
       });
-    });
+    }
   }
 
   addCustomClaim(customClaim: CustomClaim) {
