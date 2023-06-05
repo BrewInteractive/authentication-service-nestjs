@@ -1,7 +1,7 @@
 import { Inject, Controller, Post, Body } from "@nestjs/common";
 import { LoginDto } from "./dto/login.dto";
 import { UserService } from "../user/user.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
 import { SignUpDto } from "./dto/sign-up.dto";
 import { AuthResponseDto } from "./dto/response.dto";
@@ -11,6 +11,7 @@ import { Mapper } from "@automapper/core";
 
 @ApiTags("authentication")
 @Controller()
+@ApiSecurity("ApiKey")
 export class AuthController {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
