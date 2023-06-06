@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.4.3...v1.5.0) (2023-06-06)
+
+
+### Features
+
+* create api key guard ([13d93bc](https://github.com/BrewInteractive/authentication-service-nestjs/commit/13d93bc4368b245bf7bf299131d6bd3f08272a27))
+* **SHBD-358:** create hasura claims plugin. ([eae0d90](https://github.com/BrewInteractive/authentication-service-nestjs/commit/eae0d90bb7d1fdf6c760d0fbe057f38d0c9d3159))
+* **SHBD-358:** token service is defined as global ([7e1fcda](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7e1fcda4985dd70b09b7ab338a8a262def9252c8))
+* **SHBD-358:** user information and role information were associated ([7eb1506](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7eb1506f167ab808f2b56439930cde753c3f1ad5))
+
+
+### Bug Fixes
+
+* fixed Sonar bug. ([d514e3b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d514e3bfee8254e3a27a37f2c007b263ea2dc07d))
+* relationships cannot be nullable ([55d1cbc](https://github.com/BrewInteractive/authentication-service-nestjs/commit/55d1cbcd6f5e19a3a8025dfcac8941c18ca55d37))
+
 ### [1.4.3](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.4.2...v1.4.3) (2023-04-29)
 
 
