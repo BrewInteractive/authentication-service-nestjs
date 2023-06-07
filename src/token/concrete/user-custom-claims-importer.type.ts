@@ -7,6 +7,8 @@ export class UserCustomClaimsImporter implements ICustomClaimsImporter {
     const customClaims: CustomClaim[] = [];
 
     customClaims.push(new CustomClaim("user_id", user.id));
+    customClaims.push(new CustomClaim("first_name", user.firstName));
+    customClaims.push(new CustomClaim("last_name", user.lastName));
     if (user.email) customClaims.push(new CustomClaim("email", user.email));
     if (user.username)
       customClaims.push(new CustomClaim("username", user.username));
