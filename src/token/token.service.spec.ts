@@ -36,6 +36,8 @@ describe("TokenService", () => {
     const expectedCustomClaims = {
       user_id: user.id,
       email: user.email,
+      first_name: user.firstName,
+      last_name: user.lastName,
       username: user.username,
       roles: user.roles.map((userRole) => userRole.role.name),
     };
@@ -74,6 +76,8 @@ describe("TokenService", () => {
       user_id: user.id,
       email: user.email,
       username: user.username,
+      first_name: user.firstName,
+      last_name: user.lastName,
     };
     const expectedJwtSecret = "testSecret";
     const expectedJwtAlgorithm = "HS256";
