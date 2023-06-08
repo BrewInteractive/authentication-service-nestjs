@@ -132,7 +132,7 @@ $ npm run test:cov
 | DB_PASSWORD             | Represents the password of the database that needs to be connected.                   | YES      | -                      |
 | DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
 | SWAGGER_ENABLED         | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
-| CORS                    | Website endpoints can be defined for Cors safety.                                     | NO       | *                      |
+| CORS_ALLOWED_ORIGINS    | Allowed origins for cors configuration.                                               | NO       | \*                     |
 
 ## API Documentation
 

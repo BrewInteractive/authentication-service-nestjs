@@ -1,9 +1,10 @@
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
+
+import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
 import { NestFactory } from "@nestjs/core";
 import config from "./utils/config";
-import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 
 function initValidationPipe(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());
@@ -34,7 +35,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: config().cors,
+    origin: config().corsAllowedOrigins,
     credentials: true,
   });
 
