@@ -7,6 +7,7 @@ export default () => ({
   name,
   description,
   apiKey: process.env.API_KEY,
+  cors: process.env.CORS || true,
   passwordRegex: new RegExp(
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),

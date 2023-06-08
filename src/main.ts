@@ -32,6 +32,12 @@ function initGlobalGuard(app: INestApplication) {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: config().cors,
+    credentials: true,
+  });
+
   initGlobalGuard(app);
   initValidationPipe(app);
   initSwagger(app);
