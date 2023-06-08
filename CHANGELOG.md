@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.5.1...v1.6.0) (2023-06-08)
+
+
+### Features
+
+* **SHBD-637:** add first_name and last_name in UserCustomClaimsImporter ([bc5564d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/bc5564dfb517041b9deb8ae82e6db26acea5b1fe))
+
 ### [1.5.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.5.0...v1.5.1) (2023-06-07)
 
 ## [1.5.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.4.3...v1.5.0) (2023-06-06)
