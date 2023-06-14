@@ -7,6 +7,7 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from "typeorm";
 
 @Entity({ name: "users_roles" })
@@ -14,11 +15,11 @@ export class UserRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type: User) => User, (user) => user.id, { nullable: false })
+  @ManyToOne((type: User) => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @OneToOne((type: Role) => Role, (role) => role.name, { nullable: false })
+  @ManyToOne((type: Role) => Role, (role) => role.name, { nullable: false })
   @JoinColumn({ name: "role" })
   role: Role;
 
