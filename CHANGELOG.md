@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.6.0...v1.7.0) (2023-06-14)
+
+
+### Features
+
+* create cors config ([5ddc206](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5ddc206aaa6b0228a0869f8d42e32b15effab9ae))
+
+
+### Bug Fixes
+
+* fix for users roles model ([a0a1216](https://github.com/BrewInteractive/authentication-service-nestjs/commit/a0a121606cbfb4094ca4e1115e9c324d444db39a))
+
 ## [1.6.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.5.1...v1.6.0) (2023-06-08)
 
 
