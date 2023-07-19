@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing";
 import { UserModule } from "./user.module";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { User } from "../models/user.entity";
+import { User, UserRole } from "../models";
 
 describe("UserModule", () => {
   let userModule: UserModule;
@@ -11,6 +11,11 @@ describe("UserModule", () => {
       imports: [UserModule],
     })
       .overrideProvider(getRepositoryToken(User))
+      .useValue({
+        findOne: jest.fn(),
+        save: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(UserRole))
       .useValue({
         findOne: jest.fn(),
         save: jest.fn(),

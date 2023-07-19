@@ -1,7 +1,7 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
 
 import { Test } from "@nestjs/testing";
-import { User } from "../models/user.entity";
+import { User, UserRole } from "../models";
 import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
@@ -12,6 +12,8 @@ const bcrypt = require("bcrypt");
 describe("UserService", () => {
   let userService: UserService;
   let userRepository: Repository<User>;
+  let userRoleRepository: Repository<UserRole>;
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -23,10 +25,19 @@ describe("UserService", () => {
             save: jest.fn(),
           },
         },
+        {
+          provide: "UserRoleRepository",
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+          },
+        },
       ],
     }).compile();
     userService = moduleRef.get<UserService>(UserService);
     userRepository = moduleRef.get<Repository<User>>("UserRepository");
+    userRoleRepository =
+      moduleRef.get<Repository<UserRole>>("UserRoleRepository");
   });
 
   it("should return a user for getUserByUsernameAndEmail", async () => {
@@ -94,8 +105,11 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
-    jest.spyOn(userService, "getUserByUsernameOrEmailAsync").mockResolvedValue(null);
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(null);
     jest.spyOn(userRepository, "save").mockResolvedValue(expectedResult);
+    jest.spyOn(userRoleRepository, "save").mockResolvedValue(null);
 
     const actualResult = await userService.createUserAsync(expectedResult);
 
@@ -104,7 +118,9 @@ describe("UserService", () => {
 
   it("should throw an UnauthorizedException if the email and username is does not have", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    jest.spyOn(userService, "getUserByUsernameOrEmailAsync").mockResolvedValue(null);
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(null);
 
     const password = faker.internet.password();
     await expect(
@@ -119,7 +135,9 @@ describe("UserService", () => {
     const user = MockFactory(UserFixture).one() as User;
     const validateUser = MockFactory(UserFixture).one() as User;
 
-    jest.spyOn(userService, "getUserByUsernameOrEmailAsync").mockResolvedValue(user);
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(user);
 
     const password = faker.internet.password();
 
@@ -137,7 +155,9 @@ describe("UserService", () => {
     const password = faker.internet.password();
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
-    jest.spyOn(userService, "getUserByUsernameOrEmailAsync").mockResolvedValue(user);
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(user);
     await expect(
       userService.validateUserPasswordAsync(
         user.username || user.email,

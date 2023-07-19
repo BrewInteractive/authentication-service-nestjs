@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { SignUpDto } from "../dto/sign-up.dto";
 import { User } from "../../models/user.entity";
 import * as bcrypt from "bcrypt";
+import config from "../../utils/config";
 
 @Injectable()
 export class SignUpProfile extends AutomapperProfile {
@@ -27,11 +28,18 @@ export class SignUpProfile extends AutomapperProfile {
           })
         ),
         forMember(
-         (dest) => dest.passwordHash,
+          (dest) => dest.passwordHash,
           mapFrom((src: SignUpDto) => {
             const salt = this.salt;
             const hash = bcrypt.hashSync(src.password, salt);
             return hash;
+          })
+        ),
+        forMember(
+          (dest) => dest.roles,
+          mapFrom(() => {
+            if (!config().userDefaultRole) return null;
+            else return [{ role: { name: config().userDefaultRole } }];
           })
         )
       );

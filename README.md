@@ -133,6 +133,7 @@ $ npm run test:cov
 | DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
 | SWAGGER_ENABLED         | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
 | CORS_ALLOWED_ORIGINS    | Allowed origins for cors configuration.                                               | NO       | \*                     |
+| USER_DEFAULT_ROLE       | Represents the role that the user will be added by default during user registration.  | NO       | -                      |
 
 ## API Documentation
 

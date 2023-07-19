@@ -29,11 +29,12 @@ export async function setupTestDataSourceAsync() {
     });
   });
 
-  const ds: DataSource = await db.adapters.createTypeormConnection({
+  const ds: DataSource = await db.adapters.createTypeormDataSource({
     type: "postgres",
     entities: [path.join(__dirname, "/../src/models/*.entity{.ts,.js}")],
   });
 
+  await ds.initialize();
   await ds.synchronize();
 
   return ds;

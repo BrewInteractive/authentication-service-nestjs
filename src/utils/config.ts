@@ -16,4 +16,5 @@ export default () => ({
   jwtAudience: process.env.JWT_AUDIENCE,
   jwtIssuer: process.env.JWT_ISSUER,
   jwtSecret: process.env.JWT_SECRET,
+  userDefaultRole: process.env.USER_DEFAULT_ROLE,
 });
