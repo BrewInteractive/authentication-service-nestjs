@@ -25,10 +25,7 @@ export class AuthController {
       loginDto.username || loginDto.email,
       loginDto.password
     );
-    const id_token = await this.tokenService.createTokenAsync(
-      responseUser,
-      3600
-    );
+    const id_token = await this.tokenService.createTokenAsync(responseUser);
     return { id_token };
   }
 
@@ -36,10 +33,7 @@ export class AuthController {
   async signUpAsync(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
     const user = await this.mapper.mapAsync(signUpDto, SignUpDto, User);
     const responseUser = await this.userService.createUserAsync(user);
-    const id_token = await this.tokenService.createTokenAsync(
-      responseUser,
-      3600
-    );
+    const id_token = await this.tokenService.createTokenAsync(responseUser);
     return { id_token };
   }
 }
