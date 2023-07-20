@@ -9,6 +9,7 @@ import { MockFactory } from "mockingbird";
 import { TokenService } from "./token.service";
 import { User } from "../models/user.entity";
 import { UserFixture } from "../../test/fixtures";
+import config from "../utils/config";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -31,7 +32,6 @@ describe("TokenService", () => {
 
   it("should create token by calling jwt.sign with the correct arguments", async () => {
     const user = MockFactory(UserFixture).one().withRoles() as User;
-    const expiresIn = 3600;
     const expectedToken = "fakeToken";
     const expectedCustomClaims = {
       user_id: user.id,
@@ -53,7 +53,7 @@ describe("TokenService", () => {
     process.env.JWT_SUBJECT = expectedJwtSubject;
     process.env.JWT_ISSUER = expectedJwtIssuer;
 
-    const token = await tokenService.createTokenAsync(user, expiresIn);
+    const token = await tokenService.createTokenAsync(user);
 
     expect(token).toBe(expectedToken);
     expect(jwt.sign).toHaveBeenCalledWith(
@@ -63,7 +63,7 @@ describe("TokenService", () => {
         algorithm: expectedJwtAlgorithm,
         audience: expectedJwtAudience,
         issuer: expectedJwtIssuer,
-        expiresIn,
+        expiresIn: config().jwtExpiresIn,
       }
     );
   });
