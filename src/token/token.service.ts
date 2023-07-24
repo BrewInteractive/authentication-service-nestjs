@@ -16,7 +16,10 @@ export class TokenService {
     this.customClaims = {};
   }
 
-  async createTokenAsync(user: User, expiresIn: number): Promise<string> {
+  async createTokenAsync(
+    user: User,
+    expiresIn: number | string = config().jwtExpiresIn
+  ): Promise<string> {
     this.customClaimImporters.push(new UserCustomClaimsImporter());
     await this.loadCustomClaimImportersAsync(user);
 

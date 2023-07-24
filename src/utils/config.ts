@@ -17,4 +17,5 @@ export default () => ({
   jwtIssuer: process.env.JWT_ISSUER,
   jwtSecret: process.env.JWT_SECRET,
   userDefaultRole: process.env.USER_DEFAULT_ROLE,
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || 3600,
 });
