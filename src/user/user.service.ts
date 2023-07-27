@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { User } from "../models/user.entity";
+import { User, UserRole } from "../models";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
@@ -12,7 +12,9 @@ import * as bcrypt from "bcrypt";
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(UserRole)
+    private readonly userRoleRepository: Repository<UserRole>
   ) {}
 
   async getUserByUsernameAndEmailAsync(
@@ -65,6 +67,17 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
-    return this.userRepository.save(user);
+    const savedUser = await this.userRepository.save(user);
+
+    if (user.roles) {
+      const roles = user.roles.map((userRoles) => ({
+        ...userRoles,
+        user: savedUser,
+      }));
+
+      savedUser.roles = await this.userRoleRepository.save(roles);
+    }
+
+    return savedUser;
   }
 }

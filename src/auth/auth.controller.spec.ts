@@ -9,7 +9,7 @@ import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { UnauthorizedException } from "@nestjs/common";
-import { User } from "../models/user.entity";
+import { User, UserRole } from "../models";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
@@ -36,6 +36,10 @@ describe("AuthController", () => {
       .overrideProvider(getRepositoryToken(User))
       .useValue({
         findOne: jest.fn(),
+        save: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(UserRole))
+      .useValue({
         save: jest.fn(),
       })
       .compile();
