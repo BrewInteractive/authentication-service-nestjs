@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.7.2...v1.8.0) (2023-08-07)
+
+
+### Features
+
+* **SHBD-619:** add the default role feature to the user registration ([564f171](https://github.com/BrewInteractive/authentication-service-nestjs/commit/564f171cd9bb463807afb149a94a60f152e5cb20))
+* token expiration time has been moved to env ([381f09c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/381f09cb5868a3b2f55b9ca96d62fa772e4ed44d))
+
+
+### Bug Fixes
+
+* Update README.md ([ca31904](https://github.com/BrewInteractive/authentication-service-nestjs/commit/ca3190408dc8bd01ae1301516382ff3cdc0c7b7f))
+
 ### [1.7.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.7.1...v1.7.2) (2023-06-15)
 
 
