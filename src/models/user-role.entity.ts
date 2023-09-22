@@ -1,14 +1,16 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { Role } from "./role.entity";
 import { User } from "./user.entity";
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  Unique,
-} from "typeorm";
 
 @Entity({ name: "users_roles" })
 @Unique(["user", "role"])
@@ -28,6 +30,7 @@ export class UserRole {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "role" })
+  @Column("text")
   role: Role;
 
   @CreateDateColumn({ name: "created_at" })
