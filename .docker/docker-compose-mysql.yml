@@ -6,11 +6,9 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ../data/mysql:/var/lib/mysql
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_USER: ${DB_USER}
       MARIADB_PASSWORD: ${DB_PASSWORD}
-volumes:
-  mysql-data:

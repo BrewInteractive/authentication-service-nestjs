@@ -15,7 +15,7 @@ services:
     image: postgres:15
     restart: always
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
   brew-authentication-api:
