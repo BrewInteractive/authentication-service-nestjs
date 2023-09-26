@@ -59,4 +59,7 @@ export class User {
 
   @OneToMany(() => UserRole, (userRole) => userRole.user)
   roles: Array<UserRole>;
+
+  @Column({ name: "profile_picture", nullable: true })
+  profilePicture: string;
 }
