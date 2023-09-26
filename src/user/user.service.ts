@@ -57,7 +57,7 @@ export class UserService {
     return userInformation;
   }
 
-  async createUserAsync(user: User): Promise<User> {
+  async createUserAsync(user: User, appData?: object): Promise<User> {
     const existingUser = await this.getUserByUsernameAndEmailAsync(
       user.username,
       user.email
