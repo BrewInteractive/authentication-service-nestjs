@@ -1,10 +1,10 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
-
 import { Test } from "@nestjs/testing";
 import { User, UserRole } from "../models";
 import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
+import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
 const bcrypt = require("bcrypt");
@@ -118,6 +118,10 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
+    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
+    userService.addPreRegisterUserImporter(importer);
+    userService.addPostRegisterUserImporter(importer);
+
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
       .mockResolvedValue(null);
@@ -179,5 +183,15 @@ describe("UserService", () => {
     ).resolves.toEqual({
       ...user,
     });
+  });
+
+  it("should add preRegisterUserImporter", () => {
+    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
+    userService.addPreRegisterUserImporter(importer);
+  });
+
+  it("should add postRegisterUserImporter", () => {
+    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
+    userService.addPostRegisterUserImporter(importer);
   });
 });
