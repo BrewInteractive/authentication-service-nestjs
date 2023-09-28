@@ -7,9 +7,13 @@ import { User, UserRole } from "../models";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
 
 @Injectable()
 export class UserService {
+  private preRegisterUserImporters: Array<IRegisterUserImporter> = [];
+  private postRegisterUserImporters: Array<IRegisterUserImporter> = [];
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -67,6 +71,8 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
+    await this.loadPreRegisterUserImportersAsync(user, appData);
+
     const savedUser = await this.userRepository.save(user);
 
     if (user.roles) {
@@ -77,7 +83,31 @@ export class UserService {
 
       savedUser.roles = await this.userRoleRepository.save(roles);
     }
+    await this.loadPostRegisterUserImportersAsync(savedUser, appData);
 
     return savedUser;
+  }
+
+  addPreRegisterUserImporter(importer: IRegisterUserImporter) {
+    this.preRegisterUserImporters.push(importer);
+  }
+
+  addPostRegisterUserImporter(importer: IRegisterUserImporter) {
+    this.postRegisterUserImporters.push(importer);
+  }
+
+  private async loadPreRegisterUserImportersAsync(user: User, appData: object) {
+    for (const preRegisterUserImporter of this.preRegisterUserImporters) {
+      await preRegisterUserImporter.createUserAsync(user, appData);
+    }
+  }
+
+  private async loadPostRegisterUserImportersAsync(
+    user: User,
+    appData: object
+  ) {
+    for (const preRegisterUserImporter of this.postRegisterUserImporters) {
+      await preRegisterUserImporter.createUserAsync(user, appData);
+    }
   }
 }
