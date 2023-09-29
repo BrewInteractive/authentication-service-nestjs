@@ -7,6 +7,7 @@ import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
+import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -67,6 +68,7 @@ describe("UserService", () => {
 
     expect(actualResult).toBeNull();
   });
+
   it("should return a user for getUserByUsernameOrEmail", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
     jest
@@ -79,6 +81,7 @@ describe("UserService", () => {
 
     expect(actualResult).toBe(expectedResult);
   });
+
   it("should return null if the email and username does not exist for getUserByUsernameOrEmail", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
     jest
@@ -141,10 +144,7 @@ describe("UserService", () => {
 
     const password = faker.internet.password();
     await expect(
-      userService.validateUserPasswordAsync(
-        user.username || user.email,
-        password
-      )
+      userService.validateUserAsync(user.username || user.email, password)
     ).rejects.toThrow(UnauthorizedException);
   });
 
@@ -159,15 +159,40 @@ describe("UserService", () => {
     const password = faker.internet.password();
 
     await expect(
-      userService.validateUserPasswordAsync(
+      userService.validateUserAsync(
         validateUser.username || validateUser.email,
         password
       )
     ).rejects.toThrow(UnauthorizedException);
   });
 
+  it("should throw an UnauthorizedException if the imposter is invalid", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const imposter: IValidateUserImporter = {
+      validateUserAsync: jest.fn().mockResolvedValue(false),
+    };
+    userService.addValidateUserImporter(imposter);
+
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(user);
+
+    await expect(
+      userService.validateUserAsync(
+        user.username || user.email,
+        faker.internet.password()
+      )
+    ).rejects.toThrow(UnauthorizedException);
+  });
+
   it("should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
+    const imposter: IValidateUserImporter = {
+      validateUserAsync: jest.fn().mockResolvedValue(true),
+    };
+    userService.addValidateUserImporter(imposter);
 
     const password = faker.internet.password();
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
@@ -176,10 +201,7 @@ describe("UserService", () => {
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
       .mockResolvedValue(user);
     await expect(
-      userService.validateUserPasswordAsync(
-        user.username || user.email,
-        password
-      )
+      userService.validateUserAsync(user.username || user.email, password)
     ).resolves.toEqual({
       ...user,
     });
@@ -188,10 +210,18 @@ describe("UserService", () => {
   it("should add preRegisterUserImporter", () => {
     const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
     userService.addPreRegisterUserImporter(importer);
+    expect(userService["preRegisterUserImporters"]).toContain(importer);
   });
 
   it("should add postRegisterUserImporter", () => {
     const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
     userService.addPostRegisterUserImporter(importer);
+    expect(userService["postRegisterUserImporters"]).toContain(importer);
+  });
+
+  it("should add validateUserImporter", () => {
+    const importer: IValidateUserImporter = { validateUserAsync: jest.fn() };
+    userService.addValidateUserImporter(importer);
+    expect(userService["validateUserImporters"]).toContain(importer);
   });
 });

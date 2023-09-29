@@ -8,11 +8,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
+import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
 
 @Injectable()
 export class UserService {
   private preRegisterUserImporters: Array<IRegisterUserImporter> = [];
   private postRegisterUserImporters: Array<IRegisterUserImporter> = [];
+  private validateUserImporters: Array<IValidateUserImporter> = [];
 
   constructor(
     @InjectRepository(User)
@@ -40,7 +42,21 @@ export class UserService {
     );
   }
 
-  async validateUserPasswordAsync(
+  async validateUserAsync(
+    usernameOrEmail: string,
+    password: string
+  ): Promise<User> {
+    const user = await this.validateUserPasswordAsync(
+      usernameOrEmail,
+      password
+    );
+
+    await this.applyValidateUserImportersAsync(user);
+
+    return user;
+  }
+
+  private async validateUserPasswordAsync(
     usernameOrEmail: string,
     password: string
   ): Promise<User> {
@@ -101,6 +117,10 @@ export class UserService {
     this.postRegisterUserImporters.push(importer);
   }
 
+  addValidateUserImporter(importer: IValidateUserImporter) {
+    this.validateUserImporters.push(importer);
+  }
+
   private async applyPreRegisterUserImportersAsync(
     user: User,
     appData: object
@@ -116,6 +136,13 @@ export class UserService {
   ) {
     for (const preRegisterUserImporter of this.postRegisterUserImporters) {
       await preRegisterUserImporter.createUserAsync(user, appData);
+    }
+  }
+
+  private async applyValidateUserImportersAsync(user: User) {
+    for (const validateUserImporter of this.validateUserImporters) {
+      if (!(await validateUserImporter.validateUserAsync(user)))
+        throw new UnauthorizedException("Invalid User.");
     }
   }
 }

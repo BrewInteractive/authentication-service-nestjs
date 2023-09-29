@@ -21,7 +21,7 @@ export class TokenService {
     expiresIn: number | string = config().jwtExpiresIn
   ): Promise<string> {
     this.customClaimImporters.push(new UserCustomClaimsImporter());
-    await this.loadCustomClaimImportersAsync(user);
+    await this.applyCustomClaimImportersAsync(user);
 
     return jwt.sign(this.customClaims, config().jwtSecret, {
       algorithm: config().jwtAlgorithm as jwt.Algorithm,
@@ -35,7 +35,7 @@ export class TokenService {
     this.customClaimImporters.push(customClaimImporter);
   }
 
-  private async loadCustomClaimImportersAsync(user: User) {
+  private async applyCustomClaimImportersAsync(user: User) {
     for (const customClaimImporter of this.customClaimImporters) {
       const customClaims = await customClaimImporter.getCustomClaimsAsync(user);
       customClaims.forEach((customClaim) => {
