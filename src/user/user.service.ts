@@ -71,8 +71,14 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
-    await this.loadPreRegisterUserImportersAsync(user, appData);
+    await this.applyPreRegisterUserImportersAsync(user, appData);
+    const insertedUser = await this.insertUserAsync(user);
+    await this.applyPostRegisterUserImportersAsync(insertedUser, appData);
 
+    return insertedUser;
+  }
+
+  private async insertUserAsync(user: User) {
     const savedUser = await this.userRepository.save(user);
 
     if (user.roles) {
@@ -83,7 +89,6 @@ export class UserService {
 
       savedUser.roles = await this.userRoleRepository.save(roles);
     }
-    await this.loadPostRegisterUserImportersAsync(savedUser, appData);
 
     return savedUser;
   }
@@ -96,13 +101,16 @@ export class UserService {
     this.postRegisterUserImporters.push(importer);
   }
 
-  private async loadPreRegisterUserImportersAsync(user: User, appData: object) {
+  private async applyPreRegisterUserImportersAsync(
+    user: User,
+    appData: object
+  ) {
     for (const preRegisterUserImporter of this.preRegisterUserImporters) {
       await preRegisterUserImporter.createUserAsync(user, appData);
     }
   }
 
-  private async loadPostRegisterUserImportersAsync(
+  private async applyPostRegisterUserImportersAsync(
     user: User,
     appData: object
   ) {
