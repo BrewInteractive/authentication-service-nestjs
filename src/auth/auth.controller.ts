@@ -31,9 +31,13 @@ export class AuthController {
 
   @Post("sign-up")
   async signUpAsync(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
-    const newUserInfo = await this.mapper.mapAsync(signUpDto, SignUpDto, User);
+    const userCandidate = await this.mapper.mapAsync(
+      signUpDto,
+      SignUpDto,
+      User
+    );
     const user = await this.userService.createUserAsync(
-      newUserInfo,
+      userCandidate,
       signUpDto.appData
     );
     const id_token = await this.tokenService.createTokenAsync(user);
