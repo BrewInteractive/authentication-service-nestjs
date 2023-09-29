@@ -21,19 +21,26 @@ export class AuthController {
 
   @Post("login")
   async loginAsync(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
-    const responseUser = await this.userService.validateUserPasswordAsync(
+    const user = await this.userService.validateUserPasswordAsync(
       loginDto.username || loginDto.email,
       loginDto.password
     );
-    const id_token = await this.tokenService.createTokenAsync(responseUser);
-    return { id_token };
+    const token = await this.tokenService.createTokenAsync(user);
+    return { id_token: token };
   }
 
   @Post("sign-up")
   async signUpAsync(@Body() signUpDto: SignUpDto): Promise<AuthResponseDto> {
-    const user = await this.mapper.mapAsync(signUpDto, SignUpDto, User);
-    const responseUser = await this.userService.createUserAsync(user);
-    const id_token = await this.tokenService.createTokenAsync(responseUser);
+    const userCandidate = await this.mapper.mapAsync(
+      signUpDto,
+      SignUpDto,
+      User
+    );
+    const user = await this.userService.createUserAsync(
+      userCandidate,
+      signUpDto.appData
+    );
+    const id_token = await this.tokenService.createTokenAsync(user);
     return { id_token };
   }
 }

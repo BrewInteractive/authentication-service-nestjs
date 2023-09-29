@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   IsEmail,
   ValidateIf,
+  IsOptional,
 } from "class-validator";
 import config from "../../utils/config";
 import { AutoMap } from "@automapper/classes";
@@ -45,4 +46,7 @@ export class SignUpDto {
   @IsString()
   @AutoMap()
   lastName: string;
+
+  @IsOptional()
+  appData: object;
 }
