@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { Injectable } from "@nestjs/common";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
 import config from "../utils/config";
 

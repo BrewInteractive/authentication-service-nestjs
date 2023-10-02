@@ -1,9 +1,9 @@
 import { Mock } from "mockingbird";
-import { UserRole } from "../../../src/models/user-role.entity";
-import { UserFixture } from "./user.fixture";
+import { Role } from "../../../src/entities/role.entity";
 import { RoleFixture } from "./role.fixture";
-import { User } from "../../../src/models/user.entity";
-import { Role } from "../../../src/models/role.entity";
+import { User } from "../../../src/entities/user.entity";
+import { UserFixture } from "./user.fixture";
+import { UserRole } from "../../../src/entities/user-role.entity";
 
 export class UserRoleFixture extends UserRole {
   @Mock()

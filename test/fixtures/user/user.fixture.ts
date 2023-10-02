@@ -1,6 +1,7 @@
 import { Mock, MockFactory } from "mockingbird";
-import { User } from "../../../src/models/user.entity";
-import { UserRole } from "../../../src/models/user-role.entity";
+
+import { User } from "../../../src/entities/user.entity";
+import { UserRole } from "../../../src/entities/user-role.entity";
 import { UserRoleFixture } from "./user-role.fixture";
 
 export class UserFixture extends User {

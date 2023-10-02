@@ -1,12 +1,13 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
+import { User, UserRole } from "../entities";
 
-import { Test } from "@nestjs/testing";
-import { User, UserRole } from "../models";
-import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
-import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { Repository } from "typeorm";
+import { Test } from "@nestjs/testing";
+import { UserFixture } from "../../test/fixtures/user/user.fixture";
+import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
+
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {

@@ -7,7 +7,7 @@ import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { MockFactory } from "mockingbird";
 import { TokenService } from "./token.service";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import { UserFixture } from "../../test/fixtures";
 import config from "../utils/config";
 

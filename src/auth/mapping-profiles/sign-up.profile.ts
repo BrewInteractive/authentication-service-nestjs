@@ -2,7 +2,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { Mapper, createMap, forMember, mapFrom } from "@automapper/core";
 import { Injectable } from "@nestjs/common";
 import { SignUpDto } from "../dto/sign-up.dto";
-import { User } from "../../models/user.entity";
+import { User } from "../../entities/user.entity";
 import * as bcrypt from "bcrypt";
 import config from "../../utils/config";
 

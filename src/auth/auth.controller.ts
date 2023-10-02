@@ -6,7 +6,7 @@ import { TokenService } from "../token/token.service";
 import { SignUpDto } from "./dto/sign-up.dto";
 import { AuthResponseDto } from "./dto/response.dto";
 import { InjectMapper } from "@automapper/nestjs";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import { Mapper } from "@automapper/core";
 
 @ApiTags("authentication")

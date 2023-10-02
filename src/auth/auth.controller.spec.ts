@@ -1,4 +1,5 @@
 import { LoginFixture, SignUpFixture, UserFixture } from "../../test/fixtures";
+import { User, UserRole } from "../entities";
 
 import { AuthController } from "./auth.controller";
 import { AutomapperModule } from "@automapper/nestjs";
@@ -9,7 +10,6 @@ import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { UnauthorizedException } from "@nestjs/common";
-import { User, UserRole } from "../models";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";

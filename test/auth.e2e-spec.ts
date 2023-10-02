@@ -1,12 +1,15 @@
 import * as request from "supertest";
-import { Test, TestingModule } from "@nestjs/testing";
-import { AppModule } from "./../src/app.module";
+
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { setupTestDataSourceAsync } from "./test-db";
-import { MockFactory } from "mockingbird";
 import { LoginFixture, SignUpFixture, UserFixture } from "../test/fixtures";
-import { User } from "../src/models/user.entity";
+import { Test, TestingModule } from "@nestjs/testing";
+
+import { AppModule } from "./../src/app.module";
+import { MockFactory } from "mockingbird";
+import { User } from "../src/entities/user.entity";
+import { setupTestDataSourceAsync } from "./test-db";
+
 const bcrypt = require("bcrypt");
 
 describe("AuthController (e2e)", () => {

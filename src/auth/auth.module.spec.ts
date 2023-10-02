@@ -1,7 +1,8 @@
-import { Test } from "@nestjs/testing";
+import { User, UserRole } from "../entities";
+
 import { AuthModule } from "./auth.module";
+import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { User, UserRole } from "../models";
 
 describe("AuthModule", () => {
   let authModule: AuthModule;
