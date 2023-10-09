@@ -7,9 +7,16 @@ import { User, UserRole } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
+import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
+import { IUserValidator } from "./interfaces/user-validator.interface";
 
 @Injectable()
 export class UserService {
+  private preRegisterUserHandlers: Array<IPreRegisterUserHandler> = [];
+  private postRegisterUserHandlers: Array<IPostRegisterUserHandler> = [];
+  private userValidators: Array<IUserValidator> = [];
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -36,7 +43,21 @@ export class UserService {
     );
   }
 
-  async validateUserPasswordAsync(
+  async validateUserAsync(
+    usernameOrEmail: string,
+    password: string
+  ): Promise<User> {
+    const user = await this.validateUserPasswordAsync(
+      usernameOrEmail,
+      password
+    );
+
+    await this.applyUserValidatorsAsync(user);
+
+    return user;
+  }
+
+  private async validateUserPasswordAsync(
     usernameOrEmail: string,
     password: string
   ): Promise<User> {
@@ -67,6 +88,14 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
+    await this.applyPreRegisterUserHandlersAsync(user, appData);
+    const insertedUser = await this.insertUserAsync(user);
+    await this.applyPostRegisterUserHandlersAsync(insertedUser, appData);
+
+    return insertedUser;
+  }
+
+  private async insertUserAsync(user: User) {
     const savedUser = await this.userRepository.save(user);
 
     if (user.roles) {
@@ -79,5 +108,39 @@ export class UserService {
     }
 
     return savedUser;
+  }
+
+  addPreRegisterUserHandler(handler: IPreRegisterUserHandler) {
+    this.preRegisterUserHandlers.push(handler);
+  }
+
+  addPostRegisterUserHandler(handler: IPostRegisterUserHandler) {
+    this.postRegisterUserHandlers.push(handler);
+  }
+
+  addUserValidator(userValidator: IUserValidator) {
+    this.userValidators.push(userValidator);
+  }
+
+  private async applyPreRegisterUserHandlersAsync(user: User, appData: object) {
+    for (const preRegisterUserHandler of this.preRegisterUserHandlers) {
+      await preRegisterUserHandler.handleAsync(user, appData);
+    }
+  }
+
+  private async applyPostRegisterUserHandlersAsync(
+    user: User,
+    appData: object
+  ) {
+    for (const preRegisterUserHandler of this.postRegisterUserHandlers) {
+      await preRegisterUserHandler.handleAsync(user, appData);
+    }
+  }
+
+  private async applyUserValidatorsAsync(user: User) {
+    for (const userValidator of this.userValidators) {
+      if (!(await userValidator.validateAsync(user)))
+        throw new UnauthorizedException("Invalid User.");
+    }
   }
 }
