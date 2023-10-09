@@ -8,7 +8,7 @@ import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
-import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
+import { IUserValidator } from "./interfaces/user-validator.interface";
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -168,10 +168,9 @@ describe("UserService", () => {
 
   it("should throw an UnauthorizedException if the imposter is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    const imposter: IValidateUserImporter = {
-      validateUserAsync: jest.fn().mockResolvedValue(false),
-    };
-    userService.addValidateUserImporter(imposter);
+    userService.addUserValidator({
+      validateAsync: jest.fn().mockResolvedValue(false),
+    });
 
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
@@ -189,10 +188,9 @@ describe("UserService", () => {
 
   it("should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    const imposter: IValidateUserImporter = {
-      validateUserAsync: jest.fn().mockResolvedValue(true),
-    };
-    userService.addValidateUserImporter(imposter);
+    userService.addUserValidator({
+      validateAsync: jest.fn().mockResolvedValue(true),
+    });
 
     const password = faker.internet.password();
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
@@ -219,9 +217,9 @@ describe("UserService", () => {
     expect(userService["postRegisterUserHandlers"]).toContain(handler);
   });
 
-  it("should add validateUserImporter", () => {
-    const importer: IValidateUserImporter = { validateUserAsync: jest.fn() };
-    userService.addValidateUserImporter(importer);
-    expect(userService["validateUserImporters"]).toContain(importer);
+  it("should add userValidator", () => {
+    const validate: IUserValidator = { validateAsync: jest.fn() };
+    userService.addUserValidator(validate);
+    expect(userService["userValidators"]).toContain(validate);
   });
 });

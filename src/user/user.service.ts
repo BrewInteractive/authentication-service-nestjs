@@ -9,13 +9,13 @@ import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
-import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
+import { IUserValidator } from "./interfaces/user-validator.interface";
 
 @Injectable()
 export class UserService {
   private preRegisterUserHandlers: Array<IPreRegisterUserHandler> = [];
   private postRegisterUserHandlers: Array<IPostRegisterUserHandler> = [];
-  private validateUserImporters: Array<IValidateUserImporter> = [];
+  private userValidators: Array<IUserValidator> = [];
 
   constructor(
     @InjectRepository(User)
@@ -52,7 +52,7 @@ export class UserService {
       password
     );
 
-    await this.applyValidateUserImportersAsync(user);
+    await this.applyUserValidatorsAsync(user);
 
     return user;
   }
@@ -118,8 +118,8 @@ export class UserService {
     this.postRegisterUserHandlers.push(handler);
   }
 
-  addValidateUserImporter(importer: IValidateUserImporter) {
-    this.validateUserImporters.push(importer);
+  addUserValidator(userValidator: IUserValidator) {
+    this.userValidators.push(userValidator);
   }
 
   private async applyPreRegisterUserHandlersAsync(user: User, appData: object) {
@@ -137,9 +137,9 @@ export class UserService {
     }
   }
 
-  private async applyValidateUserImportersAsync(user: User) {
-    for (const validateUserImporter of this.validateUserImporters) {
-      if (!(await validateUserImporter.validateUserAsync(user)))
+  private async applyUserValidatorsAsync(user: User) {
+    for (const userValidator of this.userValidators) {
+      if (!(await userValidator.validateAsync(user)))
         throw new UnauthorizedException("Invalid User.");
     }
   }
