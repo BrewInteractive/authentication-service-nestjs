@@ -1,4 +1,4 @@
-import { User } from "../../models/user.entity";
+import { User } from "../../entities/user.entity";
 
 export interface IValidateUserImporter {
   validateUserAsync(user: User): Promise<boolean>;
