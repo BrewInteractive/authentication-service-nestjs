@@ -1,6 +1,6 @@
 import { CustomClaim } from "./custom-claim.type";
 import { ICustomClaimsImporter } from "../interfaces/custom-claims-importer.interface";
-import { User } from "src/models/user.entity";
+import { User } from "src/entities/user.entity";
 
 export class UserCustomClaimsImporter implements ICustomClaimsImporter {
   async getCustomClaimsAsync(user: User): Promise<CustomClaim[]> {

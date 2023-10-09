@@ -1,5 +1,5 @@
 import { Mock } from "mockingbird";
-import { Role } from "../../../src/models/role.entity";
+import { Role } from "../../../src/entities/role.entity";
 
 export class RoleFixture extends Role {
   @Mock()

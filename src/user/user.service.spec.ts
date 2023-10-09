@@ -1,6 +1,6 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { User, UserRole } from "../models";
+import { User, UserRole } from "../entities";
 import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";

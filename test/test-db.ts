@@ -31,7 +31,7 @@ export async function setupTestDataSourceAsync() {
 
   const ds: DataSource = await db.adapters.createTypeormDataSource({
     type: "postgres",
-    entities: [path.join(__dirname, "/../src/models/*.entity{.ts,.js}")],
+    entities: [path.join(__dirname, "/../src/entities/*.entity{.ts,.js}")],
   });
 
   await ds.initialize();
