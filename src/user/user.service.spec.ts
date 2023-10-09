@@ -4,7 +4,8 @@ import { User, UserRole } from "../models";
 import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
-import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
+import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
+import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
 import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
@@ -121,9 +122,8 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
-    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
-    userService.addPreRegisterUserImporter(importer);
-    userService.addPostRegisterUserImporter(importer);
+    userService.addPreRegisterUserHandler({ handleAsync: jest.fn() });
+    userService.addPostRegisterUserHandler({ handleAsync: jest.fn() });
 
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
@@ -207,16 +207,16 @@ describe("UserService", () => {
     });
   });
 
-  it("should add preRegisterUserImporter", () => {
-    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
-    userService.addPreRegisterUserImporter(importer);
-    expect(userService["preRegisterUserImporters"]).toContain(importer);
+  it("should add preRegisterUserHandler", () => {
+    const handler: IPreRegisterUserHandler = { handleAsync: jest.fn() };
+    userService.addPreRegisterUserHandler(handler);
+    expect(userService["preRegisterUserHandlers"]).toContain(handler);
   });
 
-  it("should add postRegisterUserImporter", () => {
-    const importer: IRegisterUserImporter = { createUserAsync: jest.fn() };
-    userService.addPostRegisterUserImporter(importer);
-    expect(userService["postRegisterUserImporters"]).toContain(importer);
+  it("should add postRegisterUserHandler", () => {
+    const handler: IPostRegisterUserHandler = { handleAsync: jest.fn() };
+    userService.addPostRegisterUserHandler(handler);
+    expect(userService["postRegisterUserHandlers"]).toContain(handler);
   });
 
   it("should add validateUserImporter", () => {

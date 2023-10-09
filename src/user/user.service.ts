@@ -7,13 +7,14 @@ import { User, UserRole } from "../models";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
-import { IRegisterUserImporter } from "./interfaces/register-user-importer.interface";
+import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
+import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IValidateUserImporter } from "./interfaces/validate-user-importer.interface";
 
 @Injectable()
 export class UserService {
-  private preRegisterUserImporters: Array<IRegisterUserImporter> = [];
-  private postRegisterUserImporters: Array<IRegisterUserImporter> = [];
+  private preRegisterUserHandlers: Array<IPreRegisterUserHandler> = [];
+  private postRegisterUserHandlers: Array<IPostRegisterUserHandler> = [];
   private validateUserImporters: Array<IValidateUserImporter> = [];
 
   constructor(
@@ -87,9 +88,9 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
-    await this.applyPreRegisterUserImportersAsync(user, appData);
+    await this.applyPreRegisterUserHandlersAsync(user, appData);
     const insertedUser = await this.insertUserAsync(user);
-    await this.applyPostRegisterUserImportersAsync(insertedUser, appData);
+    await this.applyPostRegisterUserHandlersAsync(insertedUser, appData);
 
     return insertedUser;
   }
@@ -109,33 +110,30 @@ export class UserService {
     return savedUser;
   }
 
-  addPreRegisterUserImporter(importer: IRegisterUserImporter) {
-    this.preRegisterUserImporters.push(importer);
+  addPreRegisterUserHandler(handler: IPreRegisterUserHandler) {
+    this.preRegisterUserHandlers.push(handler);
   }
 
-  addPostRegisterUserImporter(importer: IRegisterUserImporter) {
-    this.postRegisterUserImporters.push(importer);
+  addPostRegisterUserHandler(handler: IPostRegisterUserHandler) {
+    this.postRegisterUserHandlers.push(handler);
   }
 
   addValidateUserImporter(importer: IValidateUserImporter) {
     this.validateUserImporters.push(importer);
   }
 
-  private async applyPreRegisterUserImportersAsync(
-    user: User,
-    appData: object
-  ) {
-    for (const preRegisterUserImporter of this.preRegisterUserImporters) {
-      await preRegisterUserImporter.createUserAsync(user, appData);
+  private async applyPreRegisterUserHandlersAsync(user: User, appData: object) {
+    for (const preRegisterUserHandler of this.preRegisterUserHandlers) {
+      await preRegisterUserHandler.handleAsync(user, appData);
     }
   }
 
-  private async applyPostRegisterUserImportersAsync(
+  private async applyPostRegisterUserHandlersAsync(
     user: User,
     appData: object
   ) {
-    for (const preRegisterUserImporter of this.postRegisterUserImporters) {
-      await preRegisterUserImporter.createUserAsync(user, appData);
+    for (const preRegisterUserHandler of this.postRegisterUserHandlers) {
+      await preRegisterUserHandler.handleAsync(user, appData);
     }
   }
 
