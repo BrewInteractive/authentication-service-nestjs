@@ -31,126 +31,36 @@ The purpose of the project is to manage user authentication processes and secure
 
 Authentication Service can be used in any project that requires user authentication functions, making it easy for projects to manage user accounts and securely register and log in users.
 
-## Usage Instructions
+## Documents
+* [Install and Deploy Auth Service](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
+  - [Deploy With Docker Compose](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploy-with-docker-compose)
+  - [Deploy the Service Package Installing](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploy-the-service-package-installing)
+* [Local Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
+  - [Database Run With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#database-run-with-docker)
+    - [Run Postgres Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-postgres-database-with-docker)
+    - [Run Mysql Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-mysql-database-with-docker)
+  - [Migration Run and Generate](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#migration-run-and-generate)
+    - [Migration Run](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#migration-run)
+    - [Migration Generate](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#migration-generate)
+  - [Running Tests](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#running-tests)
+* [Environment Variables](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md)
+* [Plugin Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md)
+  - [Considerations When Creating a Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#considerations-when-creating-a-plugin)
+  - [Create Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-plugin)
+    - [What Can Be Done with Plugins ?](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#what-can-be-done-with-plugins-)
+    - [Create Token Claims Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-token-claims-plugin)
+    - [Create User Registration Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-user-registration-plugin)
+      - [Pre User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#pre-user-registration)
+      - [Post User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#post-user-registration)
+    - [User Validator](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#user-validator)
+  - [Publishing as Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#publishing-as-package)
+  - [Example Plugin Project](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#example-plugin-project)
+* [API Documentation](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/api_documentation.md)
 
-These instructions provide information on how to use the authentication-service-nestjs project.
-
-### Running Locally
-
-#### Dependency Installation
-
-```bash
-$ npm install
-```
-
-#### Migrations
-
-The Authentication Service provides database relationships using Typeorm. Database modeling is performed thanks to the migration support provided by Typeorm. You can provide migration management with the commands listed below.
-
-##### Migration Run
-
-```bash
-# Postgres migration run
-$ npm run migration-postgres:run
-
-# Mysql migration run
-$ npm run migration-mysql:run
-
-# Postgres and Mysql migration run
-$ npm run migration-all:run
-```
-
-##### Migration Generate
-
-```bash
-# Postgres migration generate
-$ npm run migration-postgres:generate
-
-# Mysql migration generate
-$ npm run migration-mysql:generate
-
-# Postgres and Mysql migration run
-$ npm run migration-all:generate
-```
-
-> :large_blue_circle: You can use below commands to run databases for applying migration in your local environment.
-
-```bash
-# You can use the command listed below to install the Postgres database.
-$ docker-compose -f .docker/docker-compose-postgres.yml --env-file .env up -d
-
-# You can use the command listed below to install the Mysql database.
-$ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
-
-# You can install it on Adminer docker with the command below to manage databases.
-$ docker-compose -f .docker/docker-compose-adminer.yml --env-file .env up -d
-```
-
-#### Starting the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-### Running with Docker
-
-You can also run the service with Docker.
-
-```bash
-$ docker-compose up -d
-```
-
-### Running Tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Environment Variables
-
-| Variable Name           | Description                                                                           | Required | Default                |
-| ----------------------- | ------------------------------------------------------------------------------------- | -------- | ---------------------- |
-| DB_DRIVE                | Determines which database type to use. `mysql` and `postgres` database are supported. | YES      | -                      |
-| DB_HOST                 | Represents the url or ip address of the database that needs to be connected.          | YES      | -                      |
-| DB_PORT                 | Represents the port of the database that needs to be connected.                       | YES      | -                      |
-| DB_NAME                 | Represents the name of the database that needs to be connected.                       | YES      | -                      |
-| DB_USER                 | Represents the user of the database that needs to be connected.                       | YES      | -                      |
-| DB_PASSWORD             | Represents the password of the database that needs to be connected.                   | YES      | -                      |
-| DB_MIGRATION_TABLE_NAME | Represents the name of the table that will be created to store the migration history. | NO       | auth_service_migration |
-| JWT_ALGORITHM         | Variable is represents the method of encryption used to secure and validate JSON Web Tokens (JWTs)               | YES       | -                  |
-| JWT_AUDIENCE         | Variable is identifies the target recipient or audience of the JWT. It signifies the application or service that is expected to accept and handle the token.               | YES       | -                  |
-| JWT_ISSUER         | Variable is designates the source entity that generated the JWT. It indicates the authorization server or entity that is accountable for creating and digitally signing the token.               | YES       | -                  |
-| JWT_SECRET         | Variable is a confidential key known only to the issuer and recipient, utilized for signing and verifying the JWT. It guarantees the token's authenticity and integrity.               | YES       | -                  |
-| JWT_EXPIRES_IN         | Variable is defines the time duration, in seconds, during which a JSON Web Token (JWT) remains valid after its creation.               | NO       | 3600                  |
-| SWAGGER_ENABLED         | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
-| CORS_ALLOWED_ORIGINS    | Allowed origins for cors configuration.                                               | NO       | \*                     |
-| USER_DEFAULT_ROLE       | Represents the role that the user will be added by default during user registration.  | NO       | -                      |
-
-## API Documentation
-
-The API documentation can be accessed via Swagger UI at the `localhost:3000/docs` address. The API documentation provides information on how to use the endpoints.
-
+    
 ## Conclusion
 
 These instructions will help you start, configure, test, and use the authentication-service-nestjs project. The project can be used in any project that requires user authentication functions.
-
-## Plugin Development
-
-You can extend the service capabilities with developing plugins. You can read the [Plugin Development](./docs/plugin-development.md) document about this.
 
 ## License
 
