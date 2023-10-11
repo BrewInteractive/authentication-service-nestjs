@@ -1,4 +1,4 @@
-# Local Development
+# Local Development Instructions
 
 First, create your env file. Then, you can follow the steps below.
 

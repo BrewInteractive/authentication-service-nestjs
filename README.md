@@ -32,10 +32,10 @@ The purpose of the project is to manage user authentication processes and secure
 Authentication Service can be used in any project that requires user authentication functions, making it easy for projects to manage user accounts and securely register and log in users.
 
 ## Documents
-* [Install and Deploy Auth Service](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
-  - [Deploy With Docker Compose](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploy-with-docker-compose)
-  - [Deploy the Service Package Installing](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploy-the-service-package-installing)
-* [Local Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
+* [Auth Service Installation and Deployment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
+  - [Deploying With Docker Compose](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploying-with-docker-compose)
+  - [Installing the Service Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#installing-the-service-package)
+* [Local Development Instructions](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
   - [Database Run With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#database-run-with-docker)
     - [Run Postgres Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-postgres-database-with-docker)
     - [Run Mysql Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-mysql-database-with-docker)
@@ -52,9 +52,9 @@ Authentication Service can be used in any project that requires user authenticat
     - [Create User Registration Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-user-registration-plugin)
       - [Pre User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#pre-user-registration)
       - [Post User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#post-user-registration)
-    - [User Validator](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#user-validator)
-  - [Publishing as Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#publishing-as-package)
-  - [Example Plugin Project](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#example-plugin-project)
+    - [Create User Validator Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-user-validator-plugin)
+  - [Publishing Your Plugin as a Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#publishing-your-plugin-as-a-package)
+  - [Sample Plugin Projects](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#sample-plugin-projects)
 * [API Documentation](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/api_documentation.md)
 
     

@@ -1,11 +1,11 @@
-# Install and Deploy Auth Service
+# Auth Service Installation and Deployment
 
 To customize the service, review the [environment variables](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md) document.
 
 > [!NOTE]  
 > The database migration that the service needs to run is performed automatically when the project is running. You don't need to make an extra pass.
 
-## Deploy With Docker Compose 
+## Deploying With Docker Compose 
 
 It is possible to deploy the server by pulling the docker image on the Docker Hub.
 
@@ -33,7 +33,7 @@ volumes:
   db_volume:
 
 ```
-## Deploy the Service Package Installing
+## Installing the Service Package
 
 In a Node.js project, it is possible to use the [authentication-service](https://www.npmjs.com/package/@brewww/authentication-service) package by installing it. This method allows you to use custom plugins you have written to customize the service.
 
@@ -55,7 +55,7 @@ require("@brewww/authentication-service");
 require("@brewww/authentication-service-hasura-claims-plugin");
 ```
 
-After completing the project setup, you can create an [environment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md) file and run the project.
+After completing the project setup, create an [environment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md) file and run the project.
 
 ```bash
 $ node index.js

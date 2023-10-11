@@ -72,10 +72,10 @@ It is possible to perform a check or action before user registration. For this p
 #### Post User Registration
 It is possible to perform a check or action after user registration. For this process, you need to create a [`Post Register User Handler`](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/src/user/interfaces/post-register-user-handler.interface.ts). The created handler is added to the `postRegisterUserHandlers` using the `addPostRegisterUserHandler` method found within the `user service`.
 
-### User Validator
+### Create User Validator Plugin
 When a user wants to log in, by default, username/email and password checks are performed. However, it is possible to add an additional check through the plugin. You can create a `User Validator` and add it to the `userValidators` using the `addUserValidator` method found within the `user service`.
 
-## Publishing as Package
+## Publishing Your Plugin as a Package
 
 While publishing the package, we need to adjust the `package.json` file settings.
 
@@ -90,7 +90,7 @@ While publishing the package, we need to adjust the `package.json` file settings
 | main           | The entry point of the package. This is the file that is loaded when someone requires the package.                      |
 | files          | An array of file patterns that should be included in the package when it's published.                                   |
 
-## Example Plugin Project
+## Sample Plugin Projects
 You can refer to the following projects as examples:
 
 * [Sample Plugin](https://github.com/BrewInteractive/authentication-service-nestjs-sample-plugin)
