@@ -33,7 +33,7 @@ Authentication Service can be used in any project that requires user authenticat
 
 ## Documents
 
-- [Auth Service Installation and Deployment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
+- [Authentication Service Installation and Deployment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
   - [Deploying With Docker Compose](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploying-with-docker-compose)
   - [Installing the Service Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#installing-the-service-package)
 - [Local Development Instructions](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
