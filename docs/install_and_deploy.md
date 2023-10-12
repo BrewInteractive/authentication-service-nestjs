@@ -3,7 +3,7 @@
 To customize the service, review the [environment variables](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md) document.
 
 > [!NOTE]  
-> The database migration that the service needs to run is performed automatically when the project is running. You don't need to make an extra pass.
+> The service performs the necessary database migrations automatically when the project starts. You don't need to apply migrations to database explicitly.
 
 ## Deploying With Docker Compose
 
