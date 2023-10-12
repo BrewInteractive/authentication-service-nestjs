@@ -1,3 +1,3 @@
 # API Reference
 
-The API reference can be accessed via Swagger UI at the `{{BaseUrl}}/docs` address. The API documentation provides information on how to use the endpoints.
+The API reference provides information on how to use the endpoints. It can be accessed via Swagger UI at the `{{BaseUrl}}/docs` address.
