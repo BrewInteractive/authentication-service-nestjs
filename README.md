@@ -32,10 +32,11 @@ The purpose of the project is to manage user authentication processes and secure
 Authentication Service can be used in any project that requires user authentication functions, making it easy for projects to manage user accounts and securely register and log in users.
 
 ## Documents
-* [Auth Service Installation and Deployment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
+
+- [Auth Service Installation and Deployment](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md)
   - [Deploying With Docker Compose](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#deploying-with-docker-compose)
   - [Installing the Service Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/install_and_deploy.md#installing-the-service-package)
-* [Local Development Instructions](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
+- [Local Development Instructions](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
   - [Database Run With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#database-run-with-docker)
     - [Run Postgres Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-postgres-database-with-docker)
     - [Run Mysql Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-mysql-database-with-docker)
@@ -43,8 +44,8 @@ Authentication Service can be used in any project that requires user authenticat
     - [Migration Run](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#migration-run)
     - [Migration Generate](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#migration-generate)
   - [Running Tests](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#running-tests)
-* [Environment Variables](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md)
-* [Plugin Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md)
+- [Environment Variables](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/environment_variables.md)
+- [Plugin Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md)
   - [Considerations When Creating a Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#considerations-when-creating-a-plugin)
   - [Create Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-plugin)
     - [What Can Be Done with Plugins ?](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#what-can-be-done-with-plugins-)
@@ -55,9 +56,8 @@ Authentication Service can be used in any project that requires user authenticat
     - [Create User Validator Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#create-user-validator-plugin)
   - [Publishing Your Plugin as a Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#publishing-your-plugin-as-a-package)
   - [Sample Plugin Projects](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#sample-plugin-projects)
-* [API Documentation](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/api_documentation.md)
+- [API Reference](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/api_reference.md)
 
-    
 ## Conclusion
 
 These instructions will help you start, configure, test, and use the authentication-service-nestjs project. The project can be used in any project that requires user authentication functions.
