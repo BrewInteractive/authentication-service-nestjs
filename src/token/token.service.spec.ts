@@ -109,10 +109,11 @@ describe("TokenService", () => {
   it("should add custom claims to the TokenService instance", () => {
     const expectedCustomClaims = {
       claim1: "test",
-      claim2: { objKey: "test2" },
+      claim2: { objKey1: "test", objKey2: "test" },
     };
     tokenService.addCustomClaim(new CustomClaim("claim1", "test"));
-    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey: "test2" }));
+    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey1: "test" }));
+    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey2: "test" }));
 
     expect(tokenService["customClaims"]).toEqual(expectedCustomClaims);
   });

@@ -45,6 +45,15 @@ export class TokenService {
   }
 
   addCustomClaim(customClaim: CustomClaim) {
-    this.customClaims[customClaim.name] = customClaim.value;
+    if (
+      !this.customClaims[customClaim.name] ||
+      typeof this.customClaims[customClaim.name] !== "object"
+    )
+      this.customClaims[customClaim.name] = customClaim.value;
+    else
+      this.customClaims[customClaim.name] = {
+        ...this.customClaims[customClaim.name],
+        ...customClaim.value,
+      };
   }
 }
