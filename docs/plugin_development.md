@@ -85,7 +85,7 @@ It is possible to perform a check or action after user registration. For this pr
 
 When a user wants to log in, by default, username/email and password checks are performed. However, it is possible to add an additional check through the plugin. You can create a `User Validator` and add it to the `userValidators` using the `addUserValidator` method found within the `user service`.
 
-## Publishing Your Plugin as a Package
+## Publishing a Plugin as a Package
 
 While publishing the package, we need to adjust the `package.json` file settings.
 
