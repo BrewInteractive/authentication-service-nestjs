@@ -12,6 +12,7 @@ $ npm install
 ```
 
 You can run the project with one of the following commands.
+
 ```bash
 # development
 $ npm run start
@@ -24,12 +25,15 @@ $ npm run start:prod
 ```
 
 ## Database Run With Docker
+
 To manage and observe the databases, you can install Adminer with the following command.
+
 ```bash
 $ docker-compose -f .docker/docker-compose-adminer.yml --env-file .env up -d
 ```
 
 ### Run Postgres Database With Docker
+
 You can use the command below to install the Postgres database.
 
 ```bash
@@ -37,17 +41,19 @@ $ docker-compose -f .docker/docker-compose-postgres.yml --env-file .env up -d
 ```
 
 ### Run Mysql Database With Docker
+
 You can use the command below to install the Mysql database.
 
 ```bash
 $ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
 ```
 
+## Managing Database Migrations
 
-## Migration Run and Generate
 The database migration that the service needs to run is performed automatically when the project is running. You can use the following commands when you need to.
 
-### Migration Run
+### Applying Migrations
+
 It's possible to initiate migration either on a per-database basis or automatically for both databases.
 
 ```bash
@@ -61,7 +67,8 @@ $ npm run migration-mysql:run
 $ npm run migration-all:run
 ```
 
-### Migration Generate
+### Generating Migrations
+
 You can initiate the migration creation process on a per-database basis or automatically for both databases.
 
 ```bash
@@ -76,6 +83,7 @@ $ npm run migration-all:run
 ```
 
 ## Running Tests
+
 There are unit and integration tests within the service, which are written using NestJS's built-in testing framework. You can run the tests using the following commands.
 
 ```bash
