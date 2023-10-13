@@ -48,7 +48,7 @@ Authentication Service can be used in any project that requires user authenticat
 - [Plugin Development](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md)
   - [Considerations When Creating a Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#considerations-when-creating-a-plugin)
   - [Creating Plugins](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#creating-plugins)
-    - [What Can Be Done with Plugins ?](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#what-can-be-done-with-plugins-)
+    - [What can be done with Plugins?](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#what-can-be-done-with-plugins-)
     - [Creating Token Claims Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#creating-token-claims-plugin)
     - [Creating User Registration Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#creating-user-registration-plugin)
       - [Pre User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#pre-user-registration)
