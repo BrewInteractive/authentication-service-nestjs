@@ -1,6 +1,6 @@
 # Local Development Instructions
 
-First, create your env file. Then, you can follow the steps below.
+First, create your ".env" file. Then, you can follow the steps below.
 
 > [!NOTE]  
 > It is possible to create migrations or run databases with Docker in your local environment for testing purposes. [Learn more](#database-run-with-docker)
