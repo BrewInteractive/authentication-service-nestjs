@@ -1,5 +1,5 @@
 import { Mock } from "mockingbird";
-import { SignUpDto } from "../../../src/auth/dto/sign-up.dto";
+import { SignUpDto } from "../../../src/sign-up/dto/sign-up.dto";
 
 export class SignUpFixture extends SignUpDto {
   @Mock((faker) => faker.internet.userName())
