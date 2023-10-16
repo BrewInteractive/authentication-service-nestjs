@@ -22,11 +22,11 @@ export class UserResetPasswordRequest {
   @Column({ name: "resendable_at", nullable: true })
   resendableAt: Date;
 
-  @Column({ name: "key", nullable: true })
+  @Column({ name: "key", nullable: false })
   key: string;
   @BeforeInsert()
   createKey() {
-    this.key = Random.generate(16);
+    this.key = Random.generateString(16);
   }
   @ManyToOne((type) => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: "user_id" })
