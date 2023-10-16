@@ -1,4 +1,3 @@
-  export class LoginResponseDto {
-    id_token: string;
-  }
-  
+export class LoginResponse {
+  id_token: string;
+}

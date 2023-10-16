@@ -1,3 +1,3 @@
-export class SignUpResponseDto {
+export class SignUpResponse {
   id_token: string;
 }

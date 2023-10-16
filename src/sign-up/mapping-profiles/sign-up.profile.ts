@@ -1,7 +1,7 @@
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { Mapper, createMap, forMember, mapFrom } from "@automapper/core";
 import { Injectable } from "@nestjs/common";
-import { SignUpDto } from "../dto/sign-up.dto";
+import { SignUpRequest } from "../dto/sign-up-request.dto";
 import { User } from "../../entities/user.entity";
 import * as bcrypt from "bcrypt";
 import config from "../../utils/config";
@@ -19,7 +19,7 @@ export class SignUpProfile extends AutomapperProfile {
     return (mapper) => {
       createMap(
         mapper,
-        SignUpDto,
+        SignUpRequest,
         User,
         forMember(
           (dest) => dest.passwordSalt,
@@ -29,7 +29,7 @@ export class SignUpProfile extends AutomapperProfile {
         ),
         forMember(
           (dest) => dest.passwordHash,
-          mapFrom((src: SignUpDto) => {
+          mapFrom((src: SignUpRequest) => {
             const salt = this.salt;
             const hash = bcrypt.hashSync(src.password, salt);
             return hash;

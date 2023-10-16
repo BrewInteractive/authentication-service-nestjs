@@ -2,8 +2,8 @@ import { Inject, Controller, Post, Body } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
-import { SignUpDto } from "./dto/sign-up.dto";
-import { SignUpResponseDto } from "./dto/sign-up-response.dto";
+import { SignUpRequest } from "./dto/sign-up-request.dto";
+import { SignUpResponse } from "./dto/sign-up-response.dto";
 import { InjectMapper } from "@automapper/nestjs";
 import { User } from "../entities/user.entity";
 import { Mapper } from "@automapper/core";
@@ -19,15 +19,17 @@ export class SignUpController {
   ) {}
 
   @Post("sign-up")
-  async signUpAsync(@Body() signUpDto: SignUpDto): Promise<SignUpResponseDto> {
+  async signUpAsync(
+    @Body() signUpRequest: SignUpRequest
+  ): Promise<SignUpResponse> {
     const userCandidate = await this.mapper.mapAsync(
-      signUpDto,
-      SignUpDto,
+      signUpRequest,
+      SignUpRequest,
       User
     );
     const user = await this.userService.createUserAsync(
       userCandidate,
-      signUpDto.appData
+      signUpRequest.appData
     );
     const id_token = await this.tokenService.createTokenAsync(user);
     return { id_token };
