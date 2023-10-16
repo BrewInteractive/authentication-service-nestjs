@@ -3,7 +3,7 @@ import { LoginDto } from "./dto/login.dto";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
-import { LoginResponseDto } from "./dto/response.dto";
+import { LoginResponseDto } from "./dto/login-response.dto";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 
