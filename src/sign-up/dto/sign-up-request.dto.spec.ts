@@ -1,12 +1,12 @@
-import { validate } from "class-validator";
-import { SignUpDto } from "./sign-up.dto";
+import { SignUpRequest } from "./sign-up-request.dto";
 import { faker } from "@faker-js/faker";
+import { validate } from "class-validator";
 
 describe("SingUp Dto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
 
   it("should get email if username is empty", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -17,7 +17,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should get username if email is empty", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.password = faker.internet.password(10, false, passwordRegex);
@@ -28,7 +28,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty password field", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -37,7 +37,8 @@ describe("SingUp Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
+      matches:
+        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
       isNotEmpty: "password should not be empty",
       isString: "password must be a string",
       maxLength: "password must be shorter than or equal to 20 characters",
@@ -46,7 +47,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has a weak password", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -56,12 +57,13 @@ describe("SingUp Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
+      matches:
+        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
     });
   });
 
   it("should fail validation when LoginDto has an invalid email address", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.email = faker.random.word();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
@@ -75,7 +77,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty firstName field", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
@@ -90,7 +92,7 @@ describe("SingUp Dto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty lastName field", async () => {
-    const user = new SignUpDto();
+    const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.email = faker.internet.email();
     user.password = faker.internet.password(10, false, passwordRegex);
