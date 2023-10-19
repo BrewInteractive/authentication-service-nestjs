@@ -2,8 +2,6 @@ import { SendEmailCommand, SendEmailCommandInput } from "@aws-sdk/client-ses";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { Mapper, createMap, forMember, mapFrom } from "@automapper/core";
 import { Injectable } from "@nestjs/common";
-import { User } from "../../entities/user.entity";
-import { LoginDto } from "../dto/login.dto";
 import { Email } from "../../email/dto/email.dto";
 
 @Injectable()
