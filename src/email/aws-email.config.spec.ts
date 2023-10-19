@@ -13,8 +13,6 @@ jest.mock("../utils/config", () => ({
 describe("AwsEmailConfig", () => {
   it("should have the correct configuration properties", () => {
     const awsEmailConfig = AwsEmailConfig;
-    console.log(awsEmailConfig, config());
-
     expect(awsEmailConfig.region).toEqual(config().awsSesRegion);
     expect(awsEmailConfig.accessKeyId).toEqual(config().awsSesAccessKey);
     expect(awsEmailConfig.secretAccessKey).toEqual(config().awsSesSecretKey);
