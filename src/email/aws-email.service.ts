@@ -3,7 +3,7 @@ import { Email } from "./dto/email.dto";
 import { EmailService } from "./email.service";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
-import { IAwsEmailConfig } from "./interfaces/aws-email.config";
+import { IAwsEmailConfig } from "./interfaces/aws-email.config.interface";
 import { Inject } from "@nestjs/common";
 
 export class AwsEmailService extends EmailService {
