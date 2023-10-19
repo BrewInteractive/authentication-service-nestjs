@@ -72,14 +72,14 @@ $ npm run migration-all:run
 You can initiate the migration creation process on a per-database basis or automatically for both databases.
 
 ```bash
-# Postgres migration run
-$ npm run migration-postgres:run
+# Postgres migration generate
+$ npm run migration-postgres:generate
 
-# Mysql migration run
-$ npm run migration-mysql:run
+# Mysql migration generate
+$ npm run migration-mysql:generate
 
 # Postgres and Mysql migration run
-$ npm run migration-all:run
+$ npm run migration-all:generate
 ```
 
 ## Running Tests
