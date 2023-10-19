@@ -1,9 +1,8 @@
-import { AuthController } from "./auth.controller";
+import { SignUpController } from "./sign-up.controller";
 import { Module } from "@nestjs/common";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
 import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
-import { LoginProfile } from "./mapping-profiles/login.profile";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
 
@@ -15,7 +14,7 @@ import { classes } from "@automapper/classes";
       strategyInitializer: classes(),
     }),
   ],
-  controllers: [AuthController],
-  providers: [SignUpProfile, LoginProfile],
+  controllers: [SignUpController],
+  providers: [SignUpProfile],
 })
-export class AuthModule {}
+export class SignUpModule {}

@@ -1,4 +1,4 @@
-import { LoginDto } from "./login.dto";
+import { LoginRequest } from "./login-request.dto";
 import { faker } from "@faker-js/faker";
 import { validate } from "class-validator";
 
@@ -6,7 +6,7 @@ describe("LoginDto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
 
   it("should success validation if username is empty but not email", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.email = faker.internet.email();
     user.password = faker.internet.password(10, false, passwordRegex);
     const errors = await validate(user);
@@ -15,7 +15,7 @@ describe("LoginDto Validation", () => {
   });
 
   it("should success validation if email is empty but not username", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.password = faker.internet.password(10, false, passwordRegex);
     user.username = faker.internet.userName();
     const errors = await validate(user);
@@ -24,7 +24,7 @@ describe("LoginDto Validation", () => {
   });
 
   it("should fail validation when LoginDto has empty username and email fields", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.password = faker.internet.password(10, false, passwordRegex);
     const errors = await validate(user);
 
@@ -36,7 +36,7 @@ describe("LoginDto Validation", () => {
   });
 
   it("should fail validation when password is empty", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
     const errors = await validate(user);
@@ -53,7 +53,7 @@ describe("LoginDto Validation", () => {
   });
 
   it("should fail validation when password is weak", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.username = faker.internet.userName();
     user.password = faker.internet.password(10, false, /[A-Z]/);
     const errors = await validate(user);
@@ -66,7 +66,7 @@ describe("LoginDto Validation", () => {
   });
 
   it("should fail validation when email address is invalid", async () => {
-    const user = new LoginDto();
+    const user = new LoginRequest();
     user.email = faker.random.word();
     user.password = faker.internet.password(10, false, passwordRegex);
     const errors = await validate(user);

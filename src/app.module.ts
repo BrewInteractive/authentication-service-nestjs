@@ -3,16 +3,18 @@ import { AppService } from "./app.service";
 import { Module } from "@nestjs/common";
 import { PluginModule } from "./plugin/plugin.module";
 import { PluginTestModule } from "./plugin-test/plugin-test.module";
-import { AuthModule } from "./auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { dataSourceOptions } from "../db/data-source";
 import config from "./utils/config";
 import { ConfigModule } from "@nestjs/config";
+import { SignUpModule } from "./sign-up/sign-up.module";
+import { LoginModule } from "./login/login.module";
 
 @Module({
   imports: [
     PluginTestModule,
-    AuthModule,
+    SignUpModule,
+    LoginModule,
     PluginModule.registerAsync(),
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({

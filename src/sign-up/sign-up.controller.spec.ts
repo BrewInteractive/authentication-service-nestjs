@@ -1,23 +1,21 @@
-import { LoginFixture, SignUpFixture, UserFixture } from "../../test/fixtures";
+import { SignUpFixture, UserFixture } from "../../test/fixtures";
 import { User, UserRole } from "../entities";
 
-import { AuthController } from "./auth.controller";
+import { SignUpController } from "./sign-up.controller";
 import { AutomapperModule } from "@automapper/nestjs";
-import { LoginProfile } from "./mapping-profiles/login.profile";
 import { MockFactory } from "mockingbird";
 import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
-import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
-describe("AuthController", () => {
-  let authController: AuthController;
+describe("SignUpController", () => {
+  let signUpController: SignUpController;
   let tokenService: TokenService;
   let userService: UserService;
 
@@ -30,8 +28,8 @@ describe("AuthController", () => {
         UserModule,
         TokenModule,
       ],
-      controllers: [AuthController],
-      providers: [SignUpProfile, LoginProfile],
+      controllers: [SignUpController],
+      providers: [SignUpProfile],
     })
       .overrideProvider(getRepositoryToken(User))
       .useValue({
@@ -44,40 +42,9 @@ describe("AuthController", () => {
       })
       .compile();
 
-    authController = moduleRef.get<AuthController>(AuthController);
+    signUpController = moduleRef.get<SignUpController>(SignUpController);
     tokenService = moduleRef.get<TokenService>("TokenService");
     userService = moduleRef.get<UserService>("UserService");
-  });
-
-  it("should return a token if the email and password are valid", async () => {
-    const loginDto = MockFactory(LoginFixture).one();
-    const user = MockFactory(UserFixture).one();
-
-    const token = faker.random.alphaNumeric(32);
-    jest
-      .spyOn(userService, "validateUserAsync")
-      .mockReturnValueOnce(Promise.resolve(user as User));
-
-    jest
-      .spyOn(tokenService, "createTokenAsync")
-      .mockReturnValueOnce(Promise.resolve(token));
-
-    await expect(authController.loginAsync(loginDto)).resolves.toEqual({
-      id_token: token,
-    });
-  });
-
-  it("should return a token if the email and password are invalid", async () => {
-    const loginDto = MockFactory(LoginFixture).one();
-
-    const expectedResult = new UnauthorizedException("Invalid credentials");
-    jest
-      .spyOn(userService, "validateUserAsync")
-      .mockRejectedValueOnce(expectedResult);
-
-    await expect(authController.loginAsync(loginDto)).rejects.toThrow(
-      expectedResult
-    );
   });
 
   it("should return a token if the sign-up process is successful", async () => {
@@ -93,7 +60,7 @@ describe("AuthController", () => {
       .spyOn(tokenService, "createTokenAsync")
       .mockReturnValueOnce(Promise.resolve(token));
 
-    await expect(authController.signUpAsync(signUpDto)).resolves.toEqual({
+    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual({
       id_token: token,
     });
   });

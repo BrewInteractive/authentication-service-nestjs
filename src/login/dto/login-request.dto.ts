@@ -1,17 +1,18 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsString,
-  MinLength,
-  MaxLength,
-  Matches,
-  IsNotEmpty,
   IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
   ValidateIf,
 } from "class-validator";
-import config from "../../utils/config";
-import { AutoMap } from "@automapper/classes";
 
-export class LoginDto {
+import { ApiProperty } from "@nestjs/swagger";
+import { AutoMap } from "@automapper/classes";
+import config from "../../utils/config";
+
+export class LoginRequest {
   @ValidateIf((o) => !o.email)
   @IsNotEmpty()
   @IsString()

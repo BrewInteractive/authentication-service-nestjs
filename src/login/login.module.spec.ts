@@ -1,15 +1,15 @@
 import { User, UserRole } from "../entities";
 
-import { AuthModule } from "./auth.module";
+import { LoginModule } from "./login.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
-describe("AuthModule", () => {
-  let authModule: AuthModule;
+describe("LoginModule", () => {
+  let loginModule: LoginModule;
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [AuthModule],
+      imports: [LoginModule],
     })
       .overrideProvider(getRepositoryToken(UserRole))
       .useValue({
@@ -22,10 +22,10 @@ describe("AuthModule", () => {
       })
       .compile();
 
-    authModule = app.get<AuthModule>(AuthModule);
+      loginModule = app.get<LoginModule>(LoginModule);
   });
 
   it("Should be defined", () => {
-    expect(authModule).toBeDefined();
+    expect(loginModule).toBeDefined();
   });
 });
