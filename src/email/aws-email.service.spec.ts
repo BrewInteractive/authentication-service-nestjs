@@ -1,7 +1,6 @@
 import { EmailFixture } from "../../test/fixtures/email/email.fixture";
 import { MockFactory } from "mockingbird";
-import { AwsEmailService } from "./aws.email.service";
-import { Email } from "./dto/email.dto";
+import { AwsEmailService } from "./aws-email.service";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AutomapperModule } from "@automapper/nestjs";
@@ -19,7 +18,18 @@ describe("AwsEmailService", () => {
           strategyInitializer: classes(),
         }),
       ],
-      providers: [AwsEmailService, EmailProfile],
+      providers: [
+        AwsEmailService,
+        EmailProfile,
+        {
+          provide: "IAwsEmailConfig",
+          useValue: {
+            region: "us-west-2",
+            accessKeyId: "ACCESS_KEY_ID",
+            secretAccessKey: "SECRET_ACCESS_KEY",
+          },
+        },
+      ],
     }).compile();
 
     emailService = module.get<AwsEmailService>(AwsEmailService);
