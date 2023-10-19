@@ -17,3 +17,6 @@
 | SWAGGER_ENABLED         | Variable is used to enable or disable Swagger documentation for an API.               | NO       | false                  |
 | CORS_ALLOWED_ORIGINS    | Allowed origins for cors configuration.                                               | NO       | \*                     |
 | USER_DEFAULT_ROLE       | Represents the role that the user will be added by default during user registration.  | NO       | -                      |
+| AWS_SES_REGION       | Represents the region that AWS SES Service used.  | YES       | -                      |
+| AWS_SES_ACCESS_KEY_ID       | Access key id for AWS SES service.  | YES       | -                      |
+| AWS_SES_SECRET_ACCESS_KEY       | Secret access key for AWS SES service.  | YES       | -                      |

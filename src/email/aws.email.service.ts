@@ -1,7 +1,6 @@
 import {
   SESClient,
   SendEmailCommand,
-  SendEmailCommandInput,
 } from "@aws-sdk/client-ses";
 import { Email } from "./dto/email.dto";
 import { BaseEmailService } from "./interfaces/email.service.interface";
