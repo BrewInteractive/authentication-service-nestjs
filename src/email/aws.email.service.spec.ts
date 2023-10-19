@@ -1,7 +1,6 @@
 import { EmailFixture } from "../../test/fixtures/email/email.fixture";
 import { MockFactory } from "mockingbird";
 import { AwsEmailService } from "./aws.email.service";
-import { Email } from "./dto/email.dto";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AutomapperModule } from "@automapper/nestjs";

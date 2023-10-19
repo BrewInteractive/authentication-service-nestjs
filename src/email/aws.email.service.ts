@@ -3,10 +3,10 @@ import {
   SendEmailCommand,
 } from "@aws-sdk/client-ses";
 import { Email } from "./dto/email.dto";
-import { BaseEmailService } from "./interfaces/email.service.interface";
 import config from "./../utils/config";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
+import { BaseEmailService } from "./abstract/base.email.service";
 
 export class AwsEmailService extends BaseEmailService {
   private sesClient: SESClient;

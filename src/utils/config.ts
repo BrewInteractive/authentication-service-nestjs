@@ -21,4 +21,5 @@ export default () => ({
   awsSesRegion: process.env.AWS_SES_REGION,
   awsSesAccessKey: process.env.AWS_SES_ACCESS_KEY_ID,
   awsSesSecretKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  emailService: process.env.EMAIL_SERVICE,
 });
