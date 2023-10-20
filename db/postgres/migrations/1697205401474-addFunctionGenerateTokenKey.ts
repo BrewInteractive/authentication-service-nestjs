@@ -1,6 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddFunctionGenerateTokenKey1697205401474 implements MigrationInterface {
+    name = 'AddFunctionGenerateTokenKey1697205401474'
+
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             CREATE OR REPLACE FUNCTION generate_reset_password_key() RETURNS TRIGGER AS $$
