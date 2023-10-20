@@ -15,10 +15,10 @@ export class AwsEmailService extends EmailService {
   ) {
     super();
     this.sesClient = new SESClient({
-      region: awsConfig.region,
+      region: this.awsConfig.region,
       credentials: {
-        accessKeyId: awsConfig.accessKeyId,
-        secretAccessKey: awsConfig.secretAccessKey,
+        accessKeyId: this.awsConfig.accessKeyId,
+        secretAccessKey: this.awsConfig.secretAccessKey,
       },
     });
   }
