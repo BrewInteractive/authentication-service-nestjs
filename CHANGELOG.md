@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.8.1...v1.9.0) (2023-10-19)
+
+
+### Features
+
+* add profile picture column in user table ([53a1080](https://github.com/BrewInteractive/authentication-service-nestjs/commit/53a10803982ceeb48c0f25e5fc389bff611d0c4e))
+* **TS-206:** add users_reset_password_requests table as a migration ([26dcd2f](https://github.com/BrewInteractive/authentication-service-nestjs/commit/26dcd2f3b9212ecd16e3d2635b9ff632de8cbec5))
+* **TS-8, TS-10:** the validateUser method should be customizable through plugins ([1ba0026](https://github.com/BrewInteractive/authentication-service-nestjs/commit/1ba0026414e6a4ced98aef193ec3d7a98d3ed353))
+* **TSV-26, TSV-29:** appData property has been added to the SignUpDto and variable names in the auth controller have been updated. ([621d253](https://github.com/BrewInteractive/authentication-service-nestjs/commit/621d25328f043c712532a7ce9f75723da730d325))
+* **TSV-30:** the createUser method should be customizable through plugins ([5f8da60](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5f8da604065f4a39c03232d4fb7f215c42cbeb83))
+* update addCustomClaim method in token service ([89c1905](https://github.com/BrewInteractive/authentication-service-nestjs/commit/89c1905edc1019c841a59a3e07ec55f84db8b4a2))
+* updated role column as "text" ([76acd18](https://github.com/BrewInteractive/authentication-service-nestjs/commit/76acd18a9320311686f95ad65dac441b169b7916))
+
 ### [1.8.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.8.0...v1.8.1) (2023-09-04)
 
 

@@ -1,6 +1,6 @@
 import { Email } from "../dto/email.dto";
-import { IBaseEmailService } from "../interfaces/email.service.interface";
+import { IEmailService } from "../interfaces/email.service.interface";
 
-export abstract class BaseEmailService implements IBaseEmailService {
+export abstract class BaseEmailService implements IEmailService {
   abstract sendEmailAsync(email: Email): void;
 }
