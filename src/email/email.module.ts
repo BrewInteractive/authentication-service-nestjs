@@ -22,11 +22,11 @@ import { EmailService } from "./email.service";
     {
       provide: EmailService,
       useFactory: (mapper: Mapper) => {
-        const emailService = config().emailService as EmailServiceType;
-        if (emailService === EmailServiceType.AWS) {
+        const emailServiceType = config().emailService as EmailServiceType;
+        if (emailServiceType == EmailServiceType.AWS) {
           return new AwsEmailService(mapper, AwsEmailConfig);
         } else {
-          throw new ServiceUnavailableException(emailService);
+          throw new ServiceUnavailableException(emailServiceType);
         }
       },
     },
