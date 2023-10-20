@@ -1,4 +1,4 @@
-import { User, UserRole } from "../entities";
+import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
 import { SignUpModule } from "./sign-up.module";
 import { Test } from "@nestjs/testing";
@@ -16,6 +16,11 @@ describe("SignUpModule", () => {
         save: jest.fn(),
       })
       .overrideProvider(getRepositoryToken(User))
+      .useValue({
+        findOne: jest.fn(),
+        save: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(UserResetPasswordRequest))
       .useValue({
         findOne: jest.fn(),
         save: jest.fn(),

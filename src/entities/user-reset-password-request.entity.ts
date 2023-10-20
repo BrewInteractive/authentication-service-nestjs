@@ -12,7 +12,7 @@ import { User } from "./user.entity";
 @Entity({ name: "users_reset_password_requests" })
 export class UserResetPasswordRequest {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({ name: "expires_at", nullable: true })
   expiresAt: Date;

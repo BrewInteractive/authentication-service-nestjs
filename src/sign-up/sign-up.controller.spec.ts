@@ -1,5 +1,5 @@
 import { SignUpFixture, UserFixture } from "../../test/fixtures";
-import { User, UserRole } from "../entities";
+import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
 import { SignUpController } from "./sign-up.controller";
 import { AutomapperModule } from "@automapper/nestjs";
@@ -37,6 +37,10 @@ describe("SignUpController", () => {
         save: jest.fn(),
       })
       .overrideProvider(getRepositoryToken(UserRole))
+      .useValue({
+        save: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(UserResetPasswordRequest))
       .useValue({
         save: jest.fn(),
       })
