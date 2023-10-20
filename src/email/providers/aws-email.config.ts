@@ -1,4 +1,4 @@
-export interface IAwsEmailConfig {
+export class AwsEmailConfig {
   region: string;
   accessKeyId: string;
   secretAccessKey: string;
