@@ -3,7 +3,7 @@ import { ResetPasswordController } from "./reset-password.controller";
 import { UserService } from "../user/user.service";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
-import { ResetPasswordFixture } from "test/fixtures";
+import { ResetPasswordFixture } from "../../test/fixtures";
 import { MockFactory } from "mockingbird";
 
 describe("ResetPasswordController", () => {
