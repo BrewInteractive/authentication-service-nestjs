@@ -120,9 +120,9 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should create a new user if the username and email do not exist(Remove role property)", async () => {
+  it("should create a new user if the username and email do not exist(Empty role property)", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
-    delete expectedResult.roles;
+    expectedResult.roles = [];
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
       .mockResolvedValue(null);
