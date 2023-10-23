@@ -1,14 +1,14 @@
 import { Inject, Injectable, Logger, OnModuleInit, Type } from "@nestjs/common";
 
-import { IPlugin } from "./interfaces/plugin.interface";
+import { BasePlugin } from "./abstract/base-plugin.plugin";
 import { ModuleRef } from "@nestjs/core";
 
 @Injectable()
 export class PluginService implements OnModuleInit {
-  private readonly plugins: IPlugin[];
+  private readonly plugins: BasePlugin[];
   private readonly logger = new Logger(PluginService.name);
   constructor(
-    @Inject("PLUGINTYPES") private pluginTypes: Type<IPlugin>[],
+    @Inject("PLUGINTYPES") private pluginTypes: Type<BasePlugin>[],
     private moduleRef: ModuleRef
   ) {
     this.plugins = [];
