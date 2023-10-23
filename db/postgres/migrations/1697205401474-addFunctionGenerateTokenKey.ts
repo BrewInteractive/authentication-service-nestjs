@@ -8,7 +8,7 @@ export class AddFunctionGenerateTokenKey1697205401474 implements MigrationInterf
             CREATE OR REPLACE FUNCTION generate_reset_password_key() RETURNS TRIGGER AS $$
             BEGIN
               IF NEW.key IS NULL THEN
-              NEW.key = md5(random()::text)::character varying;
+                NEW.key = md5(random()::character varying);
               END IF;
               RETURN NEW;
             END;
