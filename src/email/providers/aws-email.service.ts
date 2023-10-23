@@ -1,9 +1,9 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { Email } from "./dto/email.dto";
-import { EmailService } from "./email.service";
+import { Email } from "../dto/email.dto";
+import { EmailService } from "../email.service";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
-import { IAwsEmailConfig } from "./interfaces/aws-email.config.interface";
+import { AwsEmailConfig } from "./aws-email.config";
 import { Inject } from "@nestjs/common";
 
 export class AwsEmailService extends EmailService {
@@ -11,14 +11,14 @@ export class AwsEmailService extends EmailService {
 
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
-    @Inject("IAwsEmailConfig") private readonly awsConfig: IAwsEmailConfig
+    @Inject("AwsEmailConfig") private readonly awsConfig: AwsEmailConfig
   ) {
     super();
     this.sesClient = new SESClient({
-      region: awsConfig.region,
+      region: this.awsConfig.region,
       credentials: {
-        accessKeyId: awsConfig.accessKeyId,
-        secretAccessKey: awsConfig.secretAccessKey,
+        accessKeyId: this.awsConfig.accessKeyId,
+        secretAccessKey: this.awsConfig.secretAccessKey,
       },
     });
   }

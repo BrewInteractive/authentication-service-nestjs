@@ -1,6 +1,5 @@
 import { Email } from "./dto/email.dto";
-import { IEmailService } from "./interfaces/email.service.interface";
 
-export abstract class EmailService implements IEmailService {
+export abstract class EmailService {
   abstract sendEmailAsync(email: Email): void;
 }

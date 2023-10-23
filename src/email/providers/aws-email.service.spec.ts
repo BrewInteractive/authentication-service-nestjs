@@ -1,15 +1,20 @@
-import { EmailFixture } from "../../test/fixtures/email/email.fixture";
+import { EmailFixture } from "../../../test/fixtures/email/email.fixture";
 import { MockFactory } from "mockingbird";
 import { AwsEmailService } from "./aws-email.service";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
-import { EmailProfile } from "../auth/mapping-profiles/email.mapping.profile";
+import { EmailProfile } from "../../auth/mapping-profiles/email.mapping.profile";
+import { AwsEmailConfig } from "./aws-email.config";
 
 describe("AwsEmailService", () => {
   let emailService: AwsEmailService;
-
+  let config = {
+    region: "us-west-2",
+    accessKeyId: "ACCESS_KEY_ID",
+    secretAccessKey: "SECRET_ACCESS_KEY",
+  } as AwsEmailConfig;
   beforeEach(async () => {
     jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({
@@ -22,12 +27,8 @@ describe("AwsEmailService", () => {
         AwsEmailService,
         EmailProfile,
         {
-          provide: "IAwsEmailConfig",
-          useValue: {
-            region: "us-west-2",
-            accessKeyId: "ACCESS_KEY_ID",
-            secretAccessKey: "SECRET_ACCESS_KEY",
-          },
+          provide: "AwsEmailConfig",
+          useValue: config,
         },
       ],
     }).compile();
