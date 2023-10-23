@@ -1,21 +1,22 @@
 import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
-import { LoginModule } from "./login.module";
+import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
-describe("LoginModule", () => {
-  let loginModule: LoginModule;
+describe("ResetPasswordModule", () => {
+  let resetPasswordModule: ResetPasswordModule;
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [LoginModule],
+      imports: [ResetPasswordModule],
     })
-      .overrideProvider(getRepositoryToken(UserRole))
+      .overrideProvider(getRepositoryToken(User))
       .useValue({
+        findOne: jest.fn(),
         save: jest.fn(),
       })
-      .overrideProvider(getRepositoryToken(User))
+      .overrideProvider(getRepositoryToken(UserRole))
       .useValue({
         findOne: jest.fn(),
         save: jest.fn(),
@@ -27,10 +28,10 @@ describe("LoginModule", () => {
       })
       .compile();
 
-      loginModule = app.get<LoginModule>(LoginModule);
+    resetPasswordModule = app.get<ResetPasswordModule>(ResetPasswordModule);
   });
 
   it("Should be defined", () => {
-    expect(loginModule).toBeDefined();
+    expect(resetPasswordModule).toBeDefined();
   });
 });
