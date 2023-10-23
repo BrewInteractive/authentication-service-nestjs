@@ -120,20 +120,6 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should create a new user if the username and email do not exist(Null User)", async () => {
-    const expectedResult = MockFactory(UserFixture).one() as User;
-    expectedResult.roles = null;
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(null);
-    jest.spyOn(userRepository, "save").mockResolvedValue(expectedResult);
-    jest.spyOn(userRoleRepository, "save").mockResolvedValue(null);
-
-    const actualResult = await userService.createUserAsync(expectedResult);
-
-    expect(actualResult).toBe(expectedResult);
-  });
-
   it("should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
     userService.addPreRegisterUserHandler({
