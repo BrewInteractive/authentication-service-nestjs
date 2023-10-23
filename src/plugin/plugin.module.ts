@@ -3,7 +3,7 @@ import * as Plugins from "./plugins";
 import { DynamicModule, Module, Provider, forwardRef } from "@nestjs/common";
 
 import { AppModule } from "../app.module";
-import { IPlugin } from "./interfaces/plugin.interface";
+import { BasePlugin } from "./abstract/base-plugin.plugin";
 import { PluginService } from "./plugin.service";
 import { PluginTestModule } from "../plugin-test/plugin-test.module";
 import { TokenModule } from "../token/token.module";
@@ -17,7 +17,7 @@ import { TokenModule } from "../token/token.module";
 })
 export class PluginModule {
   public static async registerAsync(): Promise<DynamicModule> {
-    const pluginTypes: Provider<IPlugin>[] = Object.values(Plugins);
+    const pluginTypes: Provider<BasePlugin>[] = Object.values(Plugins);
     return {
       module: PluginModule,
       providers: [
