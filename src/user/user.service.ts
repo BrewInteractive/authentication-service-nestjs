@@ -147,43 +147,61 @@ export class UserService {
     }
   }
 
-  async resetPasswordAsync(resetPasswordRequest: ResetPasswordRequest): Promise<void> {
-    const userResetPasswordData = await this.getResetPasswordRequest(resetPasswordRequest.key);
-    
-    this.validateResetRequest(userResetPasswordData, resetPasswordRequest);
-    this.updateUserPasswordAsync(userResetPasswordData.user, resetPasswordRequest.newPassword);
-    this.updateResetRequestExpirationAsync(userResetPasswordData);
+  async resetPasswordAsync(
+    resetPasswordRequest: ResetPasswordRequest
+  ): Promise<void> {
+    const userResetPasswordData = await this.getResetPasswordRequestAsync(
+      resetPasswordRequest.key
+    );
+
+    this.validateResetPasswordRequest(userResetPasswordData, resetPasswordRequest);
+    this.updateUserPasswordAsync(
+      userResetPasswordData.user,
+      resetPasswordRequest.newPassword
+    );
+    this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
   }
-  
-  async getResetPasswordRequest(key: string): Promise<UserResetPasswordRequest> {
+
+  async getResetPasswordRequestAsync(
+    key: string
+  ): Promise<UserResetPasswordRequest> {
     return await this.userResetPasswordRequestRepository.findOne({
       where: { key },
       relations: ["user"],
     });
   }
-  
-  private validateResetRequest(userResetPasswordRequest: UserResetPasswordRequest, resetPasswordRequest: ResetPasswordRequest): void {
-    if (!userResetPasswordRequest) {
-      throw new UnauthorizedException("Invalid reset key.");
-    }
-    
-    if (userResetPasswordRequest.expiresAt && userResetPasswordRequest.expiresAt < new Date()) {
-      throw new UnauthorizedException("Reset request has expired.");
-    }
 
-    if (Number(userResetPasswordRequest.user.id) !== resetPasswordRequest.userId) {
-      throw new UnauthorizedException("Invalid user for the reset key.");
+  private validateResetPasswordRequest(
+    userResetPasswordRequest: UserResetPasswordRequest,
+    resetPasswordRequest: ResetPasswordRequest
+  ): void {
+    if (
+      !userResetPasswordRequest ||
+      Number(userResetPasswordRequest.user.id) !== resetPasswordRequest.userId
+    ) {
+      throw new UnauthorizedException("Invalid reset password request.");
+    }
+    if (
+      userResetPasswordRequest.expiresAt &&
+      userResetPasswordRequest.expiresAt < new Date()
+    ) {
+      throw new UnauthorizedException("Reset password request is expired.");
     }
   }
-  
-  private async updateUserPasswordAsync(user: User, newPassword: string): Promise<void> {
+
+  private async updateUserPasswordAsync(
+    user: User,
+    newPassword: string
+  ): Promise<void> {
     const newSalt = bcrypt.genSaltSync();
     user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
     user.passwordSalt = newSalt;
     await this.userRepository.save(user);
   }
-  
-  private async updateResetRequestExpirationAsync(resetPasswordRequest: UserResetPasswordRequest): Promise<void> {
+
+  private async updateResetPasswordRequestExpirationAsync(
+    resetPasswordRequest: UserResetPasswordRequest
+  ): Promise<void> {
     resetPasswordRequest.expiresAt = new Date();
     await this.userResetPasswordRequestRepository.save(resetPasswordRequest);
   }
