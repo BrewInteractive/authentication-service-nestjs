@@ -122,7 +122,9 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
-    userService.addPreRegisterUserHandler({ handleAsync: jest.fn() });
+    userService.addPreRegisterUserHandler({
+      handleAsync: jest.fn().mockResolvedValue(expectedResult),
+    });
     userService.addPostRegisterUserHandler({ handleAsync: jest.fn() });
 
     jest
