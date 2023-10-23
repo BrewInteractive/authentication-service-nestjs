@@ -116,7 +116,7 @@ describe("ResetPassword (e2e)", () => {
         .send(resetPasswordRequest)
         .expect(401);
 
-      expect(response.body.message).toBe("Invalid user for the reset key.");
+      expect(response.body.message).toBe("Invalid reset password request.");
     });
   });
 });
