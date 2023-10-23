@@ -80,6 +80,6 @@ function exportModule(modulePath: string): void {
 }
 
 const pluginsDir = path.join(__dirname, "./");
-const nodeModulesDir = path.resolve(node_modules(), "@brewww");
+const nodeModulesDir = path.resolve(node_modules());
 
 traverseDirectory(pluginsDir, nodeModulesDir);
