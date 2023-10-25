@@ -56,6 +56,7 @@
     "class-validator": "^0.14.0",
     "dotenv": "^16.0.3",
     "jsonwebtoken": "^9.0.0",
+    "mjml": "^4.14.1",
     "mockingbird": "^2.1.2",
     "mysql2": "^3.2.0",
     "node_modules-path": "^2.0.7",
