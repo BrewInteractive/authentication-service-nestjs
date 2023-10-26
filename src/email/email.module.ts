@@ -21,10 +21,8 @@ import { EmailServiceType } from "./enum/email.service.type.enum";
     {
       provide: "EmailService",
       useFactory: (awsEmailService: AwsEmailService) => {
-        if (
-          (config().emailService as EmailServiceType) === EmailServiceType.AWS
-        )
-          return awsEmailService;
+        const emailServiceType = config().emailService as EmailServiceType;
+        if (emailServiceType === EmailServiceType.AWS) return awsEmailService;
         else throw new Error("Invalid email service type");
       },
       inject: [AwsEmailService],
