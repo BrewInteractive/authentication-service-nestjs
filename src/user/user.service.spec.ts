@@ -1,6 +1,6 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { User, UserRole } from "../entities";
+import { User, UserResetPasswordRequest, UserRole } from "../entities";
 import { UserService } from "./user.service";
 import { MockFactory } from "mockingbird";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
@@ -9,11 +9,16 @@ import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handle
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
 import { IUserValidator } from "./interfaces/user-validator.interface";
+import {
+  ResetPasswordFixture,
+  UserResetPasswordRequestFixture,
+} from "../../test/fixtures";
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
   let userService: UserService;
   let userRepository: Repository<User>;
+  let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRoleRepository: Repository<UserRole>;
 
   beforeEach(async () => {
@@ -34,12 +39,22 @@ describe("UserService", () => {
             save: jest.fn(),
           },
         },
+        {
+          provide: "UserResetPasswordRequestRepository",
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+          },
+        },
       ],
     }).compile();
     userService = moduleRef.get<UserService>(UserService);
     userRepository = moduleRef.get<Repository<User>>("UserRepository");
     userRoleRepository =
       moduleRef.get<Repository<UserRole>>("UserRoleRepository");
+    userResetPasswordRequestRepository = moduleRef.get<
+      Repository<UserResetPasswordRequest>
+    >("UserResetPasswordRequestRepository");
   });
 
   it("should return a user for getUserByUsernameAndEmail", async () => {
@@ -221,5 +236,130 @@ describe("UserService", () => {
     const validate: IUserValidator = { validateAsync: jest.fn() };
     userService.addUserValidator(validate);
     expect(userService["userValidators"]).toContain(validate);
+  });
+
+  it("should return a userResetPasswordRequest for getResetPasswordRequestAsync", async () => {
+    const expectedResult = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        expiresAt: faker.date.future(1),
+      })
+      .one();
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getResetPasswordRequestAsync(
+      expectedResult.key
+    );
+
+    expect(actualResult).toBe(expectedResult);
+  });
+
+  it("should throw UnauthorizedException for invalid reset key", async () => {
+    const resetPasswordRequest = MockFactory(ResetPasswordFixture).one();
+    jest.spyOn(userService, "getResetPasswordRequestAsync").mockResolvedValue(null);
+
+    try {
+      await userService.resetPasswordAsync(resetPasswordRequest);
+    } catch (e) {
+      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e.message).toBe("Invalid reset password request.");
+    }
+  });
+
+  it("should throw UnauthorizedException for expired reset request", async () => {
+    const validKey = faker.datatype.string(16);
+    const userId = faker.datatype.number();
+
+    const resetPasswordRequest = MockFactory(ResetPasswordFixture)
+      .mutate({
+        key: validKey,
+        userId: userId,
+      })
+      .one();
+
+    const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        key: validKey,
+        expiresAt: faker.date.past(1),
+        user: MockFactory(UserFixture)
+          .mutate({
+            id: String(userId),
+          })
+          .one(),
+      })
+      .one();
+
+    jest
+      .spyOn(userService, "getResetPasswordRequestAsync")
+      .mockResolvedValue(userResetPasswordData);
+
+    try {
+      await userService.resetPasswordAsync(resetPasswordRequest);
+    } catch (e) {
+      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e.message).toBe("Reset password request is expired.");
+    }
+  });
+
+  it("should throw UnauthorizedException for invalid user", async () => {
+    const validKey = faker.datatype.string(16);
+
+    const resetPasswordRequest = MockFactory(ResetPasswordFixture)
+      .mutate({
+        key: validKey,
+      })
+      .one();
+    const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        key: validKey,
+        expiresAt: faker.date.future(1),
+      })
+      .one();
+
+    jest
+      .spyOn(userService, "getResetPasswordRequestAsync")
+      .mockResolvedValue(userResetPasswordData);
+
+    try {
+      await userService.resetPasswordAsync(resetPasswordRequest);
+    } catch (e) {
+      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e.message).toBe("Invalid reset password request.");
+    }
+  });
+
+  it("should update user password and reset request expiration", async () => {
+    const userId = faker.datatype.number();
+    const validKey = faker.datatype.string(16);
+
+    const resetPasswordRequest = MockFactory(ResetPasswordFixture)
+      .mutate({
+        key: validKey,
+        userId: userId,
+      })
+      .one();
+
+    const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        key: validKey,
+        expiresAt: faker.date.future(1),
+        user: MockFactory(UserFixture)
+          .mutate({
+            id: String(userId),
+          })
+          .one(),
+      })
+      .one();
+
+    jest
+      .spyOn(userService, "getResetPasswordRequestAsync")
+      .mockResolvedValue(userResetPasswordData);
+
+    await userService.resetPasswordAsync(resetPasswordRequest);
+
+    expect(userRepository.save).toHaveBeenCalled();
+    expect(userResetPasswordRequestRepository.save).toHaveBeenCalled();
   });
 });
