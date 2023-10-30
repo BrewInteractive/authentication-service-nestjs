@@ -18,4 +18,8 @@ export default () => ({
   jwtSecret: process.env.JWT_SECRET,
   userDefaultRole: process.env.USER_DEFAULT_ROLE,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || 3600,
+  awsSesRegion: process.env.AWS_SES_REGION,
+  awsSesAccessKey: process.env.AWS_SES_ACCESS_KEY_ID,
+  awsSesSecretKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  emailService: process.env.EMAIL_SERVICE,
 });

@@ -1,7 +1,6 @@
 import { AuthenticationServiceOptions } from "../../interfaces/authentication-service-options.interface";
-import { IPlugin } from "../interfaces/plugin.interface";
 
-export abstract class BasePlugin implements IPlugin {
+export abstract class BasePlugin {
   constructor(authenticationService: AuthenticationServiceOptions) {
     this.name = authenticationService.name;
     this.displayName = authenticationService.displayName;
