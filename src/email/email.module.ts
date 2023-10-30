@@ -5,7 +5,6 @@ import { EmailServiceType } from "./enum/email.service.type.enum";
 import { Module } from "@nestjs/common";
 import config from "../utils/config";
 
-
 @Module({
   imports: [],
   providers: [
