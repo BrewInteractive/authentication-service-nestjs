@@ -1,6 +1,6 @@
 {
   "name": "@brewww/authentication-service",
-  "version": "1.8.1",
+  "version": "1.10.0",
   "description": "Authenticator service for Brew projects.",
   "author": "Brew",
   "license": "MIT",
@@ -40,6 +40,7 @@
     "@nestjs/common": "^9.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "3.427.0",
     "@automapper/classes": "^8.7.7",
     "@automapper/core": "^8.7.7",
     "@automapper/nestjs": "^8.7.7",

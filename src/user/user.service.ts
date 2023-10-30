@@ -3,13 +3,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { User, UserRole } from "../entities";
+import { User, UserResetPasswordRequest, UserRole } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
+import { ResetPasswordRequest } from "../reset-password/dto/reset-password-request.dto";
 
 @Injectable()
 export class UserService {
@@ -21,7 +22,9 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserRole)
-    private readonly userRoleRepository: Repository<UserRole>
+    private readonly userRoleRepository: Repository<UserRole>,
+    @InjectRepository(UserResetPasswordRequest)
+    private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
   ) {}
 
   async getUserByUsernameAndEmailAsync(
@@ -88,11 +91,11 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
-    await this.applyPreRegisterUserHandlersAsync(user, appData);
-    const insertedUser = await this.insertUserAsync(user);
-    await this.applyPostRegisterUserHandlersAsync(insertedUser, appData);
+    user = await this.applyPreRegisterUserHandlersAsync(user, appData);
+    user = await this.insertUserAsync(user);
+    user = await this.applyPostRegisterUserHandlersAsync(user, appData);
 
-    return insertedUser;
+    return user;
   }
 
   private async insertUserAsync(user: User) {
@@ -122,19 +125,24 @@ export class UserService {
     this.userValidators.push(userValidator);
   }
 
-  private async applyPreRegisterUserHandlersAsync(user: User, appData: object) {
+  private async applyPreRegisterUserHandlersAsync(
+    user: User,
+    appData: object
+  ): Promise<User> {
     for (const preRegisterUserHandler of this.preRegisterUserHandlers) {
-      await preRegisterUserHandler.handleAsync(user, appData);
+      user = await preRegisterUserHandler.handleAsync(user, appData);
     }
+    return user;
   }
 
   private async applyPostRegisterUserHandlersAsync(
     user: User,
     appData: object
-  ) {
+  ): Promise<User> {
     for (const preRegisterUserHandler of this.postRegisterUserHandlers) {
-      await preRegisterUserHandler.handleAsync(user, appData);
+      user = await preRegisterUserHandler.handleAsync(user, appData);
     }
+    return user;
   }
 
   private async applyUserValidatorsAsync(user: User) {
@@ -142,5 +150,67 @@ export class UserService {
       if (!(await userValidator.validateAsync(user)))
         throw new UnauthorizedException("Invalid User.");
     }
+  }
+
+  async resetPasswordAsync(
+    resetPasswordRequest: ResetPasswordRequest
+  ): Promise<void> {
+    const userResetPasswordData = await this.getResetPasswordRequestAsync(
+      resetPasswordRequest.key
+    );
+
+    this.validateResetPasswordRequest(
+      userResetPasswordData,
+      resetPasswordRequest
+    );
+    this.updateUserPasswordAsync(
+      userResetPasswordData.user,
+      resetPasswordRequest.newPassword
+    );
+    this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
+  }
+
+  async getResetPasswordRequestAsync(
+    key: string
+  ): Promise<UserResetPasswordRequest> {
+    return await this.userResetPasswordRequestRepository.findOne({
+      where: { key },
+      relations: ["user"],
+    });
+  }
+
+  private validateResetPasswordRequest(
+    userResetPasswordRequest: UserResetPasswordRequest,
+    resetPasswordRequest: ResetPasswordRequest
+  ): void {
+    if (
+      !userResetPasswordRequest ||
+      Number(userResetPasswordRequest.user.id) !== resetPasswordRequest.userId
+    ) {
+      throw new UnauthorizedException("Invalid reset password request.");
+    }
+    if (
+      userResetPasswordRequest.expiresAt &&
+      userResetPasswordRequest.expiresAt < new Date()
+    ) {
+      throw new UnauthorizedException("Reset password request is expired.");
+    }
+  }
+
+  private async updateUserPasswordAsync(
+    user: User,
+    newPassword: string
+  ): Promise<void> {
+    const newSalt = bcrypt.genSaltSync();
+    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
+    user.passwordSalt = newSalt;
+    await this.userRepository.save(user);
+  }
+
+  private async updateResetPasswordRequestExpirationAsync(
+    resetPasswordRequest: UserResetPasswordRequest
+  ): Promise<void> {
+    resetPasswordRequest.expiresAt = new Date();
+    await this.userResetPasswordRequestRepository.save(resetPasswordRequest);
   }
 }

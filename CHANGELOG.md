@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.9.0...v1.10.0) (2023-10-30)
+
+
+### Features
+
+* **email service:** create aws email service, base email service ([7d37977](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7d37977799884914c5bda059aa229f36a6b4a18a))
+* **TS-200:** add email module ([199ce9b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/199ce9b3be5127d83c16d0a4ed99e50ca0aa7e3a))
+* **TS-212:** add expire old reset requests trigger migration ([75647c4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/75647c4cb3d992716da9a05c74a1f133153db325))
+* **TS-213:** add reset-password endpoint ([b3e3bb4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b3e3bb477d1bb5fedc2b96f84cef03a2e521d214))
+* **TSV-30:** update register user importer interface ([f708a82](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f708a821a71c3c441bae10e550c614d5c3994d83))
+
+
+### Bug Fixes
+
+* add aws config ([52cdf14](https://github.com/BrewInteractive/authentication-service-nestjs/commit/52cdf14c52e3d23e99d63cab279a0268421428a4))
+* add aws ses client to package json ([bb7aab6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/bb7aab6b1e8ff6506ba154a7cc595fc240f19f49))
+* aws config, move abstract to domain folder, fix test for new config provider ([7ad85bb](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7ad85bb50e209d6f3c93a6cc4ca0e70e519d926a))
+* cleanup ([d6a7833](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d6a7833f257d16f3defb40804082ae6607eec4b9))
+* fix email module ([6b713cc](https://github.com/BrewInteractive/authentication-service-nestjs/commit/6b713cc8df786935069eba37a60ed17060e80b6a))
+* move aws service to providers ([7d805b6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7d805b6abfd0d9a946dcf9bcc88046229564ae31))
+* move env.s to docs, clean imports ([8609885](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8609885e4c57e63d4bff0730fe8c01e0b00850fd))
+* sonar warnings ([9ef3f68](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9ef3f687d08ca48615bff4b8bc98f66bd180d2d4))
+* **TS-206:** fix for migration name ([14d4bc7](https://github.com/BrewInteractive/authentication-service-nestjs/commit/14d4bc7fdea7add246d2ced2a0a8be7377c84b0e))
+* **TS-206:** fix for migration name ([b2059a4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b2059a4914f9630df2211b926563a20c70c3c5d1))
+* **TS-206:** random string function remove and add generate_reset_password_key function migration ([bae64c0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/bae64c0cf99687784398c54629d313d3b0d7bf81))
+* **TS-213:** fix for reset password e2e test ([e594d01](https://github.com/BrewInteractive/authentication-service-nestjs/commit/e594d01913d4c8b92398ff9e9a9c41f9c33c507a))
+* **TS-213:** fix reset password fixture path ([846bc38](https://github.com/BrewInteractive/authentication-service-nestjs/commit/846bc387b9d6d4bf1945601b90f7929821ab9144))
+* typo ([fb674a5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/fb674a5c0c2a3824a9be8ad82135d20ce354e48c))
+
+## [1.9.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.8.1...v1.9.0) (2023-10-19)
+
+
+### Features
+
+* add profile picture column in user table ([53a1080](https://github.com/BrewInteractive/authentication-service-nestjs/commit/53a10803982ceeb48c0f25e5fc389bff611d0c4e))
+* **TS-206:** add users_reset_password_requests table as a migration ([26dcd2f](https://github.com/BrewInteractive/authentication-service-nestjs/commit/26dcd2f3b9212ecd16e3d2635b9ff632de8cbec5))
+* **TS-8, TS-10:** the validateUser method should be customizable through plugins ([1ba0026](https://github.com/BrewInteractive/authentication-service-nestjs/commit/1ba0026414e6a4ced98aef193ec3d7a98d3ed353))
+* **TSV-26, TSV-29:** appData property has been added to the SignUpDto and variable names in the auth controller have been updated. ([621d253](https://github.com/BrewInteractive/authentication-service-nestjs/commit/621d25328f043c712532a7ce9f75723da730d325))
+* **TSV-30:** the createUser method should be customizable through plugins ([5f8da60](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5f8da604065f4a39c03232d4fb7f215c42cbeb83))
+* update addCustomClaim method in token service ([89c1905](https://github.com/BrewInteractive/authentication-service-nestjs/commit/89c1905edc1019c841a59a3e07ec55f84db8b4a2))
+* updated role column as "text" ([76acd18](https://github.com/BrewInteractive/authentication-service-nestjs/commit/76acd18a9320311686f95ad65dac441b169b7916))
+
 ### [1.8.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.8.0...v1.8.1) (2023-09-04)
 
 
