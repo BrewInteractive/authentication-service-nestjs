@@ -92,16 +92,16 @@ export class UserService {
     }
 
     user = await this.applyPreRegisterUserHandlersAsync(user, appData);
-    const insertedUser = await this.insertUserAsync(user);
-    await this.applyPostRegisterUserHandlersAsync(insertedUser, appData);
+    user = await this.insertUserAsync(user);
+    user = await this.applyPostRegisterUserHandlersAsync(user, appData);
 
-    return insertedUser;
+    return user;
   }
 
   private async insertUserAsync(user: User) {
     const savedUser = await this.userRepository.save(user);
 
-    if (user?.roles) {
+    if (user.roles) {
       const roles = user.roles.map((userRoles) => ({
         ...userRoles,
         user: savedUser,
@@ -159,7 +159,10 @@ export class UserService {
       resetPasswordRequest.key
     );
 
-    this.validateResetPasswordRequest(userResetPasswordData, resetPasswordRequest);
+    this.validateResetPasswordRequest(
+      userResetPasswordData,
+      resetPasswordRequest
+    );
     this.updateUserPasswordAsync(
       userResetPasswordData.user,
       resetPasswordRequest.newPassword
