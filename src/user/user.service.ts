@@ -91,11 +91,11 @@ export class UserService {
       throw new ConflictException("Username or email already exists");
     }
 
-    await this.applyPreRegisterUserHandlersAsync(user, appData);
-    const insertedUser = await this.insertUserAsync(user);
-    await this.applyPostRegisterUserHandlersAsync(insertedUser, appData);
+    user = await this.applyPreRegisterUserHandlersAsync(user, appData);
+    user = await this.insertUserAsync(user);
+    user = await this.applyPostRegisterUserHandlersAsync(user, appData);
 
-    return insertedUser;
+    return user;
   }
 
   private async insertUserAsync(user: User) {
@@ -125,19 +125,24 @@ export class UserService {
     this.userValidators.push(userValidator);
   }
 
-  private async applyPreRegisterUserHandlersAsync(user: User, appData: object) {
+  private async applyPreRegisterUserHandlersAsync(
+    user: User,
+    appData: object
+  ): Promise<User> {
     for (const preRegisterUserHandler of this.preRegisterUserHandlers) {
-      await preRegisterUserHandler.handleAsync(user, appData);
+      user = await preRegisterUserHandler.handleAsync(user, appData);
     }
+    return user;
   }
 
   private async applyPostRegisterUserHandlersAsync(
     user: User,
     appData: object
-  ) {
+  ): Promise<User> {
     for (const preRegisterUserHandler of this.postRegisterUserHandlers) {
-      await preRegisterUserHandler.handleAsync(user, appData);
+      user = await preRegisterUserHandler.handleAsync(user, appData);
     }
+    return user;
   }
 
   private async applyUserValidatorsAsync(user: User) {
@@ -154,7 +159,10 @@ export class UserService {
       resetPasswordRequest.key
     );
 
-    this.validateResetPasswordRequest(userResetPasswordData, resetPasswordRequest);
+    this.validateResetPasswordRequest(
+      userResetPasswordData,
+      resetPasswordRequest
+    );
     this.updateUserPasswordAsync(
       userResetPasswordData.user,
       resetPasswordRequest.newPassword

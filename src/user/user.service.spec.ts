@@ -1,18 +1,19 @@
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
-import { UserService } from "./user.service";
-import { MockFactory } from "mockingbird";
-import { UserFixture } from "../../test/fixtures/user/user.fixture";
-import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
-import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
-import { Repository } from "typeorm";
-import { faker } from "@faker-js/faker";
-import { IUserValidator } from "./interfaces/user-validator.interface";
 import {
   ResetPasswordFixture,
   UserResetPasswordRequestFixture,
 } from "../../test/fixtures";
+import { User, UserResetPasswordRequest, UserRole } from "../entities";
+
+import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
+import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
+import { IUserValidator } from "./interfaces/user-validator.interface";
+import { MockFactory } from "mockingbird";
+import { Repository } from "typeorm";
+import { Test } from "@nestjs/testing";
+import { UserFixture } from "../../test/fixtures/user/user.fixture";
+import { UserService } from "./user.service";
+import { faker } from "@faker-js/faker";
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -137,8 +138,12 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
-    userService.addPreRegisterUserHandler({ handleAsync: jest.fn() });
-    userService.addPostRegisterUserHandler({ handleAsync: jest.fn() });
+    userService.addPreRegisterUserHandler({
+      handleAsync: jest.fn().mockResolvedValue(expectedResult),
+    });
+    userService.addPostRegisterUserHandler({
+      handleAsync: jest.fn().mockResolvedValue(expectedResult),
+    });
 
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
@@ -258,7 +263,9 @@ describe("UserService", () => {
 
   it("should throw UnauthorizedException for invalid reset key", async () => {
     const resetPasswordRequest = MockFactory(ResetPasswordFixture).one();
-    jest.spyOn(userService, "getResetPasswordRequestAsync").mockResolvedValue(null);
+    jest
+      .spyOn(userService, "getResetPasswordRequestAsync")
+      .mockResolvedValue(null);
 
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
