@@ -1,9 +1,9 @@
+import { AwsEmailConfig } from "./providers/aws-email.config";
+import { AwsEmailService } from "./providers/aws-email.service";
+import { EmailProfile } from "./mapping-profiles/email.mapping.profile";
+import { EmailServiceType } from "./enum/email.service.type.enum";
 import { Module } from "@nestjs/common";
 import config from "../utils/config";
-import { AwsEmailService } from "./providers/aws-email.service";
-import { EmailProfile } from "../auth/mapping-profiles/email.mapping.profile";
-import { AwsEmailConfig } from "./providers/aws-email.config";
-import { EmailServiceType } from "./enum/email.service.type.enum";
 
 @Module({
   imports: [],

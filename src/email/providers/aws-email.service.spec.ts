@@ -1,12 +1,13 @@
-import { EmailFixture } from "../../../test/fixtures/email/email.fixture";
-import { MockFactory } from "mockingbird";
-import { AwsEmailService } from "./aws-email.service";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
-import { EmailProfile } from "../../auth/mapping-profiles/email.mapping.profile";
 import { AwsEmailConfig } from "./aws-email.config";
+import { AwsEmailService } from "./aws-email.service";
+import { EmailFixture } from "../../../test/fixtures/email/email.fixture";
+import { EmailProfile } from "../mapping-profiles/email.mapping.profile";
+import { MockFactory } from "mockingbird";
+import { classes } from "@automapper/classes";
 
 describe("AwsEmailService", () => {
   let emailService: AwsEmailService;
