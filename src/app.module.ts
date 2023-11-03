@@ -10,9 +10,11 @@ import { ConfigModule } from "@nestjs/config";
 import { SignUpModule } from "./sign-up/sign-up.module";
 import { LoginModule } from "./login/login.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
+import { TemplateModule } from "./template/template.module";
 
 @Module({
   imports: [
+    TemplateModule,
     PluginTestModule,
     SignUpModule,
     LoginModule,
