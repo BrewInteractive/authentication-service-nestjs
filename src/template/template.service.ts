@@ -9,7 +9,6 @@ export class TemplateService{
     private readonly templatesFolderPath = './src/template/templates/';
 
   getResetPasswordEmail(data: any): string {
-    const cwd = process.cwd();
     const templateFile = this.getResetPasswordEmailTemplate();
     const templateContent = readFileSync(templateFile, 'utf8');
     const emailContent = this.compileAndInjectData(templateContent, data);
