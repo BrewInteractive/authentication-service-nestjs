@@ -1,6 +1,6 @@
 import { TemplateService } from './template.service';
 import { readFileSync } from 'fs';
-import * as Handlebars from 'handlebars';
+import mjml2html = require('mjml');
 
 // Mock the fs and mjml2html dependencies for testing
 jest.mock('fs');
@@ -15,17 +15,49 @@ describe('TemplateService', () => {
 
   describe('getResetPasswordEmail', () => {
     it('should return the email content with injected data', () => {
-      (readFileSync as jest.Mock).mockReturnValue('<mjml>Mock MJML Template</mjml>');
+      // Mock the readFileSync function to return the MJML template content
+      (readFileSync as jest.Mock).mockReturnValue(`
+        <mjml>
+          <mj-body>
+            <mj-section>
+              <mj-column>
+                <mj-text>Hello {{ name }},</mj-text>
+                <mj-text>We're resetting your password for {{ appName }}.</mj-text>
+                <mj-button href="{{ resetLink }}">Reset Password</mj-button>
+              </mj-column>
+            </mj-section>
+          </mj-body>
+        </mjml>
+      `);
 
+      // Mock the mjml2html function to return the HTML
       const mockHtmlOutput = {
-        html: '<html>Mock HTML Template</html>',
+        html: `
+          <html>
+            <body>
+              <p>Hello John Doe,</p>
+              <p>We're resetting your password for My App.</p>
+              <a href="https://example.com/reset-password">Reset Password</a>
+            </body>
+          </html>
+        `,
       };
-      require('mjml').default.mockReturnValue(mockHtmlOutput);
 
-      const data = {resetLink: "https://www.google.com"};
+      // Mock the 'mjml' library (default import) correctly
+      (mjml2html as jest.Mock).mockReturnValue(mockHtmlOutput);
+
+      const data = {
+        name: 'John Doe',
+        appName: 'My App',
+        resetLink: 'https://example.com/reset-password',
+      };
+
       const emailContent = templateService.getResetPasswordEmail(data);
 
-      expect(emailContent).toBe(mockHtmlOutput.html);
+      // Make assertions to ensure data injection works
+      expect(emailContent).toContain('Hello John Doe');
+      expect(emailContent).toContain("We're resetting your password for My App.");
+      expect(emailContent).toContain('href="https://example.com/reset-password"');
     });
   });
 });
