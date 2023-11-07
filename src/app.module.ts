@@ -14,7 +14,6 @@ import { TemplateModule } from "./template/template.module";
 
 @Module({
   imports: [
-    TemplateModule,
     PluginTestModule,
     SignUpModule,
     LoginModule,
