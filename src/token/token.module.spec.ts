@@ -1,19 +1,29 @@
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "./token.module";
-import { TokenService } from "./token.service";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { RefreshToken, User } from "../entities";
 
 describe("TokenModule", () => {
-  let tokenService: TokenService;
+  let tokenModule: TokenModule;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      imports: [TokenModule],
-    }).compile();
+      const module = await Test.createTestingModule({
+        imports: [TokenModule],
+      })
+      .overrideProvider(getRepositoryToken(RefreshToken))
+      .useValue({
+        findOne: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(User))
+      .useValue({
+        findOne: jest.fn(),
+      })
+      .compile();
 
-    tokenService = module.get<TokenService>("TokenService");
+    tokenModule = module.get<TokenModule>(TokenModule);
   });
 
   it("should be defined", () => {
-    expect(tokenService).toBeDefined();
+    expect(tokenModule).toBeDefined();
   });
 });
