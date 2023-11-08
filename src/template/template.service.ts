@@ -6,21 +6,18 @@ import mjml2html = require('mjml');
 
 @Injectable()
 export class TemplateService{
-
-    private readonly templatesFolderPath = './src/template/templates/';
+  private readonly templatesFolderPath = './src/template/templates/';
 
   getResetPasswordEmail(data: ResetPasswordEmailData): string {
-    const templateFile = this.getResetPasswordEmailTemplate();
-    const templateContent = readFileSync(templateFile, 'utf8');
-    const emailContent = this.compileAndInjectData(templateContent, data);
-    return emailContent;
+    const template = this._getResetPasswordEmailTemplate();
+    return this._compileAndInjectData(template, data);
   }
 
-  private getResetPasswordEmailTemplate(): string {
-    return `${this.templatesFolderPath}reset-password.mjml`;
+  protected _getResetPasswordEmailTemplate(): string {
+    return readFileSync(`${this.templatesFolderPath}reset-password.mjml`, 'utf8');
   }
 
-  private compileAndInjectData(mjmlTemplate: string, data: ResetPasswordEmailData): string {
+  protected _compileAndInjectData(mjmlTemplate: string, data: ResetPasswordEmailData): string {
     const htmlTemplate = mjml2html(mjmlTemplate, { validationLevel: 'strict' });
     const templateFn = Handlebars.compile(htmlTemplate.html);
     return templateFn(data);
