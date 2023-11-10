@@ -13,7 +13,7 @@ export class TemplateService{
   }
 
   public getResetPasswordEmailTemplate(locale: string): Content {
-    var content = new Content();
+    let content = new Content();
     content.mjml = readFileSync(`${__dirname}/templates/${locale}/reset-password.mjml`, 'utf8');
     return content;
   }
