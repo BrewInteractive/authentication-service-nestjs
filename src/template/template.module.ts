@@ -5,6 +5,6 @@ import { TemplateService } from "./template.service";
 @Module({
     imports: [],
     providers: [{provide: "TemplateService", useClass: TemplateService}],
-    exports: []
+    exports: ["TemplateService"]
 })
 export class TemplateModule {}
