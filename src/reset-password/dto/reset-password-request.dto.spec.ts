@@ -7,7 +7,7 @@ describe("ResetPasswordRequest Dto Validation", () => {
 
   it("should pass validation with valid data", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
-    resetPasswordRequest.userId = faker.datatype.number();
+    resetPasswordRequest.userId = faker.datatype.string();
     resetPasswordRequest.newPassword = faker.internet.password(10, false, passwordRegex);
     resetPasswordRequest.key = faker.datatype.string(16);
 
@@ -26,13 +26,13 @@ describe("ResetPasswordRequest Dto Validation", () => {
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
       isNotEmpty: "userId should not be empty",
-      isNumber: "userId must be a number conforming to the specified constraints",
+      isString: "userId must be a string",
     });
   });
 
   it("should fail validation when newPassword is weak", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
-    resetPasswordRequest.userId = faker.datatype.number();
+    resetPasswordRequest.userId = faker.datatype.string();
     resetPasswordRequest.newPassword = faker.internet.password(6, false, /[A-Z]/);
     resetPasswordRequest.key = faker.datatype.string(16);
 
@@ -47,7 +47,7 @@ describe("ResetPasswordRequest Dto Validation", () => {
 
   it("should fail validation when key is empty", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
-    resetPasswordRequest.userId = faker.datatype.number();
+    resetPasswordRequest.userId = faker.datatype.string();
     resetPasswordRequest.newPassword = faker.internet.password(10, false, passwordRegex);
     
     const errors = await validate(resetPasswordRequest);

@@ -185,7 +185,7 @@ export class UserService {
   ): void {
     if (
       !userResetPasswordRequest ||
-      Number(userResetPasswordRequest.user.id) !== resetPasswordRequest.userId
+      userResetPasswordRequest.user.id !== resetPasswordRequest.userId
     ) {
       throw new UnauthorizedException("Invalid reset password request.");
     }
