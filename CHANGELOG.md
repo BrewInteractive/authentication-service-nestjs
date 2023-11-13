@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.10.0...v1.11.0) (2023-11-13)
+
+
+### Features
+
+* **TS-205:** add reset-password.mjml template ([099d695](https://github.com/BrewInteractive/authentication-service-nestjs/commit/099d69520cb5d1e463ea1b2c1a693ec99297f078))
+
+
+### Bug Fixes
+
+* fix for conflict ([5872e1d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5872e1dad91389f6b71a96a8d41e6a96e9a0d360))
+* fix for conflict ([ddd547d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/ddd547d345a51b8f3e1dc42f7542f343ec8d3247))
+* fix for conflict ([e6fb7b8](https://github.com/BrewInteractive/authentication-service-nestjs/commit/e6fb7b87334b48039778cb96c0dee3a2b37b0079))
+* fix for conflict file ([e1f15dc](https://github.com/BrewInteractive/authentication-service-nestjs/commit/e1f15dcccad4749b08bed9444986a511336a2deb))
+* fix for package-lock.json ([8a063b9](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8a063b9d33454ce4a079a979cd89fdc5c192fa62))
+* fix for reset password convert number to string for user_id ([556b34b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/556b34b454124d7ecb607188060a9d0fe676197c))
+* **TS-205:** edit reset button href link ([41b03e3](https://github.com/BrewInteractive/authentication-service-nestjs/commit/41b03e3b6f51e07b46d4f16bb811689c2bc28053))
+
 ## [1.10.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.9.0...v1.10.0) (2023-10-30)
 
 
