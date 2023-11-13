@@ -1,6 +1,7 @@
 import { TemplateService } from './template.service';
 import { readFileSync } from 'fs';
 import mjml2html = require('mjml');
+import { Content } from './dto/content.dto';
 
 // Mock the fs and mjml2html dependencies for testing
 jest.mock('fs');
@@ -59,30 +60,21 @@ describe('TemplateService', () => {
       expect(emailContent).toContain("We're resetting your password for My App.");
       expect(emailContent).toContain('href="https://example.com/reset-password"');
     });
+    
     it('should return email content with html', () => {
-      (readFileSync as jest.Mock).mockReturnValue(`
+      let contentMock = new Content();
+      contentMock.html = `
       <html>
-            <body>
-              <p>Hello John Doe,</p>
-              <p>We're resetting your password for My App.</p>
-              <a href="{{resetLink}}">Reset Password</a>
-            </body>
-          </html>
-      `);
-
-      const mockHtmlOutput = {
-        html: `
-        <html>
         <body>
           <p>Hello John Doe,</p>
           <p>We're resetting your password for My App.</p>
-          <a href="https://example.com/reset-password">Reset Password</a>
+          <a href="{{resetLink}}">Reset Password</a>
         </body>
       </html>
-        `,
-      };
-
-      (mjml2html as jest.Mock).mockReturnValue(mockHtmlOutput);
+      `;
+      
+      const getResetPasswordEmailTemplateMock = jest.spyOn(templateService, 'getResetPasswordEmailTemplate');
+      getResetPasswordEmailTemplateMock.mockReturnValue(contentMock);
 
       const data = {
         name: 'John Doe',
