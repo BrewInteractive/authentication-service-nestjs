@@ -277,7 +277,7 @@ describe("UserService", () => {
 
   it("should throw UnauthorizedException for expired reset request", async () => {
     const validKey = faker.datatype.string(16);
-    const userId = faker.datatype.number();
+    const userId = faker.datatype.string();
 
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)
       .mutate({
@@ -338,7 +338,7 @@ describe("UserService", () => {
   });
 
   it("should update user password and reset request expiration", async () => {
-    const userId = faker.datatype.number();
+    const userId = faker.datatype.string();
     const validKey = faker.datatype.string(16);
 
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)

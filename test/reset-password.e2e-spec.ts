@@ -45,7 +45,7 @@ describe("ResetPassword (e2e)", () => {
 
   describe("POST /reset-password", () => {
     it("should reset the password when a valid reset request is provided", async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.datatype.string();
       const validKey = faker.datatype.string(16);
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
@@ -90,7 +90,7 @@ describe("ResetPassword (e2e)", () => {
     });
 
     it("should return an error for an invalid user for the reset request", async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.datatype.string();
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
         .mutate({
