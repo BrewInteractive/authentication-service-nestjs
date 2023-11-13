@@ -9,16 +9,17 @@ export class TemplateService{
 
   getResetPasswordEmail<T>(data: T): string {
     const template = this.getResetPasswordEmailTemplate("en");
-    return this._injectData(template, data);
+    return this.injectData(template, data);
   }
 
   public getResetPasswordEmailTemplate(locale: string): Content {
     let content = new Content();
-    content.mjml = readFileSync(`${__dirname}/templates/${locale}/reset-password.mjml`, 'utf8');
+    const MJML_TEMPLATE_PATH = `${__dirname}/templates/${locale}/user-invite.mjml`;
+    content.mjml = readFileSync(MJML_TEMPLATE_PATH, 'utf8');
     return content;
   }
 
-  private _injectData<T>(content: Content, data: T): string {
+  private injectData<T>(content: Content, data: T): string {
     if (content.html) {
       const templateFn = Handlebars.compile(content.html);
       return templateFn(data);
