@@ -14,7 +14,7 @@ describe('TemplateService', () => {
   });
 
   describe('getResetPasswordEmail', () => {
-    it('should return the email content with injected data', () => {
+    it('should return the email content with injected data mjml', () => {
       // Mock the readFileSync function to return the MJML template content
       (readFileSync as jest.Mock).mockReturnValue(`
         <mjml>
@@ -44,6 +44,44 @@ describe('TemplateService', () => {
       };
 
       // Mock the 'mjml' library (default import) correctly
+      (mjml2html as jest.Mock).mockReturnValue(mockHtmlOutput);
+
+      const data = {
+        name: 'John Doe',
+        appName: 'My App',
+        resetLink: 'https://example.com/reset-password',
+      };
+
+      const emailContent = templateService.getResetPasswordEmail(data);
+
+      // Make assertions to ensure data injection works
+      expect(emailContent).toContain('Hello John Doe');
+      expect(emailContent).toContain("We're resetting your password for My App.");
+      expect(emailContent).toContain('href="https://example.com/reset-password"');
+    });
+    it('should return email content with html', () => {
+      (readFileSync as jest.Mock).mockReturnValue(`
+      <html>
+            <body>
+              <p>Hello John Doe,</p>
+              <p>We're resetting your password for My App.</p>
+              <a href="{{resetLink}}">Reset Password</a>
+            </body>
+          </html>
+      `);
+
+      const mockHtmlOutput = {
+        html: `
+        <html>
+        <body>
+          <p>Hello John Doe,</p>
+          <p>We're resetting your password for My App.</p>
+          <a href="https://example.com/reset-password">Reset Password</a>
+        </body>
+      </html>
+        `,
+      };
+
       (mjml2html as jest.Mock).mockReturnValue(mockHtmlOutput);
 
       const data = {
