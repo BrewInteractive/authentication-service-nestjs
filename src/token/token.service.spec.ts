@@ -7,9 +7,12 @@ import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { MockFactory } from "mockingbird";
 import { TokenService } from "./token.service";
-import { User } from "../entities/user.entity";
-import { UserFixture } from "../../test/fixtures";
+import { User, RefreshToken } from "../entities";
+import { UserFixture, RefreshTokenFixture } from "../../test/fixtures";
 import config from "../utils/config";
+import { Repository } from "typeorm";
+import { rejects } from "assert";
+import { UnauthorizedException } from "@nestjs/common";
 
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "fakeToken"),
@@ -17,13 +20,25 @@ jest.mock("jsonwebtoken", () => ({
 
 describe("TokenService", () => {
   let tokenService: TokenService;
+  let refreshTokenRepository: Repository<RefreshToken>;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [TokenService],
+      providers: [
+        TokenService,
+        {
+          provide: "RefreshTokenRepository",
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+          },
+        }
+      ],
+      
     }).compile();
 
     tokenService = moduleRef.get<TokenService>(TokenService);
+    refreshTokenRepository = moduleRef.get<Repository<RefreshToken>>("RefreshTokenRepository");
   });
 
   afterEach(() => {
@@ -128,5 +143,40 @@ describe("TokenService", () => {
     expect(tokenService["customClaimImporters"]).toContain(
       fakeCustomClaimImporter
     );
+  });
+
+  it("should create new token", async () => {
+    const refreshTokenEntity = MockFactory(RefreshTokenFixture).one().withUser();
+    const expectedToken = "fakeToken";
+
+    const getRefreshTokenByTokenAsyncMock = jest.spyOn(tokenService as any, "getValidRefreshTokenAsync");
+    getRefreshTokenByTokenAsyncMock.mockResolvedValue(refreshTokenEntity);
+    
+    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
+    expect(token).toBe(expectedToken);
+  });
+
+  it("should create new token", async () => {
+    const refreshTokenEntity = MockFactory(RefreshTokenFixture).one().withUser();
+    const expectedToken = "fakeToken";
+
+    jest
+      .spyOn(refreshTokenRepository, "findOne")
+      .mockResolvedValue(refreshTokenEntity);
+    
+    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
+    expect(token).toBe(expectedToken);
+  });
+
+  it("should throw unauthorized excepiton", async () => {
+    const token = "testToken";
+    
+    jest
+      .spyOn(refreshTokenRepository, "findOne")
+      .mockResolvedValue(null);
+
+    await expect(() => tokenService.refreshTokenAsync(token)).rejects.toThrow(
+      UnauthorizedException
+    ); 
   });
 });
