@@ -2,17 +2,22 @@ import * as jwt from "jsonwebtoken";
 
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
-import { Injectable } from "@nestjs/common";
-import { User } from "../entities/user.entity";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
 import config from "../utils/config";
+import { InjectRepository } from "@nestjs/typeorm";
+import { MoreThan, Repository } from "typeorm";
+import { RefreshToken, User } from "../entities";
 
 @Injectable({})
 export class TokenService {
   private customClaims: {};
   private customClaimImporters: ICustomClaimsImporter[] = [];
 
-  constructor() {
+  constructor(
+    @InjectRepository(RefreshToken)
+    private readonly refreshTokenRepository: Repository<RefreshToken>
+  ) {
     this.customClaims = {};
   }
 
@@ -55,5 +60,24 @@ export class TokenService {
         ...this.customClaims[customClaim.name],
         ...customClaim.value,
       };
+  }
+
+  async refreshTokenAsync(refreshToken: string): Promise<string>{
+    const validRefreshToken = await this.getValidRefreshTokenAsync(refreshToken);
+    if(validRefreshToken){
+      return await this.createTokenAsync(validRefreshToken.user);
+    }
+    throw new UnauthorizedException("Invalid Token.");
+  }
+
+  private async getValidRefreshTokenAsync(refreshToken: string): Promise<RefreshToken>{
+    const refreshTokenEntity = await this.refreshTokenRepository.findOne({
+      where: [
+        {refreshToken: refreshToken}, 
+        {expiresAt: MoreThan(new Date())}
+      ],
+      relations: ["user"],
+    });
+    return refreshTokenEntity || null;
   }
 }
