@@ -62,22 +62,22 @@ export class TokenService {
       };
   }
 
-  async createRefreshTokenAsync(token: string): Promise<string>{
-    const refreshToken = await this.getRefreshTokenByTokenAsync(token);
-    if(refreshToken){
-      return await this.createTokenAsync(refreshToken.user);
+  async refreshTokenAsync(refreshToken: string): Promise<string>{
+    const validRefreshToken = await this.getValidRefreshTokenAsync(refreshToken);
+    if(validRefreshToken){
+      return await this.createTokenAsync(validRefreshToken.user);
     }
     throw new UnauthorizedException("Invalid Token.");
   }
 
-  private async getRefreshTokenByTokenAsync(token: string): Promise<RefreshToken>{
-    const refreshToken = await this.refreshTokenRepository.findOne({
+  private async getValidRefreshTokenAsync(refreshToken: string): Promise<RefreshToken>{
+    const refreshTokenEntity = await this.refreshTokenRepository.findOne({
       where: [
-        {refreshToken: token}, 
+        {refreshToken: refreshToken}, 
         {expiresAt: MoreThan(new Date())}
       ],
       relations: ["user"],
     });
-    return refreshToken || null;
+    return refreshTokenEntity || null;
   }
 }
