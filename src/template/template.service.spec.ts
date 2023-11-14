@@ -1,93 +1,101 @@
-import { TemplateService } from './template.service';
-import { readFileSync } from 'fs';
-import mjml2html = require('mjml');
-import { Content } from './dto/content.dto';
+import { TemplateService } from "./template.service";
+import { readFileSync } from "fs";
+import mjml2html from "mjml";
+import { TemplateContent } from "./dto/template-content.dto";
+import { faker } from "@faker-js/faker";
+import * as Handlebars from "handlebars";
 
-// Mock the fs and mjml2html dependencies for testing
-jest.mock('fs');
-jest.mock('mjml');
+jest.mock("fs");
+jest.mock("mjml", () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+jest.mock("handlebars");
 
-describe('TemplateService', () => {
+describe("TemplateService", () => {
   let templateService: TemplateService;
 
   beforeEach(() => {
     templateService = new TemplateService();
   });
 
-  describe('getResetPasswordEmail', () => {
-    it('should return the email content with injected data mjml', () => {
-      // Mock the readFileSync function to return the MJML template content
-      (readFileSync as jest.Mock).mockReturnValue(`
-        <mjml>
-          <mj-body>
-            <mj-section>
-              <mj-column>
-                <mj-text>Hello {{ name }},</mj-text>
-                <mj-text>We're resetting your password for {{ appName }}.</mj-text>
-                <mj-button href="{{ resetLink }}">Reset Password</mj-button>
-              </mj-column>
-            </mj-section>
-          </mj-body>
-        </mjml>
-      `);
-
-      // Mock the mjml2html function to return the HTML
-      const mockHtmlOutput = {
-        html: `
-          <html>
-            <body>
-              <p>Hello John Doe,</p>
-              <p>We're resetting your password for My App.</p>
-              <a href="https://example.com/reset-password">Reset Password</a>
-            </body>
-          </html>
-        `,
-      };
-
-      // Mock the 'mjml' library (default import) correctly
-      (mjml2html as jest.Mock).mockReturnValue(mockHtmlOutput);
-
-      const data = {
-        name: 'John Doe',
-        appName: 'My App',
-        resetLink: 'https://example.com/reset-password',
-      };
-
-      const emailContent = templateService.getResetPasswordEmail(data);
-
-      // Make assertions to ensure data injection works
-      expect(emailContent).toContain('Hello John Doe');
-      expect(emailContent).toContain("We're resetting your password for My App.");
-      expect(emailContent).toContain('href="https://example.com/reset-password"');
+  describe("getResetPasswordEmailTemplate", () => {
+    it("should return reset password email template", () => {
+      // Arrange
+      const locale = faker.locale;
+      const mockMjmlTemplate: string = faker.lorem.paragraphs(3);
+      const mockReadFileSync = readFileSync as jest.Mock;
+      mockReadFileSync.mockReturnValue(mockMjmlTemplate);
+      // Act
+      const content = templateService.getResetPasswordEmailTemplate(locale);
+      // Assert
+      expect(content).toBeDefined();
+      expect(content.mjml).toEqual(mockMjmlTemplate);
+      expect(mockReadFileSync).toHaveBeenCalledWith(
+        `${__dirname}/templates/${locale}/user-invite.mjml`,
+        "utf8"
+      );
     });
-    
-    it('should return email content with html', () => {
-      let contentMock = new Content();
-      contentMock.html = `
-      <html>
-        <body>
-          <p>Hello John Doe,</p>
-          <p>We're resetting your password for My App.</p>
-          <a href="{{resetLink}}">Reset Password</a>
-        </body>
-      </html>
-      `;
-      
-      const getResetPasswordEmailTemplateMock = jest.spyOn(templateService, 'getResetPasswordEmailTemplate');
-      getResetPasswordEmailTemplateMock.mockReturnValue(contentMock);
+  });
 
-      const data = {
-        name: 'John Doe',
-        appName: 'My App',
-        resetLink: 'https://example.com/reset-password',
+  describe("injectData", () => {
+    it("should return the email content with injected data mjml", () => {
+      // Arrange
+      const mockMjmlTemplate: string = faker.lorem.paragraphs(3);
+      const templateContent = new TemplateContent();
+      templateContent.mjml = mockMjmlTemplate;
+      const mockHtmlOutput = {
+        html: faker.lorem.paragraphs(3),
       };
-
-      const emailContent = templateService.getResetPasswordEmail(data);
-
-      // Make assertions to ensure data injection works
-      expect(emailContent).toContain('Hello John Doe');
-      expect(emailContent).toContain("We're resetting your password for My App.");
-      expect(emailContent).toContain('href="https://example.com/reset-password"');
+      const data = {
+        name: faker.name.fullName(),
+        appName: faker.music.songName(),
+        resetLink: faker.internet.url(),
+      };
+      const mockCompiledHtmlOutput = faker.lorem.paragraphs(3);
+      const mockMjml2Html = mjml2html as jest.Mock;
+      mockMjml2Html.mockReturnValue(mockHtmlOutput);
+      const mockHandleBarsDelegate: HandlebarsTemplateDelegate<any> = jest.fn(
+        (x) => (x == data ? mockCompiledHtmlOutput : null)
+      );
+      const mockCompile = jest.fn((x) => mockHandleBarsDelegate);
+      const spyOnCompile = jest
+        .spyOn(Handlebars, "compile")
+        .mockImplementation(mockCompile);
+      // Act
+      const emailContent = templateService.injectData(templateContent, data);
+      // Assert
+      expect(spyOnCompile).toHaveBeenCalled();
+      expect(emailContent).toEqual(mockCompiledHtmlOutput);
+      expect(mockCompile).toHaveBeenCalledWith(mockHtmlOutput.html);
+      expect(mockMjml2Html).toHaveBeenCalledWith(templateContent.mjml, {
+        validationLevel: "strict",
+      });
+    });
+    it("should return the email content with injected data html", () => {
+      // Arrange
+      const mockMjmlTemplate: string = faker.lorem.paragraphs(3);
+      const templateContent = new TemplateContent();
+      templateContent.html = mockMjmlTemplate;
+      const data = {
+        name: faker.name.fullName(),
+        appName: faker.music.songName(),
+        resetLink: faker.internet.url(),
+      };
+      const mockCompiledHtmlOutput = faker.lorem.paragraphs(3);
+      const mockHandleBarsDelegate: HandlebarsTemplateDelegate<any> = jest.fn(
+        (x) => (x == data ? mockCompiledHtmlOutput : null)
+      );
+      const mockCompile = jest.fn((x) => mockHandleBarsDelegate);
+      const spyOnCompile = jest
+        .spyOn(Handlebars, "compile")
+        .mockImplementation(mockCompile);
+      // Act
+      const emailContent = templateService.injectData(templateContent, data);
+      // Assert
+      expect(spyOnCompile).toHaveBeenCalled();
+      expect(emailContent).toEqual(mockCompiledHtmlOutput);
+      expect(mockCompile).toHaveBeenCalledWith(templateContent.html);
     });
   });
 });
