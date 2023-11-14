@@ -32,7 +32,7 @@ describe("TemplateService", () => {
       expect(content).toBeDefined();
       expect(content.mjml).toEqual(mockMjmlTemplate);
       expect(mockReadFileSync).toHaveBeenCalledWith(
-        `${__dirname}/templates/${locale}/user-invite.mjml`,
+        `${__dirname}/templates/${locale}/reset-password.mjml`,
         "utf8"
       );
     });

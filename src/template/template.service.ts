@@ -8,7 +8,7 @@ import mjml2html from "mjml";
 export class TemplateService {
   public getResetPasswordEmailTemplate(locale: string): TemplateContent {
     let content = new TemplateContent();
-    const MJML_TEMPLATE_PATH = `${__dirname}/templates/${locale}/user-invite.mjml`;
+    const MJML_TEMPLATE_PATH = `${__dirname}/templates/${locale}/reset-password.mjml`;
     content.mjml = readFileSync(MJML_TEMPLATE_PATH, "utf8");
     return content;
   }
