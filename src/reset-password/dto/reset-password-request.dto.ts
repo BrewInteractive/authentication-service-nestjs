@@ -1,6 +1,5 @@
 import {
   IsNotEmpty,
-  IsNumber,
   IsString,
   Matches,
   MaxLength,
@@ -13,9 +12,9 @@ import config from "../../utils/config";
 
 export class ResetPasswordRequest {
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   @AutoMap()
-  userId: number;
+  userId: string;
 
   @ApiProperty({
     description:
