@@ -149,10 +149,10 @@ describe("TokenService", () => {
     const refreshTokenEntity = MockFactory(RefreshTokenFixture).one().withUser();
     const expectedToken = "fakeToken";
 
-    const getRefreshTokenByTokenAsyncMock = jest.spyOn(tokenService as any, "getRefreshTokenByTokenAsync");
+    const getRefreshTokenByTokenAsyncMock = jest.spyOn(tokenService as any, "getValidRefreshTokenAsync");
     getRefreshTokenByTokenAsyncMock.mockResolvedValue(refreshTokenEntity);
     
-    const token  = await tokenService.createRefreshTokenAsync(refreshTokenEntity.refreshToken);
+    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
     expect(token).toBe(expectedToken);
   });
 
@@ -164,7 +164,7 @@ describe("TokenService", () => {
       .spyOn(refreshTokenRepository, "findOne")
       .mockResolvedValue(refreshTokenEntity);
     
-    const token  = await tokenService.createRefreshTokenAsync(refreshTokenEntity.refreshToken);
+    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
     expect(token).toBe(expectedToken);
   });
 
@@ -175,7 +175,7 @@ describe("TokenService", () => {
       .spyOn(refreshTokenRepository, "findOne")
       .mockResolvedValue(null);
 
-    await expect(() => tokenService.createRefreshTokenAsync(token)).rejects.toThrow(
+    await expect(() => tokenService.refreshTokenAsync(token)).rejects.toThrow(
       UnauthorizedException
     ); 
   });
