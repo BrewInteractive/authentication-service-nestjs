@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { readFileSync } from "fs";
 import { TemplateContent } from "./dto/template-content.dto";
 import * as Handlebars from "handlebars";
-import mjml2html from "mjml";
+import mjml2html = require('mjml');
 
 @Injectable()
 export class TemplateService {

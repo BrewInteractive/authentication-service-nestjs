@@ -1,15 +1,13 @@
 import { TemplateService } from "./template.service";
 import { readFileSync } from "fs";
-import mjml2html from "mjml";
 import { TemplateContent } from "./dto/template-content.dto";
 import { faker } from "@faker-js/faker";
 import * as Handlebars from "handlebars";
 
+import mjml2html = require('mjml');
+
 jest.mock("fs");
-jest.mock("mjml", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+jest.mock("mjml");
 jest.mock("handlebars");
 
 describe("TemplateService", () => {
