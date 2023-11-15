@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
+import { RefreshTokenResponse } from "./dto/refresh-token-response.dto";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { getRepositoryToken } from "@nestjs/typeorm";
@@ -51,6 +52,8 @@ describe("RefreshTokenController", () => {
 
     const result = await controller.createRefreshToken(refreshTokenRequest);
 
-    expect(result).toEqual({ refreshToken: mockRefreshToken });
+    expect(result).toEqual({
+      refreshToken: mockRefreshToken,
+    } as RefreshTokenResponse);
   });
 });
