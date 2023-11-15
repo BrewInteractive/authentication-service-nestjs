@@ -7,12 +7,14 @@ import { BasePlugin } from "./abstract/base-plugin.plugin";
 import { PluginService } from "./plugin.service";
 import { PluginTestModule } from "../plugin-test/plugin-test.module";
 import { TokenModule } from "../token/token.module";
+import { UserModule } from "src/user/user.module";
 
 @Module({
   imports: [
     forwardRef(() => AppModule),
     forwardRef(() => PluginTestModule),
     forwardRef(() => TokenModule),
+    forwardRef(() => UserModule),
   ],
 })
 export class PluginModule {
