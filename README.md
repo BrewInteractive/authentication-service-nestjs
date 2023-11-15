@@ -54,6 +54,7 @@ Authentication Service can be used in any project that requires user authenticat
       - [Pre User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#pre-user-registration)
       - [Post User Registration](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#post-user-registration)
     - [Creating User Validator Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#creating-user-validator-plugin)
+    - [Creating Template Plugin](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#creating-template-plugin)
   - [Publishing a Plugin as a Package](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#publishing-your-plugin-as-a-package)
   - [Sample Plugin Projects](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/plugin_development.md#sample-plugin-projects)
 - [API Reference](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/api_reference.md)
