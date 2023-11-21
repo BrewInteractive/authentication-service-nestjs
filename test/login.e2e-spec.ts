@@ -58,6 +58,7 @@ describe("LoginController (e2e)", () => {
         .expect(201);
 
       expect(responseEmail.body).toHaveProperty("id_token");
+      expect(responseEmail.body).toHaveProperty("refresh_token");
     });
 
     it("should return a token if username credentials are valid", async () => {
@@ -81,6 +82,7 @@ describe("LoginController (e2e)", () => {
         .expect(201);
 
       expect(responseUsername.body).toHaveProperty("id_token");
+      expect(responseUsername.body).toHaveProperty("refresh_token");
     });
 
     it("should return an error if email is invalid", async () => {

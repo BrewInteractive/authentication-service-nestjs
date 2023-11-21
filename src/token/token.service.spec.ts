@@ -1,22 +1,31 @@
 import * as jwt from "jsonwebtoken";
 
+import {
+  ConfigFixture,
+  RefreshTokenFixture,
+  TokensFixture,
+  UserFixture,
+} from "../../test/fixtures";
+import { RefreshToken, User } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 import { instance, mock } from "ts-mockito";
 
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { MockFactory } from "mockingbird";
-import { TokenService } from "./token.service";
-import { User, RefreshToken } from "../entities";
-import { UserFixture, RefreshTokenFixture } from "../../test/fixtures";
-import config from "../utils/config";
 import { Repository } from "typeorm";
-import { rejects } from "assert";
+import { TokenService } from "./token.service";
+import { Tokens } from "../models";
 import { UnauthorizedException } from "@nestjs/common";
+import config from "../utils/config";
+import { faker } from "@faker-js/faker";
 
-jest.mock("jsonwebtoken", () => ({
-  sign: jest.fn(() => "fakeToken"),
+jest.mock("../utils/config", () => ({
+  __esModule: true,
+  default: jest.fn(),
 }));
+
+jest.mock("jsonwebtoken");
 
 describe("TokenService", () => {
   let tokenService: TokenService;
@@ -32,13 +41,18 @@ describe("TokenService", () => {
             findOne: jest.fn(),
             save: jest.fn(),
           },
-        }
+        },
       ],
-      
     }).compile();
 
     tokenService = moduleRef.get<TokenService>(TokenService);
-    refreshTokenRepository = moduleRef.get<Repository<RefreshToken>>("RefreshTokenRepository");
+    refreshTokenRepository = moduleRef.get<Repository<RefreshToken>>(
+      "RefreshTokenRepository"
+    );
+
+    (config as jest.Mock).mockImplementation(() =>
+      MockFactory(ConfigFixture).one()
+    );
   });
 
   afterEach(() => {
@@ -47,7 +61,7 @@ describe("TokenService", () => {
 
   it("should create token by calling jwt.sign with the correct arguments", async () => {
     const user = MockFactory(UserFixture).one().withRoles() as User;
-    const expectedToken = "fakeToken";
+    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
     const expectedCustomClaims = {
       user_id: user.id,
       email: user.email,
@@ -56,28 +70,27 @@ describe("TokenService", () => {
       username: user.username,
       roles: user.roles.map((userRole) => userRole.role.name),
     };
-    const expectedJwtSecret = "testSecret";
-    const expectedJwtAlgorithm = "HS256";
-    const expectedJwtAudience = "testAudience";
-    const expectedJwtSubject = expectedCustomClaims.user_id;
-    const expectedJwtIssuer = "testIssuer";
 
-    process.env.JWT_SECRET = expectedJwtSecret;
-    process.env.JWT_ALGORITHM = expectedJwtAlgorithm;
-    process.env.JWT_AUDIENCE = expectedJwtAudience;
-    process.env.JWT_SUBJECT = expectedJwtSubject;
-    process.env.JWT_ISSUER = expectedJwtIssuer;
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
 
-    const token = await tokenService.createTokenAsync(user);
+    jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
+      refreshToken: expectedTokens.refresh_token,
+    } as RefreshToken);
 
-    expect(token).toBe(expectedToken);
+    const tokens = await tokenService.createTokensAsync(
+      user,
+      config().jwtExpiresIn
+    );
+
+    expect(tokens.id_token).toBe(expectedTokens.id_token);
+    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
-      expectedJwtSecret,
+      config().jwtSecret,
       {
-        algorithm: expectedJwtAlgorithm,
-        audience: expectedJwtAudience,
-        issuer: expectedJwtIssuer,
+        algorithm: config().jwtAlgorithm,
+        audience: config().jwtAudience,
+        issuer: config().jwtIssuer,
         expiresIn: config().jwtExpiresIn,
       }
     );
@@ -85,8 +98,7 @@ describe("TokenService", () => {
 
   it("should create token by calling jwt.sign with the correct arguments(Not Role)", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    const expiresIn = 3600;
-    const expectedToken = "fakeToken";
+    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
     const expectedCustomClaims = {
       user_id: user.id,
       email: user.email,
@@ -94,29 +106,28 @@ describe("TokenService", () => {
       first_name: user.firstName,
       last_name: user.lastName,
     };
-    const expectedJwtSecret = "testSecret";
-    const expectedJwtAlgorithm = "HS256";
-    const expectedJwtAudience = "testAudience";
-    const expectedJwtSubject = expectedCustomClaims.user_id;
-    const expectedJwtIssuer = "testIssuer";
 
-    process.env.JWT_SECRET = expectedJwtSecret;
-    process.env.JWT_ALGORITHM = expectedJwtAlgorithm;
-    process.env.JWT_AUDIENCE = expectedJwtAudience;
-    process.env.JWT_SUBJECT = expectedJwtSubject;
-    process.env.JWT_ISSUER = expectedJwtIssuer;
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
 
-    const token = await tokenService.createTokenAsync(user, expiresIn);
+    jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
+      refreshToken: expectedTokens.refresh_token,
+    } as RefreshToken);
 
-    expect(token).toBe(expectedToken);
+    const tokens = await tokenService.createTokensAsync(
+      user,
+      config().jwtExpiresIn
+    );
+
+    expect(tokens.id_token).toBe(expectedTokens.id_token);
+    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
-      expectedJwtSecret,
+      config().jwtSecret,
       {
-        algorithm: expectedJwtAlgorithm,
-        audience: expectedJwtAudience,
-        issuer: expectedJwtIssuer,
-        expiresIn,
+        algorithm: config().jwtAlgorithm,
+        audience: config().jwtAudience,
+        issuer: config().jwtIssuer,
+        expiresIn: config().jwtExpiresIn,
       }
     );
   });
@@ -146,37 +157,50 @@ describe("TokenService", () => {
   });
 
   it("should create new token", async () => {
-    const refreshTokenEntity = MockFactory(RefreshTokenFixture).one().withUser();
-    const expectedToken = "fakeToken";
+    const refreshTokenEntity = MockFactory(RefreshTokenFixture)
+      .one()
+      .withUser();
 
-    const getRefreshTokenByTokenAsyncMock = jest.spyOn(tokenService as any, "getValidRefreshTokenAsync");
+    const expectedToken = faker.random.alphaNumeric(64);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedToken);
+
+    const getRefreshTokenByTokenAsyncMock = jest.spyOn(
+      tokenService as any,
+      "getValidRefreshTokenAsync"
+    );
     getRefreshTokenByTokenAsyncMock.mockResolvedValue(refreshTokenEntity);
-    
-    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
+
+    const token = await tokenService.refreshTokenAsync(
+      refreshTokenEntity.refreshToken
+    );
     expect(token).toBe(expectedToken);
   });
 
   it("should create new token", async () => {
-    const refreshTokenEntity = MockFactory(RefreshTokenFixture).one().withUser();
-    const expectedToken = "fakeToken";
+    const refreshTokenEntity = MockFactory(RefreshTokenFixture)
+      .one()
+      .withUser();
+
+    const expectedToken = faker.random.alphaNumeric(64);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedToken);
 
     jest
       .spyOn(refreshTokenRepository, "findOne")
       .mockResolvedValue(refreshTokenEntity);
-    
-    const token  = await tokenService.refreshTokenAsync(refreshTokenEntity.refreshToken);
+
+    const token = await tokenService.refreshTokenAsync(
+      refreshTokenEntity.refreshToken
+    );
     expect(token).toBe(expectedToken);
   });
 
   it("should throw unauthorized excepiton", async () => {
     const token = "testToken";
-    
-    jest
-      .spyOn(refreshTokenRepository, "findOne")
-      .mockResolvedValue(null);
+
+    jest.spyOn(refreshTokenRepository, "findOne").mockResolvedValue(null);
 
     await expect(() => tokenService.refreshTokenAsync(token)).rejects.toThrow(
       UnauthorizedException
-    ); 
+    );
   });
 });

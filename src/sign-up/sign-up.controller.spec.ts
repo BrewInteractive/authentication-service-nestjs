@@ -1,17 +1,22 @@
-import { SignUpFixture, UserFixture } from "../../test/fixtures";
-import { RefreshToken, User, UserResetPasswordRequest, UserRole } from "../entities";
+import {
+  RefreshToken,
+  User,
+  UserResetPasswordRequest,
+  UserRole,
+} from "../entities";
+import { SignUpFixture, TokensFixture, UserFixture } from "../../test/fixtures";
 
-import { SignUpController } from "./sign-up.controller";
 import { AutomapperModule } from "@automapper/nestjs";
 import { MockFactory } from "mockingbird";
+import { SignUpController } from "./sign-up.controller";
 import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
+import { Tokens } from "../models";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
-import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("SignUpController", () => {
@@ -46,6 +51,7 @@ describe("SignUpController", () => {
       })
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
+        save: jest.fn(),
         findOne: jest.fn(),
       })
       .compile();
@@ -58,18 +64,18 @@ describe("SignUpController", () => {
   it("should return a token if the sign-up process is successful", async () => {
     const signUpDto = MockFactory(SignUpFixture).one();
     const user = MockFactory(UserFixture).one() as User;
-    const token = faker.random.alphaNumeric(32);
+    const tokens = MockFactory(TokensFixture).one() as Tokens;
 
     jest
       .spyOn(userService, "createUserAsync")
       .mockReturnValueOnce(Promise.resolve(user));
 
     jest
-      .spyOn(tokenService, "createTokenAsync")
-      .mockReturnValueOnce(Promise.resolve(token));
+      .spyOn(tokenService, "createTokensAsync")
+      .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual({
-      id_token: token,
-    });
+    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual(
+      tokens
+    );
   });
 });
