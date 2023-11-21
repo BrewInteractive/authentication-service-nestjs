@@ -79,6 +79,24 @@ describe("LoginController", () => {
     await expect(loginController.loginAsync(loginDto)).resolves.toEqual(tokens);
   });
 
+  it("should return a token if the username and password are valid", async () => {
+    const loginDto = MockFactory(LoginFixture).one();
+    const user = MockFactory(UserFixture).one();
+    delete loginDto.email;
+
+    const tokens = MockFactory(TokensFixture).one() as Tokens;
+
+    jest
+      .spyOn(userService, "validateUserAsync")
+      .mockReturnValueOnce(Promise.resolve(user as User));
+
+    jest
+      .spyOn(tokenService, "createTokensAsync")
+      .mockReturnValueOnce(Promise.resolve(tokens));
+
+    await expect(loginController.loginAsync(loginDto)).resolves.toEqual(tokens);
+  });
+
   it("should return a token if the email and password are invalid", async () => {
     const loginDto = MockFactory(LoginFixture).one();
 
