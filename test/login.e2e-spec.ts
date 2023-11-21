@@ -2,11 +2,16 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { LoginFixture, UserFixture } from "../test/fixtures";
+import {
+  LoginFixture,
+  RefreshTokenFixture,
+  UserFixture,
+} from "../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "./../src/app.module";
 import { MockFactory } from "mockingbird";
+import { RefreshToken } from "../src/entities";
 import { User } from "../src/entities/user.entity";
 import { setupTestDataSourceAsync } from "./test-db";
 
@@ -16,6 +21,7 @@ describe("LoginController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
   let userRepository: Repository<User>;
+  let refreshTokenRepository: Repository<RefreshToken>;
 
   beforeAll(async () => {
     moduleFixture = await Test.createTestingModule({
@@ -29,6 +35,9 @@ describe("LoginController (e2e)", () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
+    refreshTokenRepository = moduleFixture.get<Repository<RefreshToken>>(
+      "RefreshTokenRepository"
+    );
   });
 
   afterAll(async () => {
@@ -49,6 +58,12 @@ describe("LoginController (e2e)", () => {
       jest
         .spyOn(userRepository, "findOne")
         .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+
+      jest
+        .spyOn(refreshTokenRepository, "save")
+        .mockResolvedValue(
+          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
+        );
 
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
@@ -73,6 +88,12 @@ describe("LoginController (e2e)", () => {
       jest
         .spyOn(userRepository, "findOne")
         .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+
+      jest
+        .spyOn(refreshTokenRepository, "save")
+        .mockResolvedValue(
+          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
+        );
 
       jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
