@@ -65,6 +65,7 @@ describe("LoginController", () => {
   it("should return a token if the email and password are valid", async () => {
     const loginDto = MockFactory(LoginFixture).one();
     const user = MockFactory(UserFixture).one();
+    delete loginDto.username;
 
     const tokens = MockFactory(TokensFixture).one() as Tokens;
 
