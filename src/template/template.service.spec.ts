@@ -1,7 +1,8 @@
-import { TemplateService } from "./template.service";
-import { readFileSync } from "fs";
-import { faker } from "@faker-js/faker";
 import * as Handlebars from "handlebars";
+
+import { TemplateService } from "./template.service";
+import { faker } from "@faker-js/faker";
+import { readFileSync } from "fs";
 
 import mjml2html = require("mjml");
 
@@ -35,7 +36,7 @@ describe("TemplateService", () => {
       expect(html).toEqual(mockHtmlOutput.html);
       expect(mockReadFileSync).toHaveBeenCalledWith(
         `${__dirname}/templates/${locale}/reset-password.mjml`,
-        "utf8",
+        "utf8"
       );
     });
   });
@@ -51,7 +52,7 @@ describe("TemplateService", () => {
       };
       const mockCompiledHtmlOutput = faker.lorem.paragraphs(3);
       const mockHandleBarsDelegate: HandlebarsTemplateDelegate<any> = jest.fn(
-        (x) => (x == data ? mockCompiledHtmlOutput : null),
+        (x) => (x == data ? mockCompiledHtmlOutput : null)
       );
       const mockCompile = jest.fn((x) => mockHandleBarsDelegate);
       const spyOnCompile = jest

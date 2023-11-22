@@ -1,8 +1,9 @@
+import * as Handlebars from "handlebars";
+
 import { Injectable } from "@nestjs/common";
 import { readFileSync } from "fs";
-import * as Handlebars from "handlebars";
 import mjml2html = require("mjml");
-
+ 
 @Injectable()
 export class TemplateService {
 
