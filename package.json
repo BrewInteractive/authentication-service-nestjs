@@ -124,5 +124,9 @@
       "/node_modules/",
       "\\.(?:import|export)\\b"
     ]
+  },
+  "engines": {
+    "node": ">=21.2.0",
+    "npm": ">=10.2.3"
   }
 }
