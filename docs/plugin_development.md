@@ -85,6 +85,10 @@ It is possible to perform a check or action after user registration. For this pr
 
 When a user wants to log in, by default, username/email and password checks are performed. However, it is possible to add an additional check through the plugin. You can create a `User Validator` and add it to the `userValidators` using the `addUserValidator` method found within the `user service`.
 
+### Creating Template Plugin
+
+`Template service` has its own functions to get `reset password email template`. However, `injectData` and `getResetPasswordEmailTemplate` functions can be forced to change their behaviors via plugin. That way, custom data and custom templates can be used for different purposes rather than just to send `reset password email`.
+
 ## Publishing a Plugin as a Package
 
 While publishing the package, we need to adjust the `package.json` file settings.
