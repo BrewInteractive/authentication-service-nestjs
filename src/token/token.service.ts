@@ -96,7 +96,7 @@ export class TokenService {
     if (validRefreshToken) {
       return this.createIdTokenAsync(validRefreshToken.user);
     }
-    throw new UnauthorizedException("Invalid Token.");
+    throw new UnauthorizedException("Invalid refresh Token.");
   }
 
   private async getValidRefreshTokenAsync(
