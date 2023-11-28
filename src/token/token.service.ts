@@ -9,7 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { RefreshToken, User } from "../entities";
 import * as crypto from "crypto";
-import { Tokens } from "../models";
+import { Tokens } from "../dto";
 
 @Injectable({})
 export class TokenService {

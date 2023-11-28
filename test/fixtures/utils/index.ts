@@ -1,1 +1,1 @@
-export * from "./config.fixutre";
+export * from "./config.fixture";

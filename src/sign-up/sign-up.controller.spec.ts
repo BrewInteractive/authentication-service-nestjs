@@ -18,7 +18,7 @@ import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
-import { Tokens } from "../models";
+import { Tokens } from "../dto";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";

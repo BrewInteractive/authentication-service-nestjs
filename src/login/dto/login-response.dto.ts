@@ -1,4 +1,4 @@
 import { PartialType } from "@nestjs/swagger";
-import { Tokens } from "../../models";
+import { Tokens } from "../../dto";
 
 export class LoginResponse extends PartialType(Tokens) {}

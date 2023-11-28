@@ -1,5 +1,5 @@
 import { Mock } from "mockingbird";
-import { Tokens } from "../../../src/models";
+import { Tokens } from "../../../src/dto";
 
 export class TokensFixture extends Tokens {
   @Mock((faker) => faker.datatype.string())

@@ -15,7 +15,7 @@ import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.inter
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
-import { Tokens } from "../models";
+import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
 import config from "../utils/config";
 import { faker } from "@faker-js/faker";
