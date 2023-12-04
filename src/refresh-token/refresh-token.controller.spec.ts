@@ -41,19 +41,20 @@ describe("RefreshTokenController", () => {
   });
 
   it("Should return a refresh token.", async () => {
-    const mockRefreshToken = "mockedRefreshToken";
+    const mockIdToken = "mockIdToken";
     const refreshTokenRequest: RefreshTokenRequest = {
-      refreshToken: "mockedRefreshToken",
+      refreshToken: "mockRefreshToken",
     };
 
     jest
       .spyOn(tokenService, "refreshTokenAsync")
-      .mockResolvedValue(mockRefreshToken);
+      .mockResolvedValue(mockIdToken);
 
     const result = await controller.createRefreshToken(refreshTokenRequest);
 
     expect(result).toEqual({
-      refreshToken: mockRefreshToken,
+      id_token: mockIdToken,
+      refresh_token: refreshTokenRequest.refreshToken,
     } as RefreshTokenResponse);
   });
 });
