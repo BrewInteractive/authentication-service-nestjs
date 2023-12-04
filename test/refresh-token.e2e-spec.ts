@@ -50,7 +50,8 @@ describe("RefreshTokenController (e2e)", () => {
         .send({ refreshToken: faker.datatype.string() })
         .expect(201);
 
-      expect(response.body).toHaveProperty("refreshToken");
+      expect(response.body).toHaveProperty("refresh_token");
+      expect(response.body).toHaveProperty("id_token");
     });
 
     it("Should return 401 if invalid refresh token.", async () => {
