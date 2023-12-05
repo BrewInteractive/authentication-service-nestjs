@@ -13,12 +13,8 @@ export class RefreshTokenController {
   async createRefreshToken(
     @Body() refreshTokenRequest: RefreshTokenRequest
   ): Promise<RefreshTokenResponse> {
-    const idToken = await this.tokenService.refreshTokenAsync(
+    return this.tokenService.refreshTokenAsync(
       refreshTokenRequest.refreshToken
     );
-    return {
-      id_token: idToken,
-      refresh_token: refreshTokenRequest.refreshToken,
-    };
   }
 }

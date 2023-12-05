@@ -40,6 +40,7 @@ describe("TokenService", () => {
           useValue: {
             findOne: jest.fn(),
             save: jest.fn(),
+            update: jest.fn(),
           },
         },
       ],
@@ -156,42 +157,29 @@ describe("TokenService", () => {
     );
   });
 
-  it("should create new token", async () => {
+  it("should create new refresh token", async () => {
     const refreshTokenEntity = MockFactory(RefreshTokenFixture)
       .one()
       .withUser();
+    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
 
-    const expectedToken = faker.random.alphaNumeric(64);
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedToken);
+    jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
+      refreshToken: expectedTokens.refresh_token,
+    } as RefreshToken);
 
-    const getRefreshTokenByTokenAsyncMock = jest.spyOn(
-      tokenService as any,
-      "getValidRefreshTokenAsync"
-    );
-    getRefreshTokenByTokenAsyncMock.mockResolvedValue(refreshTokenEntity);
-
-    const token = await tokenService.refreshTokenAsync(
-      refreshTokenEntity.refreshToken
-    );
-    expect(token).toBe(expectedToken);
-  });
-
-  it("should create new token", async () => {
-    const refreshTokenEntity = MockFactory(RefreshTokenFixture)
-      .one()
-      .withUser();
-
-    const expectedToken = faker.random.alphaNumeric(64);
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedToken);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
 
     jest
       .spyOn(refreshTokenRepository, "findOne")
       .mockResolvedValue(refreshTokenEntity);
 
-    const token = await tokenService.refreshTokenAsync(
+    jest.spyOn(refreshTokenRepository, "update").mockResolvedValueOnce(null);
+
+    const tokens = await tokenService.refreshTokenAsync(
       refreshTokenEntity.refreshToken
     );
-    expect(token).toBe(expectedToken);
+    expect(tokens.id_token).toBe(expectedTokens.id_token);
+    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
   });
 
   it("should throw unauthorized excepiton", async () => {

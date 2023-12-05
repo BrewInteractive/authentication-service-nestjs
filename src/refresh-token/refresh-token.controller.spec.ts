@@ -1,11 +1,14 @@
 import { RefreshToken, User, UserRole } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { MockFactory } from "mockingbird";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
 import { RefreshTokenResponse } from "./dto/refresh-token-response.dto";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
+import { Tokens } from "../dto";
+import { TokensFixture } from "../../test/fixtures";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("RefreshTokenController", () => {
@@ -29,6 +32,7 @@ describe("RefreshTokenController", () => {
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
         findOne: jest.fn(),
+        update: jest.fn(),
       })
       .compile();
 
@@ -41,20 +45,20 @@ describe("RefreshTokenController", () => {
   });
 
   it("Should return a refresh token.", async () => {
-    const mockIdToken = "mockIdToken";
+    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
     const refreshTokenRequest: RefreshTokenRequest = {
       refreshToken: "mockRefreshToken",
     };
 
     jest
       .spyOn(tokenService, "refreshTokenAsync")
-      .mockResolvedValue(mockIdToken);
+      .mockResolvedValue(expectedTokens);
 
     const result = await controller.createRefreshToken(refreshTokenRequest);
 
     expect(result).toEqual({
-      id_token: mockIdToken,
-      refresh_token: refreshTokenRequest.refreshToken,
+      id_token: expectedTokens.id_token,
+      refresh_token: expectedTokens.refresh_token,
     } as RefreshTokenResponse);
   });
 });
