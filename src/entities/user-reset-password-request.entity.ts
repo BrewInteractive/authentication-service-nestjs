@@ -7,6 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
+import { User } from "./user.entity";
 
 @Entity({ name: "users_reset_password_requests" })
 export class UserResetPasswordRequest {
@@ -22,8 +23,9 @@ export class UserResetPasswordRequest {
   @Column({ name: "key", nullable: false })
   key: string;
 
-  @Column({ name: "email", nullable: false })
-  email: string;
+  @ManyToOne((type) => User, (user) => user.email, { nullable: false })
+  @JoinColumn({ name: "email" })
+  user: User;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
