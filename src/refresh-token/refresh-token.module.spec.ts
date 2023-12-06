@@ -23,6 +23,7 @@ describe("RefreshTokenModule", () => {
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
         findOne: jest.fn(),
+        update: jest.fn(),
       })
       .compile();
 

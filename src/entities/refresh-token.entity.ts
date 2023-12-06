@@ -1,15 +1,18 @@
-import { User } from "./user.entity";
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-  UpdateDateColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
 } from "typeorm";
 
+import { User } from "./user.entity";
+
 @Entity({ name: "refresh_tokens" })
+@Unique(["user", "refreshToken"])
 export class RefreshToken {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -20,7 +23,7 @@ export class RefreshToken {
   @Column({ name: "expires_at" })
   expiresAt?: Date;
 
-  @OneToOne((type: User) => User, (user) => user.id, { nullable: false })
+  @ManyToOne((type: User) => User, (user) => user.id, { nullable: false })
   @JoinColumn({ name: "user_id" })
   user: User;
 

@@ -1,8 +1,8 @@
-import { ApiKeyGuard } from "./api-key.guard";
 import { Test, TestingModule } from "@nestjs/testing";
-import { faker } from "@faker-js/faker";
-import { Reflector } from "@nestjs/core";
+
+import { ApiKeyGuard } from "./api-key.guard";
 import config from "../../config";
+import { faker } from "@faker-js/faker";
 
 jest.mock("../../config", () => ({
   __esModule: true,

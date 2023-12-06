@@ -52,6 +52,7 @@ describe("SignUpController (e2e)", () => {
         .expect(201);
 
       expect(response.body).toHaveProperty("id_token");
+      expect(response.body).toHaveProperty("refresh_token");
     });
 
     it("should return 409 if email already exists", async () => {

@@ -1,4 +1,9 @@
-import { User, UserResetPasswordRequest, UserRole, RefreshToken } from "../entities";
+import {
+  RefreshToken,
+  User,
+  UserResetPasswordRequest,
+  UserRole,
+} from "../entities";
 
 import { SignUpModule } from "./sign-up.module";
 import { Test } from "@nestjs/testing";
@@ -27,11 +32,12 @@ describe("SignUpModule", () => {
       })
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
+        save: jest.fn(),
         findOne: jest.fn(),
       })
       .compile();
 
-      signUpModule = app.get<SignUpModule>(SignUpModule);
+    signUpModule = app.get<SignUpModule>(SignUpModule);
   });
 
   it("Should be defined", () => {
