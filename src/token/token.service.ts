@@ -8,6 +8,8 @@ import config from "../utils/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { RefreshToken, User } from "../entities";
+import * as crypto from "crypto";
+import { Tokens } from "../dto";
 
 @Injectable({})
 export class TokenService {
@@ -21,7 +23,7 @@ export class TokenService {
     this.customClaims = {};
   }
 
-  async createTokenAsync(
+  private async createIdTokenAsync(
     user: User,
     expiresIn: number | string = config().jwtExpiresIn
   ): Promise<string> {
@@ -34,6 +36,31 @@ export class TokenService {
       issuer: config().jwtIssuer,
       expiresIn,
     });
+  }
+
+  private async createRefreshTokenAsync(user: User): Promise<string> {
+    const token = crypto.randomBytes(64).toString("hex");
+    const refreshTokenResponse = await this.refreshTokenRepository.save({
+      refreshToken: token,
+      expiresAt: new Date(
+        new Date().getTime() + config().refreshTokenExpiresIn * 1000
+      ),
+      user,
+    });
+    return refreshTokenResponse.refreshToken;
+  }
+
+  async createTokensAsync(
+    user: User,
+    expiresIn: number | string = config().jwtExpiresIn
+  ): Promise<Tokens> {
+    const refreshToken = await this.createRefreshTokenAsync(user);
+    const idToken = await this.createIdTokenAsync(user, expiresIn);
+
+    return {
+      id_token: idToken,
+      refresh_token: refreshToken,
+    };
   }
 
   addCustomClaimImporter(customClaimImporter: ICustomClaimsImporter) {
@@ -62,22 +89,36 @@ export class TokenService {
       };
   }
 
-  async refreshTokenAsync(refreshToken: string): Promise<string>{
-    const validRefreshToken = await this.getValidRefreshTokenAsync(refreshToken);
-    if(validRefreshToken){
-      return await this.createTokenAsync(validRefreshToken.user);
+  async refreshTokenAsync(refreshToken: string): Promise<Tokens> {
+    const validRefreshToken = await this.getValidRefreshTokenAsync(
+      refreshToken
+    );
+    if (validRefreshToken) {
+      await this.terminateRefreshTokenAsync(refreshToken);
+      return this.createTokensAsync(validRefreshToken.user);
     }
-    throw new UnauthorizedException("Invalid Token.");
+    throw new UnauthorizedException("Invalid refresh Token.");
   }
 
-  private async getValidRefreshTokenAsync(refreshToken: string): Promise<RefreshToken>{
+  private async getValidRefreshTokenAsync(
+    refreshToken: string
+  ): Promise<RefreshToken> {
     const refreshTokenEntity = await this.refreshTokenRepository.findOne({
       where: [
-        {refreshToken: refreshToken}, 
-        {expiresAt: MoreThan(new Date())}
+        { refreshToken: refreshToken },
+        { expiresAt: MoreThan(new Date()) },
       ],
       relations: ["user"],
     });
     return refreshTokenEntity || null;
+  }
+
+  private async terminateRefreshTokenAsync(
+    refreshToken: string
+  ): Promise<void> {
+    await this.refreshTokenRepository.update(
+      { refreshToken },
+      { expiresAt: new Date() }
+    );
   }
 }

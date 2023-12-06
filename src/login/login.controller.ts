@@ -23,7 +23,7 @@ export class LoginController {
       loginRequest.username || loginRequest.email,
       loginRequest.password
     );
-    const token = await this.tokenService.createTokenAsync(user);
-    return { id_token: token };
+    const tokens = await this.tokenService.createTokensAsync(user);
+    return tokens;
   }
 }

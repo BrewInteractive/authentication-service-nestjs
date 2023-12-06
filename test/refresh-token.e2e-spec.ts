@@ -1,6 +1,6 @@
 import * as request from "supertest";
 
-import { DataSource, Repository } from "typeorm";
+import { Any, DataSource, Repository, UpdateResult } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 
@@ -45,12 +45,19 @@ describe("RefreshTokenController (e2e)", () => {
           Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
         );
 
+      jest
+        .spyOn(refreshTokenRepository, "save")
+        .mockResolvedValue(
+          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
+        );
+
       const response = await request(app.getHttpServer())
         .post("/refresh-token")
         .send({ refreshToken: faker.datatype.string() })
         .expect(201);
 
-      expect(response.body).toHaveProperty("refreshToken");
+      expect(response.body).toHaveProperty("refresh_token");
+      expect(response.body).toHaveProperty("id_token");
     });
 
     it("Should return 401 if invalid refresh token.", async () => {

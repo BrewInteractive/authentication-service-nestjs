@@ -1,7 +1,6 @@
-import { LoginRequest } from "../../../src/login/dto/login-request.dto";
 import { Mock } from "mockingbird";
 
-export class LoginFixture extends LoginRequest {
+export class LoginFixture {
   @Mock((faker) => faker.internet.userName())
   username: string | null;
 

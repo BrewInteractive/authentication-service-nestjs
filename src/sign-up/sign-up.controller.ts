@@ -31,7 +31,7 @@ export class SignUpController {
       userCandidate,
       signUpRequest.appData
     );
-    const id_token = await this.tokenService.createTokenAsync(user);
-    return { id_token };
+    const tokens = await this.tokenService.createTokensAsync(user);
+    return tokens;
   }
 }
