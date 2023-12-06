@@ -7,8 +7,8 @@ export class UserResetPasswordRequestFixture extends UserResetPasswordRequest {
   @Mock((faker) => faker.datatype.number())
   id: number;
 
-  @Mock(UserFixture)
-  user: User;
+  @Mock((faker) => faker.internet.email())
+  email: string;
 
   @Mock()
   expiresAt: Date;

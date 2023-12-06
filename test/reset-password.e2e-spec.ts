@@ -21,7 +21,7 @@ describe("ResetPassword (e2e)", () => {
   let moduleFixture: TestingModule;
   let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRepository: Repository<User>;
-  beforeAll(async () => {
+  beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -45,30 +45,29 @@ describe("ResetPassword (e2e)", () => {
 
   describe("POST /reset-password", () => {
     it("should reset the password when a valid reset request is provided", async () => {
-      const userId = faker.datatype.string();
+      const email = faker.internet.email();
       const validKey = faker.datatype.string(16);
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
         .mutate({
           key: validKey,
-          userId: userId,
+          email: email,
         })
         .one();
 
-      const userResetPasswordData = MockFactory(
-        UserResetPasswordRequestFixture
-      )
+      const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
         .mutate({
           key: validKey,
           expiresAt: faker.date.future(1),
-          user: MockFactory(UserFixture)
-            .mutate({
-              id: String(userId),
-            })
-            .one(),
+          email: email,
         })
         .one();
 
+      const user = MockFactory(UserFixture)
+        .mutate({
+          email: email,
+        })
+        .one();
       jest
         .spyOn(userResetPasswordRequestRepository, "findOne")
         .mockResolvedValue(Promise.resolve(userResetPasswordData));
@@ -78,8 +77,12 @@ describe("ResetPassword (e2e)", () => {
         .mockResolvedValue(Promise.resolve(userResetPasswordData));
 
       jest
+        .spyOn(userRepository, "findOne")
+        .mockResolvedValue(Promise.resolve(user));
+
+      jest
         .spyOn(userRepository, "save")
-        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
+        .mockResolvedValue(Promise.resolve(user));
 
       const response = await request(app.getHttpServer())
         .post("/reset-password")
@@ -90,26 +93,19 @@ describe("ResetPassword (e2e)", () => {
     });
 
     it("should return an error for an invalid user for the reset request", async () => {
-      const userId = faker.datatype.string();
+      const email = faker.internet.email();
+      const validKey = faker.datatype.string(16);
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
         .mutate({
-          userId: userId,
-        })
-        .one();
-
-      const userResetPasswordData = MockFactory(
-        UserResetPasswordRequestFixture
-      )
-        .mutate({
-          expiresAt: faker.date.future(1),
-          user: MockFactory(UserFixture).one(),
+          key: validKey,
+          email: email,
         })
         .one();
 
       jest
         .spyOn(userResetPasswordRequestRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(userResetPasswordData));
+        .mockResolvedValue(Promise.resolve(null));
 
       const response = await request(app.getHttpServer())
         .post("/reset-password")
