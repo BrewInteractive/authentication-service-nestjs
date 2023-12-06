@@ -158,7 +158,7 @@ export class UserService {
     const userResetPasswordData = await this.getResetPasswordRequestAsync(
       resetPasswordRequest.key
     );
-    const user = await this.validateResetPasswordRequest(
+    const user = await this.validateResetPasswordRequestAsync(
       userResetPasswordData,
       resetPasswordRequest
     );
@@ -175,7 +175,7 @@ export class UserService {
     });
   }
 
-  private async validateResetPasswordRequest(
+  private async validateResetPasswordRequestAsync(
     userResetPasswordRequest: UserResetPasswordRequest,
     resetPasswordRequest: ResetPasswordRequest
   ): Promise<User> {
