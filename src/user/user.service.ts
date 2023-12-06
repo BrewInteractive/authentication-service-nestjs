@@ -158,7 +158,7 @@ export class UserService {
     const userResetPasswordData = await this.getResetPasswordRequestAsync(
       resetPasswordRequest.key
     );
-    var user = await this.validateResetPasswordRequest(
+    const user = await this.validateResetPasswordRequest(
       userResetPasswordData,
       resetPasswordRequest
     );
@@ -183,7 +183,7 @@ export class UserService {
       //reset password request not exists with given key
       throw new UnauthorizedException("Invalid reset password request.");
     }
-    var user = await this.getUserByUsernameOrEmailAsync(
+    const user = await this.getUserByUsernameOrEmailAsync(
       resetPasswordRequest.email
     );
     if (!user) {

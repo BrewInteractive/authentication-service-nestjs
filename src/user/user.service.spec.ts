@@ -14,6 +14,7 @@ import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
+
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {

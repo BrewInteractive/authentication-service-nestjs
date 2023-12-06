@@ -5,7 +5,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserService } from "./user.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserRole, UserResetPasswordRequest])],
+  imports: [
+    TypeOrmModule.forFeature([User, UserRole, UserResetPasswordRequest]),
+  ],
   providers: [{ provide: "UserService", useClass: UserService }],
   exports: ["UserService"],
 })
