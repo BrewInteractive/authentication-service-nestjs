@@ -158,15 +158,11 @@ export class UserService {
     const userResetPasswordData = await this.getResetPasswordRequestAsync(
       resetPasswordRequest.key
     );
-
-    this.validateResetPasswordRequest(
+    const user = await this.validateResetPasswordRequestAsync(
       userResetPasswordData,
       resetPasswordRequest
     );
-    this.updateUserPasswordAsync(
-      userResetPasswordData.user,
-      resetPasswordRequest.newPassword
-    );
+    this.updateUserPasswordAsync(user, resetPasswordRequest.newPassword);
     this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
   }
 
@@ -179,14 +175,19 @@ export class UserService {
     });
   }
 
-  private validateResetPasswordRequest(
+  private async validateResetPasswordRequestAsync(
     userResetPasswordRequest: UserResetPasswordRequest,
     resetPasswordRequest: ResetPasswordRequest
-  ): void {
-    if (
-      !userResetPasswordRequest ||
-      userResetPasswordRequest.user.id !== resetPasswordRequest.userId
-    ) {
+  ): Promise<User> {
+    if (!userResetPasswordRequest) {
+      //reset password request not exists with given key
+      throw new UnauthorizedException("Invalid reset password request.");
+    }
+    const user = await this.getUserByUsernameOrEmailAsync(
+      resetPasswordRequest.email
+    );
+    if (!user) {
+      //user not exists with given email address
       throw new UnauthorizedException("Invalid reset password request.");
     }
     if (
@@ -195,6 +196,7 @@ export class UserService {
     ) {
       throw new UnauthorizedException("Reset password request is expired.");
     }
+    return user;
   }
 
   private async updateUserPasswordAsync(

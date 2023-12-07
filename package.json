@@ -22,7 +22,7 @@
     "release": "standard-version",
     "typeorm-postgres": "DB_DRIVE=postgres DB_PORT=5432 npm run typeorm",
     "typeorm-mysql": "DB_DRIVE=mysql DB_PORT=3306 npm run typeorm",
-    "typeorm": "npx typeorm-ts-node-esm -d db/data-source.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d db/data-source.ts",
     "migration:generate": "npm run typeorm-$npm_config_drive migration:generate db/$npm_config_drive/migrations/$npm_config_name",
     "migration-postgres:generate": "npm run migration:generate --name=$npm_config_name --drive=postgres",
     "migration-mysql:generate": "npm run migration:generate --name=$npm_config_name --drive=mysql",

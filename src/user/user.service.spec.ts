@@ -14,6 +14,7 @@ import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
+
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -277,31 +278,33 @@ describe("UserService", () => {
 
   it("should throw UnauthorizedException for expired reset request", async () => {
     const validKey = faker.datatype.string(16);
-    const userId = faker.datatype.string();
+    const email = faker.internet.email();
 
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)
       .mutate({
         key: validKey,
-        userId: userId,
+        email: email,
       })
       .one();
+    const user = MockFactory(UserFixture)
+      .mutate({
+        email: resetPasswordRequest.email,
+      })
+      .one() as User;
 
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
         key: validKey,
         expiresAt: faker.date.past(1),
-        user: MockFactory(UserFixture)
-          .mutate({
-            id: String(userId),
-          })
-          .one(),
       })
       .one();
 
     jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(user);
+    jest
       .spyOn(userService, "getResetPasswordRequestAsync")
       .mockResolvedValue(userResetPasswordData);
-
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
     } catch (e) {
@@ -309,10 +312,8 @@ describe("UserService", () => {
       expect(e.message).toBe("Reset password request is expired.");
     }
   });
-
-  it("should throw UnauthorizedException for invalid user", async () => {
+  it("should throw UnauthorizedException for not found user", async () => {
     const validKey = faker.datatype.string(16);
-
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)
       .mutate({
         key: validKey,
@@ -324,11 +325,9 @@ describe("UserService", () => {
         expiresAt: faker.date.future(1),
       })
       .one();
-
     jest
       .spyOn(userService, "getResetPasswordRequestAsync")
       .mockResolvedValue(userResetPasswordData);
-
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
     } catch (e) {
@@ -338,25 +337,31 @@ describe("UserService", () => {
   });
 
   it("should update user password and reset request expiration", async () => {
-    const userId = faker.datatype.string();
+    const email = faker.internet.email();
     const validKey = faker.datatype.string(16);
 
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)
       .mutate({
         key: validKey,
-        userId: userId,
+        email: email,
       })
       .one();
+
+    const user = MockFactory(UserFixture)
+      .mutate({
+        email: resetPasswordRequest.email,
+      })
+      .one() as User;
+
+    jest
+      .spyOn(userService, "getUserByUsernameOrEmailAsync")
+      .mockResolvedValue(user);
 
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
         key: validKey,
+        email: email,
         expiresAt: faker.date.future(1),
-        user: MockFactory(UserFixture)
-          .mutate({
-            id: String(userId),
-          })
-          .one(),
       })
       .one();
 

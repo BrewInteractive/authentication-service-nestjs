@@ -1,8 +1,8 @@
 import { Mock } from "mockingbird";
 
 export class ResetPasswordFixture {
-  @Mock((faker) => faker.datatype.string())
-  userId: string;
+  @Mock((faker) => faker.internet.email())
+  email: string;
 
   @Mock((faker) => faker.internet.password())
   newPassword: string;

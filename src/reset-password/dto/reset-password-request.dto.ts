@@ -14,7 +14,7 @@ export class ResetPasswordRequest {
   @IsNotEmpty()
   @IsString()
   @AutoMap()
-  userId: string;
+  email: string;
 
   @ApiProperty({
     description:

@@ -23,8 +23,8 @@ export class UserResetPasswordRequest {
   @Column({ name: "key", nullable: false })
   key: string;
 
-  @ManyToOne((type) => User, (user) => user.id, { nullable: false })
-  @JoinColumn({ name: "user_id" })
+  @ManyToOne((type) => User, (user) => user.email, { nullable: false })
+  @JoinColumn({ name: "email" })
   user: User;
 
   @CreateDateColumn({ name: "created_at" })
