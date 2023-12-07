@@ -19,7 +19,7 @@ jobs:
       JWT_ISSUER: ${{ vars.JWT_AUDIENCE }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: "21.2.0"
       - uses: actions/checkout@v4
