@@ -7,9 +7,9 @@ describe("TokenModule", () => {
   let tokenModule: TokenModule;
 
   beforeEach(async () => {
-      const module = await Test.createTestingModule({
-        imports: [TokenModule],
-      })
+    const module = await Test.createTestingModule({
+      imports: [TokenModule],
+    })
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
         findOne: jest.fn(),

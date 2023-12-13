@@ -1,9 +1,5 @@
-import {
-  IsNotEmpty,
-  IsNumber
-} from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 import { AutoMap } from "@automapper/classes";
-
 
 export class SendResetPasswordRequest {
   @IsNotEmpty()

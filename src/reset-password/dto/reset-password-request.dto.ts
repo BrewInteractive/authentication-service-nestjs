@@ -33,5 +33,3 @@ export class ResetPasswordRequest {
   @AutoMap()
   key: string;
 }
-
-

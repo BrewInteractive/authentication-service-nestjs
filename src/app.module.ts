@@ -10,7 +10,7 @@ import { ConfigModule } from "@nestjs/config";
 import { SignUpModule } from "./sign-up/sign-up.module";
 import { LoginModule } from "./login/login.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
-import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 
 @Module({
   imports: [
