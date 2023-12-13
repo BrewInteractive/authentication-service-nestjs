@@ -262,6 +262,25 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
+  it("should return a userResetPasswordRequest for getResetPasswordRequestByIdAsync", async () => {
+    const expectedResult = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        expiresAt: faker.date.future(1),
+        user: MockFactory(UserFixture).one(),
+      })
+      .one();
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getResetPasswordRequestByIdAsync(
+      expectedResult.id
+    );
+
+    expect(actualResult).toBe(expectedResult);
+  });
+
   it("should throw UnauthorizedException for invalid reset key", async () => {
     const resetPasswordRequest = MockFactory(ResetPasswordFixture).one();
     jest
