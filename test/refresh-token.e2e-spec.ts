@@ -17,6 +17,7 @@ describe("RefreshTokenController (e2e)", () => {
   let refreshTokenRepository: Repository<RefreshToken>;
 
   beforeAll(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
