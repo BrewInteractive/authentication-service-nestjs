@@ -1,9 +1,9 @@
 import { AwsEmailConfig } from "./providers/aws-email.config";
 import { AwsEmailService } from "./providers/aws-email.service";
+import { ConfigService } from "@nestjs/config";
 import { EmailProfile } from "./mapping-profiles/email.mapping.profile";
 import { EmailServiceType } from "./enum/email.service.type.enum";
 import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [],
@@ -23,8 +23,8 @@ import { ConfigService } from "@nestjs/config";
     {
       provide: "EmailService",
       useFactory: (
-        configService: ConfigService,
-        awsEmailService: AwsEmailService
+        awsEmailService: AwsEmailService,
+        configService: ConfigService
       ) => {
         const emailServiceType = configService.get(
           "emailService"

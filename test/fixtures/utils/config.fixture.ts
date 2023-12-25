@@ -1,5 +1,6 @@
+import { EmailServiceType } from "../../../src/email/enum/email.service.type.enum";
+import { JWTFixture } from "./jwt.fixture";
 import { Mock } from "mockingbird";
-import { JWTFixture } from './jwt.fixture';
 
 export class ConfigFixture {
   @Mock("test")
@@ -34,4 +35,7 @@ export class ConfigFixture {
 
   @Mock("user")
   userDefaultRole: string;
+
+  @Mock(EmailServiceType.AWS)
+  emailService: string;
 }
