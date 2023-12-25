@@ -10,6 +10,7 @@ import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
 import { TokensFixture } from "../../test/fixtures";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
 
 describe("RefreshTokenController", () => {
   let controller: RefreshTokenController;
@@ -18,7 +19,12 @@ describe("RefreshTokenController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RefreshTokenController],
-      imports: [TokenModule],
+      imports: [
+        TokenModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+      ],
     })
       .overrideProvider(getRepositoryToken(UserRole))
       .useValue({

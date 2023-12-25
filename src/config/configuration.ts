@@ -12,15 +12,19 @@ export default () => ({
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),
   swaggerEnabled: process.env.SWAGGER_ENABLED === "true" || false,
-  jwtAlgorithm: process.env.JWT_ALGORITHM,
-  jwtAudience: process.env.JWT_AUDIENCE,
-  jwtIssuer: process.env.JWT_ISSUER,
-  jwtSecret: process.env.JWT_SECRET,
   userDefaultRole: process.env.USER_DEFAULT_ROLE,
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN || 3600,
-  awsSesRegion: process.env.AWS_SES_REGION,
-  awsSesAccessKey: process.env.AWS_SES_ACCESS_KEY_ID,
-  awsSesSecretKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  jwt: {
+    algorithm: process.env.JWT_ALGORITHM,
+    audience: process.env.JWT_AUDIENCE,
+    issuer: process.env.JWT_ISSUER,
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES_IN || 3600,
+  },
+  aws: {
+    sesRegion: process.env.AWS_SES_REGION,
+    sesAccessKey: process.env.AWS_SES_ACCESS_KEY_ID,
+    sesSecretKey: process.env.AWS_SES_SECRET_ACCESS_KEY || "us-east-1",
+  },
   emailService: process.env.EMAIL_SERVICE,
   refreshTokenExpiresIn:
     parseInt(process.env.REFRESH_TOKEN_EXPIRES_IN) || 86400,

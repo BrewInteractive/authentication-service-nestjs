@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ApiKeyGuard } from "./api-key.guard";
-import config from "../../config";
+import config from "../../../config/configuration";
 import { faker } from "@faker-js/faker";
 
-jest.mock("../../config", () => ({
+jest.mock("../../../config/configuration", () => ({
   __esModule: true,
   default: jest.fn(),
 }));

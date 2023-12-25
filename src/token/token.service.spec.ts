@@ -17,24 +17,40 @@ import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
-import config from "../utils/config";
-import { faker } from "@faker-js/faker";
-
-jest.mock("../utils/config", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+import { ConfigService } from "@nestjs/config";
 
 jest.mock("jsonwebtoken");
 
 describe("TokenService", () => {
   let tokenService: TokenService;
   let refreshTokenRepository: Repository<RefreshToken>;
+  let configService: ConfigService;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         TokenService,
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockImplementation((key: string) => {
+              switch (key) {
+                case "jwt.secret":
+                  return "testSecret";
+                case "jwt.algorithm":
+                  return "testSecret";
+                case "jwt.expiresIn":
+                  return 3600;
+                case "jwt.audience":
+                  return "testAudience";
+                case "jwt.issuer":
+                  return "testIssuer";
+                default:
+                  return undefined;
+              }
+            }),
+          },
+        },
         {
           provide: "RefreshTokenRepository",
           useValue: {
@@ -50,10 +66,7 @@ describe("TokenService", () => {
     refreshTokenRepository = moduleRef.get<Repository<RefreshToken>>(
       "RefreshTokenRepository"
     );
-
-    (config as jest.Mock).mockImplementation(() =>
-      MockFactory(ConfigFixture).one()
-    );
+    configService = moduleRef.get<ConfigService>(ConfigService);
   });
 
   afterEach(() => {
@@ -80,19 +93,19 @@ describe("TokenService", () => {
 
     const tokens = await tokenService.createTokensAsync(
       user,
-      config().jwtExpiresIn
+      configService.get("jwt.expiresIn")
     );
 
     expect(tokens.id_token).toBe(expectedTokens.id_token);
     expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
-      config().jwtSecret,
+      configService.get("jwt.secret"),
       {
-        algorithm: config().jwtAlgorithm,
-        audience: config().jwtAudience,
-        issuer: config().jwtIssuer,
-        expiresIn: config().jwtExpiresIn,
+        algorithm: configService.get("jwt.algorithm"),
+        audience: configService.get("jwt.audience"),
+        issuer: configService.get("jwt.issuer"),
+        expiresIn: configService.get("jwt.expiresIn"),
       }
     );
   });
@@ -116,19 +129,19 @@ describe("TokenService", () => {
 
     const tokens = await tokenService.createTokensAsync(
       user,
-      config().jwtExpiresIn
+      configService.get("jwt.expiresIn")
     );
 
     expect(tokens.id_token).toBe(expectedTokens.id_token);
     expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
-      config().jwtSecret,
+      configService.get("jwt.secret"),
       {
-        algorithm: config().jwtAlgorithm,
-        audience: config().jwtAudience,
-        issuer: config().jwtIssuer,
-        expiresIn: config().jwtExpiresIn,
+        algorithm: configService.get("jwt.algorithm"),
+        audience: configService.get("jwt.audience"),
+        issuer: configService.get("jwt.issuer"),
+        expiresIn: configService.get("jwt.expiresIn"),
       }
     );
   });

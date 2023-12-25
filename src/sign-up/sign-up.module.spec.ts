@@ -8,13 +8,19 @@ import {
 import { SignUpModule } from "./sign-up.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
 
 describe("SignUpModule", () => {
   let signUpModule: SignUpModule;
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [SignUpModule],
+      imports: [
+        SignUpModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+      ],
     })
       .overrideProvider(getRepositoryToken(UserRole))
       .useValue({

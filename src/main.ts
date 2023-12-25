@@ -4,7 +4,7 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
 import { NestFactory } from "@nestjs/core";
-import config from "./utils/config";
+import config from "./config/configuration";
 
 function initValidationPipe(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());

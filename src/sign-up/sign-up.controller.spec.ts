@@ -1,5 +1,4 @@
 import {
-  ConfigFixture,
   SignUpFixture,
   TokensFixture,
   UserFixture,
@@ -23,6 +22,7 @@ import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
 
 describe("SignUpController", () => {
   let signUpController: SignUpController;
@@ -37,6 +37,9 @@ describe("SignUpController", () => {
         }),
         UserModule,
         TokenModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
       ],
       controllers: [SignUpController],
       providers: [SignUpProfile],

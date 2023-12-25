@@ -5,12 +5,12 @@ import { PluginModule } from "./plugin/plugin.module";
 import { PluginTestModule } from "./plugin-test/plugin-test.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { dataSourceOptions } from "../db/data-source";
-import config from "./utils/config";
+import config from "./config/configuration";
 import { ConfigModule } from "@nestjs/config";
 import { SignUpModule } from "./sign-up/sign-up.module";
 import { LoginModule } from "./login/login.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
-import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 
 @Module({
   imports: [

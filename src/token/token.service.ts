@@ -4,12 +4,12 @@ import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
-import config from "../utils/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { RefreshToken, User } from "../entities";
 import * as crypto from "crypto";
 import { Tokens } from "../dto";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable({})
 export class TokenService {
@@ -18,22 +18,23 @@ export class TokenService {
 
   constructor(
     @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
+    private readonly configService: ConfigService
   ) {
     this.customClaims = {};
   }
 
   private async createIdTokenAsync(
     user: User,
-    expiresIn: number | string = config().jwtExpiresIn
+    expiresIn: number | string = this.configService.get("jwt.expiresIn")
   ): Promise<string> {
     this.customClaimImporters.push(new UserCustomClaimsImporter());
     await this.applyCustomClaimImportersAsync(user);
-
-    return jwt.sign(this.customClaims, config().jwtSecret, {
-      algorithm: config().jwtAlgorithm as jwt.Algorithm,
-      audience: config().jwtAudience,
-      issuer: config().jwtIssuer,
+    
+    return jwt.sign(this.customClaims, this.configService.get("jwt.secret"), {  
+      algorithm: this.configService.get("jwt.algorithm") as jwt.Algorithm,
+      audience: this.configService.get("jwt.audience"),
+      issuer: this.configService.get("jwt.issuer"),
       expiresIn,
     });
   }
@@ -43,7 +44,8 @@ export class TokenService {
     const refreshTokenResponse = await this.refreshTokenRepository.save({
       refreshToken: token,
       expiresAt: new Date(
-        new Date().getTime() + config().refreshTokenExpiresIn * 1000
+        new Date().getTime() +
+          this.configService.get("refreshTokenExpiresIn") * 1000
       ),
       user,
     });
@@ -52,7 +54,7 @@ export class TokenService {
 
   async createTokensAsync(
     user: User,
-    expiresIn: number | string = config().jwtExpiresIn
+    expiresIn: number | string = this.configService.get("jwt.expiresIn")
   ): Promise<Tokens> {
     const refreshToken = await this.createRefreshTokenAsync(user);
     const idToken = await this.createIdTokenAsync(user, expiresIn);

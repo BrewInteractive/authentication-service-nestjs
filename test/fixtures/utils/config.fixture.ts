@@ -1,4 +1,5 @@
 import { Mock } from "mockingbird";
+import { JWTFixture } from './jwt.fixture';
 
 export class ConfigFixture {
   @Mock("test")
@@ -7,17 +8,8 @@ export class ConfigFixture {
   @Mock((faker) => faker.datatype.string())
   apiKey: string;
 
-  @Mock("HS256")
-  jwtAlgorithm: string;
-
-  @Mock("testAudience")
-  jwtAudience: string;
-
-  @Mock("testIssuer")
-  jwtIssuer: string;
-
-  @Mock("testSecret")
-  jwtSecret: string;
+  @Mock(JWTFixture)
+  jwt: JWTFixture;
 
   @Mock(3000)
   port: number;
