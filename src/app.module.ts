@@ -1,5 +1,3 @@
-import * as path from "path";
-
 import { Module, forwardRef } from "@nestjs/common";
 
 import { AppController } from "./app.controller";
