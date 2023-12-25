@@ -1,24 +1,31 @@
+import { Module, forwardRef } from "@nestjs/common";
+
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { Module } from "@nestjs/common";
-import { PluginModule } from "./plugin/plugin.module";
-import { PluginTestModule } from "./plugin-test/plugin-test.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { dataSourceOptions } from "../db/data-source";
-import config from "./utils/config";
 import { ConfigModule } from "@nestjs/config";
-import { SignUpModule } from "./sign-up/sign-up.module";
 import { LoginModule } from "./login/login.module";
+import { PluginModule } from "@brewww/nestjs-plugin-module";
+import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
-import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { SignUpModule } from "./sign-up/sign-up.module";
+import { TokenModule } from "./token/token.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { UserModule } from "./user/user.module";
+import config from "./utils/config";
+import { dataSourceOptions } from "../db/data-source";
 
 @Module({
   imports: [
-    PluginTestModule,
+    PluginModule.registerAsync({
+      imports: [
+        forwardRef(() => AppModule),
+        forwardRef(() => TokenModule),
+        forwardRef(() => UserModule),
+      ],
+    }),
     SignUpModule,
     LoginModule,
     ResetPasswordModule,
-    PluginModule.registerAsync(),
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
