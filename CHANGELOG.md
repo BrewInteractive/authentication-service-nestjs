@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.11.1...v1.12.0) (2023-12-25)
+
+
+### Features
+
+* add user module ref in PluginModule ([28b25d3](https://github.com/BrewInteractive/authentication-service-nestjs/commit/28b25d313f78047ec58ecf9821cc0054fde71e25))
+* plugin module integrated ([8fd1d38](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8fd1d3884a850d0de49d41f498cddca87986d1a3))
+* **TS-187:** create refresh-token module ([920a27c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/920a27cd9916bfb3226536f7c124e52783a1c40d))
+* **TS-204:** add template module tests. ([d8e8845](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d8e88452d13370c9bac996d1651c4859462dc709))
+* **TS-204:** add template plugin to read me. ([615ec30](https://github.com/BrewInteractive/authentication-service-nestjs/commit/615ec30d9e5ad1ebd494011a049f825fd0bf5cdc))
+* **TS-204:** add test case for html. ([b730b46](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b730b46a3f0a2116d5f3de70a6e877ba29ed1355))
+* **TS-204:** injectData now only compiles mjml template and getResetPasswordEmailTemplate now only return html. ([1a76495](https://github.com/BrewInteractive/authentication-service-nestjs/commit/1a76495c2d62c80a591092fadf8e288e33819498))
+* **TS-204:** made service editable via plugin and inject data now accepts html. ([1ee8612](https://github.com/BrewInteractive/authentication-service-nestjs/commit/1ee861222e15fe766f65e3a9eca207f97c011747))
+* **TS-204:** template service and getResetPasswordEmail method. ([1375c78](https://github.com/BrewInteractive/authentication-service-nestjs/commit/1375c78643ec2657a1d344b1d07417caa35b9ff5))
+* **TS-241:** implemented createRefreshTokenAsync func. ([8aa4158](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8aa415808ea8b6247eefd39f8bd6962b05ca94bf))
+* **TS-253:** update refresh token method ([3236a52](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3236a527959f6d0985dc91e832b47ebddcd170d6))
+
+
+### Bug Fixes
+
+* fix for migrations ([b48fff2](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b48fff28b9baddc86ca2f33cab75e64a49403251))
+* **TS-204:** add property to ts-config esModuleInterop ([27887f0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/27887f0c80af1fc577ffaf5263e70e522b7b0d77))
+* **TS-204:** change mjml import to require. ([ba08884](https://github.com/BrewInteractive/authentication-service-nestjs/commit/ba088840c47a2ee3b32858a8894a0d88abe7af18))
+* **TS-204:** created dto for reset password email data. ([170b7c4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/170b7c44204c50745f48f263a44f078d883f6ee7))
+* **TS-204:** edit test case to make into coverage. ([c6766a9](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c6766a9feb94601210c376165aecad458e8a2a6f))
+* **TS-204:** made template service test working. ([d5e336c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d5e336cd33a8f1d985f0b1267e9f3a132fb8b90c))
+* **TS-204:** made templates folder to go into dist. ([81ca7a1](https://github.com/BrewInteractive/authentication-service-nestjs/commit/81ca7a1e8351f701976862a0c4fbe9bc94cfe9a0))
+* **TS-204:** refactored template service. ([f57a32b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f57a32b385b5c0db74d3dd48d3c01a1d60254dd8))
+* **TS-204:** remove getResetPasswordEmail, ([670d35b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/670d35b6a60d2e0a27a5c170219a778578a76ae0))
+* **TS-204:** removed code smell. ([f076609](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f076609e9701169a2e2df72ecc0ae37adafd6e35))
+* **TS-204:** removed code smell. ([584b2ce](https://github.com/BrewInteractive/authentication-service-nestjs/commit/584b2cef490222089b696c7fb0ab1a8be9f05d1d))
+* **TS-204:** removed unused import. ([306bc47](https://github.com/BrewInteractive/authentication-service-nestjs/commit/306bc471fe2ea51e0f34f94cecda5ea3bf9bc11b))
+* **TS-204:** rename private method. ([19b2110](https://github.com/BrewInteractive/authentication-service-nestjs/commit/19b211071882c1045b4204f9a5c8a125bee3c229))
+* **TS-241:** covered all lines for tests. ([7ec9881](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7ec98813b16b5785254bde0284cb054db378ef1b))
+* **TS-241:** rafactor function names also in test cases. ([7d48821](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7d48821a543fbf29309e54eff2d4f47fa17ee537))
+* **TS-241:** refactor function and variable names. ([029cc68](https://github.com/BrewInteractive/authentication-service-nestjs/commit/029cc68914f527e71abfccae959c3fd30e343745))
+* **TS-274:** validateResetPasswordRequest function name ([3243f2e](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3243f2e6a2884384d0e2b4e81288c16c2d5db26a))
+* type ([073b557](https://github.com/BrewInteractive/authentication-service-nestjs/commit/073b557c90622859604b691cbfbecb1c12a7d7c7))
+
 ### [1.11.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.11.0...v1.11.1) (2023-11-13)
 
 ## [1.11.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.10.0...v1.11.0) (2023-11-13)
