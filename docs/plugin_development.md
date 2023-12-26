@@ -9,9 +9,8 @@ While creating the plugin we need to provide the necessary parameters. Example p
 ```json
 {
 	...
-	"authenticationService": {
+	"pluginModule": {
 		"name": "hello-world-overrider",
-		"type":"plugin",
 		"displayName": "Hello World Overrider"
 	},
 	...
@@ -20,8 +19,7 @@ While creating the plugin we need to provide the necessary parameters. Example p
 
 | Variable Name | Description                                                                                              |
 | ------------- | -------------------------------------------------------------------------------------------------------- |
-| name          | This key is the plugin name. It can be used as.                                                          |
-| type          | This key contains the value "plugin" and specifies that the package is an authentication-service plugin. |
+| name          | The name field represents the folder name of the plugin.                                                 |
 | displayName   | This key is the human readable name of the plugin.                                                       |
 
 [@brewww/authentication-service](https://www.npmjs.com/package/@brewww/authentication-service) package needs to be added to plugin as peer dependency to reach authentication service modules, providers, controllers etc. We also define the version of authentication service that our plugin is developed for.
@@ -36,7 +34,7 @@ While creating the plugin we need to provide the necessary parameters. Example p
 }
 ```
 
-Plugin development is based on dependency injection feature of NestJs.
+The plugin development relies on the [NestJS Plugin Module](https://github.com/BrewInteractive/nestjs-plugin-module) package. To create more advanced plugins, please refer to the documentation for the [NestJS Plugin Module](https://github.com/BrewInteractive/nestjs-plugin-module).
 
 ## Creating Plugins
 
