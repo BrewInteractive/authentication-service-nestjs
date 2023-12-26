@@ -3,13 +3,6 @@ import { DataSource } from "typeorm";
 import { Test } from "@nestjs/testing";
 import { setupTestDataSourceAsync } from "../test/test-db";
 
-jest.mock("./config/configuration", () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    emailService: "aws",
-  })),
-}));
-
 describe("AppModule", () => {
   let appModule: AppModule;
 

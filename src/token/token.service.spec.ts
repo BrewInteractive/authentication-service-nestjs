@@ -1,7 +1,6 @@
 import * as jwt from "jsonwebtoken";
 
 import {
-  ConfigFixture,
   RefreshTokenFixture,
   TokensFixture,
   UserFixture,

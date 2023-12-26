@@ -30,8 +30,8 @@ export class TokenService {
   ): Promise<string> {
     this.customClaimImporters.push(new UserCustomClaimsImporter());
     await this.applyCustomClaimImportersAsync(user);
-    
-    return jwt.sign(this.customClaims, this.configService.get("jwt.secret"), {  
+
+    return jwt.sign(this.customClaims, this.configService.get("jwt.secret"), {
       algorithm: this.configService.get("jwt.algorithm") as jwt.Algorithm,
       audience: this.configService.get("jwt.audience"),
       issuer: this.configService.get("jwt.issuer"),

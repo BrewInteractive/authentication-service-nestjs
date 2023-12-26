@@ -5,6 +5,7 @@ import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
 import { NestFactory } from "@nestjs/core";
 import config from "./config/configuration";
+import { ConfigService } from "@nestjs/config";
 
 function initValidationPipe(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());
@@ -28,7 +29,7 @@ function initSwagger(app: INestApplication) {
 }
 
 function initGlobalGuard(app: INestApplication) {
-  app.useGlobalGuards(new ApiKeyGuard());
+  app.useGlobalGuards(new ApiKeyGuard(app.get(ConfigService)));
 }
 
 async function bootstrap() {
