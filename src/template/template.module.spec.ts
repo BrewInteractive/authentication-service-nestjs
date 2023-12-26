@@ -1,12 +1,12 @@
-import { TemplateModule } from './template.module';
+import { TemplateModule } from "./template.module";
 import { Test } from "@nestjs/testing";
 
-describe('TemplateModule', () => {
+describe("TemplateModule", () => {
   let templateModule: TemplateModule;
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-        imports: [TemplateModule],
+      imports: [TemplateModule],
     }).compile();
 
     templateModule = app.get<TemplateModule>(TemplateModule);

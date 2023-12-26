@@ -8,7 +8,11 @@ describe("ResetPasswordRequest Dto Validation", () => {
   it("should pass validation with valid data", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
     resetPasswordRequest.email = faker.internet.email();
-    resetPasswordRequest.newPassword = faker.internet.password(10, false, passwordRegex);
+    resetPasswordRequest.newPassword = faker.internet.password(
+      10,
+      false,
+      passwordRegex
+    );
     resetPasswordRequest.key = faker.datatype.string(16);
 
     const errors = await validate(resetPasswordRequest);
@@ -18,7 +22,11 @@ describe("ResetPasswordRequest Dto Validation", () => {
 
   it("should fail validation when userId is empty", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
-    resetPasswordRequest.newPassword = faker.internet.password(10, false, passwordRegex);
+    resetPasswordRequest.newPassword = faker.internet.password(
+      10,
+      false,
+      passwordRegex
+    );
     resetPasswordRequest.key = faker.datatype.string(16);
 
     const errors = await validate(resetPasswordRequest);
@@ -33,7 +41,11 @@ describe("ResetPasswordRequest Dto Validation", () => {
   it("should fail validation when newPassword is weak", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
     resetPasswordRequest.email = faker.internet.email();
-    resetPasswordRequest.newPassword = faker.internet.password(6, false, /[A-Z]/);
+    resetPasswordRequest.newPassword = faker.internet.password(
+      6,
+      false,
+      /[A-Z]/
+    );
     resetPasswordRequest.key = faker.datatype.string(16);
 
     const errors = await validate(resetPasswordRequest);
@@ -48,8 +60,12 @@ describe("ResetPasswordRequest Dto Validation", () => {
   it("should fail validation when key is empty", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
     resetPasswordRequest.email = faker.internet.email();
-    resetPasswordRequest.newPassword = faker.internet.password(10, false, passwordRegex);
-    
+    resetPasswordRequest.newPassword = faker.internet.password(
+      10,
+      false,
+      passwordRegex
+    );
+
     const errors = await validate(resetPasswordRequest);
 
     expect(errors.length).toBe(1);

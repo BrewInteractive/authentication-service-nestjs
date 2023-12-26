@@ -26,10 +26,10 @@ export class ResetPasswordRequest {
   @IsNotEmpty()
   @IsString()
   @AutoMap()
-  newPassword: string
+  newPassword: string;
 
   @IsNotEmpty()
   @IsString()
   @AutoMap()
-  key: string
+  key: string;
 }

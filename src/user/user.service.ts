@@ -171,6 +171,14 @@ export class UserService {
   ): Promise<UserResetPasswordRequest> {
     return await this.userResetPasswordRequestRepository.findOne({
       where: { key },
+    });
+  }
+
+  async getResetPasswordRequestByIdAsync(
+    id: number
+  ): Promise<UserResetPasswordRequest> {
+    return await this.userResetPasswordRequestRepository.findOne({
+      where: { id },
       relations: ["user"],
     });
   }

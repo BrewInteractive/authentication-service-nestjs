@@ -11,6 +11,7 @@ describe("AppController (e2e)", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
