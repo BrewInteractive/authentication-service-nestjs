@@ -21,4 +21,3 @@ describe("AppModule", () => {
     expect(appModule).toBeDefined();
   });
 });
-export { AppModule };
