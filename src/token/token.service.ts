@@ -32,7 +32,7 @@ export class TokenService {
     await this.applyCustomClaimImportersAsync(user);
 
     return jwt.sign(this.customClaims, this.configService.get("jwt.secret"), {
-      algorithm: this.configService.get("jwt.algorithm") as jwt.Algorithm,
+      algorithm: this.configService.get("jwt.algorithm"),
       audience: this.configService.get("jwt.audience"),
       issuer: this.configService.get("jwt.issuer"),
       expiresIn,
