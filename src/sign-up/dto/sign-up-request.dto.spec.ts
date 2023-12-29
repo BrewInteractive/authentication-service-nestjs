@@ -2,7 +2,7 @@ import { SignUpRequest } from "./sign-up-request.dto";
 import { faker } from "@faker-js/faker";
 import { validate } from "class-validator";
 
-describe("SingUp Dto Validation", () => {
+describe("Signup Dto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
 
   it("should get email if username is empty", async () => {
