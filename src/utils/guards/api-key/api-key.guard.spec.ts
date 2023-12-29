@@ -1,22 +1,25 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ApiKeyGuard } from "./api-key.guard";
-import config from "../../config";
 import { faker } from "@faker-js/faker";
-
-jest.mock("../../config", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+import { ConfigService } from "@nestjs/config";
 
 describe("ApiKeyGuard", () => {
   let apiKeyGuard: ApiKeyGuard;
-
+  let configService: ConfigService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ApiKeyGuard],
+      providers: [
+        ApiKeyGuard,
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn(),
+          },
+        },
+      ],
     }).compile();
-
+    configService = module.get<ConfigService>(ConfigService);
     apiKeyGuard = module.get<ApiKeyGuard>(ApiKeyGuard);
   });
 
@@ -25,9 +28,7 @@ describe("ApiKeyGuard", () => {
   });
 
   it("Should operate without an api key", async () => {
-    (config as jest.Mock).mockImplementation(() => ({
-      apiKey: null,
-    }));
+    (configService.get as jest.Mock).mockReturnValueOnce(undefined);
 
     const context = {
       getClass: jest.fn(),
@@ -39,11 +40,12 @@ describe("ApiKeyGuard", () => {
   });
 
   it("Api key should be approved", async () => {
-    const apiKey = faker.datatype.string(8);
-
-    (config as jest.Mock).mockImplementation(() => ({
-      apiKey,
-    }));
+    (configService.get as jest.Mock).mockReturnValue((key: string) => {
+      switch (key) {
+        case "apiKey":
+          return faker.datatype.string(8);
+      }
+    });
 
     const context = {
       getClass: jest.fn(),
@@ -51,7 +53,7 @@ describe("ApiKeyGuard", () => {
       switchToHttp: jest.fn(() => ({
         getRequest: jest.fn().mockReturnValue({
           headers: {
-            "x-api-key": apiKey,
+            "x-api-key": configService.get("apiKey"),
           },
         }),
       })),
@@ -61,9 +63,12 @@ describe("ApiKeyGuard", () => {
   });
 
   it("Api key should be not approved", async () => {
-    (config as jest.Mock).mockImplementation(() => ({
-      apiKey: faker.datatype.string(8),
-    }));
+    (configService.get as jest.Mock).mockReturnValue((key: string) => {
+      switch (key) {
+        case "apiKey":
+          return faker.datatype.string(8);
+      }
+    });
 
     const context = {
       getClass: jest.fn(),
@@ -81,10 +86,12 @@ describe("ApiKeyGuard", () => {
   });
 
   it("If the api key is not sent, it should be approved", async () => {
-    (config as jest.Mock).mockImplementation(() => ({
-      apiKey: faker.datatype.string(8),
-    }));
-
+    (configService.get as jest.Mock).mockReturnValue((key: string) => {
+      switch (key) {
+        case "apiKey":
+          return faker.datatype.string(8);
+      }
+    });
     const context = {
       getClass: jest.fn(),
       getHandler: jest.fn(),

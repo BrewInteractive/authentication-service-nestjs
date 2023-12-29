@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { SignUpRequest } from "../dto/sign-up-request.dto";
 import { User } from "../../entities/user.entity";
 import * as bcrypt from "bcrypt";
-import config from "../../utils/config";
+import config from "../../config/configuration";
 
 @Injectable()
 export class SignUpProfile extends AutomapperProfile {

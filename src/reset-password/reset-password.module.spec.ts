@@ -3,20 +3,23 @@ import { User, UserResetPasswordRequest, UserRole } from "../entities";
 import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-
-jest.mock("../utils/config", () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    emailService: "aws",
-  })),
-}));
+import { MockFactory } from "mockingbird";
+import { ConfigFixture } from "../../test/fixtures";
+import { ConfigModule } from "@nestjs/config";
 
 describe("ResetPasswordModule", () => {
   let resetPasswordModule: ResetPasswordModule;
+  const mockConfig = MockFactory(ConfigFixture).one();
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [ResetPasswordModule],
+      imports: [
+        ResetPasswordModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [() => mockConfig],
+        }),
+      ],
     })
       .overrideProvider(getRepositoryToken(User))
       .useValue({

@@ -11,7 +11,7 @@ import { SignUpModule } from "./sign-up/sign-up.module";
 import { TokenModule } from "./token/token.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
-import config from "./utils/config";
+import config from "./config/configuration";
 import { dataSourceOptions } from "../db/data-source";
 
 @Module({

@@ -1,3 +1,5 @@
+import { EmailServiceType } from "../../../src/email/enum/email.service.type.enum";
+import { JWTFixture } from "./jwt.fixture";
 import { Mock } from "mockingbird";
 
 export class ConfigFixture {
@@ -7,17 +9,8 @@ export class ConfigFixture {
   @Mock((faker) => faker.datatype.string())
   apiKey: string;
 
-  @Mock("HS256")
-  jwtAlgorithm: string;
-
-  @Mock("testAudience")
-  jwtAudience: string;
-
-  @Mock("testIssuer")
-  jwtIssuer: string;
-
-  @Mock("testSecret")
-  jwtSecret: string;
+  @Mock(JWTFixture)
+  jwt: JWTFixture;
 
   @Mock(3000)
   port: number;
@@ -42,4 +35,7 @@ export class ConfigFixture {
 
   @Mock("user")
   userDefaultRole: string;
+
+  @Mock(EmailServiceType.AWS)
+  emailService: string;
 }

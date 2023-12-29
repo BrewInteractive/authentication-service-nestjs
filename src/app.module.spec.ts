@@ -2,20 +2,23 @@ import { AppModule } from "./app.module";
 import { DataSource } from "typeorm";
 import { Test } from "@nestjs/testing";
 import { setupTestDataSourceAsync } from "../test/test-db";
-
-jest.mock("./utils/config", () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    emailService: "aws",
-  })),
-}));
+import { ConfigModule } from "@nestjs/config";
+import { MockFactory } from "mockingbird";
+import { ConfigFixture } from "../test/fixtures";
 
 describe("AppModule", () => {
   let appModule: AppModule;
+  const mockConfig = MockFactory(ConfigFixture).one();
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        AppModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [() => mockConfig],
+        }),
+      ],
     })
       .overrideProvider(DataSource)
       .useValue(await setupTestDataSourceAsync())

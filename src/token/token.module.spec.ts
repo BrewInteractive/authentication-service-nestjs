@@ -2,13 +2,19 @@ import { Test } from "@nestjs/testing";
 import { TokenModule } from "./token.module";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { RefreshToken, User } from "../entities";
+import { ConfigModule } from "@nestjs/config";
 
 describe("TokenModule", () => {
   let tokenModule: TokenModule;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [TokenModule],
+      imports: [
+        TokenModule,
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+      ],
     })
       .overrideProvider(getRepositoryToken(RefreshToken))
       .useValue({
