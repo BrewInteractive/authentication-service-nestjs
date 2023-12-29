@@ -18,6 +18,7 @@ describe("SignUpController (e2e)", () => {
   let userRepository: Repository<User>;
 
   beforeAll(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })

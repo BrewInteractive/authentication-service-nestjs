@@ -4,6 +4,13 @@ import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
+jest.mock("../utils/config", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    emailService: "aws",
+  })),
+}));
+
 describe("ResetPasswordModule", () => {
   let resetPasswordModule: ResetPasswordModule;
 

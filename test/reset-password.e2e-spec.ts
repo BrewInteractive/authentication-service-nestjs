@@ -22,6 +22,7 @@ describe("ResetPassword (e2e)", () => {
   let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRepository: Repository<User>;
   beforeEach(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
