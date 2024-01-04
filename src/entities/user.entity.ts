@@ -12,6 +12,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { UserResetPasswordRequest } from "./user-reset-password-request.entity";
 
 @Entity({ name: "users" })
 @Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
@@ -62,4 +63,7 @@ export class User {
 
   @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
+
+  @OneToMany(() => UserResetPasswordRequest, userResetPasswordRequest => userResetPasswordRequest.user)
+  userResetPasswordRequests: UserResetPasswordRequest[];
 }

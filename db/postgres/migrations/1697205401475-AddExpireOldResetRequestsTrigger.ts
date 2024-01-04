@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddExpireOldResetRequestsTrigger1797205401475 implements MigrationInterface {
-  name = 'AddExpireOldResetRequestsTrigger1797205401475';
+export class AddExpireOldResetRequestsTrigger1697205401475 implements MigrationInterface {
+  name = 'AddExpireOldResetRequestsTrigger1697205401475';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
