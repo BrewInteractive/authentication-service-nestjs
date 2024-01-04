@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.13.0...v1.13.1) (2024-01-04)
+
+
+### Bug Fixes
+
+* Update user-reset-password-request entity and migrations ([fec87e8](https://github.com/BrewInteractive/authentication-service-nestjs/commit/fec87e8bc5e64c56d8337228cc9830b146c46100))
+
 ## [1.13.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.12.0...v1.13.0) (2024-01-04)
 
 
