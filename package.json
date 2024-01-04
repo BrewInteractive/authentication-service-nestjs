@@ -1,6 +1,6 @@
 {
   "name": "@brewww/authentication-service",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Authenticator service for Brew projects.",
   "author": "Brew",
   "license": "MIT",

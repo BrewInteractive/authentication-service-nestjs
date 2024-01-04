@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.12.0...v1.13.0) (2024-01-04)
+
+
+### Features
+
+* **TS-209:** add send reset password email request ([f0f8ac0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f0f8ac0c80979242a8bca03be85a0f92df715646))
+
+
+### Bug Fixes
+
+* dynamic email service environment value for e2e tests ([911c722](https://github.com/BrewInteractive/authentication-service-nestjs/commit/911c722ed90cef4a01a9675a87e5565a4289fab4))
+* format project ([3c87cb9](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3c87cb908ebf15f0fe21d20efbf9dc9599a17777))
+* mock config() in reset-password.module.spec.ts ([126deec](https://github.com/BrewInteractive/authentication-service-nestjs/commit/126deecd53aba5a3f6265bb8accf342c889f63d9))
+* remove unnecessary type for sonar issue ([4148eca](https://github.com/BrewInteractive/authentication-service-nestjs/commit/4148ecab9f211fa8d1b00398dbe8a68bd883d3a3))
+* **TS-209:** fix for app module test ([4306812](https://github.com/BrewInteractive/authentication-service-nestjs/commit/4306812db91666f6477929661844827b9921f151))
+* **TS-252:** fix app module test ([38fb66b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/38fb66bad275b403ba32d4d8cf733c873d13cd07))
+* **TS-252:** fix for app and reset password test ([f9ddcb6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f9ddcb6cc254549a02679c68b6d1da9c9da18880))
+
 ## [1.12.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.11.1...v1.12.0) (2023-12-25)
 
 
