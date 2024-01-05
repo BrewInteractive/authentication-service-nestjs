@@ -12,6 +12,7 @@ export default () => ({
     process.env.PASSWORD_REGEX || "(?=.*[A-Z])(?=.*[a-z]).*"
   ),
   swaggerEnabled: process.env.SWAGGER_ENABLED === "true" || false,
+  basePath: process.env.BASE_PATH || "/",
   userDefaultRole: process.env.USER_DEFAULT_ROLE,
   jwt: {
     algorithm: process.env.JWT_ALGORITHM,
