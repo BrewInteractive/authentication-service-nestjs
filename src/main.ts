@@ -17,6 +17,7 @@ function initSwagger(app: INestApplication) {
       .setTitle(config().name)
       .setDescription(config().description)
       .setVersion(config().version)
+      .addServer(config().basePath)
       .addSecurity("ApiKey", {
         type: "apiKey",
         name: "x-api-key",
