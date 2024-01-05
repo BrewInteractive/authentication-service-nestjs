@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.13.1...v1.14.0) (2024-01-05)
+
+
+### Features
+
+* Add basePath configuration to support API versioning ([8865d8c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8865d8caa7af5cc3c5f3576eb8b8d99662360c62))
+
 ### [1.13.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.13.0...v1.13.1) (2024-01-04)
 
 
