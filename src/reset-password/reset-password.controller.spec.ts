@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { ResetPasswordController } from "./reset-password.controller";
 import { UserService } from "../user/user.service";
 import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 import {
   ResetPasswordFixture,
   SendResetPasswordRequestFixture,

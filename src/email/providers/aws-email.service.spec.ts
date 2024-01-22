@@ -7,7 +7,7 @@ import { AwsEmailService } from "./aws-email.service";
 import { EmailFixture } from "../../../test/fixtures/email/email.fixture";
 import { EmailProfile } from "../mapping-profiles/email.mapping.profile";
 import { MockFactory } from "mockingbird";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 
 describe("AwsEmailService", () => {
   let emailService: AwsEmailService;

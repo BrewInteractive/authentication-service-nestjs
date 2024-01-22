@@ -4,7 +4,7 @@ import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
 import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
 import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 
 @Module({
   imports: [

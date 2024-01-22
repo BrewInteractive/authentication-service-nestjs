@@ -40,9 +40,9 @@
     "@nestjs/common": "^9.0.0"
   },
   "dependencies": {
-    "@automapper/classes": "^8.7.7",
-    "@automapper/core": "^8.7.7",
-    "@automapper/nestjs": "^8.7.7",
+    "@automapper/classes": "^8.8.0",
+    "@automapper/core": "^8.8.0",
+    "@automapper/nestjs": "^8.8.0",
     "@automapper/types": "^6.3.1",
     "@aws-sdk/client-ses": "3.427.0",
     "@brewww/nestjs-plugin-module": "^1.0.5",

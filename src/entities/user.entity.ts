@@ -1,4 +1,4 @@
-import { AutoMap } from "@automapper/classes";
+import { AutoMap } from "@automapper/classes/src/lib/automap";
 import { SnowflakeId } from "../utils/snowflake-id";
 import * as crypto from "crypto";
 import { UserRole } from "./user-role.entity";

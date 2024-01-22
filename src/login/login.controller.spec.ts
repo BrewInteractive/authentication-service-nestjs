@@ -17,7 +17,7 @@ import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 

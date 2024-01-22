@@ -4,7 +4,7 @@ import { ConfigModule } from "@nestjs/config";
 import { EmailModule } from "./email.module";
 import { MockFactory } from "mockingbird";
 import { Test } from "@nestjs/testing";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 
 describe("EmailModule", () => {
   let emailModule: EmailModule;

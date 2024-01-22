@@ -5,7 +5,7 @@ import { EmailModule } from "../email/email.module";
 import { TemplateModule } from "../template/template.module";
 import { ConfigModule } from "@nestjs/config";
 import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
+import { classes } from "@automapper/classes/src/lib/classes";
 
 @Module({
   imports: [
