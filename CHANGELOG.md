@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.0...v1.14.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* fix subject issue for MailService.sendEmail ([9727b68](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9727b687f0e4c15e667236ffb11027ef77a665f9))
+
 ## [1.14.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.13.1...v1.14.0) (2024-01-05)
 
 
