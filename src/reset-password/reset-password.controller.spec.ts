@@ -159,6 +159,7 @@ describe("ResetPasswordController", () => {
     });
     const mockEmail = {
       from: mockFromEmail,
+      subject: "Reset password",
       to: mockRequest.user.email,
       content: mockhtml,
     };

@@ -55,6 +55,7 @@ export class ResetPasswordController {
     const email = {
       from: this.configService.get<string>("email.from"),
       to: request.user.email,
+      subject: "Reset password",
       content: html,
     } as Email;
     this.emailService.sendEmailAsync(email);
