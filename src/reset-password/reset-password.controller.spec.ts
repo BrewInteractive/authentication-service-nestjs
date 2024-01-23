@@ -151,9 +151,9 @@ describe("ResetPasswordController", () => {
     const mockFromEmail = faker.internet.email();
     jest.spyOn(configService, "get").mockImplementation((key) => {
       switch (key) {
-        case "reset.link":
+        case "RESET_LINK":
           return mockResetLink;
-        case "email.from":
+        case "EMAIL_FROM":
           return mockFromEmail;
       }
     });
@@ -182,7 +182,7 @@ describe("ResetPasswordController", () => {
     expect(templateService.injectData).toHaveBeenCalledWith(mockTemplate, {
       resetLink: mockResetLink + mockRequest.key,
     });
-    expect(configService.get).toHaveBeenCalledWith("reset.link");
+    expect(configService.get).toHaveBeenCalledWith("RESET_LINK");
     expect(emailService.sendEmailAsync).toHaveBeenCalledWith(mockEmail);
     expect(response.status).not.toHaveBeenCalled();
     expect(response.send).not.toHaveBeenCalled();
