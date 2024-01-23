@@ -64,6 +64,9 @@ export class User {
   @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
 
-  @OneToMany(() => UserResetPasswordRequest, userResetPasswordRequest => userResetPasswordRequest.user)
+  @OneToMany(
+    () => UserResetPasswordRequest,
+    (userResetPasswordRequest) => userResetPasswordRequest.user
+  )
   userResetPasswordRequests: UserResetPasswordRequest[];
 }

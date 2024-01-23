@@ -1,6 +1,11 @@
 export class CustomClaim {
   name: string;
-  value: any;
+  value:
+    | string
+    | object
+    | number
+    | boolean
+    | Array<string | object | number | boolean>;
 
   constructor(
     name: string,

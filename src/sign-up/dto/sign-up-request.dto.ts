@@ -32,7 +32,9 @@ export class SignUpRequest {
 
   @ApiProperty({
     description:
-      "Has to match a regular expression: " + configService.get("passwordRegex") + "",
+      "Has to match a regular expression: " +
+      configService.get("passwordRegex") +
+      "",
   })
   @MinLength(8)
   @MaxLength(20)

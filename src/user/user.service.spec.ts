@@ -15,6 +15,7 @@ import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 
 describe("UserService", () => {
@@ -193,7 +194,7 @@ describe("UserService", () => {
       validateAsync: jest.fn().mockResolvedValue(false),
     });
 
-    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+    bcrypt.compare = jest.fn().mockResolvedValue(true);
 
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")
@@ -214,7 +215,8 @@ describe("UserService", () => {
     });
 
     const password = faker.internet.password();
-    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
+    bcrypt.compare = jest.fn().mockResolvedValue(true);
 
     jest
       .spyOn(userService, "getUserByUsernameOrEmailAsync")

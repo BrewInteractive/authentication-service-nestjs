@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { ApiKeyGuard } from "./api-key.guard";
 import { faker } from "@faker-js/faker";
 import { ConfigService } from "@nestjs/config";
+import { ExecutionContext } from "@nestjs/common";
 
 describe("ApiKeyGuard", () => {
   let apiKeyGuard: ApiKeyGuard;
@@ -34,7 +35,12 @@ describe("ApiKeyGuard", () => {
       getClass: jest.fn(),
       getHandler: jest.fn(),
       switchToHttp: jest.fn(),
-    } as any;
+      getArgs: jest.fn(),
+      getArgByIndex: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
+    } as ExecutionContext;
 
     await expect(apiKeyGuard.canActivate(context)).toEqual(true);
   });
@@ -56,8 +62,15 @@ describe("ApiKeyGuard", () => {
             "x-api-key": configService.get("apiKey"),
           },
         }),
+        getResponse: jest.fn(),
+        getNext: jest.fn(),
       })),
-    } as any;
+      getArgs: jest.fn(),
+      getArgByIndex: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
+    } as ExecutionContext;
 
     await expect(apiKeyGuard.canActivate(context)).toEqual(true);
   });
@@ -79,8 +92,15 @@ describe("ApiKeyGuard", () => {
             "x-api-key": faker.datatype.string(6),
           },
         }),
+        getResponse: jest.fn(),
+        getNext: jest.fn(),
       })),
-    } as any;
+      getArgs: jest.fn(),
+      getArgByIndex: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
+    } as ExecutionContext;
 
     await expect(apiKeyGuard.canActivate(context)).toEqual(false);
   });
@@ -99,8 +119,15 @@ describe("ApiKeyGuard", () => {
         getRequest: jest.fn().mockReturnValue({
           headers: {},
         }),
+        getResponse: jest.fn(),
+        getNext: jest.fn(),
       })),
-    } as any;
+      getArgs: jest.fn(),
+      getArgByIndex: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
+    } as ExecutionContext;
 
     await expect(apiKeyGuard.canActivate(context)).toEqual(false);
   });

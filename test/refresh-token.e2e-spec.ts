@@ -1,6 +1,6 @@
 import * as request from "supertest";
 
-import { Any, DataSource, Repository, UpdateResult } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 
