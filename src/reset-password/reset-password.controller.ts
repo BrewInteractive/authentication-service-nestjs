@@ -58,7 +58,7 @@ export class ResetPasswordController {
       subject: "Reset password",
       content: html,
     } as Email;
-    this.emailService.sendEmailAsync(email);
+    await this.emailService.sendEmailAsync(email);
     return "OK";
   }
 }
