@@ -10,7 +10,7 @@ import {
 } from "class-validator";
 
 import { ApiProperty } from "@nestjs/swagger";
-import { AutoMap } from "@automapper/classes/src/lib/automap";
+import { AutoMap } from "@automapper/classes";
 import config from "../../config/configuration";
 import { ConfigService } from "@nestjs/config";
 
@@ -32,7 +32,9 @@ export class SignUpRequest {
 
   @ApiProperty({
     description:
-      "Has to match a regular expression: " + configService.get("passwordRegex") + "",
+      "Has to match a regular expression: " +
+      configService.get("passwordRegex") +
+      "",
   })
   @MinLength(8)
   @MaxLength(20)

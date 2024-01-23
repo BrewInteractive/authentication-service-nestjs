@@ -7,7 +7,7 @@ import {
 } from "class-validator";
 
 import { ApiProperty } from "@nestjs/swagger";
-import { AutoMap } from "@automapper/classes/src/lib/automap";
+import { AutoMap } from "@automapper/classes";
 import config from "../../config/configuration";
 import { ConfigService } from "@nestjs/config";
 

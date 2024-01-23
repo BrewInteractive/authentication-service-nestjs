@@ -1,21 +1,22 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { ResetPasswordController } from "./reset-password.controller";
-import { UserService } from "../user/user.service";
-import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes/src/lib/classes";
 import {
   ResetPasswordFixture,
   SendResetPasswordRequestFixture,
   UserFixture,
 } from "../../test/fixtures";
-import { MockFactory } from "mockingbird";
-import { ConfigService } from "@nestjs/config";
-import { TemplateService } from "../template/template.service";
-import { EmailService } from "../email/email.service";
-import { faker } from "@faker-js/faker";
+import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserResetPasswordRequest } from "../entities";
-import { Response } from "express";
+
+import { AutomapperModule } from "@automapper/nestjs";
+import { ConfigService } from "@nestjs/config";
+import { EmailService } from "../email/email.service";
 import { HttpStatus } from "@nestjs/common";
+import { MockFactory } from "mockingbird";
+import { ResetPasswordController } from "./reset-password.controller";
+import { Response } from "express";
+import { TemplateService } from "../template/template.service";
+import { UserService } from "../user/user.service";
+import { classes } from "@automapper/classes";
+import { faker } from "@faker-js/faker";
 
 describe("ResetPasswordController", () => {
   let resetPasswordController: ResetPasswordController;

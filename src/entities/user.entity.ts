@@ -1,4 +1,4 @@
-import { AutoMap } from "@automapper/classes/src/lib/automap";
+import { AutoMap } from "@automapper/classes";
 import { SnowflakeId } from "../utils/snowflake-id";
 import * as crypto from "crypto";
 import { UserRole } from "./user-role.entity";
@@ -64,6 +64,9 @@ export class User {
   @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
 
-  @OneToMany(() => UserResetPasswordRequest, userResetPasswordRequest => userResetPasswordRequest.user)
+  @OneToMany(
+    () => UserResetPasswordRequest,
+    (userResetPasswordRequest) => userResetPasswordRequest.user
+  )
   userResetPasswordRequests: UserResetPasswordRequest[];
 }

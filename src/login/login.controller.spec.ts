@@ -7,6 +7,7 @@ import {
 } from "../entities";
 
 import { AutomapperModule } from "@automapper/nestjs";
+import { ConfigModule } from "@nestjs/config";
 import { LoginController } from "./login.controller";
 import { LoginProfile } from "./mapping-profiles/login.profile";
 import { MockFactory } from "mockingbird";
@@ -17,9 +18,8 @@ import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
-import { classes } from "@automapper/classes/src/lib/classes";
+import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("LoginController", () => {
   let loginController: LoginController;

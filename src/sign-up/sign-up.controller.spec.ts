@@ -1,16 +1,13 @@
 import {
-  SignUpFixture,
-  TokensFixture,
-  UserFixture,
-} from "../../test/fixtures";
-import {
   RefreshToken,
   User,
   UserResetPasswordRequest,
   UserRole,
 } from "../entities";
+import { SignUpFixture, TokensFixture, UserFixture } from "../../test/fixtures";
 
 import { AutomapperModule } from "@automapper/nestjs";
+import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
 import { SignUpController } from "./sign-up.controller";
 import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
@@ -20,9 +17,8 @@ import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
-import { classes } from "@automapper/classes/src/lib/classes";
+import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("SignUpController", () => {
   let signUpController: SignUpController;
