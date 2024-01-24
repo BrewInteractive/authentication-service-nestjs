@@ -18,14 +18,14 @@ export class UserRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type: User) => User, (user) => user.id, {
+  @ManyToOne(() => User, (user) => user.id, {
     nullable: false,
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne((type: Role) => Role, (role) => role.name, {
+  @ManyToOne(() => Role, (role) => role.name, {
     nullable: false,
     createForeignKeyConstraints: false,
   })

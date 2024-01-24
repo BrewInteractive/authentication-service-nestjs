@@ -10,8 +10,6 @@ import { MockFactory } from "mockingbird";
 import { User } from "../src/entities/user.entity";
 import { setupTestDataSourceAsync } from "./test-db";
 
-const bcrypt = require("bcrypt");
-
 describe("SignUpController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;

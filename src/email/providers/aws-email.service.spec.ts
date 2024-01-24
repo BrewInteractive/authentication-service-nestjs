@@ -11,7 +11,7 @@ import { classes } from "@automapper/classes";
 
 describe("AwsEmailService", () => {
   let emailService: AwsEmailService;
-  let config = {
+  const config = {
     region: "us-west-2",
     accessKeyId: "ACCESS_KEY_ID",
     secretAccessKey: "SECRET_ACCESS_KEY",

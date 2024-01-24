@@ -1,6 +1,4 @@
 import { Mock } from "mockingbird";
-import { User } from "../../../src/entities/user.entity";
-import { UserFixture } from "./user.fixture";
 import { UserResetPasswordRequest } from "../../../src/entities";
 
 export class UserResetPasswordRequestFixture extends UserResetPasswordRequest {

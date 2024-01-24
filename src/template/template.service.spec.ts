@@ -51,10 +51,12 @@ describe("TemplateService", () => {
         resetLink: faker.internet.url(),
       };
       const mockCompiledHtmlOutput = faker.lorem.paragraphs(3);
-      const mockHandleBarsDelegate: HandlebarsTemplateDelegate<any> = jest.fn(
-        (x) => (x == data ? mockCompiledHtmlOutput : null)
-      );
-      const mockCompile = jest.fn((x) => mockHandleBarsDelegate);
+      const mockHandleBarsDelegate: HandlebarsTemplateDelegate<{
+        name: string;
+        appName: string;
+        resetLink: string;
+      }> = jest.fn((x) => (x == data ? mockCompiledHtmlOutput : null));
+      const mockCompile = jest.fn(() => mockHandleBarsDelegate);
       const spyOnCompile = jest
         .spyOn(Handlebars, "compile")
         .mockImplementation(mockCompile);

@@ -1,8 +1,4 @@
-import {
-  SignUpFixture,
-  TokensFixture,
-  UserFixture,
-} from "../../test/fixtures";
+import { SignUpFixture, TokensFixture, UserFixture } from "../../test/fixtures";
 import {
   RefreshToken,
   User,

@@ -15,6 +15,7 @@ import { RefreshToken } from "../src/entities";
 import { User } from "../src/entities/user.entity";
 import { setupTestDataSourceAsync } from "./test-db";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 
 describe("LoginController (e2e)", () => {
@@ -66,7 +67,7 @@ describe("LoginController (e2e)", () => {
           Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
         );
 
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
 
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
@@ -96,7 +97,7 @@ describe("LoginController (e2e)", () => {
           Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
         );
 
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      bcrypt.compare = jest.fn().mockResolvedValue(true);
 
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
@@ -115,7 +116,7 @@ describe("LoginController (e2e)", () => {
         })
         .one();
 
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
 
       const response = await request(app.getHttpServer())
         .post("/login")

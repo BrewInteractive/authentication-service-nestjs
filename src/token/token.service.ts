@@ -13,7 +13,7 @@ import { ConfigService } from "@nestjs/config";
 
 @Injectable({})
 export class TokenService {
-  private customClaims: {};
+  private customClaims: object = {};
   private customClaimImporters: ICustomClaimsImporter[] = [];
 
   constructor(
@@ -87,7 +87,7 @@ export class TokenService {
     else
       this.customClaims[customClaim.name] = {
         ...this.customClaims[customClaim.name],
-        ...customClaim.value,
+        ...(customClaim.value as object),
       };
   }
 
