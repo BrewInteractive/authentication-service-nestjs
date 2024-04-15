@@ -1,9 +1,10 @@
 import { ResetPasswordRequest } from "./reset-password-request.dto";
-import { validate } from "class-validator";
 import { faker } from "@faker-js/faker";
+import { validate } from "class-validator";
 
 describe("ResetPasswordRequest Dto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
+  process.env.PASSWORD_REGEX = passwordRegex.source;
 
   it("should pass validation with valid data", async () => {
     const resetPasswordRequest = new ResetPasswordRequest();
@@ -52,8 +53,7 @@ describe("ResetPasswordRequest Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches: `newPassword must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression`,
-      minLength: "newPassword must be longer than or equal to 8 characters",
+      matches: `password is too weak`,
     });
   });
 

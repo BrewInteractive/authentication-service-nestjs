@@ -8,17 +8,17 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AppModule } from "./../src/app.module";
 import { MockFactory } from "mockingbird";
 import { User } from "../src/entities/user.entity";
+import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";
-
-const bcrypt = require("bcrypt");
 
 describe("SignUpController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
   let userRepository: Repository<User>;
 
+  const validPassword = "Password1@";
+
   beforeAll(async () => {
-    process.env.EMAIL_SERVICE = "aws";
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -41,9 +41,9 @@ describe("SignUpController (e2e)", () => {
     it("should create a new user and return a token", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
-          email: "test@test.com",
-          username: "testUser",
-          password: "TestPassword1!",
+          email: faker.internet.email(),
+          username: faker.internet.userName(),
+          password: validPassword,
         })
         .one();
 
@@ -57,15 +57,15 @@ describe("SignUpController (e2e)", () => {
     });
 
     it("should return 409 if email already exists", async () => {
+      let user = MockFactory(UserFixture).one();
+      userRepository.save(user);
+
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
-          email: "test@test.com",
+          email: user.email,
+          password: validPassword,
         })
         .one();
-
-      jest
-        .spyOn(userRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
@@ -76,15 +76,15 @@ describe("SignUpController (e2e)", () => {
     });
 
     it("should return 409 if username already exists", async () => {
+      let user = MockFactory(UserFixture).one();
+      userRepository.save(user);
+
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
-          username: "testUser",
+          username: user.username,
+          password: validPassword,
         })
         .one();
-
-      jest
-        .spyOn(userRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
@@ -97,7 +97,8 @@ describe("SignUpController (e2e)", () => {
     it("should return 400 if email is invalid", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
-          email: "inv-email",
+          email: "invalid_email",
+          password: validPassword,
         })
         .one();
       signUpDto.username = null;
@@ -113,7 +114,7 @@ describe("SignUpController (e2e)", () => {
     it("should return 400 if password is too short", async () => {
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
-          password: "TPass",
+          password: "asd",
         })
         .one();
       const response = await request(app.getHttpServer())
@@ -121,9 +122,21 @@ describe("SignUpController (e2e)", () => {
         .send(signUpDto)
         .expect(400);
 
-      expect(response.body.message).toEqual([
-        "password must be longer than or equal to 8 characters",
-      ]);
+      expect(response.body.message).toEqual(["password is too weak"]);
+    });
+
+    it("should return 400 if password is too weak", async () => {
+      const signUpDto = MockFactory(SignUpFixture)
+        .mutate({
+          password: "weakpassword",
+        })
+        .one();
+      const response = await request(app.getHttpServer())
+        .post("/sign-up")
+        .send(signUpDto)
+        .expect(400);
+
+      expect(response.body.message).toEqual(["password is too weak"]);
     });
   });
 });

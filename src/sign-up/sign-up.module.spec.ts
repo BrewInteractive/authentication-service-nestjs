@@ -5,10 +5,10 @@ import {
   UserRole,
 } from "../entities";
 
+import { ConfigModule } from "@nestjs/config";
 import { SignUpModule } from "./sign-up.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("SignUpModule", () => {
   let signUpModule: SignUpModule;

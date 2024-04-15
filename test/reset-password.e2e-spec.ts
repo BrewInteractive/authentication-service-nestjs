@@ -2,27 +2,26 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
+import {
+  ResetPasswordFixture,
+  UserFixture,
+  UserResetPasswordRequestFixture,
+} from "./fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
+import { User, UserResetPasswordRequest } from "../src/entities";
 
 import { AppModule } from "./../src/app.module";
 import { MockFactory } from "mockingbird";
-import { setupTestDataSourceAsync } from "./test-db";
-
-import { User, UserResetPasswordRequest } from "../src/entities";
 import { faker } from "@faker-js/faker";
-import {
-  ResetPasswordFixture,
-  UserResetPasswordRequestFixture,
-  UserFixture,
-} from "./fixtures";
+import { setupTestDataSourceAsync } from "./test-db";
 
 describe("ResetPassword (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
   let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRepository: Repository<User>;
+
   beforeEach(async () => {
-    process.env.EMAIL_SERVICE = "aws";
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })

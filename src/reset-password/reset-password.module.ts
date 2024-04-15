@@ -1,10 +1,9 @@
-import { ResetPasswordController } from "./reset-password.controller";
-import { Module } from "@nestjs/common";
-import { UserModule } from "../user/user.module";
-import { EmailModule } from "../email/email.module";
-import { TemplateModule } from "../template/template.module";
-import { ConfigModule } from "@nestjs/config";
 import { AutomapperModule } from "@automapper/nestjs";
+import { EmailModule } from "../email/email.module";
+import { Module } from "@nestjs/common";
+import { ResetPasswordController } from "./reset-password.controller";
+import { TemplateModule } from "../template/template.module";
+import { UserModule } from "../user/user.module";
 import { classes } from "@automapper/classes";
 
 @Module({
@@ -14,10 +13,6 @@ import { classes } from "@automapper/classes";
     TemplateModule,
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [],
     }),
   ],
   controllers: [ResetPasswordController],

@@ -1,19 +1,7 @@
-import {
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MaxLength,
-  MinLength,
-} from "class-validator";
+import { IsNotEmpty, IsString, Matches } from "class-validator";
 
-import { ApiProperty } from "@nestjs/swagger";
 import { AutoMap } from "@automapper/classes";
 import config from "../../config/configuration";
-import { ConfigService } from "@nestjs/config";
-
-const configService = new ConfigService({
-  passwordRegex: config().passwordRegex,
-});
 
 export class ResetPasswordRequest {
   @IsNotEmpty()
@@ -21,15 +9,9 @@ export class ResetPasswordRequest {
   @AutoMap()
   email: string;
 
-  @ApiProperty({
-    description:
-      "Has to match a regular expression: " +
-      configService.get("passwordRegex") +
-      "",
+  @Matches(config().passwordRegex, {
+    message: "password is too weak",
   })
-  @MinLength(8)
-  @MaxLength(20)
-  @Matches(configService.get("passwordRegex"))
   @IsNotEmpty()
   @IsString()
   @AutoMap()

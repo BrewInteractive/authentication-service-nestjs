@@ -4,6 +4,7 @@ import { validate } from "class-validator";
 
 describe("Signup Dto Validation", () => {
   const passwordRegex = /[A-Za-z]/;
+  process.env.PASSWORD_REGEX = passwordRegex.source;
 
   it("should get email if username is empty", async () => {
     const user = new SignUpRequest();
@@ -27,7 +28,7 @@ describe("Signup Dto Validation", () => {
     expect(errors.length).toBe(0);
   });
 
-  it("should fail validation when LoginDto has empty password field", async () => {
+  it("should fail validation when SignUpDto has empty password field", async () => {
     const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
@@ -37,16 +38,13 @@ describe("Signup Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches:
-        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
       isNotEmpty: "password should not be empty",
       isString: "password must be a string",
-      maxLength: "password must be shorter than or equal to 20 characters",
-      minLength: "password must be longer than or equal to 8 characters",
+      matches: "password is too weak",
     });
   });
 
-  it("should fail validation when LoginDto has a weak password", async () => {
+  it("should fail validation when SignUpDto has a weak password", async () => {
     const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
@@ -57,12 +55,11 @@ describe("Signup Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
-      matches:
-        "password must match /(?=.*[A-Z])(?=.*[a-z]).*/ regular expression",
+      matches: "password is too weak",
     });
   });
 
-  it("should fail validation when LoginDto has an invalid email address", async () => {
+  it("should fail validation when SignUpDto has an invalid email address", async () => {
     const user = new SignUpRequest();
     user.email = faker.random.word();
     user.firstName = faker.name.firstName();
@@ -76,7 +73,7 @@ describe("Signup Dto Validation", () => {
     });
   });
 
-  it("should fail validation when LoginDto has empty firstName field", async () => {
+  it("should fail validation when SignUpDto has empty firstName field", async () => {
     const user = new SignUpRequest();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email();
@@ -91,7 +88,7 @@ describe("Signup Dto Validation", () => {
     });
   });
 
-  it("should fail validation when LoginDto has empty lastName field", async () => {
+  it("should fail validation when SignUpDto has empty lastName field", async () => {
     const user = new SignUpRequest();
     user.firstName = faker.name.firstName();
     user.email = faker.internet.email();
