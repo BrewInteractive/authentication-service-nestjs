@@ -32,7 +32,7 @@ export class EmailProfile extends AutomapperProfile {
                     Data: email.subject,
                   },
                   Body: {
-                    Text: {
+                    Html: {
                       Data: email.content,
                     },
                   },

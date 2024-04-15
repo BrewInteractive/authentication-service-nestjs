@@ -50,15 +50,15 @@ export class ResetPasswordController {
     }
     const template = this.templateService.getResetPasswordEmailTemplate("en");
     const html = this.templateService.injectData(template, {
-      resetLink: this.configService.get<string>("reset.link") + request.key,
+      resetLink: this.configService.get<string>("RESET_LINK") + request.key,
     });
     const email = {
-      from: this.configService.get<string>("email.from"),
+      from: this.configService.get<string>("EMAIL_FROM"),
       to: request.user.email,
       subject: "Reset password",
       content: html,
     } as Email;
-    this.emailService.sendEmailAsync(email);
+    await this.emailService.sendEmailAsync(email);
     return "OK";
   }
 }
