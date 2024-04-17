@@ -9,7 +9,7 @@ import { ConfigFixture } from "../test/fixtures";
 describe("AppModule", () => {
   let appModule: AppModule;
   const mockConfig = MockFactory(ConfigFixture).one();
-
+  process.env.EMAIL_SERVICE = "aws";
   beforeEach(async () => {
     const app = await Test.createTestingModule({
       imports: [
