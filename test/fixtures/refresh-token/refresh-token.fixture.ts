@@ -4,7 +4,7 @@ import { User } from "../../../src/entities/user.entity";
 import { UserFixture } from "../user/user.fixture";
 
 export class RefreshTokenFixture extends RefreshToken {
-  @Mock((faker) => faker.random.alpha())
+  @Mock((faker) => faker.datatype.uuid())
   id: string;
 
   @Mock((faker) => faker.random.alphaNumeric(32))

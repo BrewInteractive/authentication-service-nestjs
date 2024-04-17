@@ -1,5 +1,5 @@
 import { Mock, MockFactory } from "mockingbird";
-
+import * as bcrypt from "bcrypt";
 import { User } from "../../../src/entities/user.entity";
 import { UserRole } from "../../../src/entities/user-role.entity";
 import { UserRoleFixture } from "./user-role.fixture";
@@ -20,10 +20,9 @@ export class UserFixture extends User {
   @Mock((faker) => faker.name.lastName())
   lastName: string;
 
-  @Mock((faker) => faker.random.alphaNumeric(32))
+  @Mock()
   passwordHash: string;
-
-  @Mock((faker) => faker.random.alphaNumeric(32))
+  @Mock()
   passwordSalt: string;
 
   @Mock((faker) => faker.internet.password())
@@ -42,6 +41,11 @@ export class UserFixture extends User {
 
   withRoles(size: number = 2) {
     this.roles = MockFactory(UserRoleFixture).many(size);
+    return this;
+  }
+  hashPassword(){
+    this.passwordSalt = bcrypt.genSaltSync();
+    this.passwordHash = bcrypt.hashSync(this.password, this.passwordSalt);
     return this;
   }
 }

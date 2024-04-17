@@ -18,7 +18,7 @@ describe("SignUpController (e2e)", () => {
 
   const validPassword = "Password1@";
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -32,7 +32,7 @@ describe("SignUpController (e2e)", () => {
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close();
     await moduleFixture.close();
   });
@@ -58,7 +58,7 @@ describe("SignUpController (e2e)", () => {
 
     it("should return 409 if email already exists", async () => {
       let user = MockFactory(UserFixture).one();
-      userRepository.save(user);
+      await userRepository.save(user);
 
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
@@ -77,7 +77,7 @@ describe("SignUpController (e2e)", () => {
 
     it("should return 409 if username already exists", async () => {
       let user = MockFactory(UserFixture).one();
-      userRepository.save(user);
+      await userRepository.save(user);
 
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({

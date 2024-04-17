@@ -10,7 +10,7 @@ import {
 import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserResetPasswordRequest } from "../src/entities";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../src/app.module";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";
@@ -20,6 +20,8 @@ describe("ResetPassword (e2e)", () => {
   let moduleFixture: TestingModule;
   let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRepository: Repository<User>;
+
+  const validPassword = "Password1@";
 
   beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
@@ -52,37 +54,26 @@ describe("ResetPassword (e2e)", () => {
         .mutate({
           key: validKey,
           email: email,
+          newPassword: validPassword,
         })
         .one();
-
-      const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
-        .mutate({
-          key: validKey,
-          expiresAt: faker.date.future(1),
-          email: email,
-        })
-        .one();
-
       const user = MockFactory(UserFixture)
         .mutate({
           email: email,
         })
         .one();
-      jest
-        .spyOn(userResetPasswordRequestRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(userResetPasswordData));
 
-      jest
-        .spyOn(userResetPasswordRequestRepository, "save")
-        .mockResolvedValue(Promise.resolve(userResetPasswordData));
+      const savedUser = await userRepository.save(user);
 
-      jest
-        .spyOn(userRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(user));
+      const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+        .mutate({
+          key: validKey,
+          expiresAt: faker.date.future(1),
+          user: savedUser,
+        })
+        .one() as UserResetPasswordRequest;
 
-      jest
-        .spyOn(userRepository, "save")
-        .mockResolvedValue(Promise.resolve(user));
+      await userResetPasswordRequestRepository.save(userResetPasswordData);
 
       const response = await request(app.getHttpServer())
         .post("/reset-password")
@@ -100,12 +91,9 @@ describe("ResetPassword (e2e)", () => {
         .mutate({
           key: validKey,
           email: email,
+          newPassword: validPassword,
         })
         .one();
-
-      jest
-        .spyOn(userResetPasswordRequestRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(null));
 
       const response = await request(app.getHttpServer())
         .post("/reset-password")
