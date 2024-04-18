@@ -1,23 +1,23 @@
 import * as request from "supertest";
 
-import { Any, DataSource, Repository, UpdateResult } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { RefreshToken, User } from "../../src/entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { RefreshToken } from "../src/entities";
-import { RefreshTokenFixture } from "../test/fixtures";
+import { RefreshTokenFixture } from "../fixtures";
 import { faker } from "@faker-js/faker";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("RefreshTokenController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
   let refreshTokenRepository: Repository<RefreshToken>;
+  let userRepository: Repository<User>;
 
-  beforeAll(async () => {
-    process.env.EMAIL_SERVICE = "aws";
+  beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -31,30 +31,31 @@ describe("RefreshTokenController (e2e)", () => {
     refreshTokenRepository = moduleFixture.get<Repository<RefreshToken>>(
       "RefreshTokenRepository"
     );
+    userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close();
     await moduleFixture.close();
   });
 
   describe("POST /refresh-token", () => {
     it("Should return a refresh token.", async () => {
-      jest
-        .spyOn(refreshTokenRepository, "findOne")
-        .mockResolvedValue(
-          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
-        );
+      const refreshToken = faker.random.alphaNumeric(32);
 
-      jest
-        .spyOn(refreshTokenRepository, "save")
-        .mockResolvedValue(
-          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
-        );
+      const refreshTokenFixture = MockFactory(RefreshTokenFixture)
+        .mutate({
+          refreshToken: refreshToken,
+        })
+        .one()
+        .withUser();
+
+      await userRepository.save(refreshTokenFixture.user);
+      await refreshTokenRepository.save(refreshTokenFixture);
 
       const response = await request(app.getHttpServer())
         .post("/refresh-token")
-        .send({ refreshToken: faker.datatype.string() })
+        .send({ refreshToken: refreshToken })
         .expect(201);
 
       expect(response.body).toHaveProperty("refresh_token");
@@ -62,10 +63,6 @@ describe("RefreshTokenController (e2e)", () => {
     });
 
     it("Should return 401 if invalid refresh token.", async () => {
-      jest
-        .spyOn(refreshTokenRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(null));
-
       await request(app.getHttpServer())
         .post("/refresh-token")
         .send({ refreshToken: faker.datatype.string() })

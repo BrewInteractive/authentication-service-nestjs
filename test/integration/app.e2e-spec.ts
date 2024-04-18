@@ -2,16 +2,15 @@ import * as request from "supertest";
 
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { DataSource } from "typeorm";
 import { INestApplication } from "@nestjs/common";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("AppController (e2e)", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    process.env.EMAIL_SERVICE = "aws";
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })

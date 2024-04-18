@@ -379,7 +379,7 @@ describe("UserService", () => {
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
         key: validKey,
-        email: email,
+        user: user,
         expiresAt: faker.date.future(1),
       })
       .one();

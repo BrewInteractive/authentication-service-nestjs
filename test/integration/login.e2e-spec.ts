@@ -2,29 +2,20 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import {
-  LoginFixture,
-  RefreshTokenFixture,
-  UserFixture,
-} from "../test/fixtures";
+import { LoginFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { RefreshToken } from "../src/entities";
-import { User } from "../src/entities/user.entity";
-import { setupTestDataSourceAsync } from "./test-db";
-
-const bcrypt = require("bcrypt");
+import { User } from "../../src/entities/user.entity";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("LoginController (e2e)", () => {
   let app: INestApplication;
   let moduleFixture: TestingModule;
   let userRepository: Repository<User>;
-  let refreshTokenRepository: Repository<RefreshToken>;
 
-  beforeAll(async () => {
-    process.env.EMAIL_SERVICE = "aws";
+  beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -36,37 +27,25 @@ describe("LoginController (e2e)", () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
-    refreshTokenRepository = moduleFixture.get<Repository<RefreshToken>>(
-      "RefreshTokenRepository"
-    );
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close();
     await moduleFixture.close();
   });
 
   describe("POST /login", () => {
     it("Should return a token if email credentials are valid", async () => {
+      let user = MockFactory(UserFixture).one().hashPassword();
+      await userRepository.save(user);
+
       const loginEmailDto = MockFactory(LoginFixture)
         .mutate({
-          email: "test@test.com",
-          password: "TestPassword1!",
-          username: null,
+          email: user.email,
+          password: user.password,
         })
         .one();
-
-      jest
-        .spyOn(userRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
-
-      jest
-        .spyOn(refreshTokenRepository, "save")
-        .mockResolvedValue(
-          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
-        );
-
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+      loginEmailDto.username = null;
 
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
@@ -78,26 +57,16 @@ describe("LoginController (e2e)", () => {
     });
 
     it("should return a token if username credentials are valid", async () => {
+      let user = MockFactory(UserFixture).one().hashPassword();
+      await userRepository.save(user);
+
       const loginUsernameDto = MockFactory(LoginFixture)
         .mutate({
-          username: "testUser",
-          password: "TestPassword1!",
-          email: null,
+          username: user.username,
+          password: user.password,
         })
         .one();
-
-      jest
-        .spyOn(userRepository, "findOne")
-        .mockResolvedValue(Promise.resolve(MockFactory(UserFixture).one()));
-
-      jest
-        .spyOn(refreshTokenRepository, "save")
-        .mockResolvedValue(
-          Promise.resolve(MockFactory(RefreshTokenFixture).one().withUser())
-        );
-
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-
+      loginUsernameDto.email = null;
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
         .send(loginUsernameDto)
@@ -108,14 +77,16 @@ describe("LoginController (e2e)", () => {
     });
 
     it("should return an error if email is invalid", async () => {
+      let user = MockFactory(UserFixture).one().hashPassword();
+      await userRepository.save(user);
+
       const loginDto = MockFactory(LoginFixture)
         .mutate({
           email: "invalid@email.com",
-          password: "TestPassword1!",
+          password: user.password,
         })
         .one();
-
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+      loginDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/login")
@@ -126,12 +97,16 @@ describe("LoginController (e2e)", () => {
     });
 
     it("should return an error if password is invalid", async () => {
+      let user = MockFactory(UserFixture).one().hashPassword();
+      await userRepository.save(user);
+
       const loginDto = MockFactory(LoginFixture)
         .mutate({
-          email: "test@test.com",
+          email: user.email,
           password: "Wrong-Password",
         })
         .one();
+      loginDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/login")

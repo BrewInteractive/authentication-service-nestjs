@@ -2,14 +2,14 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { SignUpFixture, UserFixture } from "../test/fixtures";
+import { SignUpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { User } from "../src/entities/user.entity";
+import { User } from "../../src/entities/user.entity";
 import { faker } from "@faker-js/faker";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("SignUpController (e2e)", () => {
   let app: INestApplication;
@@ -18,7 +18,7 @@ describe("SignUpController (e2e)", () => {
 
   const validPassword = "Password1@";
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -32,7 +32,7 @@ describe("SignUpController (e2e)", () => {
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close();
     await moduleFixture.close();
   });
@@ -58,7 +58,7 @@ describe("SignUpController (e2e)", () => {
 
     it("should return 409 if email already exists", async () => {
       let user = MockFactory(UserFixture).one();
-      userRepository.save(user);
+      await userRepository.save(user);
 
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
@@ -77,7 +77,7 @@ describe("SignUpController (e2e)", () => {
 
     it("should return 409 if username already exists", async () => {
       let user = MockFactory(UserFixture).one();
-      userRepository.save(user);
+      await userRepository.save(user);
 
       const signUpDto = MockFactory(SignUpFixture)
         .mutate({
