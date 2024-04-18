@@ -1,12 +1,12 @@
 import * as request from "supertest";
 
-import { Any, DataSource, Repository, UpdateResult } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { RefreshToken, User } from "../src/entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../src/app.module";
 import { MockFactory } from "mockingbird";
-import { RefreshToken, User } from "../src/entities";
 import { RefreshTokenFixture } from "./fixtures";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "./test-db";

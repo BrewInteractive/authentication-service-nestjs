@@ -10,7 +10,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../src/app.module";
 import { MockFactory } from "mockingbird";
-import { RefreshToken } from "../src/entities";
 import { User } from "../src/entities/user.entity";
 import { setupTestDataSourceAsync } from "./test-db";
 
