@@ -2,10 +2,7 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import {
-  LoginFixture,
-  UserFixture,
-} from "./fixtures";
+import { LoginFixture, UserFixture } from "./fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../src/app.module";

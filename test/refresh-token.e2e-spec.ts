@@ -41,14 +41,17 @@ describe("RefreshTokenController (e2e)", () => {
 
   describe("POST /refresh-token", () => {
     it("Should return a refresh token.", async () => {
-      const refreshToken = faker.random.alphaNumeric(32)
+      const refreshToken = faker.random.alphaNumeric(32);
 
-      const refreshTokenFixture = MockFactory(RefreshTokenFixture).mutate({
-        refreshToken: refreshToken,
-      }).one().withUser();
+      const refreshTokenFixture = MockFactory(RefreshTokenFixture)
+        .mutate({
+          refreshToken: refreshToken,
+        })
+        .one()
+        .withUser();
 
       await userRepository.save(refreshTokenFixture.user);
-      await refreshTokenRepository.save(refreshTokenFixture)
+      await refreshTokenRepository.save(refreshTokenFixture);
 
       const response = await request(app.getHttpServer())
         .post("/refresh-token")
