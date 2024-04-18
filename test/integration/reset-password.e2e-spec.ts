@@ -6,14 +6,14 @@ import {
   ResetPasswordFixture,
   UserFixture,
   UserResetPasswordRequestFixture,
-} from "./fixtures";
+} from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
-import { User, UserResetPasswordRequest } from "../src/entities";
+import { User, UserResetPasswordRequest } from "../../src/entities";
 
-import { AppModule } from "../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("ResetPassword (e2e)", () => {
   let app: INestApplication;

@@ -2,14 +2,14 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { SignUpFixture, UserFixture } from "../test/fixtures";
+import { SignUpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { User } from "../src/entities/user.entity";
+import { User } from "../../src/entities/user.entity";
 import { faker } from "@faker-js/faker";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("SignUpController (e2e)", () => {
   let app: INestApplication;

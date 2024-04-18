@@ -2,14 +2,14 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { RefreshToken, User } from "../src/entities";
+import { RefreshToken, User } from "../../src/entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { RefreshTokenFixture } from "./fixtures";
+import { RefreshTokenFixture } from "../fixtures";
 import { faker } from "@faker-js/faker";
-import { setupTestDataSourceAsync } from "./test-db";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("RefreshTokenController (e2e)", () => {
   let app: INestApplication;

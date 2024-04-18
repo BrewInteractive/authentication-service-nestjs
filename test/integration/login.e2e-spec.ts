@@ -2,13 +2,13 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { LoginFixture, UserFixture } from "./fixtures";
+import { LoginFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AppModule } from "../src/app.module";
+import { AppModule } from "../../src/app.module";
 import { MockFactory } from "mockingbird";
-import { User } from "../src/entities/user.entity";
-import { setupTestDataSourceAsync } from "./test-db";
+import { User } from "../../src/entities/user.entity";
+import { setupTestDataSourceAsync } from "../test-db";
 
 describe("LoginController (e2e)", () => {
   let app: INestApplication;
