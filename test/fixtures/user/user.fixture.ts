@@ -1,5 +1,7 @@
-import { Mock, MockFactory } from "mockingbird";
 import * as bcrypt from "bcrypt";
+
+import { Mock, MockFactory } from "mockingbird";
+
 import { User } from "../../../src/entities/user.entity";
 import { UserRole } from "../../../src/entities/user-role.entity";
 import { UserRoleFixture } from "./user-role.fixture";
@@ -43,7 +45,8 @@ export class UserFixture extends User {
     this.roles = MockFactory(UserRoleFixture).many(size);
     return this;
   }
-  hashPassword(){
+
+  hashPassword() {
     this.passwordSalt = bcrypt.genSaltSync();
     this.passwordHash = bcrypt.hashSync(this.password, this.passwordSalt);
     return this;
