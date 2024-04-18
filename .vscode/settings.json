@@ -3,5 +3,6 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "brewinteractive",
     "projectKey": "BrewInteractive_authentication-service-nestjs"
-  }
+  },
+  "cSpell.words": ["resendable"]
 }
