@@ -19,7 +19,7 @@ export class LoginController {
 
   @Post("login")
   async loginAsync(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-    if (loginRequest?.email) delete loginRequest?.username;
+    if (loginRequest.email) delete loginRequest.username;
 
     const user = await this.userService.validateUserAsync({
       username: loginRequest.username,
