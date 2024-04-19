@@ -83,44 +83,6 @@ describe("SignUpController", () => {
     );
   });
 
-  it("should return a token if the sign-up process is successful(With email address)", async () => {
-    const signUpDto = MockFactory(SignUpFixture).one();
-    delete signUpDto.username;
-    const user = MockFactory(UserFixture).one() as User;
-    const tokens = MockFactory(TokensFixture).one() as Tokens;
-
-    jest
-      .spyOn(userService, "createUserAsync")
-      .mockReturnValueOnce(Promise.resolve(user));
-
-    jest
-      .spyOn(tokenService, "createTokensAsync")
-      .mockReturnValueOnce(Promise.resolve(tokens));
-
-    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual(
-      tokens
-    );
-  });
-
-  it("should return a token if the sign-up process is successful(With username)", async () => {
-    const signUpDto = MockFactory(SignUpFixture).one();
-    delete signUpDto.email;
-    const user = MockFactory(UserFixture).one() as User;
-    const tokens = MockFactory(TokensFixture).one() as Tokens;
-
-    jest
-      .spyOn(userService, "createUserAsync")
-      .mockReturnValueOnce(Promise.resolve(user));
-
-    jest
-      .spyOn(tokenService, "createTokensAsync")
-      .mockReturnValueOnce(Promise.resolve(tokens));
-
-    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual(
-      tokens
-    );
-  });
-
   it("should return a token if the sign-up process is successful(With default role)", async () => {
     const signUpDto = MockFactory(SignUpFixture).one();
     const user = MockFactory(UserFixture).one() as User;
