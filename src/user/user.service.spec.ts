@@ -59,61 +59,41 @@ describe("UserService", () => {
     >("UserResetPasswordRequestRepository");
   });
 
-  it("should return a user for getUserByUsernameAndEmail", async () => {
+  it("getUserAsync should return a user", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
       .mockResolvedValue(Promise.resolve(expectedResult));
 
-    const actualResult = await userService.getUserByUsernameAndEmailAsync(
-      expectedResult.username,
-      expectedResult.email
-    );
+    const actualResult = await userService.getUserAsync({
+      username: expectedResult.username,
+      email: expectedResult.email,
+    });
 
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should return null if the email and username does not exist for getUserByUsernameAndEmail", async () => {
+  it("getUserAsync should return null if the email and username does not exist", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
 
-    const actualResult = await userService.getUserByUsernameAndEmailAsync(
-      user.username,
-      user.email
-    );
+    const actualResult = await userService.getUserAsync({
+      username: user.username,
+      email: user.email,
+    });
 
     expect(actualResult).toBeNull();
   });
 
-  it("should return a user for getUserByUsernameOrEmail", async () => {
-    const expectedResult = MockFactory(UserFixture).one() as User;
-    jest
-      .spyOn(userService, "getUserByUsernameAndEmailAsync")
-      .mockResolvedValue(Promise.resolve(expectedResult));
-
-    const actualResult = await userService.getUserByUsernameOrEmailAsync(
-      expectedResult.username || expectedResult.email
+  it("getUserAsync should throw exception if username or email is not provided", async () => {
+    await expect(userService.getUserAsync({})).rejects.toThrow(
+      new Error("At least one of username or email must be provided.")
     );
-
-    expect(actualResult).toBe(expectedResult);
   });
 
-  it("should return null if the email and username does not exist for getUserByUsernameOrEmail", async () => {
-    const expectedResult = MockFactory(UserFixture).one() as User;
-    jest
-      .spyOn(userService, "getUserByUsernameAndEmailAsync")
-      .mockResolvedValue(null);
-
-    const actualResult = await userService.getUserByUsernameOrEmailAsync(
-      expectedResult.username || expectedResult.email
-    );
-
-    expect(actualResult).toBeNull();
-  });
-
-  it("should throw a ConflictException if the username or email already exists", async () => {
+  it("createUserAsync should throw a ConflictException if the username or email already exists", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
@@ -126,9 +106,7 @@ describe("UserService", () => {
 
   it("should create a new user if the username and email do not exist", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(null);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
     jest.spyOn(userRepository, "save").mockResolvedValue(expectedResult);
     jest.spyOn(userRoleRepository, "save").mockResolvedValue(null);
 
@@ -137,7 +115,7 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should create a new user if the username and email do not exist(With role)", async () => {
+  it("createUserAsync should create a new user if the username and email do not exist(With role)", async () => {
     const expectedResult = MockFactory(UserFixture).one().withRoles() as User;
     userService.addPreRegisterUserHandler({
       handleAsync: jest.fn().mockResolvedValue(expectedResult),
@@ -146,9 +124,7 @@ describe("UserService", () => {
       handleAsync: jest.fn().mockResolvedValue(expectedResult),
     });
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(null);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
     jest.spyOn(userRepository, "save").mockResolvedValue(expectedResult);
     jest.spyOn(userRoleRepository, "save").mockResolvedValue(null);
 
@@ -157,57 +133,57 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should throw an UnauthorizedException if the email and username is does not have", async () => {
+  it("validateUserAsync should throw an UnauthorizedException if the email and username does not exist", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(null);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
 
     const password = faker.internet.password();
     await expect(
-      userService.validateUserAsync(user.username || user.email, password)
+      userService.validateUserAsync({
+        password,
+        username: user.username,
+        email: user.email,
+      })
     ).rejects.toThrow(UnauthorizedException);
   });
 
-  it("should throw an UnauthorizedException if the password is invalid", async () => {
+  it("validateUserAsync should throw an UnauthorizedException if the password is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
-    const validateUser = MockFactory(UserFixture).one() as User;
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(user);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
 
-    const password = faker.internet.password();
+    const invalidPassword = faker.internet.password();
 
     await expect(
-      userService.validateUserAsync(
-        validateUser.username || validateUser.email,
-        password
-      )
+      userService.validateUserAsync({
+        password: invalidPassword,
+        username: user.username,
+        email: user.email,
+      })
     ).rejects.toThrow(UnauthorizedException);
   });
 
-  it("should throw an UnauthorizedException if the imposter is invalid", async () => {
+  it("validateUserAsync should throw an UnauthorizedException if the imposter is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
+    const password = faker.internet.password();
     userService.addUserValidator({
       validateAsync: jest.fn().mockResolvedValue(false),
     });
 
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(user);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
 
     await expect(
-      userService.validateUserAsync(
-        user.username || user.email,
-        faker.internet.password()
-      )
+      userService.validateUserAsync({
+        password,
+        username: user.username,
+        email: user.email,
+      })
     ).rejects.toThrow(UnauthorizedException);
   });
 
-  it("should return a user if the email and password are valid", async () => {
+  it("validateUserAsync should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
     userService.addUserValidator({
       validateAsync: jest.fn().mockResolvedValue(true),
@@ -216,35 +192,37 @@ describe("UserService", () => {
     const password = faker.internet.password();
     jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(user);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
     await expect(
-      userService.validateUserAsync(user.username || user.email, password)
+      userService.validateUserAsync({
+        password,
+        username: user.username,
+        email: user.email,
+      })
     ).resolves.toEqual({
       ...user,
     });
   });
 
-  it("should add preRegisterUserHandler", () => {
+  it("addPreRegisterUserHandler should add preRegisterUserHandler", () => {
     const handler: IPreRegisterUserHandler = { handleAsync: jest.fn() };
     userService.addPreRegisterUserHandler(handler);
     expect(userService["preRegisterUserHandlers"]).toContain(handler);
   });
 
-  it("should add postRegisterUserHandler", () => {
+  it("addPostRegisterUserHandler should add postRegisterUserHandler", () => {
     const handler: IPostRegisterUserHandler = { handleAsync: jest.fn() };
     userService.addPostRegisterUserHandler(handler);
     expect(userService["postRegisterUserHandlers"]).toContain(handler);
   });
 
-  it("should add userValidator", () => {
+  it("addUserValidator should add userValidator", () => {
     const validate: IUserValidator = { validateAsync: jest.fn() };
     userService.addUserValidator(validate);
     expect(userService["userValidators"]).toContain(validate);
   });
 
-  it("should return a userResetPasswordRequest for getResetPasswordRequestAsync", async () => {
+  it("getResetPasswordRequestAsync should return a userResetPasswordRequest", async () => {
     const expectedResult = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
         expiresAt: faker.date.future(1),
@@ -262,7 +240,7 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should return a userResetPasswordRequest for getResetPasswordRequestByIdAsync", async () => {
+  it("getResetPasswordRequestByIdAsync should return a userResetPasswordRequest", async () => {
     const expectedResult = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
         expiresAt: faker.date.future(1),
@@ -281,7 +259,7 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("should throw UnauthorizedException for invalid reset key", async () => {
+  it("resetPasswordAsync should throw UnauthorizedException for invalid reset key", async () => {
     const resetPasswordRequest = MockFactory(ResetPasswordFixture).one();
     jest
       .spyOn(userService, "getResetPasswordRequestAsync")
@@ -295,7 +273,7 @@ describe("UserService", () => {
     }
   });
 
-  it("should throw UnauthorizedException for expired reset request", async () => {
+  it("resetPasswordAsync should throw UnauthorizedException for expired reset request", async () => {
     const validKey = faker.datatype.string(16);
     const email = faker.internet.email();
 
@@ -318,9 +296,7 @@ describe("UserService", () => {
       })
       .one();
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(user);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
     jest
       .spyOn(userService, "getResetPasswordRequestAsync")
       .mockResolvedValue(userResetPasswordData);
@@ -331,7 +307,7 @@ describe("UserService", () => {
       expect(e.message).toBe("Reset password request is expired.");
     }
   });
-  it("should throw UnauthorizedException for not found user", async () => {
+  it("resetPasswordAsync should throw UnauthorizedException for not found user", async () => {
     const validKey = faker.datatype.string(16);
     const resetPasswordRequest = MockFactory(ResetPasswordFixture)
       .mutate({
@@ -355,7 +331,7 @@ describe("UserService", () => {
     }
   });
 
-  it("should update user password and reset request expiration", async () => {
+  it("resetPasswordAsync should update user password and reset request expiration", async () => {
     const email = faker.internet.email();
     const validKey = faker.datatype.string(16);
 
@@ -372,9 +348,7 @@ describe("UserService", () => {
       })
       .one() as User;
 
-    jest
-      .spyOn(userService, "getUserByUsernameOrEmailAsync")
-      .mockResolvedValue(user);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
 
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
       .mutate({
