@@ -45,7 +45,7 @@ export class TokenService {
       refreshToken: token,
       expiresAt: new Date(
         new Date().getTime() +
-          this.configService.get("refreshTokenExpiresIn") * 1000
+          this.configService.get("refreshToken.expiresIn") * 1000
       ),
       user,
     });
