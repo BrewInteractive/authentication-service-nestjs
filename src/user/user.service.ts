@@ -27,52 +27,52 @@ export class UserService {
     private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
   ) {}
 
-  async getUserByUsernameAndEmailAsync(
-    username: string,
-    email: string
-  ): Promise<User> {
+  async getUserAsync(options: {
+    username?: string;
+    email?: string;
+  }): Promise<User | null> {
+    if (!options.username && !options.email)
+      throw new Error("At least one of username or email must be provided.");
+
+    const whereClause = [];
+    if (options.username) whereClause.push({ username: options.username });
+    if (options.email) whereClause.push({ email: options.email });
+
     const user = await this.userRepository.findOne({
-      where: [{ username }, { email }],
+      where: whereClause,
       relations: ["roles", "roles.role"],
     });
     if (user) return user;
     return null;
   }
 
-  async getUserByUsernameOrEmailAsync(usernameOrEmail: string): Promise<User> {
-    return this.getUserByUsernameAndEmailAsync(
-      usernameOrEmail,
-      usernameOrEmail
-    );
-  }
-
-  async validateUserAsync(
-    usernameOrEmail: string,
-    password: string
-  ): Promise<User> {
-    const user = await this.validateUserPasswordAsync(
-      usernameOrEmail,
-      password
-    );
+  async validateUserAsync(credentials: {
+    username?: string;
+    email?: string;
+    password: string;
+  }): Promise<User> {
+    const user = await this.validateUserPasswordAsync(credentials);
 
     await this.applyUserValidatorsAsync(user);
 
     return user;
   }
 
-  private async validateUserPasswordAsync(
-    usernameOrEmail: string,
-    password: string
-  ): Promise<User> {
-    const userInformation = await this.getUserByUsernameOrEmailAsync(
-      usernameOrEmail
-    );
+  private async validateUserPasswordAsync(credentials: {
+    username?: string;
+    email?: string;
+    password: string;
+  }): Promise<User> {
+    const userInformation = await this.getUserAsync({
+      username: credentials.username,
+      email: credentials.email,
+    });
 
-    if (!userInformation) {
+    if (!userInformation)
       throw new UnauthorizedException("Invalid credentials");
-    }
+
     const isPasswordValid = await bcrypt.compare(
-      password,
+      credentials.password,
       userInformation.passwordHash
     );
     if (!isPasswordValid) {
@@ -82,10 +82,10 @@ export class UserService {
   }
 
   async createUserAsync(user: User, appData?: object): Promise<User> {
-    const existingUser = await this.getUserByUsernameAndEmailAsync(
-      user.username,
-      user.email
-    );
+    const existingUser = await this.getUserAsync({
+      username: user.username,
+      email: user.email,
+    });
 
     if (existingUser) {
       throw new ConflictException("Username or email already exists");
@@ -191,9 +191,9 @@ export class UserService {
       //reset password request not exists with given key
       throw new UnauthorizedException("Invalid reset password request.");
     }
-    const user = await this.getUserByUsernameOrEmailAsync(
-      resetPasswordRequest.email
-    );
+    const user = await this.getUserAsync({
+      email: resetPasswordRequest.email,
+    });
     if (!user) {
       //user not exists with given email address
       throw new UnauthorizedException("Invalid reset password request.");
