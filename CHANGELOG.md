@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.4](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.3...v1.14.4) (2024-04-26)
+
+
+### Bug Fixes
+
+* fix e2e test for remove jest mock ([3ab1953](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3ab1953faad68591e9835088a53d3f4454b53179))
+* fix for app module test ([3de7e09](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3de7e091d573c5b9fc30508d6478cca0d398ae53))
+* fixed password validation. ([daac595](https://github.com/BrewInteractive/authentication-service-nestjs/commit/daac595b8a791291fb799c04f72e251c7da8e029))
+
 ### [1.14.3](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.2...v1.14.3) (2024-01-23)
 
 ### [1.14.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.1...v1.14.2) (2024-01-23)
