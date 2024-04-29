@@ -16,7 +16,7 @@ export class SmtpEmailService extends EmailService {
     super();
     this.smtpClient = Nodemailer.createTransport({
       host: this.smtpConfig.host,
-      port: this.smtpConfig.port,
+      port: 465,
       auth: {
         user: this.smtpConfig.auth.user,
         pass: this.smtpConfig.auth.pass,
