@@ -48,10 +48,6 @@ export default () => ({
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASSWORD,
     },
-    secure: process.env.SMTP_SECURE == "false" ? false : true,
-    tls: {
-      rejectUnauthorized:
-        process.env.SMTP_TLS_REJECT_UNAUTHENTICATED == "false" ? false : true,
-    },
+    secure: process.env.SMTP_SECURE == "true",
   },
 });

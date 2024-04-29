@@ -25,8 +25,7 @@ import { Module } from "@nestjs/common";
     },
     {
       provide: "SmtpEmailConfig",
-      useFactory: (configService: ConfigService) =>
-        configService.get("smtp") as SmtpEmailConfig,
+      useFactory: (configService: ConfigService) => configService.get("smtp"),
       inject: [ConfigService],
     },
     AwsEmailService,

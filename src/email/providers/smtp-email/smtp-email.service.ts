@@ -14,15 +14,9 @@ export class SmtpEmailService extends EmailService {
     @Inject("SmtpEmailConfig") private readonly smtpConfig: SmtpEmailConfig
   ) {
     super();
-    this.smtpClient = Nodemailer.createTransport({
-      host: this.smtpConfig.host,
-      port: this.smtpConfig.port,
-      auth: {
-        user: this.smtpConfig.auth.user,
-        pass: this.smtpConfig.auth.pass,
-      },
-      secure: false,
-    } as Nodemailer.TransportOptions);
+    this.smtpClient = Nodemailer.createTransport(
+      this.smtpConfig as Nodemailer.TransportOptions
+    );
   }
 
   async sendEmailAsync(email: Email): Promise<void> {
