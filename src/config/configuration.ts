@@ -39,4 +39,19 @@ export default () => ({
 
   // Email Service
   emailService: process.env.EMAIL_SERVICE,
+
+  // Smtp configurations
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+    secure: process.env.SMTP_SECURE == "false" ? false : true,
+    tls: {
+      rejectUnauthorized:
+        process.env.SMTP_TLS_REJECT_UNAUTHENTICATED == "false" ? false : true,
+    },
+  },
 });
