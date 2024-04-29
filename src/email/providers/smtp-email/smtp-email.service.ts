@@ -14,12 +14,13 @@ export class SmtpEmailService extends EmailService {
     @Inject("SmtpEmailConfig") private readonly smtpConfig: SmtpEmailConfig
   ) {
     super();
-    this.smtpClient = Nodemailer.createTransport(
-      {...this.smtpConfig,
-        secure: true, 
-        requireTLS: true
-      } as Nodemailer.TransportOptions
-    );
+    this.smtpClient = Nodemailer.createTransport({
+      ...this.smtpConfig,
+      secure: true,
+      requireTLS: true,
+      port: 465,
+      secured: true,
+    } as Nodemailer.TransportOptions);
   }
 
   async sendEmailAsync(email: Email): Promise<void> {
