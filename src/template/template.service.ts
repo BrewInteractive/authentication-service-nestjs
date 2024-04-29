@@ -2,16 +2,14 @@ import * as Handlebars from "handlebars";
 
 import { Injectable } from "@nestjs/common";
 import { readFileSync } from "fs";
-import mjml2html = require("mjml");
 
 @Injectable()
 export class TemplateService {
   public getResetPasswordEmailTemplate(locale: string): string {
-    const MJML_TEMPLATE_PATH = `${__dirname}/templates/${locale}/reset-password.mjml`;
-    const mjmlTemplate = readFileSync(MJML_TEMPLATE_PATH, "utf8");
-    return mjml2html(mjmlTemplate, {
-      validationLevel: "strict",
-    }).html;
+    return readFileSync(
+      `${__dirname}/dist-templates/${locale}/reset-password.mjml`,
+      "utf8"
+    );
   }
 
   public injectData<T>(htmlTemplate: string, data: T): string {
