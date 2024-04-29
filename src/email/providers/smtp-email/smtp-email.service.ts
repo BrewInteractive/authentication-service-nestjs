@@ -16,7 +16,8 @@ export class SmtpEmailService extends EmailService {
     super();
     this.smtpClient = Nodemailer.createTransport({
       ...this.smtpConfig,
-      secure: true,
+      secure: false,
+      requireTLS: false,
     } as Nodemailer.TransportOptions);
   }
 
