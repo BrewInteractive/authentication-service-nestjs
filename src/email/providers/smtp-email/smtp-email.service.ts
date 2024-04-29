@@ -16,10 +16,12 @@ export class SmtpEmailService extends EmailService {
     super();
     this.smtpClient = Nodemailer.createTransport({
       host: this.smtpConfig.host,
+      port: this.smtpConfig.port,
       auth: {
         user: this.smtpConfig.auth.user,
         pass: this.smtpConfig.auth.pass,
       },
+      secure: true,
     } as Nodemailer.TransportOptions);
   }
 
