@@ -5,7 +5,4 @@ export class SmtpEmailConfig {
     user: string;
     pass: string;
   };
-  tls: {
-    rejectUnauthorized: boolean;
-  };
 }
