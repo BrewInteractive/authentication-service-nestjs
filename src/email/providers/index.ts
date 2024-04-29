@@ -1,2 +1,2 @@
-export * from "./aws-email";
-export * from "./smtp-email";
+export * from "./aws";
+export * from "./smtp";
