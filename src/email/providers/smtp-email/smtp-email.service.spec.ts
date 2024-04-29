@@ -36,7 +36,7 @@ describe("SmtpEmailService", () => {
 
     jest
       .spyOn(emailService["smtpClient"], "sendMail")
-      .mockResolvedValue(Promise.resolve());
+      .mockResolvedValue(Promise.resolve(null));
 
     // Act
     await emailService.sendEmailAsync(mockEmail);
