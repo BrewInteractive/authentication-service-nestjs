@@ -6,7 +6,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { MockFactory } from "mockingbird";
 import { SmtpEmailService } from "./smtp-email.service";
-import { mock } from "ts-mockito";
 
 describe("SmtpEmailService", () => {
   let emailService: SmtpEmailService;
