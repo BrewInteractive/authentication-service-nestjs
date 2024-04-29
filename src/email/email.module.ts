@@ -1,9 +1,4 @@
-import {
-  AwsEmailConfig,
-  AwsEmailService,
-  SmtpEmailConfig,
-  SmtpEmailService,
-} from "./providers";
+import { AwsEmailConfig, AwsEmailService, SmtpEmailService } from "./providers";
 
 import { ConfigService } from "@nestjs/config";
 import { EmailProfile } from "./mapping-profiles/email.mapping.profile";
