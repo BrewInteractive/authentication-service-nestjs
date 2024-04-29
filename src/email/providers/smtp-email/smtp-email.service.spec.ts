@@ -51,4 +51,28 @@ describe("SmtpEmailService", () => {
       bcc: mockEmail.bcc,
     });
   });
+
+  it("should send email successfully (option values are not sent)", async () => {
+    // Arrange
+    const mockEmail = MockFactory(EmailFixture).one();
+    delete mockEmail.cc;
+    delete mockEmail.bcc;
+
+    jest
+      .spyOn(emailService["smtpClient"], "sendMail")
+      .mockResolvedValue(Promise.resolve(null));
+
+    // Act
+    await emailService.sendEmailAsync(mockEmail);
+
+    // Assert
+    expect(emailService["smtpClient"].sendMail).toHaveBeenCalledWith({
+      from: mockEmail.from,
+      to: mockEmail.to,
+      subject: mockEmail.subject,
+      html: mockEmail.content,
+      bcc: [],
+      cc: [],
+    });
+  });
 });
