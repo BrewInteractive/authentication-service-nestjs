@@ -1,6 +1,11 @@
 import { Mock } from "mockingbird";
 import { SmtpEmailConfig } from "../../../src/email/providers";
 
+export class AuthSmtpEmailConfigFixture {
+  user: string;
+  pass: string;
+}
+
 export class SmtpEmailConfigFixture extends SmtpEmailConfig {
   @Mock()
   host: string;
@@ -8,11 +13,8 @@ export class SmtpEmailConfigFixture extends SmtpEmailConfig {
   @Mock()
   port: string;
 
-  @Mock()
-  auth: {
-    user: string;
-    pass: string;
-  };
+  @Mock(AuthSmtpEmailConfigFixture)
+  auth: AuthSmtpEmailConfigFixture;
 
   @Mock()
   secure: boolean;
