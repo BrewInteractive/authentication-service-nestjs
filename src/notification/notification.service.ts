@@ -36,4 +36,25 @@ export class NotificationService {
     } as Email;
     await this.emailService.sendEmailAsync(email);
   }
+
+  @OnEvent("otp.login.email.created")
+  async onLoginOtpEmailCreated({
+    otpValue,
+    userEmailAddress,
+  }: {
+    otpValue: string;
+    userEmailAddress: string;
+  }): Promise<void> {
+    const template = this.templateService.getLoginOtpEmailTemplate("en");
+    const html = this.templateService.injectData(template, {
+      otpCode: otpValue,
+    });
+    const email = {
+      from: this.configService.get<string>("emailFrom"),
+      to: userEmailAddress,
+      subject: this.configService.get<string>("emailSubjects.loginOtp"),
+      content: html,
+    } as Email;
+    await this.emailService.sendEmailAsync(email);
+  }
 }
