@@ -4,7 +4,7 @@ import {
   UserResetPasswordRequest,
   UserRole,
 } from "../entities";
-import { SignUpFixture, TokensFixture, UserFixture } from "../../test/fixtures";
+import { SignUpRequestFixture, TokensFixture, UserFixture } from "../../test/fixtures";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
@@ -66,7 +66,7 @@ describe("SignUpController", () => {
   });
 
   it("should return a token if the sign-up process is successful", async () => {
-    const signUpDto = MockFactory(SignUpFixture).one();
+    const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
     const user = MockFactory(UserFixture).one() as User;
     const tokens = MockFactory(TokensFixture).one() as Tokens;
 
@@ -78,13 +78,13 @@ describe("SignUpController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual(
+    await expect(signUpController.signUpAsync(signUpRequestDto)).resolves.toEqual(
       tokens
     );
   });
 
   it("should return a token if the sign-up process is successful(With default role)", async () => {
-    const signUpDto = MockFactory(SignUpFixture).one();
+    const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
     const user = MockFactory(UserFixture).one() as User;
     const tokens = MockFactory(TokensFixture).one() as Tokens;
 
@@ -98,7 +98,7 @@ describe("SignUpController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(signUpController.signUpAsync(signUpDto)).resolves.toEqual(
+    await expect(signUpController.signUpAsync(signUpRequestDto)).resolves.toEqual(
       tokens
     );
   });

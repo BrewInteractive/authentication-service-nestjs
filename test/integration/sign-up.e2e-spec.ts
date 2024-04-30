@@ -2,7 +2,7 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { SignUpFixture, UserFixture } from "../fixtures";
+import { SignUpRequestFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
@@ -39,7 +39,7 @@ describe("SignUpController (e2e)", () => {
 
   describe("POST /sign-up", () => {
     it("should create a new user and return a token", async () => {
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           email: faker.internet.email(),
           username: faker.internet.userName(),
@@ -49,7 +49,7 @@ describe("SignUpController (e2e)", () => {
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(201);
 
       expect(response.body).toHaveProperty("id_token");
@@ -60,7 +60,7 @@ describe("SignUpController (e2e)", () => {
       let user = MockFactory(UserFixture).one();
       await userRepository.save(user);
 
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           email: user.email,
           password: validPassword,
@@ -69,7 +69,7 @@ describe("SignUpController (e2e)", () => {
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(409);
 
       expect(response.body.message).toEqual("Username or email already exists");
@@ -79,7 +79,7 @@ describe("SignUpController (e2e)", () => {
       let user = MockFactory(UserFixture).one();
       await userRepository.save(user);
 
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           username: user.username,
           password: validPassword,
@@ -88,52 +88,52 @@ describe("SignUpController (e2e)", () => {
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(409);
 
       expect(response.body.message).toEqual("Username or email already exists");
     });
 
     it("should return 400 if email is invalid", async () => {
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           email: "invalid_email",
           password: validPassword,
         })
         .one();
-      signUpDto.username = null;
+      signUpRequestDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(400);
 
       expect(response.body.message).toEqual(["email must be an email"]);
     });
 
     it("should return 400 if password is too short", async () => {
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           password: "asd",
         })
         .one();
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(400);
 
       expect(response.body.message).toEqual(["password is too weak"]);
     });
 
     it("should return 400 if password is too weak", async () => {
-      const signUpDto = MockFactory(SignUpFixture)
+      const signUpRequestDto = MockFactory(SignUpRequestFixture)
         .mutate({
           password: "weakpassword",
         })
         .one();
       const response = await request(app.getHttpServer())
         .post("/sign-up")
-        .send(signUpDto)
+        .send(signUpRequestDto)
         .expect(400);
 
       expect(response.body.message).toEqual(["password is too weak"]);
