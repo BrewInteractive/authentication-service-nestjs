@@ -51,6 +51,6 @@ export default () => ({
   emailFrom: process.env.EMAIL_FROM,
   emailResetPasswordEndpoint: process.env.EMAIL_RESET_PASSWORD_ENDPOINT,
   emailSubjects: {
-    resetPassword: process.env.RESET_PASSWORD_EMAIL_SUBJECT ?? "Reset password",
+    resetPassword: process.env.RESET_PASSWORD_EMAIL_SUBJECT || "Reset password",
   },
 });
