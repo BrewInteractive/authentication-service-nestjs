@@ -1,1 +1,1 @@
-export * from "./sign-up.fixture";
+export * from "./sign-up-request.fixture";
