@@ -1,0 +1,4 @@
+{
+    "sonarCloudOrganization": "brewinteractive",
+    "projectKey": "BrewInteractive_authentication-service-nestjs"
+}

@@ -4,8 +4,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AutomapperModule } from "@automapper/nestjs";
 import { AwsEmailConfig } from "./aws-email.config";
 import { AwsEmailService } from "./aws-email.service";
-import { EmailFixture } from "../../../test/fixtures/email/email.fixture";
-import { EmailProfile } from "../mapping-profiles/email.mapping.profile";
+import { EmailFixture } from "../../../../test/fixtures/email/email.fixture";
+import { EmailProfile } from "../../mapping-profiles/email.mapping.profile";
 import { MockFactory } from "mockingbird";
 import { classes } from "@automapper/classes";
 
@@ -16,6 +16,7 @@ describe("AwsEmailService", () => {
     accessKeyId: "ACCESS_KEY_ID",
     secretAccessKey: "SECRET_ACCESS_KEY",
   } as AwsEmailConfig;
+
   beforeEach(async () => {
     jest.clearAllMocks();
     const module: TestingModule = await Test.createTestingModule({

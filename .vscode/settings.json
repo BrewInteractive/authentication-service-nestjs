@@ -4,5 +4,6 @@
     "connectionId": "brewinteractive",
     "projectKey": "BrewInteractive_authentication-service-nestjs"
   },
-  "cSpell.words": ["resendable"]
+  "cSpell.words": ["resendable"],
+  "editor.formatOnSave": true
 }
