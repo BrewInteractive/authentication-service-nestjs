@@ -33,6 +33,7 @@ import { Module } from "@nestjs/common";
         smtpEmailService: SmtpEmailService,
         configService: ConfigService
       ) => {
+        console.log(configService.get("emailService"));
         const emailServiceType = configService.get(
           "emailService"
         ) as EmailServiceType;

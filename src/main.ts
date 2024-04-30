@@ -1,23 +1,26 @@
+import {
+  APPLICATION_INFO_CONFIGURATIONS,
+  SERVER_CONFIGURATIONS,
+} from "./config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
-import { NestFactory } from "@nestjs/core";
-import config from "./config/configuration";
 import { ConfigService } from "@nestjs/config";
+import { NestFactory } from "@nestjs/core";
 
 function initValidationPipe(app: INestApplication) {
   app.useGlobalPipes(new ValidationPipe());
 }
 
 function initSwagger(app: INestApplication) {
-  if (config().swaggerEnabled) {
+  if (SERVER_CONFIGURATIONS().swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle(config().name)
-      .setDescription(config().description)
-      .setVersion(config().version)
-      .addServer(config().basePath)
+      .setTitle(APPLICATION_INFO_CONFIGURATIONS().name)
+      .setDescription(APPLICATION_INFO_CONFIGURATIONS().description)
+      .setVersion(APPLICATION_INFO_CONFIGURATIONS().version)
+      .addServer(SERVER_CONFIGURATIONS().basePath)
       .addSecurity("ApiKey", {
         type: "apiKey",
         name: "x-api-key",
@@ -37,13 +40,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: config().corsAllowedOrigins,
+    origin: SERVER_CONFIGURATIONS().corsAllowedOrigins,
     credentials: true,
   });
 
   initGlobalGuard(app);
   initValidationPipe(app);
   initSwagger(app);
-  await app.listen(config().port);
+  await app.listen(SERVER_CONFIGURATIONS().port);
 }
 bootstrap();

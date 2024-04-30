@@ -1,3 +1,9 @@
+import {
+  APPLICATION_INFO_CONFIGURATIONS,
+  AUTHENTICATION_CONFIGURATIONS,
+  EMAIL_CONFIGURATIONS,
+  SERVER_CONFIGURATIONS,
+} from "./config";
 import { Module, forwardRef } from "@nestjs/common";
 
 import { AppController } from "./app.controller";
@@ -11,7 +17,6 @@ import { SignUpModule } from "./sign-up/sign-up.module";
 import { TokenModule } from "./token/token.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
-import config from "./config/configuration";
 import { dataSourceOptions } from "../db/data-source";
 
 @Module({
@@ -29,7 +34,12 @@ import { dataSourceOptions } from "../db/data-source";
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [config],
+      load: [
+        APPLICATION_INFO_CONFIGURATIONS,
+        AUTHENTICATION_CONFIGURATIONS,
+        EMAIL_CONFIGURATIONS,
+        SERVER_CONFIGURATIONS,
+      ],
     }),
     RefreshTokenModule,
   ],
