@@ -39,4 +39,13 @@ export default () => ({
 
   // Email Service
   emailService: process.env.EMAIL_SERVICE,
+
+  // Smtp configurations
+  smtp: {
+    host: process.env.SMTP_HOST,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  },
 });
