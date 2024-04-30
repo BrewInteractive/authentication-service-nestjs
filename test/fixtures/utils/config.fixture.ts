@@ -1,6 +1,7 @@
 import { EmailServiceType } from "../../../src/email/enum/email.service.type.enum";
 import { JWTFixture } from "./jwt.fixture";
 import { Mock } from "mockingbird";
+import { SmtpEmailConfigFixture } from "../email";
 
 export class ConfigFixture {
   @Mock("test")
@@ -38,4 +39,7 @@ export class ConfigFixture {
 
   @Mock(EmailServiceType.AWS)
   emailService: string;
+
+  @Mock(SmtpEmailConfigFixture)
+  smtp: SmtpEmailConfigFixture;
 }
