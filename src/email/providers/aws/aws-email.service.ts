@@ -1,6 +1,6 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { Email } from "../dto/email.dto";
-import { EmailService } from "../email.service";
+import { Email } from "../../dto/email.dto";
+import { EmailService } from "../../email.service";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 import { AwsEmailConfig } from "./aws-email.config";

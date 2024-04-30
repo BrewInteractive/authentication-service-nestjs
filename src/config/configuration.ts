@@ -37,6 +37,15 @@ export default () => ({
     sesSecretKey: process.env.AWS_SES_SECRET_ACCESS_KEY || "us-east-1",
   },
 
+  // Smtp configurations
+  smtp: {
+    host: process.env.SMTP_HOST,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  },
+
   // Email Service
   emailService: process.env.EMAIL_SERVICE,
   emailFrom: process.env.EMAIL_FROM,
