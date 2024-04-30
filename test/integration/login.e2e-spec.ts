@@ -2,7 +2,7 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { LoginFixture, UserFixture } from "../fixtures";
+import { LoginRequestFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
@@ -39,17 +39,17 @@ describe("LoginController (e2e)", () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
-      const loginEmailDto = MockFactory(LoginFixture)
+      const loginEmailRequestDto = MockFactory(LoginRequestFixture)
         .mutate({
           email: user.email,
           password: user.password,
         })
         .one();
-      loginEmailDto.username = null;
+      loginEmailRequestDto.username = null;
 
       const responseEmail = await request(app.getHttpServer())
         .post("/login")
-        .send(loginEmailDto)
+        .send(loginEmailRequestDto)
         .expect(201);
 
       expect(responseEmail.body).toHaveProperty("id_token");
@@ -60,16 +60,16 @@ describe("LoginController (e2e)", () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
-      const loginUsernameDto = MockFactory(LoginFixture)
+      const loginUsernameRequestDto = MockFactory(LoginRequestFixture)
         .mutate({
           username: user.username,
           password: user.password,
         })
         .one();
-      loginUsernameDto.email = null;
+      loginUsernameRequestDto.email = null;
       const responseUsername = await request(app.getHttpServer())
         .post("/login")
-        .send(loginUsernameDto)
+        .send(loginUsernameRequestDto)
         .expect(201);
 
       expect(responseUsername.body).toHaveProperty("id_token");
@@ -80,17 +80,17 @@ describe("LoginController (e2e)", () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
-      const loginDto = MockFactory(LoginFixture)
+      const loginRequestDto = MockFactory(LoginRequestFixture)
         .mutate({
           email: "invalid@email.com",
           password: user.password,
         })
         .one();
-      loginDto.username = null;
+      loginRequestDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/login")
-        .send(loginDto)
+        .send(loginRequestDto)
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials");
@@ -100,17 +100,17 @@ describe("LoginController (e2e)", () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
-      const loginDto = MockFactory(LoginFixture)
+      const loginRequestDto = MockFactory(LoginRequestFixture)
         .mutate({
           email: user.email,
           password: "Wrong-Password",
         })
         .one();
-      loginDto.username = null;
+      loginRequestDto.username = null;
 
       const response = await request(app.getHttpServer())
         .post("/login")
-        .send(loginDto)
+        .send(loginRequestDto)
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials");
