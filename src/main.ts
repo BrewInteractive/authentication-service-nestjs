@@ -42,9 +42,7 @@ function buildMjmlTemplates(
   sourceDir: string = __dirname + "/template/templates",
   distDir: string = __dirname + "/template/dist-templates"
 ) {
-  if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir, { recursive: true });
-  }
+  if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
 
   fs.readdirSync(sourceDir).forEach((fileOrDirectoryName) => {
     const sourceItemPath = path.join(sourceDir, fileOrDirectoryName);
@@ -65,8 +63,8 @@ function buildMjmlTemplates(
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
   buildMjmlTemplates();
+  const app = await NestFactory.create(AppModule);
 
   app.enableCors({
     origin: config().corsAllowedOrigins,
