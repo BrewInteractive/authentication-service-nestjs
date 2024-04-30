@@ -1,6 +1,7 @@
+import { LoginRequest } from "../../../src/login/dto/login-request.dto";
 import { Mock } from "mockingbird";
 
-export class SignUpFixture {
+export class LoginRequestFixture  extends LoginRequest{
   @Mock((faker) => faker.internet.userName())
   username: string | null;
 
@@ -9,13 +10,4 @@ export class SignUpFixture {
 
   @Mock((faker) => faker.internet.password())
   password: string;
-
-  @Mock((faker) => faker.name.firstName())
-  firstName: string;
-
-  @Mock((faker) => faker.name.lastName())
-  lastName: string;
-
-  @Mock()
-  appData: object;
 }
