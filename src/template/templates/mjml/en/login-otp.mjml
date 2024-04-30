@@ -22,7 +22,7 @@
           <mj-divider border-color="#DFE3E8" border-width="1px" />
 
           <mj-text color="#637381" font-size="20px" padding-bottom="30px" align="center">
-            Your disposable OTP code is located below.
+            Your one time password is located below.
           </mj-text>
         </mj-column>
         <mj-column width="50%">
