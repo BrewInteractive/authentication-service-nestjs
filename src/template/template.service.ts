@@ -12,6 +12,13 @@ export class TemplateService {
     );
   }
 
+  public getOtpEmailTemplate(locale: string): string {
+    return readFileSync(
+      `${__dirname}/dist-templates/${locale}/otp.mjml`,
+      "utf8"
+    );
+  }
+
   public injectData<T>(htmlTemplate: string, data: T): string {
     const templateFn = Handlebars.compile(htmlTemplate);
     return templateFn(data);
