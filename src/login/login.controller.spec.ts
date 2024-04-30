@@ -1,4 +1,4 @@
-import { LoginFixture, TokensFixture, UserFixture } from "../../test/fixtures";
+import { LoginRequestFixture, TokensFixture, UserFixture } from "../../test/fixtures";
 import {
   RefreshToken,
   User,
@@ -67,9 +67,9 @@ describe("LoginController", () => {
   });
 
   it("should return a token if the email and password are valid", async () => {
-    const loginDto = MockFactory(LoginFixture).one();
+    const loginRequestDto = MockFactory(LoginRequestFixture).one();
     const user = MockFactory(UserFixture).one();
-    delete loginDto.username;
+    delete loginRequestDto.username;
 
     const tokens = MockFactory(TokensFixture).one() as Tokens;
 
@@ -81,13 +81,13 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
   });
 
   it("should return a token if the username and password are valid", async () => {
-    const loginDto = MockFactory(LoginFixture).one();
+    const loginRequestDto = MockFactory(LoginRequestFixture).one();
     const user = MockFactory(UserFixture).one();
-    delete loginDto.email;
+    delete loginRequestDto.email;
 
     const tokens = MockFactory(TokensFixture).one() as Tokens;
 
@@ -99,11 +99,11 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
   });
 
   it("should return a token if the email and password are valid. (With null email address)", async () => {
-    const loginDto = MockFactory(LoginFixture)
+    const loginRequestDto = MockFactory(LoginRequestFixture)
       .mutate({
         email: null,
       })
@@ -120,18 +120,18 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
   });
 
   it("should return a token if the email and password are invalid", async () => {
-    const loginDto = MockFactory(LoginFixture).one();
+    const loginRequestDto = MockFactory(LoginRequestFixture).one();
 
     const expectedResult = new UnauthorizedException("Invalid credentials");
     jest
       .spyOn(userService, "validateUserAsync")
       .mockRejectedValueOnce(expectedResult);
 
-    await expect(loginController.loginAsync(loginDto)).rejects.toThrow(
+    await expect(loginController.loginAsync(loginRequestDto)).rejects.toThrow(
       expectedResult
     );
   });
