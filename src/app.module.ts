@@ -34,11 +34,13 @@ import { dataSourceOptions } from "../db/data-source";
     LoginModule,
     ResetPasswordModule,
     TypeOrmModule.forRoot(dataSourceOptions),
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],
     }),
     RefreshTokenModule,
+    NotificationModule,
   ],
   providers: [AppService],
   exports: [AppService],
