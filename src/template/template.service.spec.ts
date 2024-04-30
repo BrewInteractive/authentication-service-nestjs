@@ -25,23 +25,23 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/dist-templates/${locale}/reset-password.html`,
+      `${__dirname}/templates/html/${locale}/reset-password.html`,
       "utf8"
     );
   });
 
-  it("should return otp email template", () => {
+  it("should return login otp email template", () => {
     // Arrange
     const locale = faker.locale;
     const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
     const mockReadFileSync = readFileSync as jest.Mock;
     mockReadFileSync.mockReturnValue(mockHtmlTemplate);
     // Act
-    const html = templateService.getOtpEmailTemplate(locale);
+    const html = templateService.getLoginOtpEmailTemplate(locale);
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/dist-templates/${locale}/otp.html`,
+      `${__dirname}/templates/html/${locale}/login-otp.html`,
       "utf8"
     );
   });

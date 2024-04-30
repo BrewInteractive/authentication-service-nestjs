@@ -39,24 +39,22 @@ function initGlobalGuard(app: INestApplication) {
 }
 
 function buildMjmlTemplates(
-  sourceDir: string = __dirname + "/template/templates",
-  distDir: string = __dirname + "/template/dist-templates"
+  mjmlDir: string = __dirname + "/template/templates/mjml",
+  htmlDir: string = __dirname + "/template/templates/html"
 ) {
-  if (!fs.existsSync(distDir)) {
-    fs.mkdirSync(distDir, { recursive: true });
-  }
+  if (!fs.existsSync(htmlDir)) fs.mkdirSync(htmlDir, { recursive: true });
 
-  fs.readdirSync(sourceDir).forEach((fileOrDirectoryName) => {
-    const sourceItemPath = path.join(sourceDir, fileOrDirectoryName);
-    const distItemPath = path.join(distDir, fileOrDirectoryName);
+  fs.readdirSync(mjmlDir).forEach((fileOrDirectoryName) => {
+    const mjmlItemPath = path.join(mjmlDir, fileOrDirectoryName);
+    const htmlItemPath = path.join(htmlDir, fileOrDirectoryName);
 
-    if (fs.statSync(sourceItemPath).isDirectory()) {
-      buildMjmlTemplates(sourceItemPath, distItemPath);
+    if (fs.statSync(mjmlItemPath).isDirectory()) {
+      buildMjmlTemplates(mjmlItemPath, htmlItemPath);
     } else if (fileOrDirectoryName.endsWith(".mjml")) {
-      const mjmlTemplateContent = fs.readFileSync(sourceItemPath, "utf8");
+      const mjmlTemplateContent = fs.readFileSync(mjmlItemPath, "utf8");
       const { html: htmlTemplateContent } = mjml2html(mjmlTemplateContent);
       fs.writeFileSync(
-        path.join(distDir, fileOrDirectoryName.replace(".mjml", ".html")),
+        path.join(htmlDir, fileOrDirectoryName.replace(".mjml", ".html")),
         htmlTemplateContent
       );
       console.log(`Converted ${fileOrDirectoryName} to HTML`);
@@ -65,8 +63,8 @@ function buildMjmlTemplates(
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
   buildMjmlTemplates();
+  const app = await NestFactory.create(AppModule);
 
   app.enableCors({
     origin: config().corsAllowedOrigins,
