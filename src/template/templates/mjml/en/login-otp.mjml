@@ -1,0 +1,71 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-all>
+      <mj-text font-weight="400" font-size="16px" color="#000000" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-text>
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body background-color="#E7E7E7" width="600px">
+    <mj-section full-width="full-width" background-color="#5e6ebf" padding-bottom="0">
+      <mj-column width="100%">
+        <mj-image src="  " alt="" align="center" width="150px" />
+        <mj-text color="#ffffff" font-weight="bold" align="center" text-transform="uppercase" font-size="27px" letter-spacing="1px" padding-top="30px">
+          BREW AUTHENTICATION SERVICE
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+    <mj-wrapper padding-top="0" padding-bottom="0" css-class="body-section">
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
+        <mj-column width="100%">
+          <mj-divider border-color="#DFE3E8" border-width="1px" />
+
+          <mj-text color="#637381" font-size="20px" padding-bottom="30px" align="center">
+            Your one time password is located below.
+          </mj-text>
+        </mj-column>
+        <mj-column width="50%">
+          <mj-text vertical-align="middle" color="#637381" font-size="32px" container-background-color="#F0F0F0" padding="24px" align="center">
+            {{otpCode}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0">
+
+        <mj-column width="50%">
+          <mj-image align="center" src="https://t4.ftcdn.net/jpg/06/17/52/09/240_F_617520948_qYL48U5Y1pfD6QjRRcoi5EEeZTGcGNNX.jpg" alt="" />
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0">
+        <mj-column width="100%">
+          <mj-divider border-color="#DFE3E8" border-width="1px" />
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+
+    <mj-wrapper full-width="full-width">
+      <mj-section>
+        <mj-column width="100%" padding="0">
+          <mj-social font-size="15px" icon-size="30px" mode="horizontal" padding="0" align="center">
+            </mj-social-element>
+            <mj-social-element name="twitter" href="https://twitter.com/i/flow/login?redirect_after_login=%2FBrewInteractive" background-color="#A1A0A0">
+            </mj-social-element>
+            <mj-social-element name="linkedin" href="https://www.linkedin.com/company/brew-interactive/" background-color="#A1A0A0">
+            </mj-social-element>
+          </mj-social>
+          <mj-text color="#445566" font-size="11px" font-weight="bold" align="center">
+            Brew Authentication Service
+          </mj-text>
+          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">
+            You are receiving this email because you registered with Brew Authentication Service and agreed to receive emails from us regarding new features, events and special offers.
+          </mj-text>
+          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">
+            &copy; Brew, All Rights Reserved.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+
+  </mj-body>
+</mjml>

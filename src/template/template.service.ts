@@ -12,6 +12,13 @@ export class TemplateService {
     );
   }
 
+  public getLoginOtpEmailTemplate(locale: string): string {
+    return readFileSync(
+      `${__dirname}/templates/html/${locale}/login-otp.html`,
+      "utf8"
+    );
+  }
+
   public injectData<T>(htmlTemplate: string, data: T): string {
     const templateFn = Handlebars.compile(htmlTemplate);
     return templateFn(data);
