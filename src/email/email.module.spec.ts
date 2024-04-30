@@ -1,9 +1,7 @@
 import { AutomapperModule } from "@automapper/nestjs";
-import { ConfigFixture } from "../../test/fixtures/";
 import { ConfigModule } from "@nestjs/config";
+import { EMAIL_CONFIGURATIONS } from "../config";
 import { EmailModule } from "./email.module";
-import { EmailServiceType } from "./enum/email.service.type.enum";
-import { MockFactory } from "mockingbird";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
 
@@ -11,13 +9,13 @@ describe("EmailModule", () => {
   let emailModule: EmailModule;
 
   it("Should be defined (With AWS)", async () => {
-    const mockConfig = MockFactory(ConfigFixture).one();
+    process.env.EMAIL_SERVICE = "aws";
     const app = await Test.createTestingModule({
       imports: [
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockConfig],
+          load: [EMAIL_CONFIGURATIONS],
         }),
         EmailModule,
       ],
@@ -28,15 +26,13 @@ describe("EmailModule", () => {
   });
 
   it("Should be defined (With SMTP)", async () => {
-    const mockConfig = MockFactory(ConfigFixture)
-      .mutate({ emailService: EmailServiceType.SMTP })
-      .one();
+    process.env.EMAIL_SERVICE = "smtp";
     const app = await Test.createTestingModule({
       imports: [
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockConfig],
+          load: [EMAIL_CONFIGURATIONS],
         }),
         EmailModule,
       ],
@@ -47,9 +43,7 @@ describe("EmailModule", () => {
   });
 
   it("Should throw error", async () => {
-    const mockConfig = MockFactory(ConfigFixture)
-      .mutate({ emailService: "mock" })
-      .one();
+    process.env.EMAIL_SERVICE = "mock";
     const expectedError = new Error("Invalid email service type");
     await expect(
       Test.createTestingModule({
@@ -57,7 +51,7 @@ describe("EmailModule", () => {
           AutomapperModule.forRoot({ strategyInitializer: classes() }),
           ConfigModule.forRoot({
             isGlobal: true,
-            load: [() => mockConfig],
+            load: [EMAIL_CONFIGURATIONS],
           }),
           EmailModule,
         ],
