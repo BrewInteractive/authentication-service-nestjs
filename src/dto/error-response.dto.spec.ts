@@ -1,24 +1,19 @@
-import { ErrorExtensions } from './error-extensions.dto';
+import { ErrorExtensionsFixture } from '../../test/fixtures/dto/error-extensions.fixture';
 import { ErrorResponse } from './error-response.dto';
-
-class FakeErrorExtensions extends ErrorExtensions {
-
-}
+import { MockFactory } from 'mockingbird';
 
 describe('ErrorResponse', () => {
   it('should correctly assign the message and extensions properties', () => {
     const message = 'An error occurred';
     const code = 'ERR001';
-    const extensions = new FakeErrorExtensions();
-    extensions.code = code;
-
+    const extensions = MockFactory(ErrorExtensionsFixture).mutate({code}).one();
+    
     const errorResponse = new ErrorResponse();
     errorResponse.message = message;
     errorResponse.extensions = extensions;
 
     expect(errorResponse.message).toBe(message);
     expect(errorResponse.extensions).toBe(extensions);
-    // Specifically test the extension's code to ensure proper assignment
     expect(errorResponse.extensions.code).toBe(code);
   });
 
@@ -29,6 +24,6 @@ describe('ErrorResponse', () => {
     errorResponse.message = message;
 
     expect(errorResponse.message).toBe(message);
-    expect(errorResponse.extensions).toBeUndefined(); // ensures extensions can be optional
+    expect(errorResponse.extensions).toBeUndefined();
   });
 });
