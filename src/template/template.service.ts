@@ -7,7 +7,7 @@ import { readFileSync } from "fs";
 export class TemplateService {
   public getResetPasswordEmailTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/dist-templates/${locale}/reset-password.mjml`,
+      `${__dirname}/dist-templates/${locale}/reset-password.html`,
       "utf8"
     );
   }
