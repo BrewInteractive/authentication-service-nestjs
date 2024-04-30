@@ -14,7 +14,7 @@ export class TemplateService {
 
   public getOtpEmailTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/dist-templates/${locale}/otp.mjml`,
+      `${__dirname}/dist-templates/${locale}/otp.html`,
       "utf8"
     );
   }
