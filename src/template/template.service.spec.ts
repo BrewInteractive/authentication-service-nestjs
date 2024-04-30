@@ -26,7 +26,7 @@ describe("TemplateService", () => {
       // Assert
       expect(html).toBeDefined();
       expect(mockReadFileSync).toHaveBeenCalledWith(
-        `${__dirname}/dist-templates/${locale}/reset-password.html`,
+        `${__dirname}/templates/html/${locale}/reset-password.html`,
         "utf8"
       );
     });
