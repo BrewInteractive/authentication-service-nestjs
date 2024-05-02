@@ -8,6 +8,7 @@ import {
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { LoginModule } from "./login/login.module";
 import { PluginModule } from "@brewww/nestjs-plugin-module";
@@ -17,6 +18,7 @@ import { SignUpModule } from "./sign-up/sign-up.module";
 import { TokenModule } from "./token/token.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
+import { classes } from "@automapper/classes";
 import { dataSourceOptions } from "../db/data-source";
 
 @Module({
@@ -27,6 +29,9 @@ import { dataSourceOptions } from "../db/data-source";
         forwardRef(() => TokenModule),
         forwardRef(() => UserModule),
       ],
+    }),
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
     }),
     SignUpModule,
     LoginModule,
