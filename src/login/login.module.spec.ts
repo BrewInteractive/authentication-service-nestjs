@@ -5,10 +5,12 @@ import {
   UserRole,
 } from "../entities";
 
+import { AutomapperModule } from "@automapper/nestjs";
+import { ConfigModule } from "@nestjs/config";
 import { LoginModule } from "./login.module";
 import { Test } from "@nestjs/testing";
+import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("LoginModule", () => {
   let loginModule: LoginModule;
@@ -17,6 +19,9 @@ describe("LoginModule", () => {
     const app = await Test.createTestingModule({
       imports: [
         LoginModule,
+        AutomapperModule.forRoot({
+          strategyInitializer: classes(),
+        }),
         ConfigModule.forRoot({
           isGlobal: true,
         }),
