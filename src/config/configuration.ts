@@ -30,6 +30,10 @@ export default () => ({
     expiresIn: parseInt(process.env.REFRESH_TOKEN_EXPIRES_IN) || 86400,
   },
 
+  otp: {
+    expiresIn: parseInt(process.env.OTP_EXPIRES_IN) || 180,
+  },
+
   // AWS configurations
   aws: {
     sesRegion: process.env.AWS_SES_REGION,

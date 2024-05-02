@@ -39,7 +39,7 @@ describe("OtpService", () => {
     expect(otpService).toBeDefined();
   });
 
-  it("should be successful otp verification by email", async () => {
+  it("should be successful OTP verification by email", async () => {
     const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -54,7 +54,7 @@ describe("OtpService", () => {
     expect(actualResult).toBe(true);
   });
 
-  it("should be unsuccessful otp verification by email", async () => {
+  it("should be unsuccessful OTP verification by email", async () => {
     jest
       .spyOn(otpRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
@@ -65,5 +65,44 @@ describe("OtpService", () => {
     );
 
     expect(actualResult).toBe(false);
+  });
+
+  it("OTP should be created for email sending", async () => {
+    const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(null));
+
+    jest
+      .spyOn(otpRepository, "save")
+      .mockResolvedValue(Promise.resolve(mockOtp));
+
+    const actualResult = await otpService.createEmailOtpAsync(
+      mockOtp.channel.email
+    );
+
+    expect(actualResult.code).toBe(mockOtp.value);
+    expect(actualResult.isSent).toBe(true);
+    expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
+  });
+
+  it("new OTP should not be created to send email", async () => {
+    const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(mockOtp));
+
+    jest.spyOn(otpRepository, "save").mockResolvedValue(Promise.resolve(null));
+
+    const actualResult = await otpService.createEmailOtpAsync(
+      mockOtp.channel.email
+    );
+
+    expect(otpRepository.save).not.toBeCalled();
+    expect(actualResult.code).toBe(undefined);
+    expect(actualResult.isSent).toBe(false);
+    expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
   });
 });
