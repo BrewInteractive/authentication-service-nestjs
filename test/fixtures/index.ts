@@ -5,3 +5,4 @@ export * from "./reset-password";
 export * from "./email";
 export * from "./refresh-token";
 export * from "./dto";
+export * from "./config";

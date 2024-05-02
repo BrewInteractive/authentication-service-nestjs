@@ -8,6 +8,7 @@ import { setupTestDataSourceAsync } from "../test/test-db";
 describe("AppModule", () => {
   let appModule: AppModule;
   beforeEach(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     const app = await Test.createTestingModule({
       imports: [
         AppModule,
