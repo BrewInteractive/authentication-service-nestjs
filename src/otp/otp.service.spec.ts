@@ -1,5 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
 import { Otp } from "../entities";
 import { OtpFixture } from "../../test/fixtures";
@@ -13,12 +14,18 @@ describe("OtpService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+      ],
       providers: [
         OtpService,
         {
           provide: "OtpRepository",
           useValue: {
             findOne: jest.fn(),
+            save: jest.fn(),
           },
         },
       ],
@@ -32,7 +39,7 @@ describe("OtpService", () => {
     expect(otpService).toBeDefined();
   });
 
-  it("should be successful otp verification", async () => {
+  it("should be successful otp verification by email", async () => {
     const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -47,7 +54,7 @@ describe("OtpService", () => {
     expect(actualResult).toBe(true);
   });
 
-  it("should be unsuccessful otp verification", async () => {
+  it("should be unsuccessful otp verification by email", async () => {
     jest
       .spyOn(otpRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
