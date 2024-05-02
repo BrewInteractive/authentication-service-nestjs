@@ -2,7 +2,6 @@ import { JsonContains, MoreThan, Repository } from "typeorm";
 
 import { Injectable } from "@nestjs/common";
 import { Otp } from "../entities";
-import { ValidateOtpResult } from "./dto";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
@@ -15,7 +14,7 @@ export class OtpService {
   async validateEmailOtpAsync(
     email: string,
     otpCode: string
-  ): Promise<ValidateOtpResult> {
+  ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
         value: otpCode,
@@ -24,12 +23,8 @@ export class OtpService {
       },
     });
 
-    if (otpEntity)
-      return {
-        isValid: true,
-        expiresAt: otpEntity.expiresAt,
-      };
+    if (otpEntity) return true;
 
-    return { isValid: false, expiresAt: null };
+    return false;
   }
 }

@@ -44,8 +44,7 @@ describe("OtpService", () => {
       mockOtp.value
     );
 
-    expect(actualResult.isValid).toBe(true);
-    expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
+    expect(actualResult).toBe(true);
   });
 
   it("should be unsuccessful otp verification", async () => {
@@ -58,7 +57,6 @@ describe("OtpService", () => {
       faker.datatype.string(6)
     );
 
-    expect(actualResult.isValid).toBe(false);
-    expect(actualResult.expiresAt).toBe(null);
+    expect(actualResult).toBe(false);
   });
 });
