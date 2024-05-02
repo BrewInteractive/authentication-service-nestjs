@@ -1,5 +1,5 @@
-import { AUTHENTICATION_CONFIGURATIONS, EMAIL_CONFIGURATIONS } from "../config";
 import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { authenticationConfigurations, emailConfigurations } from "../config";
 
 import { ConfigModule } from "@nestjs/config";
 import { ResetPasswordModule } from "./reset-password.module";
@@ -15,7 +15,7 @@ describe("ResetPasswordModule", () => {
         ResetPasswordModule,
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [AUTHENTICATION_CONFIGURATIONS, EMAIL_CONFIGURATIONS],
+          load: [authenticationConfigurations, emailConfigurations],
         }),
       ],
     })

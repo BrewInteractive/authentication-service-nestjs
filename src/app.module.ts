@@ -1,10 +1,10 @@
-import {
-  APPLICATION_INFO_CONFIGURATIONS,
-  AUTHENTICATION_CONFIGURATIONS,
-  EMAIL_CONFIGURATIONS,
-  SERVER_CONFIGURATIONS,
-} from "./config";
 import { Module, forwardRef } from "@nestjs/common";
+import {
+  applicationInfoConfigurations,
+  authenticationConfigurations,
+  emailConfigurations,
+  serverConfigurations,
+} from "./config";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -35,10 +35,10 @@ import { dataSourceOptions } from "../db/data-source";
     ConfigModule.forRoot({
       isGlobal: true,
       load: [
-        APPLICATION_INFO_CONFIGURATIONS,
-        AUTHENTICATION_CONFIGURATIONS,
-        EMAIL_CONFIGURATIONS,
-        SERVER_CONFIGURATIONS,
+        applicationInfoConfigurations,
+        authenticationConfigurations,
+        emailConfigurations,
+        serverConfigurations,
       ],
     }),
     RefreshTokenModule,

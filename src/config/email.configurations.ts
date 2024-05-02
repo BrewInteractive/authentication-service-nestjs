@@ -1,4 +1,4 @@
-export const EMAIL_CONFIGURATIONS = () => ({
+export const emailConfigurations = () => ({
   emailService: process.env.EMAIL_SERVICE,
 
   aws: {

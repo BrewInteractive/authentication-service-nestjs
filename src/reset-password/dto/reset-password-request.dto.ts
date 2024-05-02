@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Matches } from "class-validator";
 
-import { AUTHENTICATION_CONFIGURATIONS } from "../../config";
 import { AutoMap } from "@automapper/classes";
+import { authenticationConfigurations } from "../../config";
 
 export class ResetPasswordRequest {
   @IsNotEmpty()
@@ -9,7 +9,7 @@ export class ResetPasswordRequest {
   @AutoMap()
   email: string;
 
-  @Matches(AUTHENTICATION_CONFIGURATIONS().passwordRegex, {
+  @Matches(authenticationConfigurations().passwordRegex, {
     message: "password is too weak",
   })
   @IsNotEmpty()

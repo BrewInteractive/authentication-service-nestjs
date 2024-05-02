@@ -7,8 +7,8 @@ import {
   ValidateIf,
 } from "class-validator";
 
-import { AUTHENTICATION_CONFIGURATIONS } from "../../config";
 import { AutoMap } from "@automapper/classes";
+import { authenticationConfigurations } from "../../config";
 
 export class SignUpRequest {
   @ValidateIf((o) => !o.email)
@@ -23,7 +23,7 @@ export class SignUpRequest {
   @AutoMap()
   email: string;
 
-  @Matches(AUTHENTICATION_CONFIGURATIONS().passwordRegex, {
+  @Matches(authenticationConfigurations().passwordRegex, {
     message: "password is too weak",
   })
   @IsNotEmpty()

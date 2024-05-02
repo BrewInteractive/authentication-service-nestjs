@@ -1,4 +1,4 @@
-export const AUTHENTICATION_CONFIGURATIONS = () => ({
+export const authenticationConfigurations = () => ({
   apiKey: process.env.API_KEY,
   userDefaultRole: process.env.USER_DEFAULT_ROLE,
   passwordRegex: new RegExp(

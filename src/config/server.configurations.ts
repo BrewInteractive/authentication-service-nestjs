@@ -1,4 +1,4 @@
-export const SERVER_CONFIGURATIONS = () => ({
+export const serverConfigurations = () => ({
   environment: process.env.ENVIRONMENT || "dev",
   port: process.env.PORT || 3000,
   basePath: process.env.BASE_PATH || "/",

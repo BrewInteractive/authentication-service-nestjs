@@ -1,9 +1,9 @@
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
-import { EMAIL_CONFIGURATIONS } from "../config";
 import { EmailModule } from "./email.module";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
+import { emailConfigurations } from "../config";
 
 describe("EmailModule", () => {
   let emailModule: EmailModule;
@@ -15,7 +15,7 @@ describe("EmailModule", () => {
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [EMAIL_CONFIGURATIONS],
+          load: [emailConfigurations],
         }),
         EmailModule,
       ],
@@ -32,7 +32,7 @@ describe("EmailModule", () => {
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [EMAIL_CONFIGURATIONS],
+          load: [emailConfigurations],
         }),
         EmailModule,
       ],
@@ -51,7 +51,7 @@ describe("EmailModule", () => {
           AutomapperModule.forRoot({ strategyInitializer: classes() }),
           ConfigModule.forRoot({
             isGlobal: true,
-            load: [EMAIL_CONFIGURATIONS],
+            load: [emailConfigurations],
           }),
           EmailModule,
         ],
