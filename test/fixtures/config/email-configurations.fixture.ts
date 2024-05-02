@@ -28,13 +28,24 @@ class SMTPEmailConfigurationsFixture {
   auth: SMTPAuthEmailConfigurationsFixture;
 }
 
+class EmailSubjectsConfigurationsFixture {
+  @Mock()
+  loginOtp: string;
+}
+
 export class EmailConfigurationsFixture {
   @Mock(EmailServiceType.AWS)
   emailService: string;
+
+  @Mock((faker) => faker.internet.email())
+  emailFrom: string;
 
   @Mock(AWSEmailConfigurationsFixture)
   aws: AWSEmailConfigurationsFixture;
 
   @Mock(SMTPEmailConfigurationsFixture)
   smtp: SMTPEmailConfigurationsFixture;
+
+  @Mock(EmailSubjectsConfigurationsFixture)
+  emailSubjects: EmailSubjectsConfigurationsFixture;
 }

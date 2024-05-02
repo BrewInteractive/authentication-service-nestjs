@@ -1,5 +1,10 @@
 export const emailConfigurations = () => ({
   emailService: process.env.EMAIL_SERVICE,
+  emailFrom: process.env.EMAIL_FROM,
+
+  emailSubjects: {
+    loginOtp: process.env.LOGIN_OTP_EMAIL_SUBJECT || "Login Otp",
+  },
 
   aws: {
     sesRegion: process.env.AWS_SES_REGION,
