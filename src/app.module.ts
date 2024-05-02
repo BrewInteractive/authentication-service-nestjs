@@ -5,6 +5,7 @@ import { AppService } from "./app.service";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { LoginModule } from "./login/login.module";
+import { NotificationModule } from "./notification/notification.module";
 import { PluginModule } from "@brewww/nestjs-plugin-module";
 import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
@@ -31,6 +32,7 @@ import { dataSourceOptions } from "../db/data-source";
     SignUpModule,
     LoginModule,
     ResetPasswordModule,
+    NotificationModule,
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
