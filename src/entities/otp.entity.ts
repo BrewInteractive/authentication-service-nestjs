@@ -27,5 +27,7 @@ export class Otp {
   value: string;
 
   @Column({ name: "channel", type: "jsonb" })
-  channel: object;
+  channel: {
+    email?: string;
+  };
 }
