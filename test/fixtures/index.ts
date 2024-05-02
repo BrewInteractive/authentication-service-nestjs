@@ -6,3 +6,4 @@ export * from "./email";
 export * from "./refresh-token";
 export * from "./utils";
 export * from "./dto";
+export * from "./otp";
