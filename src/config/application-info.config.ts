@@ -1,6 +1,6 @@
 import { description, name, version } from "../../package.json";
 
-export const applicationInfoConfigurations = () => ({
+export const applicationInfoConfig = () => ({
   version,
   name,
   description,

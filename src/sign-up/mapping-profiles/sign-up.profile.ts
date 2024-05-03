@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { SignUpRequest } from "../dto/sign-up-request.dto";
 import { User } from "../../entities/user.entity";
 import * as bcrypt from "bcrypt";
-import { authenticationConfigurations } from "../../config";
+import { authenticationConfig } from "../../config";
 
 @Injectable()
 export class SignUpProfile extends AutomapperProfile {
@@ -38,12 +38,12 @@ export class SignUpProfile extends AutomapperProfile {
         forMember(
           (dest) => dest.roles,
           mapFrom(() => {
-            if (!authenticationConfigurations().userDefaultRole) return null;
+            if (!authenticationConfig().userDefaultRole) return null;
             else
               return [
                 {
                   role: {
-                    name: authenticationConfigurations().userDefaultRole,
+                    name: authenticationConfig().userDefaultRole,
                   },
                 },
               ];

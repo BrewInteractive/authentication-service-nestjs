@@ -1,1 +1,1 @@
-export * from "./email-configurations.fixture";
+export * from "./email-config.fixture";

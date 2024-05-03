@@ -2,7 +2,7 @@ import { AppModule } from "./app.module";
 import { ConfigModule } from "@nestjs/config";
 import { DataSource } from "typeorm";
 import { Test } from "@nestjs/testing";
-import { emailConfigurations } from "./config";
+import { emailConfig } from "./config";
 import { setupTestDataSourceAsync } from "../test/test-db";
 
 describe("AppModule", () => {
@@ -14,7 +14,7 @@ describe("AppModule", () => {
         AppModule,
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [emailConfigurations],
+          load: [emailConfig],
         }),
       ],
     })

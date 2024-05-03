@@ -1,4 +1,4 @@
-export const emailConfigurations = () => ({
+export const emailConfig = () => ({
   emailService: process.env.EMAIL_SERVICE,
   emailFrom: process.env.EMAIL_FROM,
 
