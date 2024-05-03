@@ -1,11 +1,13 @@
 import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
-import { ResetPasswordModule } from "./reset-password.module";
-import { Test } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { MockFactory } from "mockingbird";
+import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigFixture } from "../../test/fixtures";
 import { ConfigModule } from "@nestjs/config";
+import { MockFactory } from "mockingbird";
+import { ResetPasswordModule } from "./reset-password.module";
+import { Test } from "@nestjs/testing";
+import { classes } from "@automapper/classes";
+import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("ResetPasswordModule", () => {
   let resetPasswordModule: ResetPasswordModule;
@@ -15,6 +17,9 @@ describe("ResetPasswordModule", () => {
     const app = await Test.createTestingModule({
       imports: [
         ResetPasswordModule,
+        AutomapperModule.forRoot({
+          strategyInitializer: classes(),
+        }),
         ConfigModule.forRoot({
           isGlobal: true,
           load: [() => mockConfig],
