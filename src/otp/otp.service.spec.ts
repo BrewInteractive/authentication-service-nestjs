@@ -39,7 +39,7 @@ describe("OtpService", () => {
     expect(otpService).toBeDefined();
   });
 
-  it("should be successful OTP verification by email", async () => {
+  it("should be successful when a valid otp is provided.", async () => {
     const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -54,7 +54,7 @@ describe("OtpService", () => {
     expect(actualResult).toBe(true);
   });
 
-  it("should be unsuccessful OTP verification by email", async () => {
+  it("should be successful when an invalid otp is provided.", async () => {
     jest
       .spyOn(otpRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
