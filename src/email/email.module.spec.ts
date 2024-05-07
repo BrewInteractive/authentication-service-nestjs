@@ -1,16 +1,16 @@
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { EmailConfigFixture } from "../../test/fixtures";
 import { EmailModule } from "./email.module";
 import { MockFactory } from "mockingbird";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
-import { emailConfigFixture } from "../../test/fixtures";
 
 describe("EmailModule", () => {
   let emailModule: EmailModule;
 
   it("Should be defined (With AWS)", async () => {
-    const emailConfig = () => MockFactory(emailConfigFixture).one();
+    const emailConfig = () => MockFactory(EmailConfigFixture).one();
     const app = await Test.createTestingModule({
       imports: [
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
@@ -28,7 +28,7 @@ describe("EmailModule", () => {
 
   it("Should be defined (With SMTP)", async () => {
     const emailConfig = () =>
-      MockFactory(emailConfigFixture).mutate({ emailService: "smtp" }).one();
+      MockFactory(EmailConfigFixture).mutate({ emailService: "smtp" }).one();
     const app = await Test.createTestingModule({
       imports: [
         AutomapperModule.forRoot({ strategyInitializer: classes() }),
@@ -46,7 +46,7 @@ describe("EmailModule", () => {
 
   it("Should throw error", async () => {
     const emailConfig = () =>
-      MockFactory(emailConfigFixture).mutate({ emailService: "mock" }).one();
+      MockFactory(EmailConfigFixture).mutate({ emailService: "mock" }).one();
     const expectedError = new Error("Invalid email service type");
     await expect(
       Test.createTestingModule({

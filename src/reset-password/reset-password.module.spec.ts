@@ -2,19 +2,19 @@ import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { EmailConfigFixture } from "../../test/fixtures";
 import { MockFactory } from "mockingbird";
 import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
 import { authenticationConfig } from "../config";
 import { classes } from "@automapper/classes";
-import { emailConfigFixture } from "../../test/fixtures";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("ResetPasswordModule", () => {
   let resetPasswordModule: ResetPasswordModule;
 
   beforeEach(async () => {
-    const emailConfig = () => MockFactory(emailConfigFixture).one();
+    const emailConfig = () => MockFactory(EmailConfigFixture).one();
     const app = await Test.createTestingModule({
       imports: [
         ResetPasswordModule,

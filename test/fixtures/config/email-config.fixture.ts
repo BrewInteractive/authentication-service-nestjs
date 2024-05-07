@@ -1,7 +1,9 @@
+import { AwsEmailConfig, SmtpEmailConfig } from "../../../src/email/providers";
+
 import { EmailServiceType } from "../../../src/email/enum/email.service.type.enum";
 import { Mock } from "mockingbird";
 
-class AWSemailConfigFixture {
+class AwsEmailConfigFixture extends AwsEmailConfig {
   @Mock()
   sesRegion: string;
 
@@ -12,7 +14,7 @@ class AWSemailConfigFixture {
   sesSecretKey: string;
 }
 
-class SMTPAuthemailConfigFixture {
+class SmtpAuthEmailConfigFixture {
   @Mock()
   user: string;
 
@@ -20,12 +22,12 @@ class SMTPAuthemailConfigFixture {
   pass: string;
 }
 
-class SMTPemailConfigFixture {
+class SmtpEmailConfigFixture extends SmtpEmailConfig {
   @Mock((faker) => faker.internet.url())
   host: string;
 
-  @Mock(SMTPAuthemailConfigFixture)
-  auth: SMTPAuthemailConfigFixture;
+  @Mock(SmtpAuthEmailConfigFixture)
+  auth: SmtpAuthEmailConfigFixture;
 }
 
 class EmailSubjectsConfigurationsFixture {
@@ -33,18 +35,18 @@ class EmailSubjectsConfigurationsFixture {
   loginOtp: string;
 }
 
-export class emailConfigFixture {
+export class EmailConfigFixture {
   @Mock(EmailServiceType.AWS)
   emailService: string;
 
   @Mock((faker) => faker.internet.email())
   emailFrom: string;
 
-  @Mock(AWSemailConfigFixture)
-  aws: AWSemailConfigFixture;
+  @Mock(AwsEmailConfigFixture)
+  aws: AwsEmailConfigFixture;
 
-  @Mock(SMTPemailConfigFixture)
-  smtp: SMTPemailConfigFixture;
+  @Mock(SmtpEmailConfigFixture)
+  smtp: SmtpEmailConfigFixture;
 
   @Mock(EmailSubjectsConfigurationsFixture)
   emailSubjects: EmailSubjectsConfigurationsFixture;
