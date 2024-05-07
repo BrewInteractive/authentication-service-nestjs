@@ -3,12 +3,12 @@ import * as path from "path";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { applicationInfoConfig, serverConfig } from "./config";
 
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
-import config from "./config/configuration";
 
 import mjml2html = require("mjml");
 
@@ -17,12 +17,12 @@ function initValidationPipe(app: INestApplication) {
 }
 
 function initSwagger(app: INestApplication) {
-  if (config().swaggerEnabled) {
+  if (serverConfig().swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle(config().name)
-      .setDescription(config().description)
-      .setVersion(config().version)
-      .addServer(config().basePath)
+      .setTitle(applicationInfoConfig().name)
+      .setDescription(applicationInfoConfig().description)
+      .setVersion(applicationInfoConfig().version)
+      .addServer(serverConfig().basePath)
       .addSecurity("ApiKey", {
         type: "apiKey",
         name: "x-api-key",
@@ -67,13 +67,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: config().corsAllowedOrigins,
+    origin: serverConfig().corsAllowedOrigins,
     credentials: true,
   });
 
   initGlobalGuard(app);
   initValidationPipe(app);
   initSwagger(app);
-  await app.listen(config().port);
+  await app.listen(serverConfig().port);
 }
 bootstrap();
