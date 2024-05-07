@@ -33,9 +33,7 @@ import { Module } from "@nestjs/common";
         smtpEmailService: SmtpEmailService,
         configService: ConfigService
       ) => {
-        const emailServiceType = configService.get(
-          "emailService"
-        ) as EmailServiceType;
+        const emailServiceType = configService.get("emailService");
 
         switch (emailServiceType) {
           case EmailServiceType.SMTP:
