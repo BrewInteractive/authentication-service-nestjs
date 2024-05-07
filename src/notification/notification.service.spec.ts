@@ -1,8 +1,8 @@
-import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
-import { ConfigFixture } from "../../test/fixtures";
+import { ConfigModule } from "@nestjs/config";
+import { EmailConfigFixture } from "../../test/fixtures";
 import { EmailModule } from "../email/email.module";
 import { EmailService } from "../email/email.service";
 import { MockFactory } from "mockingbird";
@@ -16,7 +16,7 @@ describe("NotificationService", () => {
   let notificationService: NotificationService;
   let templateService: TemplateService;
   let emailService: EmailService;
-  const mockConfig = MockFactory(ConfigFixture).one();
+  const mockEmailConfig = MockFactory(EmailConfigFixture).one();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,7 +28,7 @@ describe("NotificationService", () => {
         }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockConfig],
+          load: [() => mockEmailConfig],
         }),
       ],
       providers: [NotificationService],
