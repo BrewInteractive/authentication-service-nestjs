@@ -26,7 +26,7 @@ export class OtpFixture extends Otp {
     email?: string;
   };
 
-  withEmailChannel(size: number = 2) {
+  withEmailChannel() {
     this.channel = { email: faker.internet.email() };
     return this;
   }
