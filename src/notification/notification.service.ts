@@ -1,9 +1,10 @@
 import { EmailService } from "../email/email.service";
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { TemplateService } from "../template/template.service";
 import { OnEvent } from "@nestjs/event-emitter";
 import { ConfigService } from "@nestjs/config";
-import { Email } from "../email/dto/email.dto";
+import { OtpEmailCreatedEvent } from "./dto/otp-email-created-event.dto";
+import { EAuthenticationAction } from "../enums";
 
 @Injectable()
 export class NotificationService {
@@ -14,24 +15,52 @@ export class NotificationService {
     private readonly configService: ConfigService
   ) {}
 
-  @OnEvent("otp.login.email.created")
-  async onLoginOtpEmailCreated({
-    otpCode,
-    userEmailAddress,
-  }: {
-    otpCode: string;
-    userEmailAddress: string;
-  }): Promise<void> {
-    const template = this.templateService.getLoginOtpEmailTemplate("en");
-    const html = this.templateService.injectData(template, {
-      otpCode,
-    });
-    const email = {
+  private getOtpTemplateByAuthenticationAction(
+    authenticationAction: EAuthenticationAction
+  ): {
+    content: string;
+    subject: string;
+  } {
+    if (authenticationAction === EAuthenticationAction.EMAIL_LOGIN_OTP)
+      return {
+        content: this.templateService.getLoginOtpEmailTemplate("en"),
+        subject: this.configService.get<string>("emailSubjects.loginOtp"),
+      };
+    else throw new BadRequestException("There is no otp template.");
+  }
+
+  private generateEmailOtpTemplate(
+    otpCode: string,
+    authenticationAction: EAuthenticationAction
+  ): {
+    content: string;
+    subject: string;
+  } {
+    const emailTemplate =
+      this.getOtpTemplateByAuthenticationAction(authenticationAction);
+    emailTemplate.content = this.templateService.injectData(
+      emailTemplate.content,
+      {
+        otpCode,
+      }
+    ) as string;
+    return emailTemplate;
+  }
+
+  @OnEvent("otp.email.created")
+  async onOtpEmailCreated(
+    otpEmailCreatedEvent: OtpEmailCreatedEvent
+  ): Promise<void> {
+    const emailContentTemplate = this.generateEmailOtpTemplate(
+      otpEmailCreatedEvent.otpCode,
+      otpEmailCreatedEvent.authenticationAction
+    );
+
+    await this.emailService.sendEmailAsync({
       from: this.configService.get<string>("emailFrom"),
-      to: userEmailAddress,
-      subject: this.configService.get<string>("emailSubjects.loginOtp"),
-      content: html,
-    } as Email;
-    await this.emailService.sendEmailAsync(email);
+      to: otpEmailCreatedEvent.userEmailAddress,
+      subject: emailContentTemplate.subject,
+      content: emailContentTemplate.content,
+    });
   }
 }
