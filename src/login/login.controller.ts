@@ -12,7 +12,6 @@ import { Mapper } from "@automapper/core";
 @ApiSecurity("ApiKey")
 export class LoginController {
   constructor(
-    @InjectMapper() private readonly mapper: Mapper,
     @Inject("TokenService") private readonly tokenService: TokenService,
     @Inject("UserService") private readonly userService: UserService
   ) {}
