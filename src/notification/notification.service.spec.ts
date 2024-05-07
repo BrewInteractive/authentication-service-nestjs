@@ -4,14 +4,14 @@ import {
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { AuthenticationAction } from "../enum";
 import { AutomapperModule } from "@automapper/nestjs";
-import { BadRequestException } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { EAuthenticationAction } from "../enums";
 import { EmailModule } from "../email/email.module";
 import { EmailService } from "../email/email.service";
 import { MockFactory } from "mockingbird";
 import { NotificationService } from "./notification.service";
+import { OtpEmailTemplateNotFoundError } from "./error";
 import { TemplateModule } from "../template/template.module";
 import { TemplateService } from "../template/template.service";
 import { classes } from "@automapper/classes";
@@ -65,11 +65,11 @@ describe("NotificationService", () => {
       .spyOn(emailService, "sendEmailAsync")
       .mockResolvedValue();
 
-    await notificationService.onOtpEmailCreated(mockOtpEmailCreatedEvent);
+    await notificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent);
 
     expect(templateSpy).toHaveBeenCalledWith("en");
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
-      otpCode: mockOtpEmailCreatedEvent.otpCode,
+      otpValue: mockOtpEmailCreatedEvent.otpValue,
     });
     expect(emailSpy).toBeCalled();
   });
@@ -77,19 +77,25 @@ describe("NotificationService", () => {
   it("Otp should throw an error because it can't find the template", async () => {
     const mockOtpEmailCreatedEvent = MockFactory(OtpEmailCreatedEventFixture)
       .mutate({
-        authenticationAction: "mock" as EAuthenticationAction,
+        authenticationAction: AuthenticationAction.LOGIN,
       })
       .one();
 
-    const expectedResult = new BadRequestException("There is no otp template.");
+    const templateSpy = jest
+      .spyOn(templateService, "getLoginOtpEmailTemplate")
+      .mockReturnValue(null);
+
+    const expectedError = new OtpEmailTemplateNotFoundError(
+      AuthenticationAction.LOGIN
+    );
 
     const emailSpy = jest
       .spyOn(emailService, "sendEmailAsync")
       .mockResolvedValue();
 
     await expect(
-      notificationService.onOtpEmailCreated(mockOtpEmailCreatedEvent)
-    ).rejects.toThrow(expectedResult);
+      notificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
+    ).rejects.toThrow(expectedError);
 
     expect(emailSpy).not.toBeCalled();
   });

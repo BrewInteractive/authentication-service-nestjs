@@ -1,7 +1,7 @@
-import { EAuthenticationAction } from "../../enums";
+import { AuthenticationAction } from "../../enum";
 
 export class OtpEmailCreatedEvent {
-  otpCode: string;
-  userEmailAddress: string;
-  authenticationAction: EAuthenticationAction;
+  otpValue: string;
+  emailAddress: string;
+  authenticationAction: AuthenticationAction;
 }
