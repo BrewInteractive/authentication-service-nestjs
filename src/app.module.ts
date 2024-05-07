@@ -1,4 +1,10 @@
 import { Module, forwardRef } from "@nestjs/common";
+import {
+  appConfig,
+  authenticationConfig,
+  emailConfig,
+  serverConfig,
+} from "./config";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -14,7 +20,6 @@ import { TokenModule } from "./token/token.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { classes } from "@automapper/classes";
-import config from "./config/configuration";
 import { dataSourceOptions } from "../db/data-source";
 
 @Module({
@@ -36,7 +41,7 @@ import { dataSourceOptions } from "../db/data-source";
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [config],
+      load: [appConfig, authenticationConfig, emailConfig, serverConfig],
     }),
     RefreshTokenModule,
   ],
