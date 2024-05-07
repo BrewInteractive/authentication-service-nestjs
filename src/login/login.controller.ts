@@ -4,15 +4,12 @@ import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
 import { LoginResponse } from "./dto/login-response.dto";
-import { InjectMapper } from "@automapper/nestjs";
-import { Mapper } from "@automapper/core";
 
 @ApiTags("authentication")
 @Controller()
 @ApiSecurity("ApiKey")
 export class LoginController {
   constructor(
-    @InjectMapper() private readonly mapper: Mapper,
     @Inject("TokenService") private readonly tokenService: TokenService,
     @Inject("UserService") private readonly userService: UserService
   ) {}

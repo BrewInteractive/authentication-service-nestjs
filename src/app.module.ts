@@ -10,6 +10,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { LoginModule } from "./login/login.module";
 import { PluginModule } from "@brewww/nestjs-plugin-module";
 import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
@@ -36,6 +37,7 @@ import { dataSourceOptions } from "../db/data-source";
     SignUpModule,
     LoginModule,
     ResetPasswordModule,
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
