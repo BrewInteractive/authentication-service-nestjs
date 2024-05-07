@@ -27,12 +27,12 @@ export class LoginOtpEmailController {
   async loginAsync(
     @Body() loginOtpEmailRequest: LoginOtpEmailRequest
   ): Promise<LoginResponse> {
-    const isItConfirmed = await this.otpService.validateEmailOtpAsync(
+    const isOtpConfirmed = await this.otpService.validateEmailOtpAsync(
       loginOtpEmailRequest.email,
       loginOtpEmailRequest.otpCode
     );
 
-    if (!isItConfirmed) throw new UnauthorizedException("Invalid credentials");
+    if (!isOtpConfirmed) throw new UnauthorizedException("Invalid credentials");
 
     const user = await this.userService.getUserAsync({
       email: loginOtpEmailRequest.email,
