@@ -23,6 +23,6 @@ export class OtpService {
       },
     });
 
-    return otpEntity ? true : false;
+    return !!otpEntity;
   }
 }
