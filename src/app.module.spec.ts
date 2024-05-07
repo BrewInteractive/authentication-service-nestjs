@@ -1,22 +1,20 @@
 import { AppModule } from "./app.module";
+import { ConfigModule } from "@nestjs/config";
 import { DataSource } from "typeorm";
 import { Test } from "@nestjs/testing";
+import { emailConfig } from "./config";
 import { setupTestDataSourceAsync } from "../test/test-db";
-import { ConfigModule } from "@nestjs/config";
-import { MockFactory } from "mockingbird";
-import { ConfigFixture } from "../test/fixtures";
 
 describe("AppModule", () => {
   let appModule: AppModule;
-  const mockConfig = MockFactory(ConfigFixture).one();
-  process.env.EMAIL_SERVICE = "aws";
   beforeEach(async () => {
+    process.env.EMAIL_SERVICE = "aws";
     const app = await Test.createTestingModule({
       imports: [
         AppModule,
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockConfig],
+          load: [emailConfig],
         }),
       ],
     })
