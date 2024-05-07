@@ -1,6 +1,6 @@
 import { Module, forwardRef } from "@nestjs/common";
 import {
-  applicationInfoConfig,
+  appConfig,
   authenticationConfig,
   emailConfig,
   serverConfig,
@@ -39,12 +39,7 @@ import { dataSourceOptions } from "../db/data-source";
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        applicationInfoConfig,
-        authenticationConfig,
-        emailConfig,
-        serverConfig,
-      ],
+      load: [appConfig, authenticationConfig, emailConfig, serverConfig],
     }),
     RefreshTokenModule,
   ],
