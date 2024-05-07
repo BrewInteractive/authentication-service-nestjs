@@ -43,7 +43,7 @@ export class NotificationService {
       {
         otpCode,
       }
-    ) as string;
+    );
     return emailTemplate;
   }
 
