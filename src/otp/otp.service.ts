@@ -53,7 +53,7 @@ export class OtpService {
     return {
       isSent: true,
       expiresAt: otpEntity.expiresAt,
-      code: otpEntity.value,
+      otpValue: otpEntity.value,
     };
   }
 
