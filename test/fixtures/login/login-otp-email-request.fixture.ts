@@ -6,5 +6,5 @@ export class LoginOtpEmailRequestFixture extends LoginOtpEmailRequest {
   email: string | null;
 
   @Mock((faker) => faker.datatype.string(6))
-  otpCode: string;
+  otpValue: string;
 }

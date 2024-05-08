@@ -11,5 +11,5 @@ export class LoginOtpEmailRequest {
   @IsNotEmpty()
   @IsString()
   @AutoMap()
-  otpCode: string;
+  otpValue: string;
 }

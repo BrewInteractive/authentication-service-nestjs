@@ -51,7 +51,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         .post("/login-otp-email")
         .send({
           email: mockUser.email,
-          otpCode: mockOtp.value,
+          otpValue: mockOtp.value,
         })
         .expect(201);
 
@@ -70,7 +70,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         .post("/login-otp-email")
         .send({
           email: mockUser.email,
-          otpCode: mockOtp.value,
+          otpValue: mockOtp.value,
         })
         .expect(401);
 
@@ -92,7 +92,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         .post("/login-otp-email")
         .send({
           email: mockUser.email,
-          otpCode: mockOtp.value,
+          otpValue: mockOtp.value,
         })
         .expect(401);
 
