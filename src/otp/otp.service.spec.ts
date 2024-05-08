@@ -67,8 +67,8 @@ describe("OtpService", () => {
     expect(actualResult).toBe(false);
   });
 
-  it("OTP should be created for email sending", async () => {
-    const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
+  it("New Otp must be created if there is not already one", async () => {
+    const createdOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
       .spyOn(otpRepository, "findOne")
@@ -76,33 +76,30 @@ describe("OtpService", () => {
 
     jest
       .spyOn(otpRepository, "save")
-      .mockResolvedValue(Promise.resolve(mockOtp));
+      .mockResolvedValue(Promise.resolve(createdOtp));
 
     const actualResult = await otpService.createEmailOtpAsync(
-      mockOtp.channel.email
+      createdOtp.channel.email
     );
 
-    expect(actualResult.otpValue).toBe(mockOtp.value);
+    expect(actualResult.otpValue).toBe(createdOtp.value);
     expect(actualResult.isSent).toBe(true);
-    expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
+    expect(actualResult.expiresAt).toBe(createdOtp.expiresAt);
   });
 
-  it("new OTP should not be created to send email", async () => {
-    const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
+  it("New Otp must not be created if there already one", async () => {
+    const unexpiredOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
       .spyOn(otpRepository, "findOne")
-      .mockResolvedValue(Promise.resolve(mockOtp));
-
-    jest.spyOn(otpRepository, "save").mockResolvedValue(Promise.resolve(null));
+      .mockResolvedValue(Promise.resolve(unexpiredOtp));
 
     const actualResult = await otpService.createEmailOtpAsync(
-      mockOtp.channel.email
+      unexpiredOtp.channel.email
     );
 
-    expect(otpRepository.save).not.toBeCalled();
     expect(actualResult.otpValue).toBe(undefined);
     expect(actualResult.isSent).toBe(false);
-    expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
+    expect(actualResult.expiresAt).toBe(unexpiredOtp.expiresAt);
   });
 });

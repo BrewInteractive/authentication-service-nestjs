@@ -29,6 +29,13 @@ export class OtpService {
 
     return !!otpEntity;
   }
+
+  async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
+    return await this.createOtpAsync({
+      email,
+    });
+  }
+
   private async createOtpAsync(channel: {
     email?: string;
   }): Promise<SendOtpResult> {
@@ -42,7 +49,7 @@ export class OtpService {
     if (activeOtp) return { isSent: false, expiresAt: activeOtp.expiresAt };
 
     const otpEntity = await this.otpRepository.save({
-      value: uid(6),
+      value: uid(6).toUpperCase(),
       channel,
       expiresAt: new Date(
         new Date().getTime() +
@@ -55,11 +62,5 @@ export class OtpService {
       expiresAt: otpEntity.expiresAt,
       otpValue: otpEntity.value,
     };
-  }
-
-  async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
-    return this.createOtpAsync({
-      email,
-    });
   }
 }
