@@ -3,9 +3,10 @@ import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SendLoginOtpEmailRequest } from "./dto/send-login-otp-email-request.dto";
 import { OtpService } from "../otp/otp.service";
-import { SendOtpResult } from "./dto";
+import { SendOtpResult } from "../otp/dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
+import { OtpEmailCreatedEvent } from "src/notification/dto/otp-email-created-event.dto";
 
 @ApiTags("authentication")
 @Controller()
@@ -24,13 +25,13 @@ export class SendLoginOtpEmailController {
     if(!user) throw new UnauthorizedException("User doesn't exist.");
 
     const sendOtpResult = await this.otpService.createEmailOtpAsync(sendLoginOtpEmailRequest.email);
-
-    if(sendOtpResult.isSent === false) {
-        this.eventEmitter.emit("otp.email.created", {
-            sendOtpResult.otpValue,
-            sendLoginOtpEmailRequest.email,
-            AuthenticationAction.LOGIN,
-          });
+    
+    if(sendOtpResult.isSent === true) {
+      const otpEmailCreatedEvent = new OtpEmailCreatedEvent();
+      otpEmailCreatedEvent.otpValue = sendOtpResult.otpValue;
+      otpEmailCreatedEvent.emailAddress = sendLoginOtpEmailRequest.email;
+      otpEmailCreatedEvent.authenticationAction = AuthenticationAction.LOGIN;
+      this.eventEmitter.emit("otp.email.created", otpEmailCreatedEvent);
     }
 
     return sendOtpResult;
