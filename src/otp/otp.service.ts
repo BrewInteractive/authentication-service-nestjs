@@ -17,11 +17,11 @@ export class OtpService {
 
   async validateEmailOtpAsync(
     email: string,
-    otpCode: string
+    otpValue: string
   ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
-        value: otpCode,
+        value: otpValue,
         channel: JsonContains({ email }),
         expiresAt: MoreThan(new Date()),
       },
@@ -53,7 +53,7 @@ export class OtpService {
     return {
       isSent: true,
       expiresAt: otpEntity.expiresAt,
-      code: otpEntity.value,
+      otpValue: otpEntity.value,
     };
   }
 

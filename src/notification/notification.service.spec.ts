@@ -51,7 +51,7 @@ describe("NotificationService", () => {
     const mockOtpEmailCreatedEvent = MockFactory(
       OtpEmailCreatedEventFixture
     ).one();
-    const mockTemplate = "<p>{{otpCode}}</p>";
+    const mockTemplate = "<p>{{otpValue}}</p>";
 
     const templateSpy = jest
       .spyOn(templateService, "getLoginOtpEmailTemplate")

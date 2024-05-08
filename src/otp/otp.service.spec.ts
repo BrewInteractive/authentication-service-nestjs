@@ -82,7 +82,7 @@ describe("OtpService", () => {
       mockOtp.channel.email
     );
 
-    expect(actualResult.code).toBe(mockOtp.value);
+    expect(actualResult.otpValue).toBe(mockOtp.value);
     expect(actualResult.isSent).toBe(true);
     expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
   });
@@ -101,7 +101,7 @@ describe("OtpService", () => {
     );
 
     expect(otpRepository.save).not.toBeCalled();
-    expect(actualResult.code).toBe(undefined);
+    expect(actualResult.otpValue).toBe(undefined);
     expect(actualResult.isSent).toBe(false);
     expect(actualResult.expiresAt).toBe(mockOtp.expiresAt);
   });
