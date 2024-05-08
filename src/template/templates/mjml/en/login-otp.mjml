@@ -27,7 +27,7 @@
         </mj-column>
         <mj-column width="50%">
           <mj-text vertical-align="middle" color="#637381" font-size="32px" container-background-color="#F0F0F0" padding="24px" align="center">
-            {{otpCode}}
+            {{otpValue}}
           </mj-text>
         </mj-column>
       </mj-section>

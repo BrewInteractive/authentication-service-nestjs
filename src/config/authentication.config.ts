@@ -14,4 +14,7 @@ export const authenticationConfig = () => ({
   refreshToken: {
     expiresIn: parseInt(process.env.REFRESH_TOKEN_EXPIRES_IN) || 86400,
   },
+  otp: {
+    expiresIn: parseInt(process.env.OTP_EXPIRES_IN) || 180,
+  },
 });

@@ -19,6 +19,7 @@ describe("OtpModule", () => {
       .overrideProvider(getRepositoryToken(Otp))
       .useValue({
         findOne: jest.fn(),
+        save: jest.fn(),
       })
       .compile();
 
