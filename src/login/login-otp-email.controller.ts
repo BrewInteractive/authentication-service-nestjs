@@ -4,6 +4,7 @@ import {
   Body,
   Controller,
   Inject,
+  NotFoundException,
   Post,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -38,6 +39,7 @@ export class LoginOtpEmailController {
       email: loginOtpEmailRequest.email,
     });
 
+    if (!user) throw new NotFoundException("User not found");
 
     return await this.tokenService.createTokensAsync(user);
   }

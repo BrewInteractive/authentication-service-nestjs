@@ -7,7 +7,6 @@ import { OtpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
-import { LoginOtpEmailRequest } from "../../src/login/dto/login-otp-email-request.dto";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
@@ -39,19 +38,19 @@ describe("LoginOtpEmailController (e2e)", () => {
   });
 
   describe("POST /login-otp-email", () => {
-    it("Should return a token if OTP credentials are valid", async () => {
-      const mockUser = MockFactory(UserFixture).one().hashPassword();
-      const mockOtp = MockFactory(OtpFixture)
-        .mutate({ channel: { email: mockUser.email } })
+    it("should return tokens if otp is valid", async () => {
+      const createdUser = MockFactory(UserFixture).one().hashPassword();
+      const createdOtp = MockFactory(OtpFixture)
+        .mutate({ channel: { email: createdUser.email } })
         .one();
-      await userRepository.save(mockUser);
-      await otpRepository.save(mockOtp);
+      await userRepository.save(createdUser);
+      await otpRepository.save(createdOtp);
 
       const response = await request(app.getHttpServer())
         .post("/login-otp-email")
         .send({
-          email: mockUser.email,
-          otpValue: mockOtp.value,
+          email: createdUser.email,
+          otpValue: createdOtp.value,
         })
         .expect(201);
 
@@ -60,43 +59,63 @@ describe("LoginOtpEmailController (e2e)", () => {
     });
 
     it("should return an error if OTP is invalid", async () => {
-      const mockUser = MockFactory(UserFixture).one().hashPassword();
-      const mockOtp = MockFactory(OtpFixture)
-        .mutate({ channel: { email: mockUser.email } })
+      const createdUser = MockFactory(UserFixture).one().hashPassword();
+      const createdOtp = MockFactory(OtpFixture)
+        .mutate({ channel: { email: createdUser.email } })
         .one();
-      await userRepository.save(mockUser);
+      await userRepository.save(createdUser);
 
       const response = await request(app.getHttpServer())
         .post("/login-otp-email")
         .send({
-          email: mockUser.email,
-          otpValue: mockOtp.value,
+          email: createdUser.email,
+          otpValue: createdOtp.value,
         })
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials");
     });
 
-    it("If the OTP time has expired, it should return an error", async () => {
-      const mockUser = MockFactory(UserFixture).one().hashPassword();
-      const mockOtp = MockFactory(OtpFixture)
+    it("should return an error if the otp is expired.", async () => {
+      const createdUser = MockFactory(UserFixture).one().hashPassword();
+      const unexpiredOtp = MockFactory(OtpFixture)
         .mutate({
-          channel: { email: mockUser.email },
+          channel: { email: createdUser.email },
           expiresAt: faker.date.past(),
         })
         .one();
-      await userRepository.save(mockUser);
-      await otpRepository.save(mockOtp);
+      await userRepository.save(createdUser);
+      await otpRepository.save(unexpiredOtp);
 
       const response = await request(app.getHttpServer())
         .post("/login-otp-email")
         .send({
-          email: mockUser.email,
-          otpValue: mockOtp.value,
+          email: createdUser.email,
+          otpValue: unexpiredOtp.value,
         })
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials");
+    });
+
+    it("If there is no user, the error should return", async () => {
+      const createdUser = MockFactory(UserFixture).one().hashPassword();
+      const unexpiredOtp = MockFactory(OtpFixture)
+        .mutate({
+          channel: { email: createdUser.email },
+        })
+        .one();
+      await otpRepository.save(unexpiredOtp);
+
+      const response = await request(app.getHttpServer())
+        .post("/login-otp-email")
+        .send({
+          email: createdUser.email,
+          otpValue: unexpiredOtp.value,
+        })
+        .expect(404);
+
+      expect(response.body.message).toEqual("User not found");
     });
   });
 });

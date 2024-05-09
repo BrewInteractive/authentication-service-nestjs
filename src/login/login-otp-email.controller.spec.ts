@@ -3,6 +3,7 @@ import {
   TokensFixture,
   UserFixture,
 } from "../../test/fixtures";
+import { NotFoundException, UnauthorizedException } from "@nestjs/common";
 import {
   Otp,
   RefreshToken,
@@ -20,7 +21,6 @@ import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
-import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
@@ -84,7 +84,7 @@ describe("LoginOtpEmailController", () => {
     expect(loginOtpEmailController).toBeDefined();
   });
 
-  it("should return a token if the email and otp code are invalid", async () => {
+  it("should not return a token if the email and otp code are invalid", async () => {
     const loginOtpEmailRequestDto = MockFactory(
       LoginOtpEmailRequestFixture
     ).one();
@@ -100,23 +100,23 @@ describe("LoginOtpEmailController", () => {
     ).rejects.toThrow(expectedResult);
   });
 
-  it("should return a token if the email and otp code are invalid", async () => {
+  it("If there is no user, the error should return", async () => {
     const mockLoginOtpEmailRequestDto = MockFactory(
       LoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = new UnauthorizedException("Invalid credentials");
+    const expectedResult = new NotFoundException("User not found");
 
-    jest
-      .spyOn(otpService, "validateEmailOtpAsync")
-      .mockResolvedValueOnce(false);
+    jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
 
     await expect(
       loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
     ).rejects.toThrow(expectedResult);
   });
 
-  it("should return a token if the email and otp code are invalid", async () => {
+  it("should return a token if the email and otp code are valid", async () => {
     const mockLoginOtpEmailRequestDto = MockFactory(
       LoginOtpEmailRequestFixture
     ).one();
