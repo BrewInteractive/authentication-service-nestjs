@@ -113,7 +113,7 @@ describe("LoginOtpEmailController (e2e)", () => {
           email: createdUser.email,
           otpValue: unexpiredOtp.value,
         })
-        .expect(404);
+        .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials");
     });
