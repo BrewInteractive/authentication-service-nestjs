@@ -100,12 +100,12 @@ describe("LoginOtpEmailController", () => {
     ).rejects.toThrow(expectedResult);
   });
 
-  it("If there is no user, the error should return", async () => {
+  it("should return error if there is no user", async () => {
     const mockLoginOtpEmailRequestDto = MockFactory(
       LoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = new NotFoundException("User not found");
+    const expectedResult = new UnauthorizedException("Invalid credentials");
 
     jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
 

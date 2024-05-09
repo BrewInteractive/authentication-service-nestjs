@@ -39,7 +39,7 @@ export class LoginOtpEmailController {
       email: loginOtpEmailRequest.email,
     });
 
-    if (!user) throw new NotFoundException("User not found");
+    if (!user) throw new UnauthorizedException("Invalid credentials");
 
     return await this.tokenService.createTokensAsync(user);
   }
