@@ -3,7 +3,6 @@ import {
   TokensFixture,
   UserFixture,
 } from "../../test/fixtures";
-import { NotFoundException, UnauthorizedException } from "@nestjs/common";
 import {
   Otp,
   RefreshToken,
@@ -21,6 +20,7 @@ import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
+import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";

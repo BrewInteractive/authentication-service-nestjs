@@ -4,7 +4,6 @@ import {
   Body,
   Controller,
   Inject,
-  NotFoundException,
   Post,
   UnauthorizedException,
 } from "@nestjs/common";
