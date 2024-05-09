@@ -1,4 +1,5 @@
 import {
+  Otp,
   RefreshToken,
   User,
   UserResetPasswordRequest,
@@ -42,6 +43,11 @@ describe("LoginModule", () => {
         save: jest.fn(),
       })
       .overrideProvider(getRepositoryToken(RefreshToken))
+      .useValue({
+        save: jest.fn(),
+        findOne: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(Otp))
       .useValue({
         save: jest.fn(),
         findOne: jest.fn(),

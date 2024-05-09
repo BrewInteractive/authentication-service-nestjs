@@ -3,7 +3,7 @@ import { Otp } from "../../../src/entities/otp.entity";
 import { faker } from "@faker-js/faker";
 
 export class OtpFixture extends Otp {
-  @Mock()
+  @Mock((faker) => faker.datatype.uuid())
   id: string;
 
   @Mock()

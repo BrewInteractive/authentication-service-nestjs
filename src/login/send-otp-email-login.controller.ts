@@ -6,7 +6,7 @@ import { OtpService } from "../otp/otp.service";
 import { SendOtpResult } from "../otp/dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
-import { OtpEmailCreatedEvent } from "src/notification/dto/otp-email-created-event.dto";
+import { OtpEmailCreatedEvent } from "../notification/dto/otp-email-created-event.dto";
 
 @ApiTags("authentication")
 @Controller()

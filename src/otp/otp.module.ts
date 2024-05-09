@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Otp])],
-  providers: [OtpService],
-  exports: [OtpService],
+  providers: [{provide: "OtpService", useClass: OtpService }],
+  exports: ["OtpService"],
 })
 export class OtpModule {}

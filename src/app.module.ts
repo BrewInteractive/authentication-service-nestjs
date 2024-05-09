@@ -21,6 +21,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { classes } from "@automapper/classes";
 import { dataSourceOptions } from "../db/data-source";
+import { OtpModule } from "./otp/otp.module";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { dataSourceOptions } from "../db/data-source";
         forwardRef(() => AppModule),
         forwardRef(() => TokenModule),
         forwardRef(() => UserModule),
+        forwardRef(() => OtpModule),
       ],
     }),
     AutomapperModule.forRoot({
