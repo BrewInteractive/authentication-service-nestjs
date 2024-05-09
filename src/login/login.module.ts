@@ -1,12 +1,14 @@
 import { LoginController } from "./login.controller";
+import { LoginOtpEmailController } from "./login-otp-email.controller";
 import { LoginProfile } from "./mapping-profiles/login.profile";
 import { Module } from "@nestjs/common";
+import { OtpModule } from "../otp/otp.module";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
 
 @Module({
-  imports: [TokenModule, UserModule],
-  controllers: [LoginController],
+  imports: [TokenModule, UserModule, OtpModule],
+  controllers: [LoginController, LoginOtpEmailController],
   providers: [LoginProfile],
 })
 export class LoginModule {}
