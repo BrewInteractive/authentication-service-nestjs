@@ -98,7 +98,7 @@ describe("LoginOtpEmailController (e2e)", () => {
       expect(response.body.message).toEqual("Invalid credentials");
     });
 
-    it("If there is no user, the error should return", async () => {
+    it("should return error if there is no user", async () => {
       const createdUser = MockFactory(UserFixture).one().hashPassword();
       const unexpiredOtp = MockFactory(OtpFixture)
         .mutate({
@@ -115,7 +115,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(404);
 
-      expect(response.body.message).toEqual("User not found");
+      expect(response.body.message).toEqual("Invalid credentials");
     });
   });
 });
