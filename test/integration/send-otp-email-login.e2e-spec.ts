@@ -59,8 +59,8 @@ describe("SendLoginOtpEmailController (e2e)", () => {
         .send(sendLoginOtpEmailRequest)
         .expect(201);
 
-      expect(responseEmail.body.is_sent).toEqual(false);
-      expect(new Date(responseEmail.body.expires_at)).toEqual(new Date(otp.expiresAt));
+      expect(responseEmail.body.isSent).toEqual(false);
+      expect(new Date(responseEmail.body.expiresAt)).toEqual(new Date(otp.expiresAt));
     });
 
     it("Should return send otp result when no active otp exists", async () => {
@@ -77,8 +77,8 @@ describe("SendLoginOtpEmailController (e2e)", () => {
           .send(sendLoginOtpEmailRequest)
           .expect(201);
 
-        expect(responseEmail.body.is_sent).toEqual(true);
-        expect(responseEmail.body).toHaveProperty("expires_at");
+        expect(responseEmail.body.isSent).toEqual(true);
+        expect(new Date(responseEmail.body.expiresAt).getTime()).toBeGreaterThan(new Date().getTime())
     });
 
     it("Should return unauthorized error when no user with given email exists", async () => {

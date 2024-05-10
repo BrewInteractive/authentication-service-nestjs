@@ -4,10 +4,10 @@ export class SendLoginOtpEmailResponse {
   @ApiProperty({
     required: true,
   })
-  is_sent: boolean;
+  isSent: boolean;
 
   @ApiProperty({
     required: true,
   })
-  expires_at: Date;
+  expiresAt: Date;
 }

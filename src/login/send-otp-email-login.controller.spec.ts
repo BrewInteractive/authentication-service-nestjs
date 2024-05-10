@@ -1,8 +1,6 @@
 import {
-    OtpFixture,
     SendLoginOtpEmailRequestFixture,
     SendOtpResultFixture,
-    TokensFixture,
     UserFixture,
   } from "../../test/fixtures";
   import {
@@ -119,8 +117,8 @@ import {
         }).one();
 
         const expectedResult = {
-          is_sent: mockSendOtpResult.isSent,
-          expires_at: mockSendOtpResult.expiresAt
+          isSent: mockSendOtpResult.isSent,
+          expiresAt: mockSendOtpResult.expiresAt
         }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
@@ -146,8 +144,8 @@ import {
         }).one();
 
         const expectedResult = {
-          is_sent: mockSendOtpResult.isSent,
-          expires_at: mockSendOtpResult.expiresAt
+          isSent: mockSendOtpResult.isSent,
+          expiresAt: mockSendOtpResult.expiresAt
         }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);

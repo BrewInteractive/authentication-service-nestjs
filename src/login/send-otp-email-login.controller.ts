@@ -35,8 +35,8 @@ export class SendLoginOtpEmailController {
     }
 
     return {
-      is_sent: sendOtpResult.isSent,
-      expires_at: sendOtpResult.expiresAt
+      isSent: sendOtpResult.isSent,
+      expiresAt: sendOtpResult.expiresAt
     };
   }
 }
