@@ -1,7 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, UnauthorizedException, BadRequestException } from '@nestjs/common';
-import { error } from 'console';
 import { Response } from 'express';
-import { stat } from 'fs';
 import { ErrorResponse } from '../dto/error-response.dto';
 
 @Catch()
