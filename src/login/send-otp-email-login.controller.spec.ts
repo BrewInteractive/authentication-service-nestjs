@@ -119,8 +119,8 @@ import {
         }).one();
 
         const expectedResult = {
-          isSent: mockSendOtpResult.isSent,
-          expiresAt: mockSendOtpResult.expiresAt
+          is_sent: mockSendOtpResult.isSent,
+          expires_at: mockSendOtpResult.expiresAt
         }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
@@ -146,8 +146,8 @@ import {
         }).one();
 
         const expectedResult = {
-          isSent: mockSendOtpResult.isSent,
-          expiresAt: mockSendOtpResult.expiresAt
+          is_sent: mockSendOtpResult.isSent,
+          expires_at: mockSendOtpResult.expiresAt
         }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
