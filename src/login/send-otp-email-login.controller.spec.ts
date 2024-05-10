@@ -28,9 +28,7 @@ import {
   import { classes } from "@automapper/classes";
   import { getRepositoryToken } from "@nestjs/typeorm";
   import {EventEmitterModule} from '@nestjs/event-emitter';
-import { Email } from "src/email/dto/email.dto";
-import { SendOtpResult } from "src/otp/dto";
-import { faker } from "@faker-js/faker";
+  import { faker } from "@faker-js/faker";
   
   describe("SendLoginOtpEmailController", () => {
     let sendLoginOtpEmailController: SendLoginOtpEmailController;
@@ -119,13 +117,18 @@ import { faker } from "@faker-js/faker";
             expiresAt: faker.date.future(),
             otpValue: faker.word.noun(),
         }).one();
+
+        const expectedResult = {
+          isSent: mockSendOtpResult.isSent,
+          expiresAt: mockSendOtpResult.expiresAt
+        }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
         jest.spyOn(otpService, "createEmailOtpAsync").mockResolvedValueOnce(mockSendOtpResult)
     
         await expect(
             sendLoginOtpEmailController.sendLoginOtpEmailAsync(mockSendLoginOtpEmailRequestDto)
-        ).resolves.toEqual(mockSendOtpResult);
+        ).resolves.toEqual(expectedResult);
     });
 
     it("should return send otp result with active otp", async () => {
@@ -141,13 +144,18 @@ import { faker } from "@faker-js/faker";
             isSent: false,
             expiresAt: faker.date.future()
         }).one();
+
+        const expectedResult = {
+          isSent: mockSendOtpResult.isSent,
+          expiresAt: mockSendOtpResult.expiresAt
+        }
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
         jest.spyOn(otpService, "createEmailOtpAsync").mockResolvedValueOnce(mockSendOtpResult)
     
         await expect(
             sendLoginOtpEmailController.sendLoginOtpEmailAsync(mockSendLoginOtpEmailRequestDto)
-        ).resolves.toEqual(mockSendOtpResult);
+        ).resolves.toEqual(expectedResult);
     });
   });
   

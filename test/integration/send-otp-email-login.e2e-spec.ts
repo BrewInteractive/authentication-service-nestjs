@@ -79,7 +79,6 @@ describe("SendLoginOtpEmailController (e2e)", () => {
 
         expect(responseEmail.body.isSent).toEqual(true);
         expect(responseEmail.body).toHaveProperty("expiresAt");
-        expect(responseEmail.body).toHaveProperty("otpValue");
     });
 
     it("Should return unauthorized error when no user with given email exists", async () => {

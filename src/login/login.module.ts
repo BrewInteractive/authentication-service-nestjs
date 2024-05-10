@@ -6,10 +6,9 @@ import { OtpModule } from "../otp/otp.module";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
 import { SendLoginOtpEmailController } from "./send-otp-email-login.controller";
-import {EventEmitterModule} from '@nestjs/event-emitter';
 
 @Module({
-  imports: [TokenModule, UserModule, OtpModule, EventEmitterModule.forRoot()],
+  imports: [TokenModule, UserModule, OtpModule],
   controllers: [LoginController, LoginOtpEmailController, SendLoginOtpEmailController],
   providers: [LoginProfile],
 })
