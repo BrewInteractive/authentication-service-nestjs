@@ -21,6 +21,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { classes } from "@automapper/classes";
 import { dataSourceOptions } from "../db/data-source";
+import { APP_FILTER } from "@nestjs/core";
+import { ExceptionsFilter } from "./filter/exceptions.filter";
 
 @Module({
   imports: [
@@ -45,7 +47,12 @@ import { dataSourceOptions } from "../db/data-source";
     }),
     RefreshTokenModule,
   ],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionsFilter
+    },
+  ],
   exports: [AppService],
   controllers: [AppController],
 })
