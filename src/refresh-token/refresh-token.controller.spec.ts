@@ -63,8 +63,8 @@ describe("RefreshTokenController", () => {
     const result = await controller.createRefreshToken(refreshTokenRequest);
 
     expect(result).toEqual({
-      id_token: expectedTokens.id_token,
-      refresh_token: expectedTokens.refresh_token,
+      idToken: expectedTokens.idToken,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshTokenResponse);
   });
 });

@@ -60,8 +60,8 @@ export class TokenService {
     const idToken = await this.createIdTokenAsync(user, expiresIn);
 
     return {
-      id_token: idToken,
-      refresh_token: refreshToken,
+      idToken: idToken,
+      refreshToken: refreshToken,
     };
   }
 

@@ -84,10 +84,10 @@ describe("TokenService", () => {
       roles: user.roles.map((userRole) => userRole.role.name),
     };
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
     const tokens = await tokenService.createTokensAsync(
@@ -95,8 +95,8 @@ describe("TokenService", () => {
       configService.get("jwt.expiresIn")
     );
 
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
       configService.get("jwt.secret"),
@@ -120,10 +120,10 @@ describe("TokenService", () => {
       last_name: user.lastName,
     };
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
     const tokens = await tokenService.createTokensAsync(
@@ -131,8 +131,8 @@ describe("TokenService", () => {
       configService.get("jwt.expiresIn")
     );
 
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
       configService.get("jwt.secret"),
@@ -176,10 +176,10 @@ describe("TokenService", () => {
     const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest
       .spyOn(refreshTokenRepository, "findOne")
@@ -190,8 +190,8 @@ describe("TokenService", () => {
     const tokens = await tokenService.refreshTokenAsync(
       refreshTokenEntity.refreshToken
     );
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
   });
 
   it("should throw unauthorized excepiton", async () => {
