@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { ErrorResponse } from "./error-response.dto";
 
-export class Tokens {
+export class Tokens extends ErrorResponse {
   @ApiProperty({
     required: true,
   })
