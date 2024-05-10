@@ -104,7 +104,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
         .send(sendLoginOtpEmailRequest)
         .expect(401);
 
-      expect(response.body.message).toEqual("User doesn't exist.");
+      expect(response.body.message).toEqual("Unauthorized");
     });
   });
 });

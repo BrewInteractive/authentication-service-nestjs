@@ -22,7 +22,7 @@ export class SendLoginOtpEmailController {
    Promise<SendLoginOtpEmailResponse> {
     const user = await this.userService.getUserAsync({ email: sendLoginOtpEmailRequest.email });
 
-    if(!user) throw new UnauthorizedException("User doesn't exist.");
+    if(!user) throw new UnauthorizedException();
 
     const sendOtpResult = await this.otpService.createEmailOtpAsync(sendLoginOtpEmailRequest.email);
 

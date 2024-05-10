@@ -14,7 +14,7 @@ import {
   
   import { AutomapperModule } from "@automapper/nestjs";
   import { ConfigModule } from "@nestjs/config";
-  import { SendLoginOtpEmailController } from "./send-otp-email-login.controller";
+  import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
   import { MockFactory } from "mockingbird";
   import { OtpModule } from "../otp/otp.module";
   import { OtpService } from "../otp/otp.service";
@@ -92,7 +92,7 @@ import {
             SendLoginOtpEmailRequestFixture
         ).one();
     
-        const expectedResult = new UnauthorizedException("User doesn't exist.");
+        const expectedResult = new UnauthorizedException();
     
         jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
     
@@ -106,7 +106,7 @@ import {
             SendLoginOtpEmailRequestFixture
         ).one();
     
-        const mockUser = MockFactory(UserFixture).mutate({
+        const mockValidUser = MockFactory(UserFixture).mutate({
             email: mockSendLoginOtpEmailRequestDto.email
         }).one();
 
@@ -121,7 +121,7 @@ import {
           expiresAt: mockSendOtpResult.expiresAt
         }
     
-        jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
+        jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockValidUser);
         jest.spyOn(otpService, "createEmailOtpAsync").mockResolvedValueOnce(mockSendOtpResult)
     
         await expect(
@@ -134,7 +134,7 @@ import {
             SendLoginOtpEmailRequestFixture
         ).one();
     
-        const mockUser = MockFactory(UserFixture).mutate({
+        const mockValidUser = MockFactory(UserFixture).mutate({
             email: mockSendLoginOtpEmailRequestDto.email
         }).one();
 
@@ -148,7 +148,7 @@ import {
           expiresAt: mockSendOtpResult.expiresAt
         }
     
-        jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
+        jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockValidUser);
         jest.spyOn(otpService, "createEmailOtpAsync").mockResolvedValueOnce(mockSendOtpResult)
     
         await expect(

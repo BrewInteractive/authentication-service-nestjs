@@ -5,7 +5,7 @@ import { Module } from "@nestjs/common";
 import { OtpModule } from "../otp/otp.module";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
-import { SendLoginOtpEmailController } from "./send-otp-email-login.controller";
+import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
 
 @Module({
   imports: [TokenModule, UserModule, OtpModule],
