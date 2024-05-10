@@ -5,6 +5,9 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  BadRequestException,
+  ForbiddenException,
+  UseFilters,
 } from "@nestjs/common";
 import { LoginRequest } from "./dto/login-request.dto";
 import { UserService } from "../user/user.service";
@@ -13,6 +16,7 @@ import { TokenService } from "../token/token.service";
 import { LoginResponse } from "./dto/login-response.dto";
 import { ErrorResponse } from "src/dto/error-response.dto";
 import { AppException, AppHttpException } from "src/exceptions/app.exception";
+import { OtpLockedError } from "src/exceptions/otp-locked.error";
 
 @ApiTags("authentication")
 @Controller()
@@ -25,6 +29,13 @@ export class LoginController {
 
   @Post("login")
   async loginAsync(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+    try {
+    } catch (error) {
+      if (error instanceof OtpLockedError)
+        throw new ForbiddenException(error.message, { cause: error });
+      else throw new BadRequestException(error.message);
+    }
+
     try {
       if (loginRequest.email) delete loginRequest.username;
 

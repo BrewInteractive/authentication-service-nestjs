@@ -1,18 +1,21 @@
 import {
-  ExceptionFilter,
-  Catch,
   ArgumentsHost,
-  HttpException,
-  UnauthorizedException,
   BadRequestException,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  UnauthorizedException,
 } from "@nestjs/common";
-import { Response } from "express";
-import { AppHttpException } from "../exceptions/app.exception";
-import { ErrorResponse } from "../dto/error-response.dto";
-import { error } from "console";
-import { ExtendedError } from "src/dto";
 
-@Catch()
+import { AppHttpException } from "../exceptions/app.exception";
+import { ErrorResponse } from "../dto/http-extension-response.dto";
+import { ExtendedError } from "src/dto";
+import { OtpLockedError } from "src/exceptions/otp-locked.error";
+import { Response } from "express";
+import { error } from "console";
+
+@Catch(Error)
 export class ExceptionsFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -35,6 +38,18 @@ export class ExceptionsFilter implements ExceptionFilter {
       errorResponse.extensions = exception.extensions;
     }
 
-    response.status(status).json(errorResponse);
+// todo: dictionary'den status code bul
+    
+    response.status(this.getStatusCode(exception)).json(errorResponse);
+  }
+
+  private getStatusCode(exception: Error): number {
+    if (exception instanceof OtpLockedError) {
+      return HttpStatus.UNAUTHORIZED;
+    } else if (exception instanceof BadRequestException) {
+      return HttpStatus.BAD_REQUEST;
+    } else {
+      return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
   }
 }
