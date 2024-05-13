@@ -1,8 +1,8 @@
 import { AwsEmailConfig, AwsEmailService, SmtpEmailService } from "./providers";
 
 import { ConfigService } from "@nestjs/config";
-import { EmailProfile } from "./mapping-profiles/email.mapping.profile";
-import { EmailServiceType } from "./enum/email.service.type.enum";
+import { EmailProfile } from "./mapping-profiles/email.mapping-profile";
+import { EmailServiceType } from "./enum/email-service-type.enum";
 import { Module } from "@nestjs/common";
 
 @Module({

@@ -1,4 +1,8 @@
-import { LoginRequestFixture, TokensFixture, UserFixture } from "../../test/fixtures";
+import {
+  LoginRequestFixture,
+  TokensFixture,
+  UserFixture,
+} from "../../test/fixtures";
 import {
   RefreshToken,
   User,
@@ -9,7 +13,7 @@ import {
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { LoginController } from "./login.controller";
-import { LoginProfile } from "./mapping-profiles/login.profile";
+import { LoginProfile } from "./mapping-profiles/login.mapping-profile";
 import { MockFactory } from "mockingbird";
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
@@ -81,7 +85,9 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(
+      tokens
+    );
   });
 
   it("should return a token if the username and password are valid", async () => {
@@ -99,7 +105,9 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(
+      tokens
+    );
   });
 
   it("should return a token if the email and password are valid. (With null email address)", async () => {
@@ -120,7 +128,9 @@ describe("LoginController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(tokens);
+    await expect(loginController.loginAsync(loginRequestDto)).resolves.toEqual(
+      tokens
+    );
   });
 
   it("should return a token if the email and password are invalid", async () => {

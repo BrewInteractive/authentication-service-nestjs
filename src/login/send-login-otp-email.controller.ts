@@ -1,4 +1,10 @@
-import { Inject, Controller, Post, Body, UnauthorizedException } from "@nestjs/common";
+import {
+  Inject,
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SendLoginOtpEmailRequest } from "./dto/send-login-otp-email-request.dto";
@@ -18,15 +24,20 @@ export class SendLoginOtpEmailController {
   ) {}
 
   @Post("send-login-otp-email")
-  async sendLoginOtpEmailAsync(@Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest):
-   Promise<SendLoginOtpEmailResponse> {
-    const user = await this.userService.getUserAsync({ email: sendLoginOtpEmailRequest.email });
+  async sendLoginOtpEmailAsync(
+    @Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest
+  ): Promise<SendLoginOtpEmailResponse> {
+    const user = await this.userService.getUserAsync({
+      email: sendLoginOtpEmailRequest.email,
+    });
 
-    if(!user) throw new UnauthorizedException();
+    if (!user) throw new UnauthorizedException();
 
-    const sendOtpResult = await this.otpService.createEmailOtpAsync(sendLoginOtpEmailRequest.email);
+    const sendOtpResult = await this.otpService.createEmailOtpAsync(
+      sendLoginOtpEmailRequest.email
+    );
 
-    if(sendOtpResult.isSent === true) {
+    if (sendOtpResult.isSent === true) {
       this.eventEmitter.emit("otp.email.created", {
         otpValue: sendOtpResult.otpValue,
         emailAddress: sendLoginOtpEmailRequest.email,
@@ -36,7 +47,7 @@ export class SendLoginOtpEmailController {
 
     return {
       isSent: sendOtpResult.isSent,
-      expiresAt: sendOtpResult.expiresAt
+      expiresAt: sendOtpResult.expiresAt,
     };
   }
 }

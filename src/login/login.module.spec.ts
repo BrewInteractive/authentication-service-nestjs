@@ -8,11 +8,11 @@ import {
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { LoginModule } from "./login.module";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import {EventEmitterModule} from '@nestjs/event-emitter';
 
 describe("LoginModule", () => {
   let loginModule: LoginModule;

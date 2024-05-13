@@ -1,4 +1,5 @@
 import { Mock, MockFactory } from "mockingbird";
+
 import { RefreshToken } from "../../../src/entities/refresh-token.entity";
 import { User } from "../../../src/entities/user.entity";
 import { UserFixture } from "../user/user.fixture";

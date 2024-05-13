@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ApiKeyGuard } from "./api-key.guard";
-import { faker } from "@faker-js/faker";
 import { ConfigService } from "@nestjs/config";
+import { faker } from "@faker-js/faker";
 
 describe("ApiKeyGuard", () => {
   let apiKeyGuard: ApiKeyGuard;

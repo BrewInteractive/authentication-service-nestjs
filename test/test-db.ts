@@ -28,12 +28,12 @@ export async function setupTestDataSourceAsync() {
       impure: true,
     });
   });
-  
+
   db.public.registerFunction({
-    name: 'obj_description',
+    name: "obj_description",
     args: [DataType.text, DataType.text],
     returns: DataType.text,
-    implementation: () => 'test',
+    implementation: () => "test",
   });
 
   const ds: DataSource = await db.adapters.createTypeormDataSource({
