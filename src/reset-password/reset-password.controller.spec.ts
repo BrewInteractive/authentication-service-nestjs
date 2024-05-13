@@ -1,25 +1,26 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { ResetPasswordController } from "./reset-password.controller";
-import { UserService } from "../user/user.service";
-import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
 import {
   ResetPasswordFixture,
   SendResetPasswordRequestFixture,
   UserFixture,
 } from "../../test/fixtures";
-import { MockFactory } from "mockingbird";
-import { ConfigService } from "@nestjs/config";
-import { TemplateService } from "../template/template.service";
-import { EmailService } from "../email/email.service";
-import { faker } from "@faker-js/faker";
+import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserResetPasswordRequest } from "../entities";
-import { Response } from "express";
+
+import { AutomapperModule } from "@automapper/nestjs";
+import { ConfigService } from "@nestjs/config";
+import { EmailService } from "../email/email.service";
 import { HttpStatus } from "@nestjs/common";
+import { MockFactory } from "mockingbird";
+import { ResetPasswordController } from "./reset-password.controller";
+import { ResetPasswordService } from "./reset-password.service";
+import { Response } from "express";
+import { TemplateService } from "../template/template.service";
+import { classes } from "@automapper/classes";
+import { faker } from "@faker-js/faker";
 
 describe("ResetPasswordController", () => {
   let resetPasswordController: ResetPasswordController;
-  let userService: UserService;
+  let resetPasswordService: ResetPasswordService;
   let templateService: TemplateService;
   let emailService: EmailService;
   let configService: ConfigService;
@@ -34,7 +35,7 @@ describe("ResetPasswordController", () => {
       controllers: [ResetPasswordController],
       providers: [
         {
-          provide: "UserService",
+          provide: "ResetPasswordService",
           useValue: {
             resetPasswordAsync: jest.fn(),
             getResetPasswordRequestByIdAsync: jest.fn(),
@@ -65,7 +66,9 @@ describe("ResetPasswordController", () => {
     resetPasswordController = module.get<ResetPasswordController>(
       ResetPasswordController
     );
-    userService = module.get<UserService>("UserService");
+    resetPasswordService = module.get<ResetPasswordService>(
+      "ResetPasswordService"
+    );
     templateService = module.get<TemplateService>("TemplateService");
     emailService = module.get<EmailService>("EmailService");
     configService = module.get<ConfigService>(ConfigService);
@@ -75,12 +78,12 @@ describe("ResetPasswordController", () => {
     expect(resetPasswordController).toBeDefined();
   });
 
-  it("should call userService.resetPasswordAsync with the provided request", async () => {
+  it("should call resetPasswordService.resetPasswordAsync with the provided request", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
     await resetPasswordController.resetPasswordAsync(resetPasswordRequestDto);
 
-    expect(userService.resetPasswordAsync).toHaveBeenCalledWith(
+    expect(resetPasswordService.resetPasswordAsync).toHaveBeenCalledWith(
       resetPasswordRequestDto
     );
   });
@@ -113,7 +116,7 @@ describe("ResetPasswordController", () => {
       send: jest.fn().mockReturnValue(sendResponse),
     };
     jest
-      .spyOn(userService, "getResetPasswordRequestByIdAsync")
+      .spyOn(resetPasswordService, "getResetPasswordRequestByIdAsync")
       .mockResolvedValue(mockRequest);
     // Act
     await resetPasswordController.sendResetPasswordRequestAsync(
@@ -121,9 +124,9 @@ describe("ResetPasswordController", () => {
       statusResponse as Response
     );
     // Assert
-    expect(userService.getResetPasswordRequestByIdAsync).toHaveBeenCalledWith(
-      sendResetPasswordRequestDto.requestId
-    );
+    expect(
+      resetPasswordService.getResetPasswordRequestByIdAsync
+    ).toHaveBeenCalledWith(sendResetPasswordRequestDto.requestId);
     expect(statusResponse.status).toHaveBeenCalledWith(HttpStatus.ACCEPTED);
     expect(sendResponse.send).toHaveBeenCalledWith("Debounced");
   });
@@ -139,7 +142,7 @@ describe("ResetPasswordController", () => {
       user: MockFactory(UserFixture).one() as User,
     } as UserResetPasswordRequest;
     jest
-      .spyOn(userService, "getResetPasswordRequestByIdAsync")
+      .spyOn(resetPasswordService, "getResetPasswordRequestByIdAsync")
       .mockResolvedValue(mockRequest);
     const mockTemplate = "mock template";
     jest
@@ -173,9 +176,9 @@ describe("ResetPasswordController", () => {
       response as Response
     );
     // Assert
-    expect(userService.getResetPasswordRequestByIdAsync).toHaveBeenCalledWith(
-      sendResetPasswordRequestDto.requestId
-    );
+    expect(
+      resetPasswordService.getResetPasswordRequestByIdAsync
+    ).toHaveBeenCalledWith(sendResetPasswordRequestDto.requestId);
     expect(templateService.getResetPasswordEmailTemplate).toHaveBeenCalledWith(
       "en"
     );

@@ -32,11 +32,6 @@ describe("ResetPasswordModule", () => {
         findOne: jest.fn(),
         save: jest.fn(),
       })
-      .overrideProvider(getRepositoryToken(UserRole))
-      .useValue({
-        findOne: jest.fn(),
-        save: jest.fn(),
-      })
       .overrideProvider(getRepositoryToken(UserResetPasswordRequest))
       .useValue({
         findOne: jest.fn(),

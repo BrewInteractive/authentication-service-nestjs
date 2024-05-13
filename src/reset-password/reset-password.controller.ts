@@ -6,22 +6,22 @@ import {
   Res,
   HttpStatus,
 } from "@nestjs/common";
-import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { ResetPasswordRequest } from "./dto/reset-password-request.dto";
 import { SendResetPasswordRequest } from "./dto/send-reset-password-request.dto";
-import { Response } from "express";
 import { TemplateService } from "../template/template.service";
 import { EmailService } from "../email/email.service";
 import { Email } from "../email/dto/email.dto";
 import { ConfigService } from "@nestjs/config";
+import { ResetPasswordService } from "./reset-password.service";
 
 @ApiTags("authentication")
 @Controller()
 @ApiSecurity("ApiKey")
 export class ResetPasswordController {
   constructor(
-    @Inject("UserService") private readonly userService: UserService,
+    @Inject("ResetPasswordService")
+    private readonly resetPasswordService: ResetPasswordService,
     @Inject("TemplateService")
     private readonly templateService: TemplateService,
     @Inject("EmailService") private readonly emailService: EmailService,
@@ -32,18 +32,19 @@ export class ResetPasswordController {
   async resetPasswordAsync(
     @Body() resetPasswordRequest: ResetPasswordRequest
   ): Promise<string> {
-    await this.userService.resetPasswordAsync(resetPasswordRequest);
+    await this.resetPasswordService.resetPasswordAsync(resetPasswordRequest);
     return "OK";
   }
 
   @Post("send-reset-password-request")
   async sendResetPasswordRequestAsync(
     @Body() sendResetPasswordRequest: SendResetPasswordRequest,
-    @Res() response: Response
+    @Res() response
   ): Promise<string> {
-    const request = await this.userService.getResetPasswordRequestByIdAsync(
-      sendResetPasswordRequest.requestId
-    );
+    const request =
+      await this.resetPasswordService.getResetPasswordRequestByIdAsync(
+        sendResetPasswordRequest.requestId
+      );
     if (request.resendableAt < new Date()) {
       response.status(HttpStatus.ACCEPTED).send("Debounced");
       return;
