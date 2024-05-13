@@ -3,10 +3,9 @@ import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SendLoginOtpEmailRequest } from "./dto/send-login-otp-email-request.dto";
 import { OtpService } from "../otp/otp.service";
-import { SendOtpResult } from "../otp/dto";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
-import { OtpEmailCreatedEvent } from "../notification/dto/otp-email-created-event.dto";
+import { SendLoginOtpEmailResponse } from "./dto/send-login-otp-email-response.dto";
 
 @ApiTags("authentication")
 @Controller()
@@ -19,21 +18,25 @@ export class SendLoginOtpEmailController {
   ) {}
 
   @Post("send-login-otp-email")
-  async sendLoginOtpEmailAsync(@Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest): Promise<SendOtpResult> {
+  async sendLoginOtpEmailAsync(@Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest):
+   Promise<SendLoginOtpEmailResponse> {
     const user = await this.userService.getUserAsync({ email: sendLoginOtpEmailRequest.email });
 
-    if(!user) throw new UnauthorizedException("User doesn't exist.");
+    if(!user) throw new UnauthorizedException();
 
     const sendOtpResult = await this.otpService.createEmailOtpAsync(sendLoginOtpEmailRequest.email);
 
     if(sendOtpResult.isSent === true) {
-      const otpEmailCreatedEvent = new OtpEmailCreatedEvent();
-      otpEmailCreatedEvent.otpValue = sendOtpResult.otpValue;
-      otpEmailCreatedEvent.emailAddress = sendLoginOtpEmailRequest.email;
-      otpEmailCreatedEvent.authenticationAction = AuthenticationAction.LOGIN;
-      this.eventEmitter.emit("otp.email.created", otpEmailCreatedEvent);
+      this.eventEmitter.emit("otp.email.created", {
+        otpValue: sendOtpResult.otpValue,
+        emailAddress: sendLoginOtpEmailRequest.email,
+        authenticationAction: AuthenticationAction.LOGIN,
+      });
     }
 
-    return sendOtpResult;
+    return {
+      isSent: sendOtpResult.isSent,
+      expiresAt: sendOtpResult.expiresAt
+    };
   }
 }
