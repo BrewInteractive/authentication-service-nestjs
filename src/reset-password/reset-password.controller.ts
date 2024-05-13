@@ -9,7 +9,6 @@ import {
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { ResetPasswordRequest } from "./dto/reset-password-request.dto";
-import { SendResetPasswordRequest } from "./dto/send-reset-password-request.dto";
 import { Response } from "express";
 import { TemplateService } from "../template/template.service";
 import { EmailService } from "../email/email.service";
@@ -33,32 +32,6 @@ export class ResetPasswordController {
     @Body() resetPasswordRequest: ResetPasswordRequest
   ): Promise<string> {
     await this.userService.resetPasswordAsync(resetPasswordRequest);
-    return "OK";
-  }
-
-  @Post("send-reset-password-request")
-  async sendResetPasswordRequestAsync(
-    @Body() sendResetPasswordRequest: SendResetPasswordRequest,
-    @Res() response: Response
-  ): Promise<string> {
-    const request = await this.userService.getResetPasswordRequestByIdAsync(
-      sendResetPasswordRequest.requestId
-    );
-    if (request.resendableAt < new Date()) {
-      response.status(HttpStatus.ACCEPTED).send("Debounced");
-      return;
-    }
-    const template = this.templateService.getResetPasswordEmailTemplate("en");
-    const html = this.templateService.injectData(template, {
-      resetLink: this.configService.get<string>("RESET_LINK") + request.key,
-    });
-    const email = {
-      from: this.configService.get<string>("EMAIL_FROM"),
-      to: request.user.email,
-      subject: "Reset password",
-      content: html,
-    } as Email;
-    await this.emailService.sendEmailAsync(email);
     return "OK";
   }
 }
