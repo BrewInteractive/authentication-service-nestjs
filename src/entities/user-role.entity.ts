@@ -20,14 +20,14 @@ export class UserRole {
 
   @ManyToOne((type: User) => User, (user) => user.id, {
     nullable: false,
-    createForeignKeyConstraints: false,
+    createForeignKeyConstraints: true,
   })
   @JoinColumn({ name: "user_id" })
   user: User;
 
   @ManyToOne((type: Role) => Role, (role) => role.name, {
     nullable: false,
-    createForeignKeyConstraints: false,
+    createForeignKeyConstraints: true,
   })
   @JoinColumn({ name: "role" })
   @Column("text")
