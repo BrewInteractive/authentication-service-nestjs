@@ -40,7 +40,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
   });
 
   describe("POST /send-login-otp-email", () => {
-    it("Should return send otp result when active otp exists", async () => {
+    it("should return send otp result when active otp exists", async () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       let otp = MockFactory(OtpFixture)
         .mutate({
@@ -71,7 +71,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       );
     });
 
-    it("Should return send otp result when no active otp exists", async () => {
+    it("should return send otp result when no active otp exists", async () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
@@ -94,7 +94,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       );
     });
 
-    it("Should return unauthorized error when no user with given email exists", async () => {
+    it("should return unauthorized error when no user with given email exists", async () => {
       const sendLoginOtpEmailRequest = MockFactory(
         SendLoginOtpEmailRequestFixture
       ).one();
