@@ -97,6 +97,7 @@ describe("NotificationService", () => {
       notificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
     ).rejects.toThrow(expectedError);
 
+    expect(templateSpy).toHaveBeenCalledWith("en");
     expect(emailSpy).not.toBeCalled();
   });
 });

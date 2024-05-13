@@ -1,12 +1,13 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
+
 import { User } from "./user.entity";
 
 @Entity({ name: "users_reset_password_requests" })

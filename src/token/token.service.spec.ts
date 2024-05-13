@@ -1,14 +1,15 @@
 import * as jwt from "jsonwebtoken";
 
+import { RefreshToken, User } from "../entities";
 import {
   RefreshTokenFixture,
   TokensFixture,
   UserFixture,
 } from "../../test/fixtures";
-import { RefreshToken, User } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 import { instance, mock } from "ts-mockito";
 
+import { ConfigService } from "@nestjs/config";
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { MockFactory } from "mockingbird";
@@ -16,7 +17,6 @@ import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 
 jest.mock("jsonwebtoken");
 

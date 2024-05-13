@@ -1,9 +1,9 @@
 import { RefreshToken, User, UserRole } from "../entities";
 
+import { ConfigModule } from "@nestjs/config";
 import { RefreshTokenModule } from "./refresh-token.module";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("RefreshTokenModule", () => {
   let refreshTokenModule: RefreshTokenModule;

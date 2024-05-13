@@ -4,13 +4,17 @@ import {
   UserResetPasswordRequest,
   UserRole,
 } from "../entities";
-import { SignUpRequestFixture, TokensFixture, UserFixture } from "../../test/fixtures";
+import {
+  SignUpRequestFixture,
+  TokensFixture,
+  UserFixture,
+} from "../../test/fixtures";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
 import { SignUpController } from "./sign-up.controller";
-import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
+import { SignUpProfile } from "./mapping-profiles/sign-up.mapping-profile";
 import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
@@ -78,9 +82,9 @@ describe("SignUpController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(signUpController.signUpAsync(signUpRequestDto)).resolves.toEqual(
-      tokens
-    );
+    await expect(
+      signUpController.signUpAsync(signUpRequestDto)
+    ).resolves.toEqual(tokens);
   });
 
   it("should return a token if the sign-up process is successful(With default role)", async () => {
@@ -98,8 +102,8 @@ describe("SignUpController", () => {
       .spyOn(tokenService, "createTokensAsync")
       .mockReturnValueOnce(Promise.resolve(tokens));
 
-    await expect(signUpController.signUpAsync(signUpRequestDto)).resolves.toEqual(
-      tokens
-    );
+    await expect(
+      signUpController.signUpAsync(signUpRequestDto)
+    ).resolves.toEqual(tokens);
   });
 });

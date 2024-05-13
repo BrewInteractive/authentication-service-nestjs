@@ -1,6 +1,7 @@
 import { RefreshToken, User, UserRole } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
@@ -10,7 +11,6 @@ import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
 import { TokensFixture } from "../../test/fixtures";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
 
 describe("RefreshTokenController", () => {
   let controller: RefreshTokenController;

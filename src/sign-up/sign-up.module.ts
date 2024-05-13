@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { SignUpController } from "./sign-up.controller";
-import { SignUpProfile } from "./mapping-profiles/sign-up.profile";
+import { SignUpProfile } from "./mapping-profiles/sign-up.mapping-profile";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
 
