@@ -40,13 +40,6 @@ You can use the command below to install the Postgres database.
 $ docker-compose -f .docker/docker-compose-postgres.yml --env-file .env up -d
 ```
 
-### Run Mysql Database With Docker
-
-You can use the command below to install the Mysql database.
-
-```bash
-$ docker-compose -f .docker/docker-compose-mysql.yml --env-file .env up -d
-```
 
 ## Managing Database Migrations
 
@@ -60,13 +53,6 @@ It's possible to initiate migration either on a per-database basis or automatica
 # Postgres migration run
 $ npm run migration-postgres:run
 
-# Mysql migration run
-$ npm run migration-mysql:run
-
-# Postgres and Mysql migration run
-$ npm run migration-all:run
-```
-
 ### Generating Migrations
 
 You can initiate the migration creation process on a per-database basis or automatically for both databases.
@@ -74,13 +60,6 @@ You can initiate the migration creation process on a per-database basis or autom
 ```bash
 # Postgres migration generate
 $ npm run migration-postgres:generate
-
-# Mysql migration generate
-$ npm run migration-mysql:generate
-
-# Postgres and Mysql migration run
-$ npm run migration-all:generate
-```
 
 ## Running Tests
 
