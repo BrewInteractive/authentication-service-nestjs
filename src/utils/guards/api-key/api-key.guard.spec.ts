@@ -36,14 +36,13 @@ describe("ApiKeyGuard", () => {
       switchToHttp: jest.fn(),
     } as any;
 
-    await expect(apiKeyGuard.canActivate(context)).toEqual(true);
+    expect(apiKeyGuard.canActivate(context)).toEqual(true);
   });
 
   it("Api key should be approved", async () => {
     (configService.get as jest.Mock).mockReturnValue((key: string) => {
-      switch (key) {
-        case "apiKey":
-          return faker.datatype.string(8);
+      if (key === "apiKey") {
+        return faker.datatype.string(8);
       }
     });
 
@@ -59,14 +58,13 @@ describe("ApiKeyGuard", () => {
       })),
     } as any;
 
-    await expect(apiKeyGuard.canActivate(context)).toEqual(true);
+    expect(apiKeyGuard.canActivate(context)).toEqual(true);
   });
 
   it("Api key should be not approved", async () => {
     (configService.get as jest.Mock).mockReturnValue((key: string) => {
-      switch (key) {
-        case "apiKey":
-          return faker.datatype.string(8);
+      if (key === "apiKey") {
+        return faker.datatype.string(8);
       }
     });
 
@@ -82,14 +80,13 @@ describe("ApiKeyGuard", () => {
       })),
     } as any;
 
-    await expect(apiKeyGuard.canActivate(context)).toEqual(false);
+    expect(apiKeyGuard.canActivate(context)).toEqual(false);
   });
 
   it("If the api key is not sent, it should be approved", async () => {
     (configService.get as jest.Mock).mockReturnValue((key: string) => {
-      switch (key) {
-        case "apiKey":
-          return faker.datatype.string(8);
+      if (key === "apiKey") {
+        return faker.datatype.string(8);
       }
     });
     const context = {
@@ -102,6 +99,6 @@ describe("ApiKeyGuard", () => {
       })),
     } as any;
 
-    await expect(apiKeyGuard.canActivate(context)).toEqual(false);
+    expect(apiKeyGuard.canActivate(context)).toEqual(false);
   });
 });
