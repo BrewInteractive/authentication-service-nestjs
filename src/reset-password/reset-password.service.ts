@@ -1,9 +1,5 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { User, UserResetPasswordRequest } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
