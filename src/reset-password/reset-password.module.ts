@@ -9,11 +9,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "../user/user.module";
 
 @Module({
-  imports: [
-    EmailModule,
-    TemplateModule,
-    TypeOrmModule.forFeature([User, UserResetPasswordRequest]),
-  ],
+  imports: [TypeOrmModule.forFeature([User, UserResetPasswordRequest])],
   controllers: [ResetPasswordController],
   providers: [
     { provide: "ResetPasswordService", useClass: ResetPasswordService },

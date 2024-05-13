@@ -55,15 +55,6 @@ export class ResetPasswordService {
     return user;
   }
 
-  async getResetPasswordRequestByIdAsync(
-    id: number
-  ): Promise<UserResetPasswordRequest> {
-    return await this.userResetPasswordRequestRepository.findOne({
-      where: { id },
-      relations: ["user"],
-    });
-  }
-
   private async validateResetPasswordRequestAsync(
     userResetPasswordRequest: UserResetPasswordRequest,
     resetPasswordRequest: ResetPasswordRequest
