@@ -4,7 +4,7 @@
     "connectionId": "brewinteractive",
     "projectKey": "BrewInteractive_authentication-service-nestjs"
   },
-  "cSpell.words": ["resendable"],
+  "cSpell.words": ["automapper", "resendable"],
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
   "editor.formatOnType": false, // required
   "editor.formatOnPaste": true, // optional
