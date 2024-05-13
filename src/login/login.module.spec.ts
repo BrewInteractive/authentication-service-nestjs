@@ -12,6 +12,7 @@ import { LoginModule } from "./login.module";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import {EventEmitterModule} from '@nestjs/event-emitter';
 
 describe("LoginModule", () => {
   let loginModule: LoginModule;
@@ -26,6 +27,7 @@ describe("LoginModule", () => {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
+        EventEmitterModule.forRoot(),
       ],
     })
       .overrideProvider(getRepositoryToken(User))

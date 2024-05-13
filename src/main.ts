@@ -3,7 +3,7 @@ import * as path from "path";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { applicationInfoConfig, serverConfig } from "./config";
+import { appConfig, serverConfig } from "./config";
 
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
@@ -19,9 +19,9 @@ function initValidationPipe(app: INestApplication) {
 function initSwagger(app: INestApplication) {
   if (serverConfig().swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle(applicationInfoConfig().name)
-      .setDescription(applicationInfoConfig().description)
-      .setVersion(applicationInfoConfig().version)
+      .setTitle(appConfig().name)
+      .setDescription(appConfig().description)
+      .setVersion(appConfig().version)
       .addServer(serverConfig().basePath)
       .addSecurity("ApiKey", {
         type: "apiKey",
