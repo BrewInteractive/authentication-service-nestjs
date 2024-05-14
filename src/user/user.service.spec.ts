@@ -4,7 +4,6 @@ import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handle
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError } from "../error/invalid-credentials.error";
-import { InvalidUserError } from "../error/invalid-user.error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { Test } from "@nestjs/testing";
@@ -81,13 +80,13 @@ describe("UserService", () => {
     expect(actualResult).toBeNull();
   });
 
-  it("getUserAsync should throw exception if username or email is not provided", async () => {
+  it("getUserAsync should throw error if username or email is not provided", async () => {
     await expect(userService.getUserAsync({})).rejects.toThrow(
       new Error("At least one of username or email must be provided.")
     );
   });
 
-  it("createUserAsync should throw a ConflictException if the username or email already exists", async () => {
+  it("createUserAsync should throw a UserExistsError if the username or email already exists", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
@@ -127,7 +126,7 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("validateUserAsync should throw an UnauthorizedException if the email and username does not exist", async () => {
+  it("validateUserAsync should throw an InvalidCredentialsError if the email and username does not exist", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
 
@@ -141,7 +140,7 @@ describe("UserService", () => {
     ).rejects.toThrow(InvalidCredentialsError);
   });
 
-  it("validateUserAsync should throw an UnauthorizedException if the password is invalid", async () => {
+  it("validateUserAsync should throw an InvalidCredentialsError if the password is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
@@ -157,7 +156,7 @@ describe("UserService", () => {
     ).rejects.toThrow(InvalidCredentialsError);
   });
 
-  it("validateUserAsync should throw an UnauthorizedException if the imposter is invalid", async () => {
+  it("validateUserAsync should throw an InvalidCredentialsError if the imposter is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
     const password = faker.internet.password();
     userService.addUserValidator({
@@ -174,7 +173,7 @@ describe("UserService", () => {
         username: user.username,
         email: user.email,
       })
-    ).rejects.toThrow(InvalidUserError);
+    ).rejects.toThrow(InvalidCredentialsError);
   });
 
   it("validateUserAsync should return a user if the email and password are valid", async () => {
