@@ -11,6 +11,10 @@ import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { ResetPasswordRequest } from "../reset-password/dto/reset-password-request.dto";
+import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
+import { UserExistsError } from "../exception/user-exists.error";
+import { InvalidUserError } from "../exception/invalid-user.error";
+import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
 
 @Injectable()
 export class UserService {
@@ -68,15 +72,14 @@ export class UserService {
       email: credentials.email,
     });
 
-    if (!userInformation)
-      throw new UnauthorizedException("Invalid credentials");
+    if (!userInformation) throw new InvalidCredentialsError();
 
     const isPasswordValid = await bcrypt.compare(
       credentials.password,
       userInformation.passwordHash
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException("Invalid credentials");
+      throw new InvalidCredentialsError();
     }
     return userInformation;
   }
@@ -88,7 +91,7 @@ export class UserService {
     });
 
     if (existingUser) {
-      throw new ConflictException("Username or email already exists");
+      throw new UserExistsError();
     }
 
     user = await this.applyPreRegisterUserHandlersAsync(user, appData);
@@ -148,7 +151,7 @@ export class UserService {
   private async applyUserValidatorsAsync(user: User) {
     for (const userValidator of this.userValidators) {
       if (!(await userValidator.validateAsync(user)))
-        throw new UnauthorizedException("Invalid User.");
+        throw new InvalidUserError();
     }
   }
 
@@ -189,20 +192,26 @@ export class UserService {
   ): Promise<User> {
     if (!userResetPasswordRequest) {
       //reset password request not exists with given key
-      throw new UnauthorizedException("Invalid reset password request.");
+      throw new InvalidResetPasswordRequestError(
+        "Invalid reset password request."
+      );
     }
     const user = await this.getUserAsync({
       email: resetPasswordRequest.email,
     });
     if (!user) {
       //user not exists with given email address
-      throw new UnauthorizedException("Invalid reset password request.");
+      throw new InvalidResetPasswordRequestError(
+        "Invalid reset password request."
+      );
     }
     if (
       userResetPasswordRequest.expiresAt &&
       userResetPasswordRequest.expiresAt < new Date()
     ) {
-      throw new UnauthorizedException("Reset password request is expired.");
+      throw new InvalidResetPasswordRequestError(
+        "Reset password request is expired."
+      );
     }
     return user;
   }

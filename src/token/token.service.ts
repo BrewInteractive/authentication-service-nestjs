@@ -10,6 +10,7 @@ import { RefreshToken, User } from "../entities";
 import * as crypto from "crypto";
 import { Tokens } from "../dto";
 import { ConfigService } from "@nestjs/config";
+import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 
 @Injectable({})
 export class TokenService {
@@ -99,7 +100,7 @@ export class TokenService {
       await this.terminateRefreshTokenAsync(refreshToken);
       return this.createTokensAsync(validRefreshToken.user);
     }
-    throw new UnauthorizedException("Invalid refresh Token.");
+    throw new InvalidRefreshTokenError();
   }
 
   private async getValidRefreshTokenAsync(

@@ -27,6 +27,7 @@ import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { UserNotFoundError } from "../exception/user-not-found.error";
 
 describe("SendLoginOtpEmailController", () => {
   let sendLoginOtpEmailController: SendLoginOtpEmailController;
@@ -92,7 +93,7 @@ describe("SendLoginOtpEmailController", () => {
       SendLoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = new UnauthorizedException();
+    const expectedResult = new UserNotFoundError();
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
 

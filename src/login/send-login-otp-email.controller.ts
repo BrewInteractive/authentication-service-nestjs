@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   UnauthorizedException,
+  UseFilters,
 } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
@@ -12,6 +13,8 @@ import { OtpService } from "../otp/otp.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
 import { SendLoginOtpEmailResponse } from "./dto/send-login-otp-email-response.dto";
+import { ExceptionsFilter } from "../filter/exceptions.filter";
+import { UserNotFoundError } from "../exception/user-not-found.error";
 
 @ApiTags("authentication")
 @Controller()
@@ -24,6 +27,7 @@ export class SendLoginOtpEmailController {
   ) {}
 
   @Post("send-login-otp-email")
+  @UseFilters(new ExceptionsFilter())
   async sendLoginOtpEmailAsync(
     @Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest
   ): Promise<SendLoginOtpEmailResponse> {
@@ -31,7 +35,7 @@ export class SendLoginOtpEmailController {
       email: sendLoginOtpEmailRequest.email,
     });
 
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new UserNotFoundError();
 
     const sendOtpResult = await this.otpService.createEmailOtpAsync(
       sendLoginOtpEmailRequest.email

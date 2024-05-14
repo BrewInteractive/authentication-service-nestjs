@@ -5,6 +5,7 @@ import {
   Body,
   Res,
   HttpStatus,
+  UseFilters,
 } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
@@ -15,6 +16,7 @@ import { TemplateService } from "../template/template.service";
 import { EmailService } from "../email/email.service";
 import { Email } from "../email/dto/email.dto";
 import { ConfigService } from "@nestjs/config";
+import { ExceptionsFilter } from "../filter/exceptions.filter";
 
 @ApiTags("authentication")
 @Controller()
@@ -29,6 +31,7 @@ export class ResetPasswordController {
   ) {}
 
   @Post("reset-password")
+  @UseFilters(new ExceptionsFilter())
   async resetPasswordAsync(
     @Body() resetPasswordRequest: ResetPasswordRequest
   ): Promise<string> {

@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Inject } from "@nestjs/common";
+import { Controller, Post, Body, Inject, UseFilters } from "@nestjs/common";
+import { ExceptionsFilter } from "../filter/exceptions.filter";
 import { TokenService } from "../token/token.service";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
 import { RefreshTokenResponse } from "./dto/refresh-token-response.dto";
@@ -10,6 +11,7 @@ export class RefreshTokenController {
   ) {}
 
   @Post()
+  @UseFilters(new ExceptionsFilter())
   async createRefreshToken(
     @Body() refreshTokenRequest: RefreshTokenRequest
   ): Promise<RefreshTokenResponse> {

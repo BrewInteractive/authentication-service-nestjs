@@ -17,6 +17,7 @@ import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
+import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 
 jest.mock("jsonwebtoken");
 
@@ -200,7 +201,7 @@ describe("TokenService", () => {
     jest.spyOn(refreshTokenRepository, "findOne").mockResolvedValue(null);
 
     await expect(() => tokenService.refreshTokenAsync(token)).rejects.toThrow(
-      UnauthorizedException
+      InvalidRefreshTokenError
     );
   });
 });

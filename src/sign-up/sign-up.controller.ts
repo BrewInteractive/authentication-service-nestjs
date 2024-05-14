@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Body } from "@nestjs/common";
+import { Inject, Controller, Post, Body, UseFilters } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
@@ -7,6 +7,7 @@ import { SignUpResponse } from "./dto/sign-up-response.dto";
 import { InjectMapper } from "@automapper/nestjs";
 import { User } from "../entities/user.entity";
 import { Mapper } from "@automapper/core";
+import { ExceptionsFilter } from "../filter/exceptions.filter";
 
 @ApiTags("authentication")
 @Controller()
@@ -19,6 +20,7 @@ export class SignUpController {
   ) {}
 
   @Post("sign-up")
+  @UseFilters(new ExceptionsFilter())
   async signUpAsync(
     @Body() signUpRequest: SignUpRequest
   ): Promise<SignUpResponse> {

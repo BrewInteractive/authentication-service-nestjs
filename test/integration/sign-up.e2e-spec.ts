@@ -72,7 +72,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("Username or email already exists");
+      expect(response.body.message).toEqual("User exists.");
     });
 
     it("should return 409 if username already exists", async () => {
@@ -91,7 +91,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("Username or email already exists");
+      expect(response.body.message).toEqual("User exists.");
     });
 
     it("should return 400 if email is invalid", async () => {

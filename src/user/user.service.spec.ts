@@ -14,6 +14,10 @@ import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
 import { faker } from "@faker-js/faker";
+import { UserExistsError } from "../exception/user-exists.error";
+import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
+import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
+import { InvalidUserError } from "../exception/invalid-user.error";
 
 const bcrypt = require("bcrypt");
 
@@ -100,7 +104,7 @@ describe("UserService", () => {
       .mockResolvedValue(Promise.resolve(user));
 
     await expect(userService.createUserAsync(user)).rejects.toThrow(
-      ConflictException
+      UserExistsError
     );
   });
 
@@ -144,7 +148,7 @@ describe("UserService", () => {
         username: user.username,
         email: user.email,
       })
-    ).rejects.toThrow(UnauthorizedException);
+    ).rejects.toThrow(InvalidCredentialsError);
   });
 
   it("validateUserAsync should throw an UnauthorizedException if the password is invalid", async () => {
@@ -160,7 +164,7 @@ describe("UserService", () => {
         username: user.username,
         email: user.email,
       })
-    ).rejects.toThrow(UnauthorizedException);
+    ).rejects.toThrow(InvalidCredentialsError);
   });
 
   it("validateUserAsync should throw an UnauthorizedException if the imposter is invalid", async () => {
@@ -180,7 +184,7 @@ describe("UserService", () => {
         username: user.username,
         email: user.email,
       })
-    ).rejects.toThrow(UnauthorizedException);
+    ).rejects.toThrow(InvalidUserError);
   });
 
   it("validateUserAsync should return a user if the email and password are valid", async () => {
@@ -268,7 +272,7 @@ describe("UserService", () => {
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
     } catch (e) {
-      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e).toBeInstanceOf(InvalidResetPasswordRequestError);
       expect(e.message).toBe("Invalid reset password request.");
     }
   });
@@ -303,7 +307,7 @@ describe("UserService", () => {
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
     } catch (e) {
-      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e).toBeInstanceOf(InvalidResetPasswordRequestError);
       expect(e.message).toBe("Reset password request is expired.");
     }
   });
@@ -326,7 +330,7 @@ describe("UserService", () => {
     try {
       await userService.resetPasswordAsync(resetPasswordRequest);
     } catch (e) {
-      expect(e).toBeInstanceOf(UnauthorizedException);
+      expect(e).toBeInstanceOf(InvalidResetPasswordRequestError);
       expect(e.message).toBe("Invalid reset password request.");
     }
   });
