@@ -1,4 +1,4 @@
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { User, UserRole } from "../entities";
 
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
@@ -18,7 +18,6 @@ const bcrypt = require("bcrypt");
 describe("UserService", () => {
   let userService: UserService;
   let userRepository: Repository<User>;
-  let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRoleRepository: Repository<UserRole>;
 
   beforeEach(async () => {
@@ -52,9 +51,6 @@ describe("UserService", () => {
     userRepository = moduleRef.get<Repository<User>>("UserRepository");
     userRoleRepository =
       moduleRef.get<Repository<UserRole>>("UserRoleRepository");
-    userResetPasswordRequestRepository = moduleRef.get<
-      Repository<UserResetPasswordRequest>
-    >("UserResetPasswordRequestRepository");
   });
 
   it("getUserAsync should return a user", async () => {
