@@ -7,7 +7,6 @@ import {
 } from "@nestjs/common";
 import {
   InvalidCredentialsError,
-  InvalidOtpError,
   InvalidRefreshTokenError,
   InvalidResetPasswordRequestError,
   UserExistsError,
@@ -42,7 +41,6 @@ export class ErrorFilter implements ExceptionFilter {
       exception instanceof InvalidCredentialsError ||
       exception instanceof InvalidResetPasswordRequestError ||
       exception instanceof InvalidRefreshTokenError ||
-      exception instanceof InvalidOtpError ||
       exception instanceof UserNotFoundError
     ) {
       return HttpStatus.UNAUTHORIZED;

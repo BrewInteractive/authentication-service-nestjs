@@ -1,12 +1,13 @@
 import { ArgumentsHost, BadRequestException } from "@nestjs/common";
+import {
+  InvalidCredentialsError,
+  InvalidRefreshTokenError,
+  InvalidResetPasswordRequestError,
+  UserExistsError,
+  UserNotFoundError,
+} from "../error";
 
 import { ErrorFilter } from "./error.filter";
-import { InvalidCredentialsError } from "../error/invalid-credentials.error";
-import { InvalidOtpError } from "../error/invalid-otp.error";
-import { InvalidRefreshTokenError } from "../error/invalid-refresh-token.error";
-import { InvalidResetPasswordRequestError } from "../error/invalid-reset-password-request.error";
-import { UserExistsError } from "../error/user-exists.error";
-import { UserNotFoundError } from "../error/user-not-found.error";
 
 describe("ErrorFilter", () => {
   let filter: ErrorFilter;
@@ -60,17 +61,6 @@ describe("ErrorFilter", () => {
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: "Invalid refresh Token.",
-    });
-  });
-
-  it("should handle Invalid Otp Error", () => {
-    const error = new InvalidOtpError("Test message");
-
-    filter.catch(error, mockArgumentsHost);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(401);
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      message: "Test message",
     });
   });
 

@@ -6,8 +6,8 @@ import { LoginResponse } from "./dto/login-response.dto";
 import { OtpService } from "../otp/otp.service";
 import { UserService } from "../user/user.service";
 import { TokenService } from "../token/token.service";
-import { InvalidOtpError } from "../error/invalid-otp.error";
 import { ErrorFilter } from "../filter/error.filter";
+import { InvalidCredentialsError } from "../error";
 
 @ApiTags("authentication")
 @ApiSecurity("ApiKey")
@@ -29,13 +29,13 @@ export class LoginOtpEmailController {
       loginOtpEmailRequest.otpValue
     );
 
-    if (!isOtpValid) throw new InvalidOtpError("Invalid credentials");
+    if (!isOtpValid) throw new InvalidCredentialsError();
 
     const user = await this.userService.getUserAsync({
       email: loginOtpEmailRequest.email,
     });
 
-    if (!user) throw new InvalidOtpError("Invalid credentials");
+    if (!user) throw new InvalidCredentialsError();
 
     return await this.tokenService.createTokensAsync(user);
   }
