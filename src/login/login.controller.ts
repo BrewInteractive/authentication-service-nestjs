@@ -26,7 +26,6 @@ export class LoginController {
       password: loginRequest.password,
     });
 
-    const tokens = await this.tokenService.createTokensAsync(user);
-    return tokens;
+    return await this.tokenService.createTokensAsync(user);
   }
 }
