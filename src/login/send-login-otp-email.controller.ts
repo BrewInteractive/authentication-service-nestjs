@@ -7,7 +7,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
 import { SendLoginOtpEmailResponse } from "./dto/send-login-otp-email-response.dto";
 import { ErrorFilter } from "../filter/error.filter";
-import { UserNotFoundError } from "../exception/user-not-found.error";
+import { UserNotFoundError } from "../error/user-not-found.error";
 
 @ApiTags("authentication")
 @Controller()

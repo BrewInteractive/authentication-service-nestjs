@@ -6,9 +6,9 @@ import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
-import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
-import { UserExistsError } from "../exception/user-exists.error";
-import { InvalidUserError } from "../exception/invalid-user.error";
+import { InvalidCredentialsError } from "../error/invalid-credentials.error";
+import { UserExistsError } from "../error/user-exists.error";
+import { InvalidUserError } from "../error/invalid-user.error";
 
 @Injectable()
 export class UserService {

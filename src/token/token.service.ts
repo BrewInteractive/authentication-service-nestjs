@@ -10,7 +10,7 @@ import { RefreshToken, User } from "../entities";
 import * as crypto from "crypto";
 import { Tokens } from "../dto";
 import { ConfigService } from "@nestjs/config";
-import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
+import { InvalidRefreshTokenError } from "../error/invalid-refresh-token.error";
 
 @Injectable({})
 export class TokenService {

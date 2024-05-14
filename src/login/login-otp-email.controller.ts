@@ -6,7 +6,7 @@ import { LoginResponse } from "./dto/login-response.dto";
 import { OtpService } from "../otp/otp.service";
 import { UserService } from "../user/user.service";
 import { TokenService } from "../token/token.service";
-import { InvalidOtpError } from "../exception/invalid-otp.error";
+import { InvalidOtpError } from "../error/invalid-otp.error";
 import { ErrorFilter } from "../filter/error.filter";
 
 @ApiTags("authentication")

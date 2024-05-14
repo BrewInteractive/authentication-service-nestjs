@@ -8,13 +8,13 @@ import {
 
 import { ErrorResponse } from "../dto/error-response.dto";
 import { ExtendedError } from "../dto";
-import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
-import { InvalidOtpError } from "../exception/invalid-otp.error";
-import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
-import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
+import { InvalidCredentialsError } from "../error/invalid-credentials.error";
+import { InvalidOtpError } from "../error/invalid-otp.error";
+import { InvalidRefreshTokenError } from "../error/invalid-refresh-token.error";
+import { InvalidResetPasswordRequestError } from "../error/invalid-reset-password-request.error";
 import { Response } from "express";
-import { UserExistsError } from "../exception/user-exists.error";
-import { UserNotFoundError } from "../exception/user-not-found.error";
+import { UserExistsError } from "../error/user-exists.error";
+import { UserNotFoundError } from "../error/user-not-found.error";
 
 @Catch(Error)
 export class ErrorFilter implements ExceptionFilter {

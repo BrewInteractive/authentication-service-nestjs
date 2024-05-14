@@ -12,12 +12,12 @@ import { instance, mock } from "ts-mockito";
 import { ConfigService } from "@nestjs/config";
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
+import { InvalidRefreshTokenError } from "../error/invalid-refresh-token.error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
 import { UnauthorizedException } from "@nestjs/common";
-import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 
 jest.mock("jsonwebtoken");
 

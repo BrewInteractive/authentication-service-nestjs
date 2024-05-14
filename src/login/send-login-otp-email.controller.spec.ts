@@ -23,11 +23,11 @@ import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
+import { UserNotFoundError } from "../error/user-not-found.error";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { UserNotFoundError } from "../exception/user-not-found.error";
 
 describe("SendLoginOtpEmailController", () => {
   let sendLoginOtpEmailController: SendLoginOtpEmailController;
