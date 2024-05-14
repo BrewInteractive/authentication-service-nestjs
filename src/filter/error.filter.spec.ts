@@ -31,9 +31,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle Invalid Credentials Error", () => {
-    const mockHttpException = new InvalidCredentialsError();
+    const error = new InvalidCredentialsError();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -42,11 +42,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle Invalid Reset Password Request Error", () => {
-    const mockHttpException = new InvalidResetPasswordRequestError(
-      "Test message"
-    );
+    const error = new InvalidResetPasswordRequestError("Test message");
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -55,9 +53,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle Invalid Refresh Token Error", () => {
-    const mockHttpException = new InvalidRefreshTokenError();
+    const error = new InvalidRefreshTokenError();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -66,9 +64,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle Invalid Otp Error", () => {
-    const mockHttpException = new InvalidOtpError("Test message");
+    const error = new InvalidOtpError("Test message");
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -77,9 +75,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle User Not Found Error", () => {
-    const mockHttpException = new UserNotFoundError();
+    const error = new UserNotFoundError();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -88,9 +86,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle User Exists Error", () => {
-    const mockHttpException = new UserExistsError();
+    const error = new UserExistsError();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(409);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -99,9 +97,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle User Exists Error", () => {
-    const mockHttpException = new UserExistsError();
+    const error = new UserExistsError();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(409);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -110,9 +108,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle Bad Request Exception", () => {
-    const mockHttpException = new BadRequestException();
+    const error = new BadRequestException();
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -121,9 +119,9 @@ describe("ErrorFilter", () => {
   });
 
   it("should handle other errors", () => {
-    const mockHttpException = new Error("Test message");
+    const error = new Error("Test message");
 
-    filter.catch(mockHttpException, mockArgumentsHost);
+    filter.catch(error, mockArgumentsHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({
