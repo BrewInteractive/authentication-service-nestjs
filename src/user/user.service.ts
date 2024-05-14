@@ -3,14 +3,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { User, UserRole } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
-import { ResetPasswordRequest } from "../reset-password/dto/reset-password-request.dto";
 
 @Injectable()
 export class UserService {
@@ -22,9 +21,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserRole)
-    private readonly userRoleRepository: Repository<UserRole>,
-    @InjectRepository(UserResetPasswordRequest)
-    private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
+    private readonly userRoleRepository: Repository<UserRole>
   ) {}
 
   async getUserAsync(options: {
@@ -150,77 +147,5 @@ export class UserService {
       if (!(await userValidator.validateAsync(user)))
         throw new UnauthorizedException("Invalid User.");
     }
-  }
-
-  async resetPasswordAsync(
-    resetPasswordRequest: ResetPasswordRequest
-  ): Promise<void> {
-    const userResetPasswordData = await this.getResetPasswordRequestAsync(
-      resetPasswordRequest.key
-    );
-    const user = await this.validateResetPasswordRequestAsync(
-      userResetPasswordData,
-      resetPasswordRequest
-    );
-    this.updateUserPasswordAsync(user, resetPasswordRequest.newPassword);
-    this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
-  }
-
-  async getResetPasswordRequestAsync(
-    key: string
-  ): Promise<UserResetPasswordRequest> {
-    return await this.userResetPasswordRequestRepository.findOne({
-      where: { key },
-    });
-  }
-
-  async getResetPasswordRequestByIdAsync(
-    id: number
-  ): Promise<UserResetPasswordRequest> {
-    return await this.userResetPasswordRequestRepository.findOne({
-      where: { id },
-      relations: ["user"],
-    });
-  }
-
-  private async validateResetPasswordRequestAsync(
-    userResetPasswordRequest: UserResetPasswordRequest,
-    resetPasswordRequest: ResetPasswordRequest
-  ): Promise<User> {
-    if (!userResetPasswordRequest) {
-      //reset password request not exists with given key
-      throw new UnauthorizedException("Invalid reset password request.");
-    }
-    const user = await this.getUserAsync({
-      email: resetPasswordRequest.email,
-    });
-    if (!user) {
-      //user not exists with given email address
-      throw new UnauthorizedException("Invalid reset password request.");
-    }
-    if (
-      userResetPasswordRequest.expiresAt &&
-      userResetPasswordRequest.expiresAt < new Date()
-    ) {
-      throw new UnauthorizedException("Reset password request is expired.");
-    }
-    return user;
-  }
-
-  private async updateUserPasswordAsync(
-    user: User,
-    newPassword: string
-  ): Promise<void> {
-    const newSalt = bcrypt.genSaltSync();
-    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
-    user.passwordSalt = newSalt;
-    await this.userRepository.save(user);
-  }
-
-  private async updateResetPasswordRequestExpirationAsync(
-    resetPasswordRequest: UserResetPasswordRequest
-  ): Promise<void> {
-    resetPasswordRequest.expiresAt = new Date();
-    await this.userResetPasswordRequestRepository.save(resetPasswordRequest);
   }
 }
