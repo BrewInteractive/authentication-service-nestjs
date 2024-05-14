@@ -14,22 +14,6 @@ describe("TemplateService", () => {
     templateService = new TemplateService();
   });
 
-  it("should return reset password email template", () => {
-    // Arrange
-    const locale = faker.locale;
-    const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
-    const mockReadFileSync = readFileSync as jest.Mock;
-    mockReadFileSync.mockReturnValue(mockHtmlTemplate);
-    // Act
-    const html = templateService.getResetPasswordEmailTemplate(locale);
-    // Assert
-    expect(html).toBeDefined();
-    expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/html/${locale}/reset-password.html`,
-      "utf8"
-    );
-  });
-
   it("should return login otp email template", () => {
     // Arrange
     const locale = faker.locale;

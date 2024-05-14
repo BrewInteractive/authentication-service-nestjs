@@ -95,6 +95,14 @@ describe("ResetPassword (e2e)", () => {
         })
         .one();
 
+      const user = MockFactory(UserFixture)
+        .mutate({
+          email: email,
+        })
+        .one();
+
+      const savedUser = await userRepository.save(user);
+
       const response = await request(app.getHttpServer())
         .post("/reset-password")
         .send(resetPasswordRequest)

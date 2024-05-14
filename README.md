@@ -39,7 +39,6 @@ Authentication Service can be used in any project that requires user authenticat
 - [Local Development Instructions](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md)
   - [Database Run With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#database-run-with-docker)
     - [Run Postgres Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-postgres-database-with-docker)
-    - [Run Mysql Database With Docker](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#run-mysql-database-with-docker)
   - [Managing Database Migrations](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#managing-database-migrations)
     - [Applying Migrations](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#applying-migrations)
     - [Generating Migrations](https://github.com/BrewInteractive/authentication-service-nestjs/blob/main/docs/local_development.md#generating-migrations)
