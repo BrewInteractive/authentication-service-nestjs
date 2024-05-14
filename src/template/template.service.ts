@@ -5,13 +5,6 @@ import { readFileSync } from "fs";
 
 @Injectable()
 export class TemplateService {
-  public getResetPasswordEmailTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/html/${locale}/reset-password.html`,
-      "utf8"
-    );
-  }
-
   public getLoginOtpEmailTemplate(locale: string): string {
     return readFileSync(
       `${__dirname}/templates/html/${locale}/login-otp.html`,
