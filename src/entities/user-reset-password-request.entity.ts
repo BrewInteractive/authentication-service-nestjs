@@ -15,7 +15,7 @@ export class UserResetPasswordRequest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: "expires_at", nullable: true })
+  @Column({ name: "expires_at", nullable: false })
   expiresAt: Date;
 
   @Column({ name: "resendable_at", nullable: true })
