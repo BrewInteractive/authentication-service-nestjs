@@ -6,9 +6,7 @@ import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
-import { InvalidCredentialsError } from "../error/invalid-credentials.error";
-import { UserExistsError } from "../error/user-exists.error";
-import { InvalidUserError } from "../error/invalid-user.error";
+import { UserExistsError, InvalidCredentialsError } from "../error";
 
 @Injectable()
 export class UserService {
@@ -140,10 +138,10 @@ export class UserService {
     return user;
   }
 
-  private async applyUserValidatorsAsync(user: User) {
+  private async applyUserValidatorsAsync(user: User): Promise<void> {
     for (const userValidator of this.userValidators) {
       if (!(await userValidator.validateAsync(user)))
-        throw new InvalidUserError();
+        throw new InvalidCredentialsError();
     }
   }
 }
