@@ -1,11 +1,4 @@
-import {
-  Inject,
-  Controller,
-  Post,
-  Body,
-  UnauthorizedException,
-  UseFilters,
-} from "@nestjs/common";
+import { Inject, Controller, Post, Body, UseFilters } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SendLoginOtpEmailRequest } from "./dto/send-login-otp-email-request.dto";
