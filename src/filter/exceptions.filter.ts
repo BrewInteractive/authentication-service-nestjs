@@ -14,6 +14,7 @@ import { UserExistsError } from "../exception/user-exists.error";
 import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
 import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 import { InvalidOtpError } from "../exception/invalid-otp.error";
+import { UserNotFoundError } from "../exception/user-not-found.error";
 
 @Catch(Error)
 export class ExceptionsFilter implements ExceptionFilter {
@@ -39,7 +40,8 @@ export class ExceptionsFilter implements ExceptionFilter {
       exception instanceof InvalidCredentialsError ||
       exception instanceof InvalidResetPasswordRequestError ||
       exception instanceof InvalidRefreshTokenError ||
-      exception instanceof InvalidOtpError
+      exception instanceof InvalidOtpError ||
+      exception instanceof UserNotFoundError
     ) {
       return HttpStatus.UNAUTHORIZED;
     } else if (exception instanceof UserExistsError) {
