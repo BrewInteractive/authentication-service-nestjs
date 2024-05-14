@@ -59,7 +59,7 @@ You can initiate the migration creation process on a per-database basis or autom
 
 ```bash
 # Postgres migration generate
-$ npm run migration-postgres:generate
+$ npm run migration-postgres:generate --name=MigrationName
 
 ## Running Tests
 
