@@ -17,7 +17,6 @@ import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
-import { UnauthorizedException } from "@nestjs/common";
 
 jest.mock("jsonwebtoken");
 
