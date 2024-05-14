@@ -8,16 +8,16 @@ import {
 
 import { ErrorResponse } from "../dto/error-response.dto";
 import { ExtendedError } from "../dto";
-import { Response } from "express";
 import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
-import { UserExistsError } from "../exception/user-exists.error";
-import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
-import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 import { InvalidOtpError } from "../exception/invalid-otp.error";
+import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
+import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
+import { Response } from "express";
+import { UserExistsError } from "../exception/user-exists.error";
 import { UserNotFoundError } from "../exception/user-not-found.error";
 
 @Catch(Error)
-export class ExceptionsFilter implements ExceptionFilter {
+export class ErrorFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

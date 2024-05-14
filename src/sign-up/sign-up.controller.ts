@@ -7,7 +7,7 @@ import { SignUpResponse } from "./dto/sign-up-response.dto";
 import { InjectMapper } from "@automapper/nestjs";
 import { User } from "../entities/user.entity";
 import { Mapper } from "@automapper/core";
-import { ExceptionsFilter } from "../filter/exceptions.filter";
+import { ErrorFilter } from "../filter/error.filter";
 
 @ApiTags("authentication")
 @Controller()
@@ -20,7 +20,7 @@ export class SignUpController {
   ) {}
 
   @Post("sign-up")
-  @UseFilters(new ExceptionsFilter())
+  @UseFilters(new ErrorFilter())
   async signUpAsync(
     @Body() signUpRequest: SignUpRequest
   ): Promise<SignUpResponse> {

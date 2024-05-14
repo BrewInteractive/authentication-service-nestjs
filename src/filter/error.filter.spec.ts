@@ -1,25 +1,20 @@
-import {
-  ArgumentsHost,
-  BadRequestException,
-  HttpException,
-  Response,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { ExceptionsFilter } from "./exceptions.filter";
+import { ArgumentsHost, BadRequestException } from "@nestjs/common";
+
+import { ErrorFilter } from "./error.filter";
 import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
-import { UserExistsError } from "../exception/user-exists.error";
-import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
-import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
 import { InvalidOtpError } from "../exception/invalid-otp.error";
+import { InvalidRefreshTokenError } from "../exception/invalid-refresh-token.error";
+import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
+import { UserExistsError } from "../exception/user-exists.error";
 import { UserNotFoundError } from "../exception/user-not-found.error";
 
-describe("ExceptionsFilter", () => {
-  let filter: ExceptionsFilter;
+describe("ErrorFilter", () => {
+  let filter: ErrorFilter;
   let mockArgumentsHost: ArgumentsHost;
   let mockResponse: Response;
 
   beforeEach(() => {
-    filter = new ExceptionsFilter();
+    filter = new ErrorFilter();
     mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),

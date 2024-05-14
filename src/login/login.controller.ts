@@ -4,12 +4,12 @@ import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
 import { LoginResponse } from "./dto/login-response.dto";
-import { ExceptionsFilter } from "../filter/exceptions.filter";
+import { ErrorFilter } from "../filter/error.filter";
 
 @ApiTags("authentication")
 @Controller()
 @ApiSecurity("ApiKey")
-@UseFilters(new ExceptionsFilter())
+@UseFilters(new ErrorFilter())
 export class LoginController {
   constructor(
     @Inject("TokenService") private readonly tokenService: TokenService,

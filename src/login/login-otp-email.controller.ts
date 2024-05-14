@@ -7,7 +7,7 @@ import { OtpService } from "../otp/otp.service";
 import { UserService } from "../user/user.service";
 import { TokenService } from "../token/token.service";
 import { InvalidOtpError } from "../exception/invalid-otp.error";
-import { ExceptionsFilter } from "../filter/exceptions.filter";
+import { ErrorFilter } from "../filter/error.filter";
 
 @ApiTags("authentication")
 @ApiSecurity("ApiKey")
@@ -20,7 +20,7 @@ export class LoginOtpEmailController {
   ) {}
 
   @Post("login-otp-email")
-  @UseFilters(new ExceptionsFilter())
+  @UseFilters(new ErrorFilter())
   async loginAsync(
     @Body() loginOtpEmailRequest: LoginOtpEmailRequest
   ): Promise<LoginResponse> {

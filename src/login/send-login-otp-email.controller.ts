@@ -6,7 +6,7 @@ import { OtpService } from "../otp/otp.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
 import { SendLoginOtpEmailResponse } from "./dto/send-login-otp-email-response.dto";
-import { ExceptionsFilter } from "../filter/exceptions.filter";
+import { ErrorFilter } from "../filter/error.filter";
 import { UserNotFoundError } from "../exception/user-not-found.error";
 
 @ApiTags("authentication")
@@ -20,7 +20,7 @@ export class SendLoginOtpEmailController {
   ) {}
 
   @Post("send-login-otp-email")
-  @UseFilters(new ExceptionsFilter())
+  @UseFilters(new ErrorFilter())
   async sendLoginOtpEmailAsync(
     @Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest
   ): Promise<SendLoginOtpEmailResponse> {
