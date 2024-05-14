@@ -1,15 +1,9 @@
-import { ConflictException, UnauthorizedException } from "@nestjs/common";
-import {
-  ResetPasswordFixture,
-  UserResetPasswordRequestFixture,
-} from "../../test/fixtures";
 import { User, UserResetPasswordRequest, UserRole } from "../entities";
 
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
-import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
 import { InvalidUserError } from "../exception/invalid-user.error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";

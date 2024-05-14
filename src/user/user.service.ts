@@ -9,7 +9,6 @@ import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError } from "../exception/invalid-credentials.error";
 import { UserExistsError } from "../exception/user-exists.error";
 import { InvalidUserError } from "../exception/invalid-user.error";
-import { InvalidResetPasswordRequestError } from "../exception/invalid-reset-password-request.error";
 
 @Injectable()
 export class UserService {
