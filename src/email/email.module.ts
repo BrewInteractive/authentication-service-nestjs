@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { EmailProfile } from "./mapping-profiles/email.mapping-profile";
 import { EmailServiceType } from "./enum/email-service-type.enum";
 import { Module } from "@nestjs/common";
+import { UndefinedServiceError } from "../error";
 
 @Module({
   imports: [],
@@ -41,7 +42,7 @@ import { Module } from "@nestjs/common";
           case EmailServiceType.AWS:
             return awsEmailService;
           default:
-            throw new Error("Invalid email service type");
+            throw new UndefinedServiceError(emailServiceType, "Email Service");
         }
       },
       inject: [AwsEmailService, SmtpEmailService, ConfigService],

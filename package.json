@@ -41,7 +41,6 @@
     "@automapper/types": "^6.3.1",
     "@aws-sdk/client-ses": "3.427.0",
     "@brewww/nestjs-plugin-module": "^1.0.6",
-    "@faker-js/faker": "^7.6.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -69,6 +68,7 @@
     "url": "https://github.com/BrewInteractive/authentication-service-nestjs"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",

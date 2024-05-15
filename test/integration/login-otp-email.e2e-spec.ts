@@ -7,6 +7,7 @@ import { OtpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
@@ -27,6 +28,7 @@ describe("LoginOtpEmailController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
     otpRepository = moduleFixture.get<Repository<Otp>>("OtpRepository");

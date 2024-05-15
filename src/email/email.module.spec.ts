@@ -4,6 +4,7 @@ import { EmailConfigFixture } from "../../test/fixtures";
 import { EmailModule } from "./email.module";
 import { MockFactory } from "mockingbird";
 import { Test } from "@nestjs/testing";
+import { UndefinedServiceError } from "../error";
 import { classes } from "@automapper/classes";
 
 describe("EmailModule", () => {
@@ -45,9 +46,15 @@ describe("EmailModule", () => {
   });
 
   it("Should throw error", async () => {
+    const emailServiceType = "mock";
     const emailConfig = () =>
-      MockFactory(EmailConfigFixture).mutate({ emailService: "mock" }).one();
-    const expectedError = new Error("Invalid email service type");
+      MockFactory(EmailConfigFixture)
+        .mutate({ emailService: emailServiceType })
+        .one();
+    const expectedError = new UndefinedServiceError(
+      emailServiceType,
+      "Email Service"
+    );
     await expect(
       Test.createTestingModule({
         imports: [

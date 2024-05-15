@@ -20,7 +20,6 @@ import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
 import { TokenModule } from "../token/token.module";
-import { TokenService } from "../token/token.service";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
@@ -32,7 +31,6 @@ describe("SendLoginOtpEmailController", () => {
   let sendLoginOtpEmailController: SendLoginOtpEmailController;
   let otpService: OtpService;
   let userService: UserService;
-  let tokenService: TokenService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -78,7 +76,7 @@ describe("SendLoginOtpEmailController", () => {
     sendLoginOtpEmailController = module.get<SendLoginOtpEmailController>(
       SendLoginOtpEmailController
     );
-    tokenService = module.get<TokenService>("TokenService");
+
     userService = module.get<UserService>("UserService");
     otpService = module.get<OtpService>(OtpService);
   });

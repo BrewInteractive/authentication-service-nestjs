@@ -1,9 +1,10 @@
-import { ResetPasswordFixture, UserFixture } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { MockFactory } from "mockingbird";
+import { OkResponse } from "../dto";
 import { ResetPasswordController } from "./reset-password.controller";
+import { ResetPasswordFixture } from "../../test/fixtures";
 import { ResetPasswordService } from "./reset-password.service";
 import { classes } from "@automapper/classes";
 
@@ -41,23 +42,18 @@ describe("ResetPasswordController", () => {
     expect(resetPasswordController).toBeDefined();
   });
 
-  it("should call resetPasswordService.resetPasswordAsync with the provided request", async () => {
+  it("should return OkResponse when resetPasswordAsync is called", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
-    await resetPasswordController.resetPasswordAsync(resetPasswordRequestDto);
+    const expectedResult = new OkResponse();
+
+    const actualResult = await resetPasswordController.resetPasswordAsync(
+      resetPasswordRequestDto
+    );
 
     expect(resetPasswordService.resetPasswordAsync).toHaveBeenCalledWith(
       resetPasswordRequestDto
     );
-  });
-
-  it('should return "OK" when resetPasswordAsync is called', async () => {
-    const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
-
-    const result = await resetPasswordController.resetPasswordAsync(
-      resetPasswordRequestDto
-    );
-
-    expect(result).toBe("OK");
+    expect(actualResult).toStrictEqual(expectedResult);
   });
 });

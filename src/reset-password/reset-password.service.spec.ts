@@ -1,14 +1,14 @@
-import { ConflictException, UnauthorizedException } from "@nestjs/common";
 import {
   ResetPasswordFixture,
   UserResetPasswordRequestFixture,
 } from "../../test/fixtures";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { User, UserResetPasswordRequest } from "../entities";
 
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { ResetPasswordService } from "./reset-password.service";
 import { Test } from "@nestjs/testing";
+import { UnauthorizedException } from "@nestjs/common";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { faker } from "@faker-js/faker";
 
@@ -23,13 +23,7 @@ describe("ResetPasswordService", () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         ResetPasswordService,
-        {
-          provide: "UserRepository",
-          useValue: {
-            findOne: jest.fn(),
-            save: jest.fn(),
-          },
-        },
+
         {
           provide: "UserRoleRepository",
           useValue: {
