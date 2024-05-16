@@ -6,6 +6,7 @@ import { LoginRequestFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { User } from "../../src/entities/user.entity";
 import { setupTestDataSourceAsync } from "../test-db";
@@ -25,6 +26,7 @@ describe("LoginController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
@@ -52,8 +54,8 @@ describe("LoginController (e2e)", () => {
         .send(loginEmailRequestDto)
         .expect(201);
 
-      expect(responseEmail.body).toHaveProperty("id_token");
-      expect(responseEmail.body).toHaveProperty("refresh_token");
+      expect(responseEmail.body).toHaveProperty("idToken");
+      expect(responseEmail.body).toHaveProperty("refreshToken");
     });
 
     it("should return a token if username credentials are valid", async () => {
@@ -72,8 +74,8 @@ describe("LoginController (e2e)", () => {
         .send(loginUsernameRequestDto)
         .expect(201);
 
-      expect(responseUsername.body).toHaveProperty("id_token");
-      expect(responseUsername.body).toHaveProperty("refresh_token");
+      expect(responseUsername.body).toHaveProperty("idToken");
+      expect(responseUsername.body).toHaveProperty("refreshToken");
     });
 
     it("should return an error if email is invalid", async () => {
@@ -93,11 +95,12 @@ describe("LoginController (e2e)", () => {
         .send(loginRequestDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
 
     it("should return an error if password is invalid", async () => {
       let user = MockFactory(UserFixture).one().hashPassword();
+
       await userRepository.save(user);
 
       const loginRequestDto = MockFactory(LoginRequestFixture)
@@ -113,7 +116,7 @@ describe("LoginController (e2e)", () => {
         .send(loginRequestDto)
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
   });
 });

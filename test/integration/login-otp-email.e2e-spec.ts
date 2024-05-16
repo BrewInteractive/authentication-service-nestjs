@@ -56,8 +56,8 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(201);
 
-      expect(response.body).toHaveProperty("id_token");
-      expect(response.body).toHaveProperty("refresh_token");
+      expect(response.body).toHaveProperty("idToken");
+      expect(response.body).toHaveProperty("refreshToken");
     });
 
     it("should return an error if OTP is invalid", async () => {
@@ -75,7 +75,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
 
     it("should return an error if the otp is expired.", async () => {
@@ -97,7 +97,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
 
     it("should return error if there is no user", async () => {
@@ -117,7 +117,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
   });
 });

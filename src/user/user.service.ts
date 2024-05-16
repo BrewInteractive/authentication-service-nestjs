@@ -88,6 +88,16 @@ export class UserService {
     return user;
   }
 
+  async updateUserPasswordAsync(
+    user: User,
+    newPassword: string
+  ): Promise<void> {
+    const newSalt = bcrypt.genSaltSync();
+    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
+    user.passwordSalt = newSalt;
+    await this.userRepository.save(user);
+  }
+
   private async insertUserAsync(user: User): Promise<User> {
     const savedUser = await this.userRepository.save(user);
 

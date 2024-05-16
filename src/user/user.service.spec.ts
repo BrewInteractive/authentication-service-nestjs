@@ -1,10 +1,9 @@
+import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
 import { User, UserRole } from "../entities";
 
-import { ConflictException } from "@nestjs/common";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
-import { InvalidCredentialsError } from "../error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { Test } from "@nestjs/testing";
@@ -45,6 +44,10 @@ describe("UserService", () => {
       moduleRef.get<Repository<UserRole>>("UserRoleRepository");
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("getUserAsync should return a user", async () => {
     const expectedResult = MockFactory(UserFixture).one() as User;
     jest
@@ -79,14 +82,14 @@ describe("UserService", () => {
     );
   });
 
-  it("createUserAsync should throw a ConflictException if the username or email already exists", async () => {
+  it("createUserAsync should throw UserAlreadyExistsError if the username or email already exists", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
       .mockResolvedValue(Promise.resolve(user));
 
     await expect(userService.createUserAsync(user)).rejects.toThrow(
-      ConflictException
+      UserAlreadyExistsError
     );
   });
 
@@ -118,6 +121,7 @@ describe("UserService", () => {
 
     expect(actualResult).toBe(expectedResult);
   });
+
   it("validateUserAsync should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
     userService.addUserValidator({
@@ -138,6 +142,7 @@ describe("UserService", () => {
       ...user,
     });
   });
+
   it("validateUserAsync should throw an InvalidCredentialsError if the email and username does not exist", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
@@ -155,6 +160,7 @@ describe("UserService", () => {
   it("validateUserAsync should throw an InvalidCredentialsError if the password is invalid", async () => {
     const user = MockFactory(UserFixture).one() as User;
 
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
     jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
 
     const invalidPassword = faker.internet.password();

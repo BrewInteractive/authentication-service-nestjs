@@ -1,5 +1,6 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -16,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     const errorResponse = new ErrorResponse();
-    errorResponse.message = exception.message;
+    errorResponse.message = this.getExceptionMessage(exception);
 
     if (exception.cause) {
       if (exception.cause["message"])
@@ -25,5 +26,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         errorResponse.extensions = exception.cause["extensions"];
     }
     response.status(status).json(errorResponse);
+  }
+
+  private getExceptionMessage(exception: HttpException) {
+    const errorResponse = exception.getResponse();
+    return errorResponse["message"] || exception.message;
   }
 }

@@ -11,6 +11,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserResetPasswordRequest } from "../../src/entities";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
@@ -33,6 +34,7 @@ describe("ResetPassword (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userResetPasswordRequestRepository = moduleFixture.get<
       Repository<UserResetPasswordRequest>
@@ -48,7 +50,7 @@ describe("ResetPassword (e2e)", () => {
   describe("POST /reset-password", () => {
     it("should reset the password when a valid reset request is provided", async () => {
       const email = faker.internet.email();
-      const validKey = faker.datatype.string(16);
+      const validKey = faker.string.sample(16);
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
         .mutate({
@@ -62,13 +64,14 @@ describe("ResetPassword (e2e)", () => {
           email: email,
         })
         .one();
+      const expectedResponse = { result: "OK" };
 
       const savedUser = await userRepository.save(user);
 
       const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
         .mutate({
           key: validKey,
-          expiresAt: faker.date.future(1),
+          expiresAt: faker.date.future({ years: 1 }),
           user: savedUser,
         })
         .one() as UserResetPasswordRequest;
@@ -80,12 +83,12 @@ describe("ResetPassword (e2e)", () => {
         .send(resetPasswordRequest)
         .expect(201);
 
-      expect(response.text).toBe("OK");
+      expect(response.body).toEqual(expectedResponse);
     });
 
-    it("should return an error for an invalid user for the reset request", async () => {
+    it("should return an error if the user is invalid", async () => {
       const email = faker.internet.email();
-      const validKey = faker.datatype.string(16);
+      const validKey = faker.string.sample(16);
 
       const resetPasswordRequest = MockFactory(ResetPasswordFixture)
         .mutate({
@@ -95,18 +98,10 @@ describe("ResetPassword (e2e)", () => {
         })
         .one();
 
-      const user = MockFactory(UserFixture)
-        .mutate({
-          email: email,
-        })
-        .one();
-
-      const savedUser = await userRepository.save(user);
-
       const response = await request(app.getHttpServer())
         .post("/reset-password")
         .send(resetPasswordRequest)
-        .expect(401);
+        .expect(400);
 
       expect(response.body.message).toBe("Invalid reset password request.");
     });

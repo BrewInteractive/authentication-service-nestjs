@@ -24,7 +24,7 @@ export class UserResetPasswordRequest {
   @Column({ name: "key", nullable: false })
   key: string;
 
-  @ManyToOne((type) => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: "email", referencedColumnName: "email" })
   user: User;
 

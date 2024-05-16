@@ -1,15 +1,14 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { User, UserResetPasswordRequest } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, MoreThan } from "typeorm";
-import * as bcrypt from "bcrypt";
 import { InvalidResetPasswordRequestError } from "../error/invalid-reset-password-request.error";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class ResetPasswordService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @Inject("UserService") private readonly userService: UserService,
     @InjectRepository(UserResetPasswordRequest)
     private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
   ) {}
@@ -25,7 +24,7 @@ export class ResetPasswordService {
 
     if (!userResetPasswordRequest) throw new InvalidResetPasswordRequestError();
 
-    await this.updateUserPasswordAsync(user, newPassword);
+    await this.userService.updateUserPasswordAsync(user, newPassword);
 
     await this.expireResetPasswordRequestAsync(userResetPasswordRequest);
   }
@@ -36,16 +35,6 @@ export class ResetPasswordService {
     return await this.userResetPasswordRequestRepository.findOne({
       where: { key, expiresAt: MoreThan(new Date()) },
     });
-  }
-
-  private async updateUserPasswordAsync(
-    user: User,
-    newPassword: string
-  ): Promise<void> {
-    const newSalt = bcrypt.genSaltSync();
-    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
-    user.passwordSalt = newSalt;
-    await this.userRepository.save(user);
   }
 
   private async expireResetPasswordRequestAsync(

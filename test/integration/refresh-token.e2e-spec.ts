@@ -6,6 +6,7 @@ import { RefreshToken, User } from "../../src/entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { RefreshTokenFixture } from "../fixtures";
 import { faker } from "@faker-js/faker";
@@ -27,6 +28,7 @@ describe("RefreshTokenController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     refreshTokenRepository = moduleFixture.get<Repository<RefreshToken>>(
       "RefreshTokenRepository"
@@ -41,7 +43,7 @@ describe("RefreshTokenController (e2e)", () => {
 
   describe("POST /refresh-token", () => {
     it("Should return a refresh token.", async () => {
-      const refreshToken = faker.random.alphaNumeric(32);
+      const refreshToken = faker.string.alphanumeric(32);
 
       const refreshTokenFixture = MockFactory(RefreshTokenFixture)
         .mutate({
@@ -58,15 +60,17 @@ describe("RefreshTokenController (e2e)", () => {
         .send({ refreshToken: refreshToken })
         .expect(201);
 
-      expect(response.body).toHaveProperty("refresh_token");
-      expect(response.body).toHaveProperty("id_token");
+      expect(response.body).toHaveProperty("refreshToken");
+      expect(response.body).toHaveProperty("idToken");
     });
 
     it("Should return 401 if invalid refresh token.", async () => {
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post("/refresh-token")
-        .send({ refreshToken: faker.datatype.string() })
+        .send({ refreshToken: faker.string.sample() })
         .expect(401);
+
+      expect(response.body.message).toEqual("Invalid refresh token.");
     });
   });
 });
