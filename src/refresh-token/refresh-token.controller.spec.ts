@@ -2,6 +2,7 @@ import { RefreshToken, User, UserRole } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ConfigModule } from "@nestjs/config";
+import { InvalidRefreshTokenError } from "../error";
 import { MockFactory } from "mockingbird";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
@@ -9,6 +10,7 @@ import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
 import { TokensFixture } from "../../test/fixtures";
+import { UnauthorizedException } from "@nestjs/common";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("RefreshTokenController", () => {
@@ -63,5 +65,21 @@ describe("RefreshTokenController", () => {
     const actualResult = await controller.refreshTokens(refreshTokenRequest);
 
     expect(actualResult).toStrictEqual(expectedResult);
+  });
+
+  it("should throw UnauthorizedException if the refresh token is invalid", async () => {
+    const refreshTokenRequest: RefreshTokenRequest = {
+      refreshToken: "invalidMockRefreshToken",
+    };
+
+    jest
+      .spyOn(tokenService, "refreshTokensAsync")
+      .mockImplementationOnce(() => {
+        throw new InvalidRefreshTokenError();
+      });
+
+    await expect(controller.refreshTokens(refreshTokenRequest)).rejects.toThrow(
+      UnauthorizedException
+    );
   });
 });

@@ -2,6 +2,8 @@ import { ResetPasswordFixture, UserFixture } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
+import { BadRequestException } from "@nestjs/common";
+import { InvalidResetPasswordRequestError } from "../error";
 import { MockFactory } from "mockingbird";
 import { OkResponse } from "../dto";
 import { ResetPasswordController } from "./reset-password.controller";
@@ -72,5 +74,27 @@ describe("ResetPasswordController", () => {
       resetPasswordRequestDto.key
     );
     expect(actualResult).toStrictEqual(expectedResult);
+  });
+
+  it("should throw InvalidResetPasswordRequestError if user is not found", async () => {
+    const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+
+    await expect(
+      resetPasswordController.resetPasswordAsync(resetPasswordRequestDto)
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught", async () => {
+    const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
+
+    jest.spyOn(userService, "getUserAsync").mockImplementationOnce(() => {
+      throw new InvalidResetPasswordRequestError();
+    });
+
+    await expect(
+      resetPasswordController.resetPasswordAsync(resetPasswordRequestDto)
+    ).rejects.toThrow(BadRequestException);
   });
 });

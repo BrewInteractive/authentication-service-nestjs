@@ -211,4 +211,25 @@ describe("UserService", () => {
     userService.addUserValidator(validate);
     expect(userService["userValidators"]).toContain(validate);
   });
+
+  it("updateUserPasswordAsync should update the user's password and salt", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const newPassword = faker.internet.password();
+    const newSalt = "newSalt";
+    const newPasswordHash = "newPasswordHash";
+
+    jest.spyOn(bcrypt, "genSaltSync").mockReturnValue(newSalt);
+    jest.spyOn(bcrypt, "hashSync").mockReturnValue(newPasswordHash);
+    jest.spyOn(userRepository, "save").mockResolvedValue(user);
+
+    await userService.updateUserPasswordAsync(user, newPassword);
+
+    expect(bcrypt.genSaltSync).toHaveBeenCalledTimes(1);
+    expect(bcrypt.hashSync).toHaveBeenCalledWith(newPassword, newSalt);
+    expect(userRepository.save).toHaveBeenCalledWith({
+      ...user,
+      passwordHash: newPasswordHash,
+      passwordSalt: newSalt,
+    });
+  });
 });
