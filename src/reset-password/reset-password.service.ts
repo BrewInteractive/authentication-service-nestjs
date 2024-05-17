@@ -52,16 +52,14 @@ export class ResetPasswordService {
     }
 
     const createdUserResetPasswordRequest =
-      this.createResetPassworRequestEntity(email);
+      this.createResetPassworRequest(email);
 
     return await this.userResetPasswordRequestRepository.save(
       createdUserResetPasswordRequest
     );
   }
 
-  private createResetPassworRequestEntity(
-    email: string
-  ): UserResetPasswordRequest {
+  private createResetPassworRequest(email: string): UserResetPasswordRequest {
     const currentTime = new Date();
 
     const resendableAt =
@@ -90,7 +88,7 @@ export class ResetPasswordService {
   ): Promise<UserResetPasswordRequest> {
     const activeResetPasswordRequest =
       await this.userResetPasswordRequestRepository.findOne({
-        where: { email: email },
+        where: [{ email: email }, { expiresAt: MoreThan(new Date()) }],
       });
     return activeResetPasswordRequest;
   }
