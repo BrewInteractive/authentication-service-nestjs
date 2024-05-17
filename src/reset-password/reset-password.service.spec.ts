@@ -12,6 +12,8 @@ import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "../user/user.service";
 import { faker } from "@faker-js/faker";
+import { ConfigModule } from "@nestjs/config";
+import { authenticationConfig } from "../config";
 
 describe("ResetPasswordService", () => {
   let resetPasswordService: ResetPasswordService;
@@ -20,6 +22,12 @@ describe("ResetPasswordService", () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [authenticationConfig],
+        }),
+      ],
       providers: [
         {
           provide: "UserService",
@@ -179,5 +187,75 @@ describe("ResetPasswordService", () => {
       expect(e).toBeInstanceOf(InvalidResetPasswordRequestError);
       expect(e.message).toBe("Invalid reset password request.");
     }
+  });
+
+  it("should return null when the active reset password request is not resendable", async () => {
+    const email = faker.internet.email();
+
+    const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        resendableAt: faker.date.future({ years: 1 }),
+      })
+      .one();
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(userResetPasswordData));
+
+    const result = await resetPasswordService.createResetPasswordRequest(email);
+
+    expect(result).toBeNull();
+  });
+
+  it("should save and return the created reset password request when active one is resendable", async () => {
+    const email = faker.internet.email();
+
+    const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        resendableAt: faker.date.past({ years: 1 }),
+      })
+      .one();
+
+    const expectedResult = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        resendableAt: faker.date.past({ years: 1 }),
+        email: email,
+      })
+      .one();
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(userResetPasswordData));
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "save")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    await expect(
+      resetPasswordService.createResetPasswordRequest(email)
+    ).resolves.toEqual(expectedResult);
+  });
+
+  it("should save and return the created reset password request when no active request exists", async () => {
+    const email = faker.internet.email();
+
+    const expectedResult = MockFactory(UserResetPasswordRequestFixture)
+      .mutate({
+        resendableAt: faker.date.past({ years: 1 }),
+        email: email,
+      })
+      .one();
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(null));
+
+    jest
+      .spyOn(userResetPasswordRequestRepository, "save")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    await expect(
+      resetPasswordService.createResetPasswordRequest(email)
+    ).resolves.toEqual(expectedResult);
   });
 });
