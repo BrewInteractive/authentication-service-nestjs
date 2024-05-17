@@ -56,7 +56,7 @@ describe("TemplateService", () => {
 
   it("should return reset password email template", () => {
     // Arrange
-    const locale = faker.locale;
+    const locale = faker.rawDefinitions.metadata.language;
     const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
     const mockReadFileSync = readFileSync as jest.Mock;
     mockReadFileSync.mockReturnValue(mockHtmlTemplate);
