@@ -6,18 +6,21 @@ import { EmailConfigFixture } from "../../test/fixtures";
 import { MockFactory } from "mockingbird";
 import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
+import { UserModule } from "../user/user.module";
 import { authenticationConfig } from "../config";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("ResetPasswordModule", () => {
   let resetPasswordModule: ResetPasswordModule;
+  let userModule: UserModule;
 
   beforeEach(async () => {
     const emailConfig = () => MockFactory(EmailConfigFixture).one();
     const app = await Test.createTestingModule({
       imports: [
         ResetPasswordModule,
+        UserModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
@@ -32,6 +35,10 @@ describe("ResetPasswordModule", () => {
         findOne: jest.fn(),
         save: jest.fn(),
       })
+      .overrideProvider(getRepositoryToken(UserRole))
+      .useValue({
+        save: jest.fn(),
+      })
       .overrideProvider(getRepositoryToken(UserResetPasswordRequest))
       .useValue({
         findOne: jest.fn(),
@@ -40,9 +47,11 @@ describe("ResetPasswordModule", () => {
       .compile();
 
     resetPasswordModule = app.get<ResetPasswordModule>(ResetPasswordModule);
+    userModule = app.get<UserModule>(UserModule);
   });
 
   it("Should be defined", () => {
     expect(resetPasswordModule).toBeDefined();
+    expect(userModule).toBeDefined();
   });
 });

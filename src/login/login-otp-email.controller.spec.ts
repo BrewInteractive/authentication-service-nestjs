@@ -14,6 +14,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { InvalidCredentialsError } from "../error";
 import { LoginOtpEmailController } from "./login-otp-email.controller";
 import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
@@ -84,12 +85,34 @@ describe("LoginOtpEmailController", () => {
     expect(loginOtpEmailController).toBeDefined();
   });
 
-  it("should not return a token if the email and otp code are invalid", async () => {
+  it("should return tokens if the email and otp code are valid", async () => {
+    const mockLoginOtpEmailRequestDto = MockFactory(
+      LoginOtpEmailRequestFixture
+    ).one();
+
+    const mockUser = MockFactory(UserFixture).one();
+    const mockToken = MockFactory(TokensFixture).one();
+
+    jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
+
+    jest
+      .spyOn(tokenService, "createTokensAsync")
+      .mockResolvedValueOnce(mockToken);
+
+    await expect(
+      loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
+    ).resolves.toEqual(mockToken);
+  });
+
+  it("should not return tokens if the email and otp code are invalid", async () => {
     const loginOtpEmailRequestDto = MockFactory(
       LoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = new UnauthorizedException("Invalid credentials");
+    const expectedResult = new UnauthorizedException(null, {
+      cause: new InvalidCredentialsError(),
+    });
 
     jest
       .spyOn(otpService, "validateEmailOtpAsync")
@@ -105,35 +128,15 @@ describe("LoginOtpEmailController", () => {
       LoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = new UnauthorizedException("Invalid credentials");
+    const expectedResult = new UnauthorizedException(null, {
+      cause: new InvalidCredentialsError(),
+    });
 
     jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
-
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
 
     await expect(
       loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
     ).rejects.toThrow(expectedResult);
-  });
-
-  it("should return a token if the email and otp code are valid", async () => {
-    const mockLoginOtpEmailRequestDto = MockFactory(
-      LoginOtpEmailRequestFixture
-    ).one();
-
-    const mockUser = MockFactory(UserFixture).one();
-    const mockToken = MockFactory(TokensFixture).one();
-
-    jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
-
-    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
-
-    jest
-      .spyOn(tokenService, "createTokensAsync")
-      .mockResolvedValueOnce(mockToken);
-
-    await expect(
-      loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
-    ).resolves.toEqual(mockToken);
   });
 });

@@ -12,6 +12,7 @@ import {
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { InvalidCredentialsError } from "../error";
 import { LoginController } from "./login.controller";
 import { LoginProfile } from "./mapping-profiles/login.mapping-profile";
 import { MockFactory } from "mockingbird";
@@ -133,16 +134,19 @@ describe("LoginController", () => {
     );
   });
 
-  it("should return a token if the email and password are invalid", async () => {
+  it("should throw UnauthorizedException if the email and password are invalid", async () => {
     const loginRequestDto = MockFactory(LoginRequestFixture).one();
 
-    const expectedResult = new UnauthorizedException("Invalid credentials");
+    const invalidCredentialsError = new InvalidCredentialsError();
+    const exception = new UnauthorizedException(null, {
+      cause: invalidCredentialsError,
+    });
     jest
       .spyOn(userService, "validateUserAsync")
-      .mockRejectedValueOnce(expectedResult);
+      .mockRejectedValueOnce(invalidCredentialsError);
 
     await expect(loginController.loginAsync(loginRequestDto)).rejects.toThrow(
-      expectedResult
+      exception
     );
   });
 });

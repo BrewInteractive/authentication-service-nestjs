@@ -6,6 +6,7 @@ import { SignUpRequestFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { User } from "../../src/entities/user.entity";
 import { faker } from "@faker-js/faker";
@@ -28,6 +29,7 @@ describe("SignUpController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
   });
@@ -52,8 +54,8 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(201);
 
-      expect(response.body).toHaveProperty("id_token");
-      expect(response.body).toHaveProperty("refresh_token");
+      expect(response.body).toHaveProperty("idToken");
+      expect(response.body).toHaveProperty("refreshToken");
     });
 
     it("should return 409 if email already exists", async () => {
@@ -72,7 +74,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("Username or email already exists");
+      expect(response.body.message).toEqual("User is already exists.");
     });
 
     it("should return 409 if username already exists", async () => {
@@ -91,7 +93,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(409);
 
-      expect(response.body.message).toEqual("Username or email already exists");
+      expect(response.body.message).toEqual("User is already exists.");
     });
 
     it("should return 400 if email is invalid", async () => {
@@ -108,7 +110,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(400);
 
-      expect(response.body.message).toEqual(["email must be an email"]);
+      expect(response.body.message).toContain("email must be an email");
     });
 
     it("should return 400 if password is too short", async () => {
@@ -122,7 +124,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(400);
 
-      expect(response.body.message).toEqual(["password is too weak"]);
+      expect(response.body.message).toContain("password is too weak");
     });
 
     it("should return 400 if password is too weak", async () => {
@@ -136,7 +138,7 @@ describe("SignUpController (e2e)", () => {
         .send(signUpRequestDto)
         .expect(400);
 
-      expect(response.body.message).toEqual(["password is too weak"]);
+      expect(response.body.message).toContain("password is too weak");
     });
   });
 });

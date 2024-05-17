@@ -2,14 +2,15 @@ import { RefreshToken, User, UserRole } from "../entities";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ConfigModule } from "@nestjs/config";
+import { InvalidRefreshTokenError } from "../error";
 import { MockFactory } from "mockingbird";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
-import { RefreshTokenResponse } from "./dto/refresh-token-response.dto";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
 import { TokensFixture } from "../../test/fixtures";
+import { UnauthorizedException } from "@nestjs/common";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("RefreshTokenController", () => {
@@ -46,25 +47,39 @@ describe("RefreshTokenController", () => {
     tokenService = module.get<TokenService>("TokenService");
   });
 
-  it("Should be defined", () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  it("Should return a refresh token.", async () => {
-    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
+  it("should create new tokens using a refresh token.", async () => {
     const refreshTokenRequest: RefreshTokenRequest = {
       refreshToken: "mockRefreshToken",
     };
 
+    const expectedResult = MockFactory(TokensFixture).one() as Tokens;
+
     jest
-      .spyOn(tokenService, "refreshTokenAsync")
-      .mockResolvedValue(expectedTokens);
+      .spyOn(tokenService, "refreshTokensAsync")
+      .mockResolvedValue(expectedResult);
 
-    const result = await controller.createRefreshToken(refreshTokenRequest);
+    const actualResult = await controller.refreshTokens(refreshTokenRequest);
 
-    expect(result).toEqual({
-      id_token: expectedTokens.id_token,
-      refresh_token: expectedTokens.refresh_token,
-    } as RefreshTokenResponse);
+    expect(actualResult).toStrictEqual(expectedResult);
+  });
+
+  it("should throw UnauthorizedException if the refresh token is invalid", async () => {
+    const refreshTokenRequest: RefreshTokenRequest = {
+      refreshToken: "invalidMockRefreshToken",
+    };
+
+    jest
+      .spyOn(tokenService, "refreshTokensAsync")
+      .mockImplementationOnce(() => {
+        throw new InvalidRefreshTokenError();
+      });
+
+    await expect(controller.refreshTokens(refreshTokenRequest)).rejects.toThrow(
+      UnauthorizedException
+    );
   });
 });

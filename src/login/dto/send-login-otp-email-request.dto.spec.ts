@@ -16,7 +16,7 @@ describe("SendLoginOtpEmailRequest validation", () => {
 
   it("should fail validation when email address is invalid", async () => {
     const request = new SendLoginOtpEmailRequest();
-    request.email = faker.random.word();
+    request.email = faker.word.sample();
     const errors = await validate(request);
 
     expect(errors.length).toBe(1);

@@ -8,10 +8,14 @@ describe("Signup Dto Validation", () => {
 
   it("should get email if username is empty", async () => {
     const user = new SignUpRequest();
-    user.firstName = faker.name.firstName();
-    user.lastName = faker.name.lastName();
+    user.firstName = faker.person.firstName();
+    user.lastName = faker.person.lastName();
     user.email = faker.internet.email();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(0);
@@ -19,9 +23,13 @@ describe("Signup Dto Validation", () => {
 
   it("should get username if email is empty", async () => {
     const user = new SignUpRequest();
-    user.firstName = faker.name.firstName();
-    user.lastName = faker.name.lastName();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.firstName = faker.person.firstName();
+    user.lastName = faker.person.lastName();
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     user.username = faker.internet.userName();
     const errors = await validate(user);
 
@@ -30,8 +38,8 @@ describe("Signup Dto Validation", () => {
 
   it("should fail validation when SignUpDto has empty password field", async () => {
     const user = new SignUpRequest();
-    user.firstName = faker.name.firstName();
-    user.lastName = faker.name.lastName();
+    user.firstName = faker.person.firstName();
+    user.lastName = faker.person.lastName();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
     const errors = await validate(user);
@@ -46,11 +54,15 @@ describe("Signup Dto Validation", () => {
 
   it("should fail validation when SignUpDto has a weak password", async () => {
     const user = new SignUpRequest();
-    user.firstName = faker.name.firstName();
-    user.lastName = faker.name.lastName();
+    user.firstName = faker.person.firstName();
+    user.lastName = faker.person.lastName();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
-    user.password = faker.internet.password(10, false, /[A-Z]/);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: /[A-Z]/,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(1);
@@ -61,10 +73,14 @@ describe("Signup Dto Validation", () => {
 
   it("should fail validation when SignUpDto has an invalid email address", async () => {
     const user = new SignUpRequest();
-    user.email = faker.random.word();
-    user.firstName = faker.name.firstName();
-    user.lastName = faker.name.lastName();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.email = faker.word.sample();
+    user.firstName = faker.person.firstName();
+    user.lastName = faker.person.lastName();
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(1);
@@ -75,10 +91,14 @@ describe("Signup Dto Validation", () => {
 
   it("should fail validation when SignUpDto has empty firstName field", async () => {
     const user = new SignUpRequest();
-    user.lastName = faker.name.lastName();
+    user.lastName = faker.person.lastName();
     user.email = faker.internet.email();
     user.username = faker.internet.userName();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(1);
@@ -90,9 +110,13 @@ describe("Signup Dto Validation", () => {
 
   it("should fail validation when SignUpDto has empty lastName field", async () => {
     const user = new SignUpRequest();
-    user.firstName = faker.name.firstName();
+    user.firstName = faker.person.firstName();
     user.email = faker.internet.email();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     user.username = faker.internet.userName();
     const errors = await validate(user);
 

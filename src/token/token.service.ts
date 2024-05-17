@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
@@ -10,6 +10,7 @@ import { RefreshToken, User } from "../entities";
 import * as crypto from "crypto";
 import { Tokens } from "../dto";
 import { ConfigService } from "@nestjs/config";
+import { InvalidRefreshTokenError } from "../error";
 
 @Injectable({})
 export class TokenService {
@@ -60,8 +61,8 @@ export class TokenService {
     const idToken = await this.createIdTokenAsync(user, expiresIn);
 
     return {
-      id_token: idToken,
-      refresh_token: refreshToken,
+      idToken,
+      refreshToken,
     };
   }
 
@@ -91,15 +92,14 @@ export class TokenService {
       };
   }
 
-  async refreshTokenAsync(refreshToken: string): Promise<Tokens> {
+  async refreshTokensAsync(refreshToken: string): Promise<Tokens> {
     const validRefreshToken = await this.getValidRefreshTokenAsync(
       refreshToken
     );
-    if (validRefreshToken) {
-      await this.terminateRefreshTokenAsync(refreshToken);
-      return this.createTokensAsync(validRefreshToken.user);
-    }
-    throw new UnauthorizedException("Invalid refresh Token.");
+    if (!validRefreshToken) throw new InvalidRefreshTokenError();
+
+    await this.terminateRefreshTokenAsync(refreshToken);
+    return this.createTokensAsync(validRefreshToken.user);
   }
 
   private async getValidRefreshTokenAsync(

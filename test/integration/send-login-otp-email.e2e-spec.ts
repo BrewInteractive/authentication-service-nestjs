@@ -6,6 +6,7 @@ import { OtpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { Otp } from "../../src/entities";
 import { SendLoginOtpEmailRequestFixture } from "../fixtures/login/send-otp-email-login-request.fixture";
@@ -29,6 +30,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
     otpRepository = moduleFixture.get<Repository<Otp>>("OtpRepository");
@@ -94,7 +96,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       );
     });
 
-    it("should return unauthorized error when no user with given email exists", async () => {
+    it("should return invalid credentials error when no user with given email exists", async () => {
       const sendLoginOtpEmailRequest = MockFactory(
         SendLoginOtpEmailRequestFixture
       ).one();
@@ -104,7 +106,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
         .send(sendLoginOtpEmailRequest)
         .expect(401);
 
-      expect(response.body.message).toEqual("Unauthorized");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
   });
 });

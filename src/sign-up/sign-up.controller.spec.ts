@@ -12,6 +12,7 @@ import {
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { ConflictException } from "@nestjs/common";
 import { MockFactory } from "mockingbird";
 import { SignUpController } from "./sign-up.controller";
 import { SignUpProfile } from "./mapping-profiles/sign-up.mapping-profile";
@@ -19,6 +20,7 @@ import { Test } from "@nestjs/testing";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
+import { UserAlreadyExistsError } from "../error";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
@@ -69,7 +71,7 @@ describe("SignUpController", () => {
     userService = moduleRef.get<UserService>("UserService");
   });
 
-  it("should return a token if the sign-up process is successful", async () => {
+  it("should return tokens if the sign-up process is successful", async () => {
     const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
     const user = MockFactory(UserFixture).one() as User;
     const tokens = MockFactory(TokensFixture).one() as Tokens;
@@ -87,7 +89,7 @@ describe("SignUpController", () => {
     ).resolves.toEqual(tokens);
   });
 
-  it("should return a token if the sign-up process is successful(With default role)", async () => {
+  it("should return tokens if the sign-up process is successful(With default role)", async () => {
     const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
     const user = MockFactory(UserFixture).one() as User;
     const tokens = MockFactory(TokensFixture).one() as Tokens;
@@ -105,5 +107,17 @@ describe("SignUpController", () => {
     await expect(
       signUpController.signUpAsync(signUpRequestDto)
     ).resolves.toEqual(tokens);
+  });
+
+  it("should throw ConflictException if the user already exists", async () => {
+    const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
+
+    jest.spyOn(userService, "createUserAsync").mockImplementationOnce(() => {
+      throw new UserAlreadyExistsError();
+    });
+
+    await expect(
+      signUpController.signUpAsync(signUpRequestDto)
+    ).rejects.toThrow(ConflictException);
   });
 });

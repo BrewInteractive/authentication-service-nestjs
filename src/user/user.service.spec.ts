@@ -1,9 +1,5 @@
-import { ConflictException, UnauthorizedException } from "@nestjs/common";
-import {
-  ResetPasswordFixture,
-  UserResetPasswordRequestFixture,
-} from "../../test/fixtures";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
+import { User, UserRole } from "../entities";
 
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
@@ -20,7 +16,6 @@ const bcrypt = require("bcrypt");
 describe("UserService", () => {
   let userService: UserService;
   let userRepository: Repository<User>;
-  let userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>;
   let userRoleRepository: Repository<UserRole>;
 
   beforeEach(async () => {
@@ -41,22 +36,16 @@ describe("UserService", () => {
             save: jest.fn(),
           },
         },
-        {
-          provide: "UserResetPasswordRequestRepository",
-          useValue: {
-            findOne: jest.fn(),
-            save: jest.fn(),
-          },
-        },
       ],
     }).compile();
     userService = moduleRef.get<UserService>(UserService);
     userRepository = moduleRef.get<Repository<User>>("UserRepository");
     userRoleRepository =
       moduleRef.get<Repository<UserRole>>("UserRoleRepository");
-    userResetPasswordRequestRepository = moduleRef.get<
-      Repository<UserResetPasswordRequest>
-    >("UserResetPasswordRequestRepository");
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("getUserAsync should return a user", async () => {
@@ -93,14 +82,14 @@ describe("UserService", () => {
     );
   });
 
-  it("createUserAsync should throw a ConflictException if the username or email already exists", async () => {
+  it("createUserAsync should throw UserAlreadyExistsError if the username or email already exists", async () => {
     const user = MockFactory(UserFixture).one() as User;
     jest
       .spyOn(userRepository, "findOne")
       .mockResolvedValue(Promise.resolve(user));
 
     await expect(userService.createUserAsync(user)).rejects.toThrow(
-      ConflictException
+      UserAlreadyExistsError
     );
   });
 
@@ -133,56 +122,6 @@ describe("UserService", () => {
     expect(actualResult).toBe(expectedResult);
   });
 
-  it("validateUserAsync should throw an UnauthorizedException if the email and username does not exist", async () => {
-    const user = MockFactory(UserFixture).one() as User;
-    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
-
-    const password = faker.internet.password();
-    await expect(
-      userService.validateUserAsync({
-        password,
-        username: user.username,
-        email: user.email,
-      })
-    ).rejects.toThrow(UnauthorizedException);
-  });
-
-  it("validateUserAsync should throw an UnauthorizedException if the password is invalid", async () => {
-    const user = MockFactory(UserFixture).one() as User;
-
-    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
-
-    const invalidPassword = faker.internet.password();
-
-    await expect(
-      userService.validateUserAsync({
-        password: invalidPassword,
-        username: user.username,
-        email: user.email,
-      })
-    ).rejects.toThrow(UnauthorizedException);
-  });
-
-  it("validateUserAsync should throw an UnauthorizedException if the imposter is invalid", async () => {
-    const user = MockFactory(UserFixture).one() as User;
-    const password = faker.internet.password();
-    userService.addUserValidator({
-      validateAsync: jest.fn().mockResolvedValue(false),
-    });
-
-    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-
-    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
-
-    await expect(
-      userService.validateUserAsync({
-        password,
-        username: user.username,
-        email: user.email,
-      })
-    ).rejects.toThrow(UnauthorizedException);
-  });
-
   it("validateUserAsync should return a user if the email and password are valid", async () => {
     const user = MockFactory(UserFixture).one() as User;
     userService.addUserValidator({
@@ -204,6 +143,57 @@ describe("UserService", () => {
     });
   });
 
+  it("validateUserAsync should throw an InvalidCredentialsError if the email and username does not exist", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(null);
+
+    const password = faker.internet.password();
+    await expect(
+      userService.validateUserAsync({
+        password,
+        username: user.username,
+        email: user.email,
+      })
+    ).rejects.toThrow(InvalidCredentialsError);
+  });
+
+  it("validateUserAsync should throw an InvalidCredentialsError if the password is invalid", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
+
+    const invalidPassword = faker.internet.password();
+
+    await expect(
+      userService.validateUserAsync({
+        password: invalidPassword,
+        username: user.username,
+        email: user.email,
+      })
+    ).rejects.toThrow(InvalidCredentialsError);
+  });
+
+  it("validateUserAsync should throw an InvalidCredentialsError if the imposter is invalid", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const password = faker.internet.password();
+    userService.addUserValidator({
+      validateAsync: jest.fn().mockResolvedValue(false),
+    });
+
+    jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValue(user);
+
+    await expect(
+      userService.validateUserAsync({
+        password,
+        username: user.username,
+        email: user.email,
+      })
+    ).rejects.toThrow(InvalidCredentialsError);
+  });
+
   it("addPreRegisterUserHandler should add preRegisterUserHandler", () => {
     const handler: IPreRegisterUserHandler = { handleAsync: jest.fn() };
     userService.addPreRegisterUserHandler(handler);
@@ -220,5 +210,26 @@ describe("UserService", () => {
     const validate: IUserValidator = { validateAsync: jest.fn() };
     userService.addUserValidator(validate);
     expect(userService["userValidators"]).toContain(validate);
+  });
+
+  it("updateUserPasswordAsync should update the user's password and salt", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const newPassword = faker.internet.password();
+    const newSalt = "newSalt";
+    const newPasswordHash = "newPasswordHash";
+
+    jest.spyOn(bcrypt, "genSaltSync").mockReturnValue(newSalt);
+    jest.spyOn(bcrypt, "hashSync").mockReturnValue(newPasswordHash);
+    jest.spyOn(userRepository, "save").mockResolvedValue(user);
+
+    await userService.updateUserPasswordAsync(user, newPassword);
+
+    expect(bcrypt.genSaltSync).toHaveBeenCalledTimes(1);
+    expect(bcrypt.hashSync).toHaveBeenCalledWith(newPassword, newSalt);
+    expect(userRepository.save).toHaveBeenCalledWith({
+      ...user,
+      passwordHash: newPasswordHash,
+      passwordSalt: newSalt,
+    });
   });
 });
