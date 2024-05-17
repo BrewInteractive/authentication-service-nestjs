@@ -3,3 +3,7 @@ process.env.PASSWORD_REGEX = "(?=.*[A-Z])(?=.*[a-z]).*";
 process.env.SMTP_HOST = "localhost";
 process.env.SMTP_USER = "test";
 process.env.SMTP_PASSWORD = "test";
+process.env.JWT_ALGORITHM = "HS256";
+process.env.JWT_AUDIENCE = "test";
+process.env.JWT_ISSUER = "test";
+process.env.JWT_SECRET = "test";

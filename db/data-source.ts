@@ -4,7 +4,7 @@ require("dotenv").config();
 const DB_DRIVE = process.env.DB_DRIVE || "postgres";
 
 export const dataSourceOptions: DataSourceOptions = {
-  type: DB_DRIVE as "mysql" | "postgres",
+  type: DB_DRIVE as "postgres",
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT),
   username: process.env.DB_USER,
@@ -17,8 +17,8 @@ export const dataSourceOptions: DataSourceOptions = {
   migrationsRun: true,
   ssl: process.env.DB_SSL_CA
     ? {
-        ca: process.env.DB_SSL_CA,
-      }
+      ca: process.env.DB_SSL_CA,
+    }
     : JSON.parse(process.env.DB_SSL || "false"),
 };
 

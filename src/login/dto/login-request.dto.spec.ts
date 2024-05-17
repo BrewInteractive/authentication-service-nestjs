@@ -8,7 +8,11 @@ describe("LoginDto Validation", () => {
   it("should success validation if username is empty but not email", async () => {
     const user = new LoginRequest();
     user.email = faker.internet.email();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(0);
@@ -16,7 +20,11 @@ describe("LoginDto Validation", () => {
 
   it("should success validation if email is empty but not username", async () => {
     const user = new LoginRequest();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     user.username = faker.internet.userName();
     const errors = await validate(user);
 
@@ -25,7 +33,11 @@ describe("LoginDto Validation", () => {
 
   it("should fail validation when LoginDto has empty username and email fields", async () => {
     const user = new LoginRequest();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(2);
@@ -46,8 +58,12 @@ describe("LoginDto Validation", () => {
 
   it("should fail validation when email address is invalid", async () => {
     const user = new LoginRequest();
-    user.email = faker.random.word();
-    user.password = faker.internet.password(10, false, passwordRegex);
+    user.email = faker.word.sample();
+    user.password = faker.internet.password({
+      length: 10,
+      memorable: false,
+      pattern: passwordRegex,
+    });
     const errors = await validate(user);
 
     expect(errors.length).toBe(1);

@@ -6,7 +6,7 @@ describe("LoginOtpEmailRequest Validation", () => {
   it("should be verified", async () => {
     const loginOtpEmailRequest = new LoginOtpEmailRequest();
     loginOtpEmailRequest.email = faker.internet.email();
-    loginOtpEmailRequest.otpValue = faker.datatype.string(6);
+    loginOtpEmailRequest.otpValue = faker.string.sample(6);
     const errors = await validate(loginOtpEmailRequest);
 
     expect(errors.length).toBe(0);
@@ -15,7 +15,7 @@ describe("LoginOtpEmailRequest Validation", () => {
   it("should not be verified", async () => {
     const loginOtpEmailRequest = new LoginOtpEmailRequest();
     loginOtpEmailRequest.email = faker.lorem.words(1);
-    loginOtpEmailRequest.otpValue = faker.datatype.string(6);
+    loginOtpEmailRequest.otpValue = faker.string.sample(6);
     const errors = await validate(loginOtpEmailRequest);
 
     expect(errors.length).toBe(1);

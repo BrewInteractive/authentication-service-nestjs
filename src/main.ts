@@ -8,6 +8,7 @@ import { appConfig, serverConfig } from "./config";
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
 import { AppModule } from "./app.module";
 import { ConfigService } from "@nestjs/config";
+import { HttpExceptionFilter } from "./filter/http-exception.filter";
 import { NestFactory } from "@nestjs/core";
 
 import mjml2html = require("mjml");
@@ -71,6 +72,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.useGlobalFilters(new HttpExceptionFilter());
   initGlobalGuard(app);
   initValidationPipe(app);
   initSwagger(app);

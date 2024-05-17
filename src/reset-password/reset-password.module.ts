@@ -1,11 +1,15 @@
-import { EmailModule } from "../email/email.module";
 import { Module } from "@nestjs/common";
 import { ResetPasswordController } from "./reset-password.controller";
-import { TemplateModule } from "../template/template.module";
+import { ResetPasswordService } from "./reset-password.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "../user/user.module";
+import { UserResetPasswordRequest } from "../entities";
 
 @Module({
-  imports: [UserModule, EmailModule, TemplateModule],
+  imports: [TypeOrmModule.forFeature([UserResetPasswordRequest]), UserModule],
   controllers: [ResetPasswordController],
+  providers: [
+    { provide: "ResetPasswordService", useClass: ResetPasswordService },
+  ],
 })
 export class ResetPasswordModule {}

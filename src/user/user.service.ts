@@ -1,16 +1,12 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { User, UserResetPasswordRequest, UserRole } from "../entities";
+import { Injectable } from "@nestjs/common";
+import { User, UserRole } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
-import { ResetPasswordRequest } from "../reset-password/dto/reset-password-request.dto";
+import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
 
 @Injectable()
 export class UserService {
@@ -22,9 +18,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(UserRole)
-    private readonly userRoleRepository: Repository<UserRole>,
-    @InjectRepository(UserResetPasswordRequest)
-    private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
+    private readonly userRoleRepository: Repository<UserRole>
   ) {}
 
   async getUserAsync(options: {
@@ -38,12 +32,10 @@ export class UserService {
     if (options.username) whereClause.push({ username: options.username });
     if (options.email) whereClause.push({ email: options.email });
 
-    const user = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: whereClause,
       relations: ["roles", "roles.role"],
     });
-    if (user) return user;
-    return null;
   }
 
   async validateUserAsync(credentials: {
@@ -53,7 +45,9 @@ export class UserService {
   }): Promise<User> {
     const user = await this.validateUserPasswordAsync(credentials);
 
-    await this.applyUserValidatorsAsync(user);
+    const isUserValid = await this.applyUserValidatorsAsync(user);
+
+    if (!isUserValid) throw new InvalidCredentialsError();
 
     return user;
   }
@@ -63,22 +57,20 @@ export class UserService {
     email?: string;
     password: string;
   }): Promise<User> {
-    const userInformation = await this.getUserAsync({
+    const user = await this.getUserAsync({
       username: credentials.username,
       email: credentials.email,
     });
 
-    if (!userInformation)
-      throw new UnauthorizedException("Invalid credentials");
+    if (!user) throw new InvalidCredentialsError();
 
     const isPasswordValid = await bcrypt.compare(
       credentials.password,
-      userInformation.passwordHash
+      user.passwordHash
     );
-    if (!isPasswordValid) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
-    return userInformation;
+    if (!isPasswordValid) throw new InvalidCredentialsError();
+
+    return user;
   }
 
   async createUserAsync(user: User, appData?: object): Promise<User> {
@@ -87,9 +79,7 @@ export class UserService {
       email: user.email,
     });
 
-    if (existingUser) {
-      throw new ConflictException("Username or email already exists");
-    }
+    if (existingUser) throw new UserAlreadyExistsError();
 
     user = await this.applyPreRegisterUserHandlersAsync(user, appData);
     user = await this.insertUserAsync(user);
@@ -98,7 +88,17 @@ export class UserService {
     return user;
   }
 
-  private async insertUserAsync(user: User) {
+  async updateUserPasswordAsync(
+    user: User,
+    newPassword: string
+  ): Promise<void> {
+    const newSalt = bcrypt.genSaltSync();
+    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
+    user.passwordSalt = newSalt;
+    await this.userRepository.save(user);
+  }
+
+  private async insertUserAsync(user: User): Promise<User> {
     const savedUser = await this.userRepository.save(user);
 
     if (user.roles) {
@@ -129,9 +129,9 @@ export class UserService {
     user: User,
     appData: object
   ): Promise<User> {
-    for (const preRegisterUserHandler of this.preRegisterUserHandlers) {
+    for (const preRegisterUserHandler of this.preRegisterUserHandlers)
       user = await preRegisterUserHandler.handleAsync(user, appData);
-    }
+
     return user;
   }
 
@@ -145,82 +145,11 @@ export class UserService {
     return user;
   }
 
-  private async applyUserValidatorsAsync(user: User) {
+  private async applyUserValidatorsAsync(user: User): Promise<boolean> {
     for (const userValidator of this.userValidators) {
-      if (!(await userValidator.validateAsync(user)))
-        throw new UnauthorizedException("Invalid User.");
+      const isValid = await userValidator.validateAsync(user);
+      if (!isValid) return false;
     }
-  }
-
-  async resetPasswordAsync(
-    resetPasswordRequest: ResetPasswordRequest
-  ): Promise<void> {
-    const userResetPasswordData = await this.getResetPasswordRequestAsync(
-      resetPasswordRequest.key
-    );
-    const user = await this.validateResetPasswordRequestAsync(
-      userResetPasswordData,
-      resetPasswordRequest
-    );
-    this.updateUserPasswordAsync(user, resetPasswordRequest.newPassword);
-    this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
-  }
-
-  async getResetPasswordRequestAsync(
-    key: string
-  ): Promise<UserResetPasswordRequest> {
-    return await this.userResetPasswordRequestRepository.findOne({
-      where: { key },
-    });
-  }
-
-  async getResetPasswordRequestByIdAsync(
-    id: number
-  ): Promise<UserResetPasswordRequest> {
-    return await this.userResetPasswordRequestRepository.findOne({
-      where: { id },
-      relations: ["user"],
-    });
-  }
-
-  private async validateResetPasswordRequestAsync(
-    userResetPasswordRequest: UserResetPasswordRequest,
-    resetPasswordRequest: ResetPasswordRequest
-  ): Promise<User> {
-    if (!userResetPasswordRequest) {
-      //reset password request not exists with given key
-      throw new UnauthorizedException("Invalid reset password request.");
-    }
-    const user = await this.getUserAsync({
-      email: resetPasswordRequest.email,
-    });
-    if (!user) {
-      //user not exists with given email address
-      throw new UnauthorizedException("Invalid reset password request.");
-    }
-    if (
-      userResetPasswordRequest.expiresAt &&
-      userResetPasswordRequest.expiresAt < new Date()
-    ) {
-      throw new UnauthorizedException("Reset password request is expired.");
-    }
-    return user;
-  }
-
-  private async updateUserPasswordAsync(
-    user: User,
-    newPassword: string
-  ): Promise<void> {
-    const newSalt = bcrypt.genSaltSync();
-    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
-    user.passwordSalt = newSalt;
-    await this.userRepository.save(user);
-  }
-
-  private async updateResetPasswordRequestExpirationAsync(
-    resetPasswordRequest: UserResetPasswordRequest
-  ): Promise<void> {
-    resetPasswordRequest.expiresAt = new Date();
-    await this.userResetPasswordRequestRepository.save(resetPasswordRequest);
+    return true;
   }
 }
