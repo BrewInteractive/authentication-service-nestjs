@@ -17,4 +17,8 @@ export const authenticationConfig = () => ({
   otp: {
     expiresIn: parseInt(process.env.OTP_EXPIRES_IN) || 180,
   },
+  resetPassword: {
+    expiresAt: parseInt(process.env.RESET_PASSWORD_EXPIRES_AT) || 86400,
+    resendableAt: parseInt(process.env.RESET_PASSWORD_RESENDABLE_AT) || 0,
+  },
 });
