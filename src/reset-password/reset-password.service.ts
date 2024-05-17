@@ -52,14 +52,16 @@ export class ResetPasswordService {
     }
 
     const createdUserResetPasswordRequest =
-      this.createResetPassworRequest(email);
+      this.createUserResetPasswordRequest(email);
 
     return await this.userResetPasswordRequestRepository.save(
       createdUserResetPasswordRequest
     );
   }
 
-  private createResetPassworRequest(email: string): UserResetPasswordRequest {
+  private createUserResetPasswordRequest(
+    email: string
+  ): UserResetPasswordRequest {
     const currentTime = new Date();
 
     const resendableAt =
