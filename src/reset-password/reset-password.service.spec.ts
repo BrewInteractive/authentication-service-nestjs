@@ -4,6 +4,7 @@ import {
 } from "../../test/fixtures";
 import { User, UserResetPasswordRequest } from "../entities";
 
+import { ConfigModule } from "@nestjs/config";
 import { InvalidResetPasswordRequestError } from "../error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
@@ -11,9 +12,8 @@ import { ResetPasswordService } from "./reset-password.service";
 import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "../user/user.service";
-import { faker } from "@faker-js/faker";
-import { ConfigModule } from "@nestjs/config";
 import { authenticationConfig } from "../config";
+import { faker } from "@faker-js/faker";
 
 describe("ResetPasswordService", () => {
   let resetPasswordService: ResetPasswordService;
@@ -207,7 +207,7 @@ describe("ResetPasswordService", () => {
     expect(result).toBeNull();
   });
 
-  it("should save and return the created reset password request when active one is resendable", async () => {
+  it("should save and return the created reset password request when the active one is resendable", async () => {
     const email = faker.internet.email();
 
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
