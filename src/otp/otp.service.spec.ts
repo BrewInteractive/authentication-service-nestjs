@@ -61,7 +61,7 @@ describe("OtpService", () => {
 
     const actualResult = await otpService.validateEmailOtpAsync(
       faker.internet.email(),
-      faker.datatype.string(6)
+      faker.string.sample(6)
     );
 
     expect(actualResult).toBe(false);

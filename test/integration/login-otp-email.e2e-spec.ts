@@ -7,6 +7,7 @@ import { OtpFixture, UserFixture } from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
+import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
@@ -27,6 +28,7 @@ describe("LoginOtpEmailController (e2e)", () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter());
     await app.init();
     userRepository = moduleFixture.get<Repository<User>>("UserRepository");
     otpRepository = moduleFixture.get<Repository<Otp>>("OtpRepository");
@@ -54,8 +56,8 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(201);
 
-      expect(response.body).toHaveProperty("id_token");
-      expect(response.body).toHaveProperty("refresh_token");
+      expect(response.body).toHaveProperty("idToken");
+      expect(response.body).toHaveProperty("refreshToken");
     });
 
     it("should return an error if OTP is invalid", async () => {
@@ -73,7 +75,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
 
     it("should return an error if the otp is expired.", async () => {
@@ -95,7 +97,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
 
     it("should return error if there is no user", async () => {
@@ -115,7 +117,7 @@ describe("LoginOtpEmailController (e2e)", () => {
         })
         .expect(401);
 
-      expect(response.body.message).toEqual("Invalid credentials");
+      expect(response.body.message).toEqual("Invalid credentials.");
     });
   });
 });

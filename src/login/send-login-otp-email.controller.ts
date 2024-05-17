@@ -12,6 +12,7 @@ import { OtpService } from "../otp/otp.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthenticationAction } from "../enum";
 import { SendLoginOtpEmailResponse } from "./dto/send-login-otp-email-response.dto";
+import { InvalidCredentialsError } from "../error";
 
 @ApiTags("authentication")
 @Controller()
@@ -27,27 +28,32 @@ export class SendLoginOtpEmailController {
   async sendLoginOtpEmailAsync(
     @Body() sendLoginOtpEmailRequest: SendLoginOtpEmailRequest
   ): Promise<SendLoginOtpEmailResponse> {
-    const user = await this.userService.getUserAsync({
-      email: sendLoginOtpEmailRequest.email,
-    });
-
-    if (!user) throw new UnauthorizedException();
-
-    const sendOtpResult = await this.otpService.createEmailOtpAsync(
-      sendLoginOtpEmailRequest.email
-    );
-
-    if (sendOtpResult.isSent === true) {
-      this.eventEmitter.emit("otp.email.created", {
-        otpValue: sendOtpResult.otpValue,
-        emailAddress: sendLoginOtpEmailRequest.email,
-        authenticationAction: AuthenticationAction.LOGIN,
+    try {
+      const user = await this.userService.getUserAsync({
+        email: sendLoginOtpEmailRequest.email,
       });
-    }
 
-    return {
-      isSent: sendOtpResult.isSent,
-      expiresAt: sendOtpResult.expiresAt,
-    };
+      if (!user) throw new InvalidCredentialsError();
+
+      const sendOtpResult = await this.otpService.createEmailOtpAsync(
+        sendLoginOtpEmailRequest.email
+      );
+
+      if (sendOtpResult.isSent === true) {
+        this.eventEmitter.emit("otp.email.created", {
+          otpValue: sendOtpResult.otpValue,
+          emailAddress: sendLoginOtpEmailRequest.email,
+          authenticationAction: AuthenticationAction.LOGIN,
+        });
+      }
+
+      return {
+        isSent: sendOtpResult.isSent,
+        expiresAt: sendOtpResult.expiresAt,
+      };
+    } catch (error) {
+      if (error instanceof InvalidCredentialsError)
+        throw new UnauthorizedException(null, { cause: error });
+    }
   }
 }

@@ -1,4 +1,10 @@
-import { Inject, Controller, Post, Body } from "@nestjs/common";
+import {
+  Inject,
+  Controller,
+  Post,
+  Body,
+  ConflictException,
+} from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { TokenService } from "../token/token.service";
@@ -7,6 +13,7 @@ import { SignUpResponse } from "./dto/sign-up-response.dto";
 import { InjectMapper } from "@automapper/nestjs";
 import { User } from "../entities/user.entity";
 import { Mapper } from "@automapper/core";
+import { UserAlreadyExistsError } from "../error";
 
 @ApiTags("authentication")
 @Controller()
@@ -22,16 +29,20 @@ export class SignUpController {
   async signUpAsync(
     @Body() signUpRequest: SignUpRequest
   ): Promise<SignUpResponse> {
-    const userCandidate = await this.mapper.mapAsync(
-      signUpRequest,
-      SignUpRequest,
-      User
-    );
-    const user = await this.userService.createUserAsync(
-      userCandidate,
-      signUpRequest.appData
-    );
-    const tokens = await this.tokenService.createTokensAsync(user);
-    return tokens;
+    try {
+      const userCandidate = await this.mapper.mapAsync(
+        signUpRequest,
+        SignUpRequest,
+        User
+      );
+      const user = await this.userService.createUserAsync(
+        userCandidate,
+        signUpRequest.appData
+      );
+      return await this.tokenService.createTokensAsync(user);
+    } catch (error) {
+      if (error instanceof UserAlreadyExistsError)
+        throw new ConflictException(null, { cause: error });
+    }
   }
 }

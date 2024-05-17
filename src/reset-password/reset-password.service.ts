@@ -1,83 +1,43 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { User, UserResetPasswordRequest } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import * as bcrypt from "bcrypt";
-import { ResetPasswordRequest } from "../reset-password/dto/reset-password-request.dto";
+import { Repository, MoreThan } from "typeorm";
+import { InvalidResetPasswordRequestError } from "../error/invalid-reset-password-request.error";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class ResetPasswordService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @Inject("UserService") private readonly userService: UserService,
     @InjectRepository(UserResetPasswordRequest)
     private readonly userResetPasswordRequestRepository: Repository<UserResetPasswordRequest>
   ) {}
 
   async resetPasswordAsync(
-    resetPasswordRequest: ResetPasswordRequest
+    user: User,
+    newPassword: string,
+    key: string
   ): Promise<void> {
-    const userResetPasswordData = await this.getResetPasswordRequestAsync(
-      resetPasswordRequest.key
+    const userResetPasswordRequest = await this.getResetPasswordRequestAsync(
+      key
     );
 
-    const user = await this.getUserAsync(resetPasswordRequest.email);
+    if (!userResetPasswordRequest) throw new InvalidResetPasswordRequestError();
 
-    await this.validateResetPasswordRequestAsync(
-      userResetPasswordData,
-      resetPasswordRequest
-    );
+    await this.userService.updateUserPasswordAsync(user, newPassword);
 
-    this.updateUserPasswordAsync(user, resetPasswordRequest.newPassword);
-
-    this.updateResetPasswordRequestExpirationAsync(userResetPasswordData);
+    await this.expireResetPasswordRequestAsync(userResetPasswordRequest);
   }
 
   async getResetPasswordRequestAsync(
     key: string
   ): Promise<UserResetPasswordRequest> {
     return await this.userResetPasswordRequestRepository.findOne({
-      where: { key },
+      where: { key, expiresAt: MoreThan(new Date()) },
     });
   }
 
-  private async getUserAsync(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: { email: email },
-    });
-    if (!user) {
-      throw new UnauthorizedException("User not found");
-    }
-    return user;
-  }
-
-  private async validateResetPasswordRequestAsync(
-    userResetPasswordRequest: UserResetPasswordRequest,
-    resetPasswordRequest: ResetPasswordRequest
-  ) {
-    if (!userResetPasswordRequest) {
-      throw new UnauthorizedException("Invalid reset password request.");
-    }
-
-    if (
-      userResetPasswordRequest.expiresAt &&
-      userResetPasswordRequest.expiresAt < new Date()
-    ) {
-      throw new UnauthorizedException("Reset password request is expired.");
-    }
-  }
-
-  private async updateUserPasswordAsync(
-    user: User,
-    newPassword: string
-  ): Promise<void> {
-    const newSalt = bcrypt.genSaltSync();
-    user.passwordHash = bcrypt.hashSync(newPassword, newSalt);
-    user.passwordSalt = newSalt;
-    await this.userRepository.save(user);
-  }
-
-  private async updateResetPasswordRequestExpirationAsync(
+  private async expireResetPasswordRequestAsync(
     resetPasswordRequest: UserResetPasswordRequest
   ): Promise<void> {
     resetPasswordRequest.expiresAt = new Date();

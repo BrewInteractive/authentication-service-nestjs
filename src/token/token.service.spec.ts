@@ -12,11 +12,11 @@ import { instance, mock } from "ts-mockito";
 import { ConfigService } from "@nestjs/config";
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
+import { InvalidRefreshTokenError } from "../error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
-import { UnauthorizedException } from "@nestjs/common";
 
 jest.mock("jsonwebtoken");
 
@@ -84,10 +84,10 @@ describe("TokenService", () => {
       roles: user.roles.map((userRole) => userRole.role.name),
     };
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
     const tokens = await tokenService.createTokensAsync(
@@ -95,8 +95,8 @@ describe("TokenService", () => {
       configService.get("jwt.expiresIn")
     );
 
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
       configService.get("jwt.secret"),
@@ -120,10 +120,10 @@ describe("TokenService", () => {
       last_name: user.lastName,
     };
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
     const tokens = await tokenService.createTokensAsync(
@@ -131,8 +131,8 @@ describe("TokenService", () => {
       configService.get("jwt.expiresIn")
     );
 
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
     expect(jwt.sign).toHaveBeenCalledWith(
       expectedCustomClaims,
       configService.get("jwt.secret"),
@@ -176,10 +176,10 @@ describe("TokenService", () => {
     const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
 
     jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
-      refreshToken: expectedTokens.refresh_token,
+      refreshToken: expectedTokens.refreshToken,
     } as RefreshToken);
 
-    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.id_token);
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
 
     jest
       .spyOn(refreshTokenRepository, "findOne")
@@ -187,20 +187,20 @@ describe("TokenService", () => {
 
     jest.spyOn(refreshTokenRepository, "update").mockResolvedValueOnce(null);
 
-    const tokens = await tokenService.refreshTokenAsync(
+    const tokens = await tokenService.refreshTokensAsync(
       refreshTokenEntity.refreshToken
     );
-    expect(tokens.id_token).toBe(expectedTokens.id_token);
-    expect(tokens.refresh_token).toBe(expectedTokens.refresh_token);
+    expect(tokens.idToken).toBe(expectedTokens.idToken);
+    expect(tokens.refreshToken).toBe(expectedTokens.refreshToken);
   });
 
-  it("should throw unauthorized excepiton", async () => {
+  it("should throw InvalidRefreshTokenError when the refresh token is invalid", async () => {
     const token = "testToken";
 
     jest.spyOn(refreshTokenRepository, "findOne").mockResolvedValue(null);
 
-    await expect(() => tokenService.refreshTokenAsync(token)).rejects.toThrow(
-      UnauthorizedException
+    await expect(() => tokenService.refreshTokensAsync(token)).rejects.toThrow(
+      InvalidRefreshTokenError
     );
   });
 });
