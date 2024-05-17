@@ -1,6 +1,7 @@
 import {
   EmailConfigFixture,
   OtpEmailCreatedEventFixture,
+  ResetPasswordCreatedEventFixture,
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
@@ -99,5 +100,34 @@ describe("NotificationService", () => {
 
     expect(templateSpy).toHaveBeenCalledWith("en");
     expect(emailSpy).not.toBeCalled();
+  });
+
+  it("should send reset password email", async () => {
+    const resetPasswordEmailCreatedEvent = MockFactory(
+      ResetPasswordCreatedEventFixture
+    ).one();
+    const resetPasswordTemplate = "<p>{{resetLink}}</p>";
+
+    const templateSpy = jest
+      .spyOn(templateService, "getResetPasswordEmailTemplate")
+      .mockReturnValue(resetPasswordTemplate);
+
+    const injectDataSpy = jest
+      .spyOn(templateService, "injectData")
+      .mockReturnValue(resetPasswordTemplate);
+
+    const emailSpy = jest
+      .spyOn(emailService, "sendEmailAsync")
+      .mockResolvedValue();
+
+    await notificationService.onResetPasswordEmailCreatedAsync(
+      resetPasswordEmailCreatedEvent
+    );
+
+    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(injectDataSpy).toHaveBeenCalledWith(resetPasswordTemplate, {
+      resetLink: resetPasswordEmailCreatedEvent.resetLink,
+    });
+    expect(emailSpy).toBeCalled();
   });
 });

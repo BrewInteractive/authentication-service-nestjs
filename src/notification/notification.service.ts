@@ -6,6 +6,7 @@ import { ConfigService } from "@nestjs/config";
 import { OtpEmailCreatedEvent } from "./dto/otp-email-created-event.dto";
 import { AuthenticationAction } from "../enum";
 import { OtpEmailTemplateNotFoundError } from "./error";
+import { ResetPasswordCreatedEvent } from "./dto";
 
 @Injectable()
 export class NotificationService {
@@ -20,7 +21,7 @@ export class NotificationService {
   async onOtpEmailCreatedAsync(
     otpEmailCreatedEvent: OtpEmailCreatedEvent
   ): Promise<void> {
-    const email = this.getEmailByAction(
+    const email = this.getOtpEmailByAuthAction(
       otpEmailCreatedEvent.otpValue,
       otpEmailCreatedEvent.authenticationAction
     );
@@ -34,7 +35,28 @@ export class NotificationService {
     }
   }
 
-  private getEmailByAction(
+  @OnEvent("reset-password.email.created")
+  async onResetPasswordEmailCreatedAsync(
+    resetPasswordCreatedEvent: ResetPasswordCreatedEvent
+  ): Promise<void> {
+    const resetPasswordEmailTemplate =
+      this.templateService.getResetPasswordEmailTemplate("en");
+
+    const emailContent = this.templateService.injectData(
+      resetPasswordEmailTemplate,
+      {
+        resetLink: resetPasswordCreatedEvent.resetLink,
+      }
+    );
+
+    return await this.sendEmailAsync(
+      this.configService.get("emailSubjects.resetPassword"),
+      resetPasswordCreatedEvent.emailAddress,
+      emailContent
+    );
+  }
+
+  private getOtpEmailByAuthAction(
     otpValue: string,
     authenticationAction: AuthenticationAction
   ): { subject: string; content: string } {
