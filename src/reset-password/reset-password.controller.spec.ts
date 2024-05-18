@@ -112,7 +112,7 @@ describe("ResetPasswordController", () => {
     expect(actualResult).toStrictEqual(expectedResult);
   });
 
-  it("should throw BadRequestException if InvalidCredentialsError is caught due null user", async () => {
+  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null user", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
@@ -176,7 +176,7 @@ describe("ResetPasswordController", () => {
     expect(actualResult).toStrictEqual(expectedResult);
   });
 
-  it("should throw BadRequestException if InvalidCredentialsError is caught due null user", async () => {
+  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null user", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);

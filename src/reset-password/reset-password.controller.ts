@@ -40,7 +40,7 @@ export class ResetPasswordController {
         email: resetPasswordRequest.email,
       });
 
-      if (!user) throw new InvalidCredentialsError();
+      if (!user) throw new InvalidResetPasswordRequestError();
 
       await this.resetPasswordService.resetPasswordAsync(
         user,
@@ -66,7 +66,7 @@ export class ResetPasswordController {
         email: createResetPasswordRequest.email,
       });
 
-      if (!user) throw new InvalidCredentialsError();
+      if (!user) throw new InvalidResetPasswordRequestError();
 
       const userResetPasswordRequest =
         await this.resetPasswordService.createResetPasswordRequest(user.email);
