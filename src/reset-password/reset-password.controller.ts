@@ -10,10 +10,7 @@ import { ResetPasswordRequest } from "./dto/reset-password-request.dto";
 import { ResetPasswordService } from "./reset-password.service";
 import { OkResponse } from "../dto";
 import { UserService } from "../user/user.service";
-import {
-  InvalidCredentialsError,
-  InvalidResetPasswordRequestError,
-} from "../error";
+import { InvalidResetPasswordRequestError } from "../error";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { ConfigService } from "@nestjs/config";
 import { ResetPasswordCreatedEvent } from "../notification/dto";
