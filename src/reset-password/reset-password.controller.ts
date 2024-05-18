@@ -49,10 +49,7 @@ export class ResetPasswordController {
       );
       return new OkResponse();
     } catch (error) {
-      if (
-        error instanceof InvalidResetPasswordRequestError ||
-        error instanceof InvalidCredentialsError
-      )
+      if (error instanceof InvalidResetPasswordRequestError)
         throw new BadRequestException(null, { cause: error });
     }
   }
@@ -88,10 +85,7 @@ export class ResetPasswordController {
 
       return new OkResponse();
     } catch (error) {
-      if (
-        error instanceof InvalidResetPasswordRequestError ||
-        error instanceof InvalidCredentialsError
-      )
+      if (error instanceof InvalidResetPasswordRequestError)
         throw new BadRequestException(null, { cause: error });
     }
   }

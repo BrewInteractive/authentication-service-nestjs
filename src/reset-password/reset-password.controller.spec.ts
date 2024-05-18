@@ -195,9 +195,7 @@ describe("ResetPasswordController", () => {
       .mockResolvedValueOnce(Promise.resolve(user));
     jest
       .spyOn(resetPasswordService, "createResetPasswordRequest")
-      .mockImplementationOnce(() => {
-        throw new InvalidResetPasswordRequestError();
-      });
+      .mockResolvedValue(null);
 
     await expect(
       resetPasswordController.forgotPasswordAsync(resetPasswordRequestDto)
