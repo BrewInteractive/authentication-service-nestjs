@@ -48,6 +48,7 @@ export class ResetPasswordService {
       activeUserResetPasswordRequest &&
       activeUserResetPasswordRequest.resendableAt > new Date()
     ) {
+      //TODO: null is obscure, should be a custom error that describes the reason to whom is calling this method
       return null;
     }
 

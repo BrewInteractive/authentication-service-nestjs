@@ -3,6 +3,7 @@ import { User, UserResetPasswordRequest, UserRole } from "../entities";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { EmailConfigFixture } from "../../test/fixtures";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { MockFactory } from "mockingbird";
 import { ResetPasswordModule } from "./reset-password.module";
 import { Test } from "@nestjs/testing";
@@ -21,6 +22,7 @@ describe("ResetPasswordModule", () => {
       imports: [
         ResetPasswordModule,
         UserModule,
+        EventEmitterModule.forRoot(),
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
