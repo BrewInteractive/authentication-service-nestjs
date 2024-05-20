@@ -36,6 +36,7 @@ describe("ResetPasswordController", () => {
           provide: "ResetPasswordService",
           useValue: {
             resetPasswordAsync: jest.fn(),
+            createResetPasswordRequest: jest.fn(),
           },
         },
       ],
@@ -76,7 +77,7 @@ describe("ResetPasswordController", () => {
     expect(actualResult).toStrictEqual(expectedResult);
   });
 
-  it("should throw InvalidResetPasswordRequestError if user is not found", async () => {
+  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null user", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
@@ -86,12 +87,14 @@ describe("ResetPasswordController", () => {
     ).rejects.toThrow(BadRequestException);
   });
 
-  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught", async () => {
+  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null resetPasswordRequest", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 
-    jest.spyOn(userService, "getUserAsync").mockImplementationOnce(() => {
-      throw new InvalidResetPasswordRequestError();
-    });
+    jest
+      .spyOn(resetPasswordService, "resetPasswordAsync")
+      .mockImplementationOnce(() => {
+        throw new InvalidResetPasswordRequestError();
+      });
 
     await expect(
       resetPasswordController.resetPasswordAsync(resetPasswordRequestDto)

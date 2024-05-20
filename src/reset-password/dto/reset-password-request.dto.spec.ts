@@ -1,3 +1,4 @@
+import { MockFactory } from "mockingbird";
 import { ResetPasswordRequest } from "./reset-password-request.dto";
 import { faker } from "@faker-js/faker";
 import { validate } from "class-validator";
@@ -34,6 +35,7 @@ describe("ResetPasswordRequest Dto Validation", () => {
 
     expect(errors.length).toBe(1);
     expect(errors[0].constraints).toEqual({
+      isEmail: "email must be an email",
       isNotEmpty: "email should not be empty",
       isString: "email must be a string",
     });

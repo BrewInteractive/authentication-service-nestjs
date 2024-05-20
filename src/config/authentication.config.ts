@@ -20,5 +20,6 @@ export const authenticationConfig = () => ({
   resetPassword: {
     expiresAt: parseInt(process.env.RESET_PASSWORD_EXPIRES_AT) || 86400,
     resendableAt: parseInt(process.env.RESET_PASSWORD_RESENDABLE_AT) || 0,
+    url: process.env.RESET_PASSWORD_URL,
   },
 });
