@@ -14,6 +14,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { ConfigService } from "@nestjs/config";
 import { ResetPasswordCreatedEvent } from "../notification/dto";
 import { CreateResetPasswordRequest } from "./dto/create-reset-password-request.dto";
+import { ActiveResetPasswordRequestExistsError } from "../error/active-reset-password-request-exists.error";
 
 @ApiTags("authentication")
 @Controller()
@@ -41,9 +42,6 @@ export class ForgotPasswordController {
       const userResetPasswordRequest =
         await this.resetPasswordService.createResetPasswordRequest(user.email);
 
-      if (!userResetPasswordRequest)
-        throw new InvalidResetPasswordRequestError();
-
       const resetPasswordCreatedEvent: ResetPasswordCreatedEvent = {
         emailAddress: user.email,
         resetLink:
@@ -58,7 +56,10 @@ export class ForgotPasswordController {
 
       return new OkResponse();
     } catch (error) {
-      if (error instanceof InvalidResetPasswordRequestError)
+      if (
+        error instanceof InvalidResetPasswordRequestError ||
+        error instanceof ActiveResetPasswordRequestExistsError
+      )
         throw new BadRequestException(null, { cause: error });
     }
   }

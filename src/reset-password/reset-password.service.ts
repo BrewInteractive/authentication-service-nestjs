@@ -5,6 +5,7 @@ import { Repository, MoreThan } from "typeorm";
 import { InvalidResetPasswordRequestError } from "../error/invalid-reset-password-request.error";
 import { UserService } from "../user/user.service";
 import { authenticationConfig } from "../config";
+import { ActiveResetPasswordRequestExistsError } from "../error/active-reset-password-request-exists.error";
 
 @Injectable()
 export class ResetPasswordService {
@@ -48,8 +49,7 @@ export class ResetPasswordService {
       activeUserResetPasswordRequest &&
       activeUserResetPasswordRequest.resendableAt > new Date()
     ) {
-      //TODO: null is obscure, should be a custom error that describes the reason to whom is calling this method
-      return null;
+      throw new ActiveResetPasswordRequestExistsError();
     }
 
     const createdUserResetPasswordRequest =
