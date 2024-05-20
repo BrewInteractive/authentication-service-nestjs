@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { User, UserRole } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
@@ -28,7 +28,7 @@ export class UserService {
     if (!options.username && !options.email)
       throw new Error("At least one of username or email must be provided.");
 
-    const whereClause = [];
+    const whereClause = [] as FindOptionsWhere<User>[];
     if (options.username) whereClause.push({ username: options.username });
     if (options.email) whereClause.push({ email: options.email });
 

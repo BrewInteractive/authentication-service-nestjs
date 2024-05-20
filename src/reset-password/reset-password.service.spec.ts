@@ -4,6 +4,7 @@ import {
 } from "../../test/fixtures";
 import { User, UserResetPasswordRequest } from "../entities";
 
+import { ActiveResetPasswordRequestExistsError } from "../error/active-reset-password-request-exists.error";
 import { ConfigModule } from "@nestjs/config";
 import { InvalidResetPasswordRequestError } from "../error";
 import { MockFactory } from "mockingbird";
@@ -189,7 +190,7 @@ describe("ResetPasswordService", () => {
     }
   });
 
-  it("should return null when the active reset password request is not resendable", async () => {
+  it("should return error when the active reset password request is not resendable", async () => {
     const email = faker.internet.email();
 
     const userResetPasswordData = MockFactory(UserResetPasswordRequestFixture)
@@ -202,9 +203,12 @@ describe("ResetPasswordService", () => {
       .spyOn(userResetPasswordRequestRepository, "findOne")
       .mockResolvedValue(Promise.resolve(userResetPasswordData));
 
-    const result = await resetPasswordService.createResetPasswordRequest(email);
-
-    expect(result).toBeNull();
+    try {
+      await resetPasswordService.createResetPasswordRequest(email);
+    } catch (e) {
+      expect(e).toBeInstanceOf(ActiveResetPasswordRequestExistsError);
+      expect(e.message).toBe("Active reset password request exists.");
+    }
   });
 
   it("should save and return the created reset password request when the active one is resendable", async () => {

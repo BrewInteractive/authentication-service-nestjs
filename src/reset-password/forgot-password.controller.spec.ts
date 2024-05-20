@@ -8,6 +8,7 @@ import {
 import { Test, TestingModule } from "@nestjs/testing";
 import { User, UserResetPasswordRequest } from "../entities";
 
+import { ActiveResetPasswordRequestExistsError } from "../error/active-reset-password-request-exists.error";
 import { AutomapperModule } from "@automapper/nestjs";
 import { BadRequestException } from "@nestjs/common";
 import { ForgotPasswordController } from "./forgot-password.controller";
@@ -133,7 +134,7 @@ describe("ForgotPasswordController", () => {
     ).rejects.toThrow(BadRequestException);
   });
 
-  it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null resetPasswordRequest", async () => {
+  it("should throw BadRequestException if ActiveResetPasswordRequestExistsError is caught", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
     const user = MockFactory(UserFixture).one();
 
@@ -142,7 +143,7 @@ describe("ForgotPasswordController", () => {
       .mockResolvedValueOnce(Promise.resolve(user));
     jest
       .spyOn(resetPasswordService, "createResetPasswordRequest")
-      .mockResolvedValue(null);
+      .mockRejectedValueOnce(new ActiveResetPasswordRequestExistsError());
 
     await expect(
       forgotPasswordController.forgotPasswordAsync(resetPasswordRequestDto)
