@@ -11,10 +11,6 @@ import { ResetPasswordService } from "./reset-password.service";
 import { OkResponse } from "../dto";
 import { UserService } from "../user/user.service";
 import { InvalidResetPasswordRequestError } from "../error";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { ConfigService } from "@nestjs/config";
-import { ResetPasswordCreatedEvent } from "../notification/dto";
-import { CreateResetPasswordRequest } from "./dto/create-reset-password-request.dto";
 
 @ApiTags("authentication")
 @Controller()
@@ -23,9 +19,7 @@ export class ResetPasswordController {
   constructor(
     @Inject("UserService") private readonly userService: UserService,
     @Inject("ResetPasswordService")
-    private readonly resetPasswordService: ResetPasswordService,
-    private readonly eventEmitter: EventEmitter2,
-    private readonly configService: ConfigService
+    private readonly resetPasswordService: ResetPasswordService
   ) {}
 
   @Post("reset-password")
@@ -44,42 +38,6 @@ export class ResetPasswordController {
         resetPasswordRequest.newPassword,
         resetPasswordRequest.key
       );
-      return new OkResponse();
-    } catch (error) {
-      if (error instanceof InvalidResetPasswordRequestError)
-        throw new BadRequestException(null, { cause: error });
-    }
-  }
-
-  @Post("forgot-password")
-  async forgotPasswordAsync(
-    @Body() createResetPasswordRequest: CreateResetPasswordRequest
-  ): Promise<OkResponse> {
-    try {
-      const user = await this.userService.getUserAsync({
-        email: createResetPasswordRequest.email,
-      });
-
-      if (!user) throw new InvalidResetPasswordRequestError();
-
-      const userResetPasswordRequest =
-        await this.resetPasswordService.createResetPasswordRequest(user.email);
-
-      if (!userResetPasswordRequest)
-        throw new InvalidResetPasswordRequestError();
-
-      const resetPasswordCreatedEvent: ResetPasswordCreatedEvent = {
-        emailAddress: user.email,
-        resetLink:
-          this.configService.get("resetPassword.url") +
-          userResetPasswordRequest.key,
-      };
-
-      this.eventEmitter.emit(
-        "reset-password.email.created",
-        resetPasswordCreatedEvent
-      );
-
       return new OkResponse();
     } catch (error) {
       if (error instanceof InvalidResetPasswordRequestError)
