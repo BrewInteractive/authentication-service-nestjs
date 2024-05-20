@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.4...v2.0.0) (2024-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* changes error responses and some controller succesful reponses.
+
+### Features
+
+* add forgot-password endpoint ([80cabe4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/80cabe4dba632a05d9f193ddbbe4fc4b4ec02164))
+* create an event handler reset-password-request-created event in notification service. ([9e2e162](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9e2e1623ffca2fb2e4c4421e5fc87126254c9cb4))
+* create createEmailOtpAsync method in otp service ([c7ee986](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c7ee9862b508f9c67a9531fe7bf8d3aca7fd270d))
+* create login otp email controller ([fb38a2f](https://github.com/BrewInteractive/authentication-service-nestjs/commit/fb38a2fa58f214fc789e08c1f4958e7afb71a8c4))
+* create notification module ([08fbafa](https://github.com/BrewInteractive/authentication-service-nestjs/commit/08fbafa5112e3ec991597550c52ca329aee1b7de))
+* create otp email template ([43c6fe1](https://github.com/BrewInteractive/authentication-service-nestjs/commit/43c6fe19515bf60d504dfc9d084cfe9815a19e9d))
+* create otp module ([4971dc3](https://github.com/BrewInteractive/authentication-service-nestjs/commit/4971dc3d2ef1b4c0f0178abb822a6c00c0725f21))
+* create otps tables ([59d206c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/59d206c6f04aab66cce7407495a5dc4a2c142d5b))
+* create smtp email provider ([6460343](https://github.com/BrewInteractive/authentication-service-nestjs/commit/646034343c06b1c54dc0480f3651ce2b2e62335d))
+* **create-reset-password-request:** add reset password env to .env.example ([2af2aae](https://github.com/BrewInteractive/authentication-service-nestjs/commit/2af2aaee815eb4c7d9620acd457ad569a111f306))
+* **create-reset-password-request:** createResetPasswordRequest function in reset-password service. ([eb4897d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/eb4897dbb1c9f27f6b2b9de25966affd4602f411))
+* created response classes. ([cc34c41](https://github.com/BrewInteractive/authentication-service-nestjs/commit/cc34c410194c5e5ae45ccf9482ce7c5f275670fd))
+* Refactor reset password controller and service ([d5a02af](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d5a02af42c7cd8b3540e406090475773bad4e89b))
+* update configurations files ([3c2efe5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3c2efe549e2b1c317108dfc0fcd885c2fe3440eb))
+* update template service ([512080a](https://github.com/BrewInteractive/authentication-service-nestjs/commit/512080a7ef9dbf161ab75b35b15b81cb8b03b59c))
+* **VILLB-6:** add unit test for controller. ([be4e985](https://github.com/BrewInteractive/authentication-service-nestjs/commit/be4e9858e69d36a062739c615e4cd83f9043c236))
+* **VILLB-6:** create send login otp email controller and test cases. ([42779da](https://github.com/BrewInteractive/authentication-service-nestjs/commit/42779da27443c27da299cec473a7fceda5aac318))
+* **VILLB-6:** fix minor sonar issue ([5009cd6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5009cd6c7ea35f6e48a03c75dbea5f98f7534209))
+* **VILLB-6:** make controller response snake case. ([9cc6523](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9cc6523447e2cf450b702e408c1f3edfa5d9f894))
+* **VILLB-6:** removed otpvalue from response, refactored event emitter call, removed EventEmitter module import from login module decl. ([4facaa1](https://github.com/BrewInteractive/authentication-service-nestjs/commit/4facaa1a1deaa9bbc764bd46d44faf4de97f3516))
+
+
+### Bug Fixes
+
+* Add ActiveResetPasswordRequestExistsError class ([3301176](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3301176568112b7b9fb60bb8554a7fdba519b392))
+* add foreign key constraints to User and Role in UserRole entity ([c93ecaa](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c93ecaac880c923f41603e9246404b5e0974441e))
+* add NOW() update for reset_password request expires_at before setting NOT NULL constraint ([fc067a5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/fc067a51b881766b0597e019ac0de1e30710b119))
+* **create-reset-password-request:** rename function and add expires at check to getActiveResetPasswordRequestByEmail. ([9e08b1c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9e08b1cda5332c39e85bed593ca45d68dbde4321))
+* fix for nullable constraint for expires_at column in user-reset-password-request entity ([2b48072](https://github.com/BrewInteractive/authentication-service-nestjs/commit/2b48072deb59200c19429924cbff50d6cdd0366c))
+* fix typo in function name. ([b338694](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b338694d4a9979123a0a312d4b82809249e4cd2f))
+* make the smtp secured. ([b9ac3d7](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b9ac3d7575b57f9d2748ddc3042366fb8368f4c8))
+* make the smtp secured. ([427c7ce](https://github.com/BrewInteractive/authentication-service-nestjs/commit/427c7ce42f2a53786045533a0ab082916ae5c25b))
+* update reset password error handling ([3f8b6ad](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3f8b6ad2e69d92609e8dd8579ed041849c8ff069))
+* **VILLB-6:** change controller and controller spec file name, change test case descriptions, change variable names. ([0a236c2](https://github.com/BrewInteractive/authentication-service-nestjs/commit/0a236c26164310a156b8aed54e551cd6957bfd85))
+
+
+* refactor responses. ([ff9f98d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/ff9f98d8793381ce7d4afc596ff3cd8087d7dca0))
+
 ### [1.14.4](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.3...v1.14.4) (2024-04-26)
 
 
