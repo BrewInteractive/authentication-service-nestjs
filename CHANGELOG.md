@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.0.0...v2.0.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* Add NotificationModule to app.module.ts ([6d325f3](https://github.com/BrewInteractive/authentication-service-nestjs/commit/6d325f356dc5ab3be86c08ba308ae65acebf24af))
+
 ## [2.0.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v1.14.4...v2.0.0) (2024-05-20)
 
 
