@@ -42,6 +42,8 @@ export class LoginOtpEmailController {
 
       if (!user) throw new InvalidCredentialsError();
 
+      this.otpService.expireOtpAsync({ email: loginOtpEmailRequest.email });
+
       return await this.tokenService.createTokensAsync(user);
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
