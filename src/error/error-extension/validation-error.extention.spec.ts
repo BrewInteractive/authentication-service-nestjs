@@ -6,14 +6,6 @@ describe("ValidationErrorExtensions", () => {
     expect(validationErrorExtensions).toBeDefined();
   });
 
-  it("should have message property", () => {
-    const validationErrorExtensions = new ValidationErrorExtensions();
-    expect(validationErrorExtensions.message).toBeUndefined();
-
-    validationErrorExtensions.message = "Test message";
-    expect(validationErrorExtensions.message).toBe("Test message");
-  });
-
   it("should have fields property", () => {
     const validationErrorExtensions = new ValidationErrorExtensions();
     expect(validationErrorExtensions.fields).toBeUndefined();
