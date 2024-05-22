@@ -89,4 +89,4 @@ jspm_packages
 
 data/
 
-src/template/templates/html/en/*
+src/template/templates/html/en/*.html

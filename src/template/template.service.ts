@@ -12,6 +12,13 @@ export class TemplateService {
     );
   }
 
+  public getLoginOtpSmsTemplate(locale: string): string {
+    return readFileSync(
+      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
+      "utf8"
+    );
+  }
+
   public getResetPasswordEmailTemplate(locale: string): string {
     return readFileSync(
       `${__dirname}/templates/html/${locale}/reset-password.html`,
