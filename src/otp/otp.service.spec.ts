@@ -7,6 +7,7 @@ import { OtpFixture } from "../../test/fixtures";
 import { OtpService } from "./otp.service";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
+import { OtpNotFoundError } from "../error";
 
 describe("OtpService", () => {
   let otpService: OtpService;
@@ -26,6 +27,7 @@ describe("OtpService", () => {
           useValue: {
             findOne: jest.fn(),
             save: jest.fn(),
+            update: jest.fn(),
           },
         },
       ],
@@ -101,5 +103,31 @@ describe("OtpService", () => {
     expect(actualResult.otpValue).toBe(undefined);
     expect(actualResult.isSent).toBe(false);
     expect(actualResult.expiresAt).toBe(unexpiredOtp.expiresAt);
+  });
+
+  it("should update expiry time for valid OTP", async () => {
+    const unexpiredOtp = MockFactory(OtpFixture).one().withEmailChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(unexpiredOtp));
+
+    await otpService.expireOtpAsync({ email: unexpiredOtp.channel.email });
+
+    expect(otpRepository.update).toHaveBeenCalledWith(unexpiredOtp.id, {
+      expiresAt: expect.any(Date),
+    });
+  });
+
+  it("should throw otp not found error", async () => {
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(null));
+
+    await expect(
+      otpService.expireOtpAsync({ email: faker.internet.email() })
+    ).rejects.toThrow(OtpNotFoundError);
+
+    expect(otpRepository.update).not.toHaveBeenCalled();
   });
 });
