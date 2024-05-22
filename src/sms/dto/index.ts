@@ -1,2 +1,2 @@
 export * from "./sms.dto";
-export * from "./sms-xml.dto";
+export * from "./mutlucell-sms-xml.dto";

@@ -1,4 +1,4 @@
-export class MutluCellSmsDto {
+export class MutluCellSmsXmlDto {
   mesaj: {
     metin: string;
     nums: string;

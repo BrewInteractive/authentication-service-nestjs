@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { SmsService } from "../../sms.service";
-import { MutluCellSmsDto, Sms } from "../../dto";
+import { MutluCellSmsXmlDto, Sms } from "../../dto";
 import { MutluCellSmsConfig } from "./";
 import { parse } from "js2xmlparser";
 
@@ -14,7 +14,7 @@ export class MutluCellSmsService extends SmsService {
     }
 
     async sendSmsAsync(sms: Sms): Promise<void> {
-        const smsDto = new MutluCellSmsDto(
+        const smsDto = new MutluCellSmsXmlDto(
             sms.message,
             sms.phoneNumber,
             this.mutluCellConfig.username,

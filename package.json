@@ -57,7 +57,6 @@
     "jsonwebtoken": "^9.0.0",
     "mjml": "^4.7.1",
     "node_modules-path": "^2.0.7",
-    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",

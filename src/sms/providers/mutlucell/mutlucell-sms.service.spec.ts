@@ -48,7 +48,7 @@ describe("MutluCellSmsService", () => {
         await mutluCellSmsService.sendSmsAsync(sms);
 
         expect(js2xmlparser.parse).toHaveBeenCalledWith(
-            "xml",
+            "smspack",
             expect.objectContaining({
                 mesaj: {
                     metin: sms.message,
