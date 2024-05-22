@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SendOtpResult } from "./dto";
 import { uid } from "uid";
 import { ConfigService } from "@nestjs/config";
+import { OtpNotFoundError } from "../error";
 
 @Injectable()
 export class OtpService {
@@ -33,6 +34,21 @@ export class OtpService {
   async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
     return await this.createOtpAsync({
       email,
+    });
+  }
+
+  async expireOtpAsync(channel: { email?: string }): Promise<void> {
+    const entity = await this.otpRepository.findOne({
+      where: {
+        channel: JsonContains(channel),
+        expiresAt: MoreThan(new Date()),
+      },
+    });
+
+    if (!entity) throw new OtpNotFoundError();
+
+    this.otpRepository.update(entity.id, {
+      expiresAt: new Date(),
     });
   }
 

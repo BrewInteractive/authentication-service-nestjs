@@ -95,6 +95,7 @@ describe("LoginOtpEmailController", () => {
 
     jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
+    jest.spyOn(otpService, "expireOtpAsync").mockResolvedValueOnce(void 0);
 
     jest
       .spyOn(tokenService, "createTokensAsync")
