@@ -1,1 +1,3 @@
-export enum SmsServiceType { }
+export enum SmsServiceType {
+    MUTLUCELL = "mutlucell",
+}

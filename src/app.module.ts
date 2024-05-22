@@ -22,6 +22,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { classes } from "@automapper/classes";
 import { dataSourceOptions } from "../db/data-source";
+import { smsConfig } from "./config/sms.config";
 
 @Module({
   imports: [
@@ -42,7 +43,7 @@ import { dataSourceOptions } from "../db/data-source";
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, authenticationConfig, emailConfig, serverConfig],
+      load: [appConfig, authenticationConfig, emailConfig, serverConfig, smsConfig],
     }),
     RefreshTokenModule,
     NotificationModule,
