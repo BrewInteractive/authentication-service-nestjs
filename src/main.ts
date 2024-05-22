@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { appConfig, serverConfig } from "./config";
 
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
@@ -12,9 +12,10 @@ import { HttpExceptionFilter } from "./filter/http-exception.filter";
 import { NestFactory } from "@nestjs/core";
 
 import mjml2html = require("mjml");
+import { CustomValidationPipe } from "./validation/custom-validation.pipe";
 
 function initValidationPipe(app: INestApplication) {
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new CustomValidationPipe());
 }
 
 function initSwagger(app: INestApplication) {
