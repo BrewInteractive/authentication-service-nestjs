@@ -88,3 +88,5 @@ jspm_packages
 .next
 
 data/
+
+src/template/templates/html/en/*
