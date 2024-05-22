@@ -18,11 +18,17 @@ describe("CustomValidationPipe", () => {
     const validationErrors: ValidationError[] = [
       {
         property: "field1",
-        constraints: { isNotEmpty: "Field1 should not be empty" },
+        constraints: {
+          isNotEmpty: "Field1 should not be empty",
+          maxLength: "Field1 should be at least 5 characters",
+        },
       },
       {
         property: "field2",
-        constraints: { maxLength: "Field2 should be at most 10 characters" },
+        constraints: {
+          isNotEmpty: "Field2 should not be empty",
+          maxLength: "Field2 should be at most 10 characters",
+        },
       },
     ];
 
@@ -32,11 +38,11 @@ describe("CustomValidationPipe", () => {
     expect(result["cause"]).toEqual({
       extensions: {
         fields: [
-          "field1 Field1 should not be empty",
-          "field2 Field2 should be at most 10 characters",
+          "field1: Field1 should not be empty, Field1 should be at least 5 characters",
+          "field2: Field2 should not be empty, Field2 should be at most 10 characters",
         ],
       },
-      message: "validation failed",
+      message: "Validation failed",
     });
   });
 });

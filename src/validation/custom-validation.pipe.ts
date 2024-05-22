@@ -12,12 +12,12 @@ export class CustomValidationPipe extends ValidationPipe {
       const fields = validationErrors.map(
         (error) =>
           error.property +
-          " " +
+          ": " +
           Object.values(error.constraints || {}).join(", ")
       );
       return new BadRequestException(null, {
         cause: {
-          message: "validation failed",
+          message: "Validation failed",
           extensions: {
             fields,
           },
