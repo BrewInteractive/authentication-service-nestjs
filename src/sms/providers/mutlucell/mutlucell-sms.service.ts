@@ -21,7 +21,7 @@ export class MutluCellSmsService extends SmsService {
             this.mutluCellConfig.password,
             this.mutluCellConfig.originator
         );
-        const xml = parse("xml", smsDto, { declaration: { encoding: "UTF-8" } });
+        const xml = parse("smspack", smsDto, { declaration: { encoding: "UTF-8" } });
 
         await this.sendXmlToMutluCellAsync(xml);
     }
