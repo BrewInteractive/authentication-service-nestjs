@@ -69,4 +69,20 @@ describe("TemplateService", () => {
       "utf8"
     );
   });
+
+  it("should return login otp sms template", () => {
+    // Arrange
+    const locale = faker.rawDefinitions.metadata.language;
+    const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
+    const mockReadFileSync = readFileSync as jest.Mock;
+    mockReadFileSync.mockReturnValue(mockHtmlTemplate);
+    // Act
+    const html = templateService.getLoginOtpSmsTemplate(locale);
+    // Assert
+    expect(html).toBeDefined();
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      `${__dirname}/templates/html/${locale}/login-otp-sms.txt`,
+      "utf8"
+    );
+  });
 });
