@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { appConfig, serverConfig } from "./config";
 
 import { ApiKeyGuard } from "./utils/guards/api-key/api-key.guard";
