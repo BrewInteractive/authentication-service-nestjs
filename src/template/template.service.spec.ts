@@ -81,7 +81,7 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/html/${locale}/login-otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
       "utf8"
     );
   });

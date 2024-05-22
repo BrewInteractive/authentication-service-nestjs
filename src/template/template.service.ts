@@ -14,7 +14,7 @@ export class TemplateService {
 
   public getLoginOtpSmsTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/templates/html/${locale}/login-otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
       "utf8"
     );
   }
