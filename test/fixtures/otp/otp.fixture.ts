@@ -24,10 +24,24 @@ export class OtpFixture extends Otp {
   @Mock()
   channel: {
     email?: string;
+    phone?: {
+      country_code: string;
+      phone_number: string;
+    };
   };
 
   withEmailChannel() {
     this.channel = { email: faker.internet.email() };
+    return this;
+  }
+
+  withPhoneChannel() {
+    this.channel = {
+      phone: {
+        country_code: faker.word.preposition(),
+        phone_number: faker.phone.number(),
+      },
+    };
     return this;
   }
 }

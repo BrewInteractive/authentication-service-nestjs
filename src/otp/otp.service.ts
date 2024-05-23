@@ -37,6 +37,13 @@ export class OtpService {
     });
   }
 
+  async createPhoneOtpAsync(phone: {
+    country_code: string;
+    phone_number: string;
+  }): Promise<SendOtpResult> {
+    return await this.createOtpAsync({ phone: phone });
+  }
+
   async expireOtpAsync(channel: { email?: string }): Promise<void> {
     const entity = await this.otpRepository.findOne({
       where: {
@@ -54,6 +61,10 @@ export class OtpService {
 
   private async createOtpAsync(channel: {
     email?: string;
+    phone?: {
+      country_code: string;
+      phone_number: string;
+    };
   }): Promise<SendOtpResult> {
     const activeOtp = await this.otpRepository.findOne({
       where: {
