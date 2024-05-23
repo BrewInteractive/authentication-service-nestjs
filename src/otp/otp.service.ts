@@ -117,4 +117,14 @@ export class OtpService {
       otpValue: otpEntity.value,
     };
   }
+
+  createFakeOtpResult(): SendOtpResult {
+    return {
+      isSent: Math.random() < 0.5,
+      expiresAt: new Date(
+        new Date().getTime() +
+          this.configService.get<number>("otp.expiresIn") * 1000
+      ),
+    };
+  }
 }
