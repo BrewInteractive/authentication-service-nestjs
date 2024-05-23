@@ -1,5 +1,5 @@
 import {
-  LoginOtpEmailRequestFixture,
+  LoginOtpPhoneRequestFixture,
   TokensFixture,
   UserFixture,
 } from "../../test/fixtures";
@@ -15,7 +15,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { InvalidCredentialsError } from "../error";
-import { LoginOtpEmailController } from "./login-otp-email.controller";
+import { LoginOtpPhoneController } from "./login-otp-phone.controller";
 import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
@@ -27,8 +27,8 @@ import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
-describe("LoginOtpEmailController", () => {
-  let loginOtpEmailController: LoginOtpEmailController;
+describe("LoginOtpPhoneController", () => {
+  let loginOtpPhoneController: LoginOtpPhoneController;
   let otpService: OtpService;
   let userService: UserService;
   let tokenService: TokenService;
@@ -46,7 +46,7 @@ describe("LoginOtpEmailController", () => {
         UserModule,
         OtpModule,
       ],
-      controllers: [LoginOtpEmailController],
+      controllers: [LoginOtpPhoneController],
     })
       .overrideProvider(getRepositoryToken(User))
       .useValue({
@@ -73,8 +73,8 @@ describe("LoginOtpEmailController", () => {
       })
       .compile();
 
-    loginOtpEmailController = module.get<LoginOtpEmailController>(
-      LoginOtpEmailController
+    loginOtpPhoneController = module.get<LoginOtpPhoneController>(
+      LoginOtpPhoneController
     );
     tokenService = module.get<TokenService>("TokenService");
     userService = module.get<UserService>("UserService");
@@ -82,18 +82,18 @@ describe("LoginOtpEmailController", () => {
   });
 
   it("should be defined", () => {
-    expect(loginOtpEmailController).toBeDefined();
+    expect(loginOtpPhoneController).toBeDefined();
   });
 
-  it("should return tokens if the email and otp code are valid", async () => {
-    const mockLoginOtpEmailRequestDto = MockFactory(
-      LoginOtpEmailRequestFixture
+  it("should return tokens if the phone and otp code are valid", async () => {
+    const mockLoginOtpPhoneRequestDto = MockFactory(
+      LoginOtpPhoneRequestFixture
     ).one();
 
     const mockUser = MockFactory(UserFixture).one();
     const mockToken = MockFactory(TokensFixture).one();
 
-    jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
+    jest.spyOn(otpService, "validatePhoneOtpAsync").mockResolvedValueOnce(true);
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(mockUser);
     jest.spyOn(otpService, "expireOtpAsync").mockResolvedValueOnce(void 0);
 
@@ -102,42 +102,43 @@ describe("LoginOtpEmailController", () => {
       .mockResolvedValueOnce(mockToken);
 
     await expect(
-      loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
+      loginOtpPhoneController.loginAsync(mockLoginOtpPhoneRequestDto)
     ).resolves.toEqual(mockToken);
   });
 
-  it("should not return tokens if the email and otp code are invalid", async () => {
-    const loginOtpEmailRequestDto = MockFactory(
-      LoginOtpEmailRequestFixture
+  it("should not return tokens if the phone and otp code are invalid", async () => {
+    const loginOtpPhoneRequestDto = MockFactory(
+      LoginOtpPhoneRequestFixture
     ).one();
+    console.log(loginOtpPhoneRequestDto);
 
     const expectedResult = new UnauthorizedException(null, {
       cause: new InvalidCredentialsError(),
     });
 
     jest
-      .spyOn(otpService, "validateEmailOtpAsync")
+      .spyOn(otpService, "validatePhoneOtpAsync")
       .mockResolvedValueOnce(false);
 
     await expect(
-      loginOtpEmailController.loginAsync(loginOtpEmailRequestDto)
+      loginOtpPhoneController.loginAsync(loginOtpPhoneRequestDto)
     ).rejects.toThrow(expectedResult);
   });
 
   it("should return error if there is no user", async () => {
-    const mockLoginOtpEmailRequestDto = MockFactory(
-      LoginOtpEmailRequestFixture
+    const mockLoginOtpPhoneRequestDto = MockFactory(
+      LoginOtpPhoneRequestFixture
     ).one();
 
     const expectedResult = new UnauthorizedException(null, {
       cause: new InvalidCredentialsError(),
     });
 
-    jest.spyOn(otpService, "validateEmailOtpAsync").mockResolvedValueOnce(true);
+    jest.spyOn(otpService, "validatePhoneOtpAsync").mockResolvedValueOnce(true);
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
 
     await expect(
-      loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
+      loginOtpPhoneController.loginAsync(mockLoginOtpPhoneRequestDto)
     ).rejects.toThrow(expectedResult);
   });
 });
