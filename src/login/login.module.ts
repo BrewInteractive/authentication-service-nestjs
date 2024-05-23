@@ -6,6 +6,7 @@ import { OtpModule } from "../otp/otp.module";
 import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
 import { TokenModule } from "../token/token.module";
 import { UserModule } from "../user/user.module";
+import { SendLoginOtpPhoneController } from "./send-login-otp-phone.controller";
 
 @Module({
   imports: [TokenModule, UserModule, OtpModule],
@@ -13,6 +14,7 @@ import { UserModule } from "../user/user.module";
     LoginController,
     LoginOtpEmailController,
     SendLoginOtpEmailController,
+    SendLoginOtpPhoneController,
   ],
   providers: [LoginProfile],
 })
