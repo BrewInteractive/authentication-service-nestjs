@@ -4,9 +4,9 @@ import { Injectable } from "@nestjs/common";
 import { Otp } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SendOtpResult } from "./dto";
-import { uid } from "uid";
 import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
+import { OtpValue } from "../utils/otp-value";
 
 @Injectable()
 export class OtpService {
@@ -76,7 +76,7 @@ export class OtpService {
     if (activeOtp) return { isSent: false, expiresAt: activeOtp.expiresAt };
 
     const otpEntity = await this.otpRepository.save({
-      value: uid(6).toUpperCase(),
+      value: OtpValue.generate(6),
       channel,
       expiresAt: new Date(
         new Date().getTime() +
