@@ -146,7 +146,7 @@ describe("UserService", () => {
 
   it("getUserAsync should throw exception if username or email is not provided", async () => {
     await expect(userService.getUserAsync({})).rejects.toThrow(
-      new Error("At least one of username or email or phone must be provided.")
+      new Error("Provide at least one of: username, email, or phone number.")
     );
   });
 

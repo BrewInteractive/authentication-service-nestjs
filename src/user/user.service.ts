@@ -33,7 +33,7 @@ export class UserService {
       (!options.phoneNumber || !options.countryCode)
     )
       throw new Error(
-        "At least one of username or email or phone must be provided."
+        "Provide at least one of: username, email, or phone number."
       );
 
     const whereClause = [] as FindOptionsWhere<User>[];
