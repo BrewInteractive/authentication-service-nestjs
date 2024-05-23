@@ -211,4 +211,10 @@ describe("OtpService", () => {
 
     expect(otpRepository.update).not.toHaveBeenCalled();
   });
+
+  it("should return fake otp result", async () => {
+    const actualResult = otpService.createFakeOtpResult();
+    expect(actualResult).toHaveProperty("isSent");
+    expect(actualResult).toHaveProperty("expiresAt");
+  });
 });
