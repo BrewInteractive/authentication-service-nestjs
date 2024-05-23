@@ -1,4 +1,5 @@
 process.env.EMAIL_SERVICE = "aws";
+process.env.SMS_SERVICE = "mutlucell";
 process.env.PASSWORD_REGEX = "(?=.*[A-Z])(?=.*[a-z]).*";
 process.env.SMTP_HOST = "localhost";
 process.env.SMTP_USER = "test";
