@@ -110,8 +110,10 @@ describe("UserService", () => {
       .mockResolvedValue(Promise.resolve(expectedResult));
 
     const actualResult = await userService.getUserAsync({
-      phoneNumber: expectedResult.phoneNumber,
-      countryCode: expectedResult.countryCode,
+      phone: {
+        phoneNumber: expectedResult.phoneNumber,
+        countryCode: expectedResult.countryCode,
+      },
     });
 
     expect(actualResult).toBe(expectedResult);
@@ -133,8 +135,10 @@ describe("UserService", () => {
       .mockResolvedValue(Promise.resolve(expectedResult));
 
     const actualResult = await userService.getUserAsync({
-      phoneNumber: expectedResult.phoneNumber,
-      countryCode: expectedResult.countryCode,
+      phone: {
+        phoneNumber: expectedResult.phoneNumber,
+        countryCode: expectedResult.countryCode,
+      },
       email: expectedResult.email,
       username: expectedResult.username,
     });

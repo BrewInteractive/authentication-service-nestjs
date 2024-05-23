@@ -24,13 +24,17 @@ export class UserService {
   async getUserAsync(options: {
     username?: string;
     email?: string;
-    phoneNumber?: string;
-    countryCode?: string;
+    phone?: {
+      phoneNumber?: string;
+      countryCode?: string;
+    };
   }): Promise<User | null> {
     if (
       !options.username &&
       !options.email &&
-      (!options.phoneNumber || !options.countryCode)
+      (!options.phone ||
+        !options.phone.phoneNumber ||
+        !options.phone.countryCode)
     )
       throw new Error(
         "Provide at least one of: username, email, or phone number."
@@ -39,11 +43,8 @@ export class UserService {
     const whereClause = [] as FindOptionsWhere<User>[];
     if (options.username) whereClause.push({ username: options.username });
     if (options.email) whereClause.push({ email: options.email });
-    if (options.phoneNumber && options.countryCode) {
-      whereClause.push({
-        phoneNumber: options.phoneNumber,
-        countryCode: options.countryCode,
-      });
+    if (options.phone) {
+      whereClause.push(options.phone);
     }
 
     return await this.userRepository.findOne({

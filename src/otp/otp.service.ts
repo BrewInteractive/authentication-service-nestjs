@@ -71,7 +71,13 @@ export class OtpService {
     return await this.createOtpAsync({ phone: phone });
   }
 
-  async expireOtpAsync(channel: { email?: string }): Promise<void> {
+  async expireOtpAsync(channel: {
+    email?: string;
+    phone?: {
+      country_code: string;
+      phone_number: string;
+    };
+  }): Promise<void> {
     const entity = await this.otpRepository.findOne({
       where: {
         channel: JsonContains(channel),
