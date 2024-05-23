@@ -33,7 +33,7 @@ export class SendLoginOtpEmailController {
         email: sendLoginOtpEmailRequest.email,
       });
 
-      if (!user) return this.otpService.createFakeOtpResult();
+      if (!user) throw new InvalidCredentialsError();
 
       const sendOtpResult = await this.otpService.createEmailOtpAsync(
         sendLoginOtpEmailRequest.email
