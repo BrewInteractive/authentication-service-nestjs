@@ -41,7 +41,7 @@ export class User {
 
   @AutoMap()
   @Column({ name: "phone_number", unique: true, nullable: true })
-  phoneNumner?: string;
+  phoneNumber?: string;
 
   @AutoMap()
   @Column({ name: "first_name" })
