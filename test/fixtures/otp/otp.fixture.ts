@@ -38,7 +38,7 @@ export class OtpFixture extends Otp {
   withPhoneChannel() {
     this.channel = {
       phone: {
-        country_code: faker.word.preposition(),
+        country_code: faker.address.countryCode(),
         phone_number: faker.phone.number(),
       },
     };
