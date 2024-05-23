@@ -1,7 +1,7 @@
+import { randomInt } from "crypto";
+
 export class OtpValue {
   static generate(length: number): string {
-    return String(
-      Array.from({ length }, () => Math.floor(Math.random() * 10)).join("")
-    );
+    return Array.from({ length }, () => randomInt(0, 10)).join("");
   }
 }
