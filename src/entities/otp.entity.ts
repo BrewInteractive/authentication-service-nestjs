@@ -29,5 +29,9 @@ export class Otp {
   @Column({ name: "channel", type: "jsonb" })
   channel: {
     email?: string;
+    phone?: {
+      phone_number: string;
+      country_code: string;
+    };
   };
 }

@@ -36,6 +36,14 @@ export class User {
   email?: string;
 
   @AutoMap()
+  @Column({ name: "country_code", unique: true, nullable: true })
+  countryCode?: string;
+
+  @AutoMap()
+  @Column({ name: "phone_number", unique: true, nullable: true })
+  phoneNumber?: string;
+
+  @AutoMap()
   @Column({ name: "first_name" })
   firstName: string;
 
@@ -64,6 +72,9 @@ export class User {
   @Column({ name: "profile_picture", nullable: true })
   profilePicture: string;
 
-  @OneToMany(() => UserResetPasswordRequest, userResetPasswordRequest => userResetPasswordRequest.user)
+  @OneToMany(
+    () => UserResetPasswordRequest,
+    (userResetPasswordRequest) => userResetPasswordRequest.user
+  )
   userResetPasswordRequests: UserResetPasswordRequest[];
 }
