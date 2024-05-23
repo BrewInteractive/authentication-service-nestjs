@@ -26,6 +26,7 @@ import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
+import exp from "constants";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
@@ -162,7 +163,7 @@ describe("SendLoginOtpEmailController", () => {
     ).resolves.toEqual(expectedResult);
   });
 
-  it("should return fake response if there is no user", async () => {
+  it("should throw error for unhandled errors", async () => {
     const mockSendLoginOtpEmailRequestDto = MockFactory(
       SendLoginOtpEmailRequestFixture
     ).one();
@@ -172,18 +173,14 @@ describe("SendLoginOtpEmailController", () => {
       expiresAt: faker.date.future(),
     } as SendOtpResult;
 
-    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
     jest
-      .spyOn(otpService, "createFakeOtpResult")
-      .mockReturnValue(expectedResult);
+      .spyOn(userService, "getUserAsync")
+      .mockRejectedValueOnce(new Error("mock error"));
 
-    const actual = await sendLoginOtpEmailController.sendLoginOtpEmailAsync(
-      mockSendLoginOtpEmailRequestDto
-    );
-
-    expect(actual).toEqual(expectedResult);
-    expect(userService.getUserAsync).toHaveBeenCalledWith({
-      email: mockSendLoginOtpEmailRequestDto.email,
-    });
+    expect(
+      sendLoginOtpEmailController.sendLoginOtpEmailAsync(
+        mockSendLoginOtpEmailRequestDto
+      )
+    ).rejects.toThrow(new Error("mock error"));
   });
 });
