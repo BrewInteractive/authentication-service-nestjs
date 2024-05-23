@@ -163,6 +163,42 @@ describe("SendLoginOtpEmailController", () => {
     ).resolves.toEqual(expectedResult);
   });
 
+  it("should return send otp result without user", async () => {
+    const mockSendLoginOtpEmailRequestDto = MockFactory(
+      SendLoginOtpEmailRequestFixture
+    ).one();
+
+    const mockValidUser = MockFactory(UserFixture)
+      .mutate({
+        email: mockSendLoginOtpEmailRequestDto.email,
+      })
+      .one();
+
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: false,
+        expiresAt: faker.date.future(),
+      })
+      .omit("otpValue")
+      .one();
+
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+    jest
+      .spyOn(otpService, "createFakeOtpResult")
+      .mockReturnValue(mockSendOtpResult);
+
+    await expect(
+      sendLoginOtpEmailController.sendLoginOtpEmailAsync(
+        mockSendLoginOtpEmailRequestDto
+      )
+    ).resolves.toEqual(expectedResult);
+  });
+
   it("should throw error for unhandled errors", async () => {
     const mockSendLoginOtpEmailRequestDto = MockFactory(
       SendLoginOtpEmailRequestFixture
