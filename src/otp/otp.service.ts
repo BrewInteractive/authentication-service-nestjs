@@ -7,6 +7,7 @@ import { SendOtpResult } from "./dto";
 import { uid } from "uid";
 import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
+import { faker } from "@faker-js/faker";
 
 @Injectable()
 export class OtpService {
@@ -93,7 +94,7 @@ export class OtpService {
 
   createFakeOtpResult(): SendOtpResult {
     return {
-      isSent: Math.random() < 0.5,
+      isSent: faker.datatype.boolean(),
       expiresAt: new Date(
         new Date().getTime() +
           this.configService.get<number>("otp.expiresIn") * 1000
