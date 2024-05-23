@@ -39,6 +39,12 @@ export class UserFixture extends User {
   @Mock((faker) => faker.date.future())
   updatedAt: Date;
 
+  @Mock((faker) => faker.phone.phoneNumber())
+  phoneNumber?: string;
+
+  @Mock((faker) => faker.address.countryCode())
+  countryCode?: string;
+
   roles: Array<UserRole>;
 
   withRoles(size: number = 2) {

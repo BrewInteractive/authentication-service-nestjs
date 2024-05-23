@@ -69,7 +69,7 @@ describe("OtpService", () => {
     expect(actualResult).toBe(false);
   });
 
-  it("New Otp must be created if there is not already one", async () => {
+  it("New Email Otp must be created if there is not already one", async () => {
     const createdOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -89,7 +89,27 @@ describe("OtpService", () => {
     expect(actualResult.expiresAt).toBe(createdOtp.expiresAt);
   });
 
-  it("New Otp must not be created if there already one", async () => {
+  it("New Phone Otp must be created if there is not already one", async () => {
+    const createdOtp = MockFactory(OtpFixture).one().withPhoneChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(null));
+
+    jest
+      .spyOn(otpRepository, "save")
+      .mockResolvedValue(Promise.resolve(createdOtp));
+
+    const actualResult = await otpService.createPhoneOtpAsync(
+      createdOtp.channel.phone
+    );
+
+    expect(actualResult.otpValue).toBe(createdOtp.value);
+    expect(actualResult.isSent).toBe(true);
+    expect(actualResult.expiresAt).toBe(createdOtp.expiresAt);
+  });
+
+  it("New Email Otp must not be created if there already one", async () => {
     const unexpiredOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -98,6 +118,22 @@ describe("OtpService", () => {
 
     const actualResult = await otpService.createEmailOtpAsync(
       unexpiredOtp.channel.email
+    );
+
+    expect(actualResult.otpValue).toBe(undefined);
+    expect(actualResult.isSent).toBe(false);
+    expect(actualResult.expiresAt).toBe(unexpiredOtp.expiresAt);
+  });
+
+  it("New Phone Otp must not be created if there already one", async () => {
+    const unexpiredOtp = MockFactory(OtpFixture).one().withPhoneChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(unexpiredOtp));
+
+    const actualResult = await otpService.createPhoneOtpAsync(
+      unexpiredOtp.channel.phone
     );
 
     expect(actualResult.otpValue).toBe(undefined);
