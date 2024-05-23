@@ -8,3 +8,7 @@ process.env.JWT_ALGORITHM = "HS256";
 process.env.JWT_AUDIENCE = "test";
 process.env.JWT_ISSUER = "test";
 process.env.JWT_SECRET = "test";
+process.env.MUTLUCELL_API_URL = "test";
+process.env.MUTLUCELL_USERNAME="test";
+process.env.MUTLUCELL_PASSWORD="test";
+process.env.MUTLUCELL_ORIGINATOR="test";
