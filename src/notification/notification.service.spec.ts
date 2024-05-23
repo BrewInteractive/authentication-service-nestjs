@@ -1,7 +1,9 @@
 import {
   EmailConfigFixture,
   OtpEmailCreatedEventFixture,
+  OtpSmsCreatedEventFixture,
   ResetPasswordCreatedEventFixture,
+  SmsConfigFixture,
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
@@ -13,27 +15,34 @@ import { EmailService } from "../email/email.service";
 import { MockFactory } from "mockingbird";
 import { NotificationService } from "./notification.service";
 import { OtpEmailTemplateNotFoundError } from "./error";
+import { OtpSmsTemplateNotFoundError } from "./error/otp-sms-template-not-found.error.ts";
+import { SmsModule } from "../sms/sms.module";
+import { SmsService } from "../sms/sms.service";
 import { TemplateModule } from "../template/template.module";
 import { TemplateService } from "../template/template.service";
 import { classes } from "@automapper/classes";
+import { error } from "console";
+import { faker } from "@faker-js/faker";
 
 describe("NotificationService", () => {
   let notificationService: NotificationService;
   let templateService: TemplateService;
   let emailService: EmailService;
+  let smsService: SmsService;
   const mockEmailConfig = MockFactory(EmailConfigFixture).one();
-
+  const mockSmsConfig = MockFactory(SmsConfigFixture).one();
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         EmailModule,
+        SmsModule,
         TemplateModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockEmailConfig],
+          load: [() => mockEmailConfig, () => mockSmsConfig],
         }),
       ],
       providers: [NotificationService],
@@ -42,6 +51,7 @@ describe("NotificationService", () => {
     notificationService = module.get<NotificationService>(NotificationService);
     templateService = module.get<TemplateService>("TemplateService");
     emailService = module.get<EmailService>("EmailService");
+    smsService = module.get<SmsService>("SmsService");
   });
 
   it("should be defined", () => {
@@ -129,5 +139,72 @@ describe("NotificationService", () => {
       resetLink: resetPasswordEmailCreatedEvent.resetLink,
     });
     expect(emailSpy).toBeCalled();
+  });
+
+  it("should send otp sms", async () => {
+    // Arrange
+    const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture).one();
+
+    const mockTemplate = faker.lorem.paragraphs(3);
+    const compiledMockTemplate = faker.lorem.paragraphs(3);
+
+    const mockSms = {
+      message: compiledMockTemplate,
+      phoneNumber: mockOtpSmsCreatedEvent.phoneNumber,
+    };
+
+    const sendSmsAsyncSpy = jest
+      .spyOn(smsService, "sendSmsAsync")
+      .mockResolvedValue();
+
+    const templateSpy = jest
+      .spyOn(templateService, "getLoginOtpSmsTemplate")
+      .mockReturnValue(mockTemplate);
+
+    const injectDataSpy = jest
+      .spyOn(templateService, "injectData")
+      .mockReturnValue(compiledMockTemplate);
+
+    const mockSendSmsAsync = jest
+      .spyOn(smsService, "sendSmsAsync")
+      .mockResolvedValue();
+
+    // Act
+    await notificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
+
+    // Assert
+    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
+      otpValue: mockOtpSmsCreatedEvent.otpValue,
+    });
+    expect(sendSmsAsyncSpy).toHaveBeenCalledWith(mockSms);
+  });
+
+  it("should not send otp sms because the template is not found", async () => {
+    // Arrange
+    const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture).one();
+
+    const mockTemplate = faker.lorem.paragraphs(3);
+
+    const templateSpy = jest
+      .spyOn(templateService, "getLoginOtpSmsTemplate")
+      .mockReturnValue(null);
+
+    const sendSmsAsyncSpy = jest
+      .spyOn(smsService, "sendSmsAsync")
+      .mockResolvedValue();
+
+    const expectedError = new OtpSmsTemplateNotFoundError(
+      AuthenticationAction.LOGIN
+    );
+
+    // Act
+    await expect(
+      notificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent)
+    ).rejects.toThrow(expectedError);
+
+    // Assert
+    expect(sendSmsAsyncSpy).not.toBeCalled();
+    expect(templateSpy).toHaveBeenCalledWith("en");
   });
 });

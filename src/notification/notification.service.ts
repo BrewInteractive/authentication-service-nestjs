@@ -3,10 +3,15 @@ import { Inject, Injectable } from "@nestjs/common";
 import { TemplateService } from "../template/template.service";
 import { OnEvent } from "@nestjs/event-emitter";
 import { ConfigService } from "@nestjs/config";
-import { OtpEmailCreatedEvent } from "./dto/otp-email-created-event.dto";
 import { AuthenticationAction } from "../enum";
 import { OtpEmailTemplateNotFoundError } from "./error";
-import { ResetPasswordCreatedEvent } from "./dto";
+import {
+  ResetPasswordCreatedEvent,
+  OtpEmailCreatedEvent,
+  OtpSmsCreatedEvent,
+} from "./dto";
+import { SmsService } from "../sms/sms.service";
+import { OtpSmsTemplateNotFoundError } from "./error/otp-sms-template-not-found.error.ts";
 
 @Injectable()
 export class NotificationService {
@@ -14,6 +19,7 @@ export class NotificationService {
     @Inject("TemplateService")
     private readonly templateService: TemplateService,
     @Inject("EmailService") private readonly emailService: EmailService,
+    @Inject("SmsService") private readonly smsService: SmsService,
     private readonly configService: ConfigService
   ) {}
 
@@ -32,6 +38,23 @@ export class NotificationService {
         otpEmailCreatedEvent.emailAddress,
         email.content
       );
+    }
+  }
+
+  @OnEvent("otp.sms.created")
+  async onOtpSmsCreatedAsync(
+    otpSmsCreatedEvent: OtpSmsCreatedEvent
+  ): Promise<void> {
+    const sms = this.getOtpSmsByAuthAction(
+      otpSmsCreatedEvent.otpValue,
+      otpSmsCreatedEvent.authenticationAction
+    );
+
+    if (sms) {
+      this.smsService.sendSmsAsync({
+        message: sms.message,
+        phoneNumber: otpSmsCreatedEvent.phoneNumber,
+      });
     }
   }
 
@@ -72,6 +95,24 @@ export class NotificationService {
         otpValue,
       }),
       subject: this.configService.get<string>("emailSubjects.loginOtp"),
+    };
+  }
+
+  private getOtpSmsByAuthAction(
+    otpValue: string,
+    authenticationAction: AuthenticationAction
+  ): { message: string } {
+    let template: string = null;
+    if (authenticationAction === AuthenticationAction.LOGIN)
+      template = this.templateService.getLoginOtpSmsTemplate("en");
+
+    if (template == null)
+      throw new OtpSmsTemplateNotFoundError(authenticationAction);
+
+    return {
+      message: this.templateService.injectData(template, {
+        otpValue,
+      }),
     };
   }
 
