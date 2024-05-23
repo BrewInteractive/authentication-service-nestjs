@@ -60,6 +60,97 @@ describe("UserService", () => {
     });
 
     expect(actualResult).toBe(expectedResult);
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [
+        { username: expectedResult.username },
+        { email: expectedResult.email },
+      ],
+      relations: ["roles", "roles.role"],
+    });
+  });
+
+  it("getUserAsync should return a user with email", async () => {
+    const expectedResult = MockFactory(UserFixture).one() as User;
+    jest
+      .spyOn(userRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getUserAsync({
+      email: expectedResult.email,
+    });
+
+    expect(actualResult).toBe(expectedResult);
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [{ email: expectedResult.email }],
+      relations: ["roles", "roles.role"],
+    });
+  });
+
+  it("getUserAsync should return a user with user name", async () => {
+    const expectedResult = MockFactory(UserFixture).one() as User;
+    jest
+      .spyOn(userRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getUserAsync({
+      username: expectedResult.username,
+    });
+
+    expect(actualResult).toBe(expectedResult);
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [{ username: expectedResult.username }],
+      relations: ["roles", "roles.role"],
+    });
+  });
+
+  it("getUserAsync should return a user with phone", async () => {
+    const expectedResult = MockFactory(UserFixture).one() as User;
+    jest
+      .spyOn(userRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getUserAsync({
+      phoneNumber: expectedResult.phoneNumber,
+      countryCode: expectedResult.countryCode,
+    });
+
+    expect(actualResult).toBe(expectedResult);
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [
+        {
+          phoneNumber: expectedResult.phoneNumber,
+          countryCode: expectedResult.countryCode,
+        },
+      ],
+      relations: ["roles", "roles.role"],
+    });
+  });
+
+  it("getUserAsync should return a user with all arguments", async () => {
+    const expectedResult = MockFactory(UserFixture).one() as User;
+    jest
+      .spyOn(userRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(expectedResult));
+
+    const actualResult = await userService.getUserAsync({
+      phoneNumber: expectedResult.phoneNumber,
+      countryCode: expectedResult.countryCode,
+      email: expectedResult.email,
+      username: expectedResult.username,
+    });
+
+    expect(actualResult).toBe(expectedResult);
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [
+        { username: expectedResult.username },
+        { email: expectedResult.email },
+        {
+          phoneNumber: expectedResult.phoneNumber,
+          countryCode: expectedResult.countryCode,
+        },
+      ],
+      relations: ["roles", "roles.role"],
+    });
   });
 
   it("getUserAsync should return null if the email and username does not exist", async () => {
@@ -74,11 +165,15 @@ describe("UserService", () => {
     });
 
     expect(actualResult).toBeNull();
+    expect(userRepository.findOne).toHaveBeenCalledWith({
+      where: [{ username: user.username }, { email: user.email }],
+      relations: ["roles", "roles.role"],
+    });
   });
 
   it("getUserAsync should throw exception if username or email is not provided", async () => {
     await expect(userService.getUserAsync({})).rejects.toThrow(
-      new Error("At least one of username or email must be provided.")
+      new Error("Provide at least one of: username, email, or phone number.")
     );
   });
 
