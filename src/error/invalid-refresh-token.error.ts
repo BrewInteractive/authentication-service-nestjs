@@ -5,7 +5,7 @@ export class InvalidRefreshTokenError extends ExtendedError<ErrorExtensions> {
     super();
     this.message = "Invalid refresh token.";
     this.extensions = {
-      code: "ERR_004",
+      code: "ERR004",
     };
   }
 }

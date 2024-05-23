@@ -5,7 +5,7 @@ export class ActiveResetPasswordRequestExistsError extends ExtendedError<ErrorEx
     super();
     this.message = "Active reset password request exists.";
     this.extensions = {
-      code: "ERR_001",
+      code: "ERR001",
     };
   }
 }

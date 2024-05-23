@@ -5,7 +5,7 @@ export class InvalidResetPasswordRequestError extends ExtendedError<ErrorExtensi
     super();
     this.message = "Invalid reset password request.";
     this.extensions = {
-      code: "ERR_005",
+      code: "ERR005",
     };
   }
 }

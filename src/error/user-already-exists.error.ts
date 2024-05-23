@@ -5,7 +5,7 @@ export class UserAlreadyExistsError extends ExtendedError<ErrorExtensions> {
     super();
     this.message = "User is already exists.";
     this.extensions = {
-      code: "ERR_008",
+      code: "ERR008",
     };
   }
 }

@@ -5,7 +5,7 @@ export class UndefinedServiceError extends ExtendedError<ErrorExtensions> {
     super();
     this.message = `${serviceType} service is not defined for ${service}.`;
     this.extensions = {
-      code: "ERR_007",
+      code: "ERR007",
     };
   }
 }

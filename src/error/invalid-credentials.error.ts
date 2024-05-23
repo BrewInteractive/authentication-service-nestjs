@@ -5,7 +5,7 @@ export class InvalidCredentialsError extends ExtendedError<ErrorExtensions> {
     super();
     this.message = "Invalid credentials.";
     this.extensions = {
-      code: "ERR_003",
+      code: "ERR003",
     };
   }
 }

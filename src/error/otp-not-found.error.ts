@@ -5,7 +5,7 @@ export class OtpNotFoundError extends ExtendedError<ErrorExtensions> {
     super();
     this.message = "Otp not found";
     this.extensions = {
-      code: "ERR_006",
+      code: "ERR006",
     };
   }
 }
