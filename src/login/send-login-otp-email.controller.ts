@@ -33,7 +33,7 @@ export class SendLoginOtpEmailController {
         email: sendLoginOtpEmailRequest.email,
       });
 
-      if (!user) throw new InvalidCredentialsError();
+      if (!user) return this.otpService.createFakeOtpResult();
 
       const sendOtpResult = await this.otpService.createEmailOtpAsync(
         sendLoginOtpEmailRequest.email
@@ -53,7 +53,9 @@ export class SendLoginOtpEmailController {
       };
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
-        throw new UnauthorizedException(null, { cause: error });
+        return this.otpService.createFakeOtpResult();
+
+      throw error;
     }
   }
 }

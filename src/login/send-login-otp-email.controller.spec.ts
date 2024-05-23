@@ -20,6 +20,7 @@ import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
+import { SendOtpResult } from "../otp/dto";
 import { TokenModule } from "../token/token.module";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
@@ -161,21 +162,28 @@ describe("SendLoginOtpEmailController", () => {
     ).resolves.toEqual(expectedResult);
   });
 
-  it("should throw UnauthorizedException if there is no user", async () => {
+  it("should return fake response if there is no user", async () => {
     const mockSendLoginOtpEmailRequestDto = MockFactory(
       SendLoginOtpEmailRequestFixture
     ).one();
 
-    const cause = new InvalidCredentialsError();
-
-    const expectedResult = new UnauthorizedException(null, { cause });
+    const expectedResult = {
+      isSent: false,
+      expiresAt: faker.date.future(),
+    } as SendOtpResult;
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+    jest
+      .spyOn(otpService, "createFakeOtpResult")
+      .mockReturnValue(expectedResult);
 
-    await expect(
-      sendLoginOtpEmailController.sendLoginOtpEmailAsync(
-        mockSendLoginOtpEmailRequestDto
-      )
-    ).rejects.toThrow(expectedResult);
+    const actual = await sendLoginOtpEmailController.sendLoginOtpEmailAsync(
+      mockSendLoginOtpEmailRequestDto
+    );
+
+    expect(actual).toEqual(expectedResult);
+    expect(userService.getUserAsync).toHaveBeenCalledWith({
+      email: mockSendLoginOtpEmailRequestDto.email,
+    });
   });
 });
