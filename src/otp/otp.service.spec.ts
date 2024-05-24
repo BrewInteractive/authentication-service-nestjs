@@ -1,3 +1,4 @@
+import { FindOperator, JsonContains, Repository } from "typeorm";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { ConfigModule } from "@nestjs/config";
@@ -6,7 +7,6 @@ import { Otp } from "../entities";
 import { OtpFixture } from "../../test/fixtures";
 import { OtpNotFoundError } from "../error";
 import { OtpService } from "./otp.service";
-import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
 
 describe("OtpService", () => {
@@ -41,7 +41,7 @@ describe("OtpService", () => {
     expect(otpService).toBeDefined();
   });
 
-  it("should be successful when a valid otp is provided.", async () => {
+  it("should be successful when a valid email otp is provided.", async () => {
     const mockOtp = MockFactory(OtpFixture).one().withEmailChannel();
 
     jest
@@ -56,7 +56,7 @@ describe("OtpService", () => {
     expect(actualResult).toBe(true);
   });
 
-  it("should be successful when an invalid otp is provided.", async () => {
+  it("should be successful when an invalid email otp is provided.", async () => {
     jest
       .spyOn(otpRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
@@ -67,6 +67,49 @@ describe("OtpService", () => {
     );
 
     expect(actualResult).toBe(false);
+  });
+
+  it("should be successful when a valid phone otp is provided.", async () => {
+    const mockOtp = MockFactory(OtpFixture).one().withPhoneChannel();
+
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(mockOtp));
+
+    const actualResult = await otpService.validatePhoneOtpAsync(
+      mockOtp.channel.phone,
+      mockOtp.value
+    );
+
+    expect(actualResult).toBe(true);
+    expect(otpRepository.findOne).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        value: mockOtp.value,
+        channel: JsonContains(mockOtp.channel),
+        expiresAt: expect.any(FindOperator),
+      }),
+    });
+  });
+
+  it("should be successful when an invalid phone otp is provided.", async () => {
+    jest
+      .spyOn(otpRepository, "findOne")
+      .mockResolvedValue(Promise.resolve(null));
+    const phone = {
+      country_code: faker.address.countryCode(),
+      phone_number: faker.phone.number(),
+    };
+    const value = faker.string.sample(6);
+    const actualResult = await otpService.validatePhoneOtpAsync(phone, value);
+
+    expect(actualResult).toBe(false);
+    expect(otpRepository.findOne).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        value: value,
+        channel: JsonContains({ phone }),
+        expiresAt: expect.any(FindOperator),
+      }),
+    });
   });
 
   it("New Email Otp must be created if there is not already one", async () => {

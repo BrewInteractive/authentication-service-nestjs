@@ -9,7 +9,6 @@ import { OtpNotFoundError } from "../error";
 import { faker } from "@faker-js/faker";
 import { OtpValue } from "../utils/otp-value";
 
-
 @Injectable()
 export class OtpService {
   constructor(
@@ -18,19 +17,46 @@ export class OtpService {
     private readonly configService: ConfigService
   ) {}
 
-  async validateEmailOtpAsync(
-    email: string,
+  async validateOtpAsync(
+    channel: {
+      email?: string;
+      phone?: {
+        country_code: string;
+        phone_number: string;
+      };
+    },
     otpValue: string
   ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
         value: otpValue,
-        channel: JsonContains({ email }),
+        channel: JsonContains(channel),
         expiresAt: MoreThan(new Date()),
       },
     });
-
     return !!otpEntity;
+  }
+
+  async validateEmailOtpAsync(
+    email: string,
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync({ email }, otpValue);
+  }
+
+  async validatePhoneOtpAsync(
+    phone: {
+      country_code: string;
+      phone_number: string;
+    },
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync(
+      {
+        phone,
+      },
+      otpValue
+    );
   }
 
   async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
