@@ -6,7 +6,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SendOtpResult } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
+import { faker } from "@faker-js/faker";
 import { OtpValue } from "../utils/otp-value";
+
 
 @Injectable()
 export class OtpService {
@@ -88,6 +90,16 @@ export class OtpService {
       isSent: true,
       expiresAt: otpEntity.expiresAt,
       otpValue: otpEntity.value,
+    };
+  }
+
+  createFakeOtpResult(): SendOtpResult {
+    return {
+      isSent: faker.datatype.boolean(),
+      expiresAt: new Date(
+        new Date().getTime() +
+          this.configService.get<number>("otp.expiresIn") * 1000
+      ),
     };
   }
 }

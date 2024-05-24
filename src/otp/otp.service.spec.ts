@@ -4,10 +4,10 @@ import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
 import { Otp } from "../entities";
 import { OtpFixture } from "../../test/fixtures";
+import { OtpNotFoundError } from "../error";
 import { OtpService } from "./otp.service";
 import { Repository } from "typeorm";
 import { faker } from "@faker-js/faker";
-import { OtpNotFoundError } from "../error";
 
 describe("OtpService", () => {
   let otpService: OtpService;
@@ -165,5 +165,11 @@ describe("OtpService", () => {
     ).rejects.toThrow(OtpNotFoundError);
 
     expect(otpRepository.update).not.toHaveBeenCalled();
+  });
+
+  it("should return fake otp result", async () => {
+    const actualResult = otpService.createFakeOtpResult();
+    expect(actualResult).toHaveProperty("isSent");
+    expect(actualResult).toHaveProperty("expiresAt");
   });
 });

@@ -104,9 +104,10 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       const response = await request(app.getHttpServer())
         .post("/send-login-otp-email")
         .send(sendLoginOtpEmailRequest)
-        .expect(401);
+        .expect(201);
 
-      expect(response.body.message).toEqual("Invalid credentials.");
+      expect(response.body).toHaveProperty("expiresAt");
+      expect(response.body).toHaveProperty("isSent");
     });
   });
 });

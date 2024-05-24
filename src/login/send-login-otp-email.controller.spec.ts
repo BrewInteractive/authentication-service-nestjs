@@ -20,11 +20,13 @@ import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { SendLoginOtpEmailController } from "./send-login-otp-email.controller";
+import { SendOtpResult } from "../otp/dto";
 import { TokenModule } from "../token/token.module";
 import { UnauthorizedException } from "@nestjs/common";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
+import exp from "constants";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
 
@@ -161,21 +163,60 @@ describe("SendLoginOtpEmailController", () => {
     ).resolves.toEqual(expectedResult);
   });
 
-  it("should throw UnauthorizedException if there is no user", async () => {
+  it("should return send otp result without user", async () => {
     const mockSendLoginOtpEmailRequestDto = MockFactory(
       SendLoginOtpEmailRequestFixture
     ).one();
 
-    const cause = new InvalidCredentialsError();
+    const mockValidUser = MockFactory(UserFixture)
+      .mutate({
+        email: mockSendLoginOtpEmailRequestDto.email,
+      })
+      .one();
 
-    const expectedResult = new UnauthorizedException(null, { cause });
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: false,
+        expiresAt: faker.date.future(),
+      })
+      .omit("otpValue")
+      .one();
+
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+    jest
+      .spyOn(otpService, "createFakeOtpResult")
+      .mockReturnValue(mockSendOtpResult);
 
     await expect(
       sendLoginOtpEmailController.sendLoginOtpEmailAsync(
         mockSendLoginOtpEmailRequestDto
       )
-    ).rejects.toThrow(expectedResult);
+    ).resolves.toEqual(expectedResult);
+  });
+
+  it("should throw error for unhandled errors", async () => {
+    const mockSendLoginOtpEmailRequestDto = MockFactory(
+      SendLoginOtpEmailRequestFixture
+    ).one();
+
+    const expectedResult = {
+      isSent: false,
+      expiresAt: faker.date.future(),
+    } as SendOtpResult;
+
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockRejectedValueOnce(new Error("mock error"));
+
+    expect(
+      sendLoginOtpEmailController.sendLoginOtpEmailAsync(
+        mockSendLoginOtpEmailRequestDto
+      )
+    ).rejects.toThrow(new Error("mock error"));
   });
 });
