@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { EmailProfile } from "./mapping-profiles/email.mapping-profile";
 import { EmailServiceType } from "./enum/email-service-type.enum";
 import { Module } from "@nestjs/common";
+import { SendgridService } from "./providers/sendgrid/sendgrid.service";
 import { UndefinedServiceError } from "../error";
 
 @Module({
@@ -24,15 +25,24 @@ import { UndefinedServiceError } from "../error";
       useFactory: (configService: ConfigService) => configService.get("smtp"),
       inject: [ConfigService],
     },
+    {
+      provide: "SendgridConfig",
+      useFactory: (configService: ConfigService) => ({
+        apiKey: configService.get("sendgrid.apiKey"),
+      }),
+      inject: [ConfigService],
+    },
     AwsEmailService,
     SmtpEmailService,
     EmailProfile,
+    SendgridService,
     {
       provide: "EmailService",
       useFactory: (
+        configService: ConfigService,
         awsEmailService: AwsEmailService,
         smtpEmailService: SmtpEmailService,
-        configService: ConfigService
+        sendgridService: SendgridService
       ) => {
         const emailServiceType = configService.get("emailService");
 
@@ -41,11 +51,18 @@ import { UndefinedServiceError } from "../error";
             return smtpEmailService;
           case EmailServiceType.AWS:
             return awsEmailService;
+          case EmailServiceType.SENDGRID:
+            return sendgridService;
           default:
             throw new UndefinedServiceError(emailServiceType, "Email Service");
         }
       },
-      inject: [AwsEmailService, SmtpEmailService, ConfigService],
+      inject: [
+        ConfigService,
+        AwsEmailService,
+        SmtpEmailService,
+        SendgridService,
+      ],
     },
   ],
   exports: ["EmailService"],

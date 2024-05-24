@@ -45,6 +45,26 @@ describe("EmailModule", () => {
     expect(emailModule).toBeDefined();
   });
 
+  it("Should be defined (With Sendgrid)", async () => {
+    const emailConfig = () =>
+      MockFactory(EmailConfigFixture)
+        .mutate({ emailService: "sendgrid" })
+        .one();
+    const app = await Test.createTestingModule({
+      imports: [
+        AutomapperModule.forRoot({ strategyInitializer: classes() }),
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [emailConfig],
+        }),
+        EmailModule,
+      ],
+    }).compile();
+
+    emailModule = app.get<EmailModule>(EmailModule);
+    expect(emailModule).toBeDefined();
+  });
+
   it("Should throw error", async () => {
     const emailServiceType = "mock";
     const emailConfig = () =>
