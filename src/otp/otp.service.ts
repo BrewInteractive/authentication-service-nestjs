@@ -8,8 +8,6 @@ import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
 import { faker } from "@faker-js/faker";
 import { OtpValue } from "../utils/otp-value";
-import { faker } from "@faker-js/faker";
-
 
 @Injectable()
 export class OtpService {
