@@ -4,4 +4,5 @@ export const appConfig = () => ({
   version,
   name,
   description,
+  errorCodePrefix: process.env.ERROR_CODE_PREFIX || "ERR",
 });
