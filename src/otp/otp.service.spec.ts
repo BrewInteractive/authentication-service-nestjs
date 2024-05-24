@@ -7,8 +7,6 @@ import { Otp } from "../entities";
 import { OtpFixture } from "../../test/fixtures";
 import { OtpNotFoundError } from "../error";
 import { OtpService } from "./otp.service";
-import { channel } from "diagnostics_channel";
-import exp from "constants";
 import { faker } from "@faker-js/faker";
 
 describe("OtpService", () => {
