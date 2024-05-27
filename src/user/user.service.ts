@@ -7,6 +7,7 @@ import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
+import { InvalidArgumentError } from "../error/invalid-argument-error";
 
 @Injectable()
 export class UserService {
@@ -32,7 +33,7 @@ export class UserService {
       !options.email &&
       (!options.phoneNumber || !options.countryCode)
     )
-      throw new Error(
+      throw new InvalidArgumentError(
         "Provide at least one of: username, email, or phone number."
       );
 
