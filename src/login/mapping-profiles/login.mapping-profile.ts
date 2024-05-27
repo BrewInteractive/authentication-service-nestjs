@@ -3,7 +3,6 @@ import { Mapper, createMap } from "@automapper/core";
 import { Injectable } from "@nestjs/common";
 import { User } from "../../entities/user.entity";
 import { LoginRequest } from "../dto/login-request.dto";
-import { LoginOtpPhoneRequest } from "../dto/login-otp-phone-request.dto";
 
 @Injectable()
 export class LoginProfile extends AutomapperProfile {

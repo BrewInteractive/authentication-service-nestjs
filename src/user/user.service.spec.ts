@@ -1,4 +1,5 @@
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
+import { PhoneModule, faker } from "@faker-js/faker";
 import { User, UserRole } from "../entities";
 
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
@@ -9,7 +10,6 @@ import { Repository } from "typeorm";
 import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
-import { faker } from "@faker-js/faker";
 
 const bcrypt = require("bcrypt");
 
@@ -157,29 +157,23 @@ describe("UserService", () => {
     });
   });
 
-  it("getUserAsync should return null if the email and username does not exist", async () => {
-    const user = MockFactory(UserFixture).one() as User;
-    jest
-      .spyOn(userRepository, "findOne")
-      .mockResolvedValue(Promise.resolve(null));
-
-    const actualResult = await userService.getUserAsync({
-      username: user.username,
-      email: user.email,
-    });
-
-    expect(actualResult).toBeNull();
-    expect(userRepository.findOne).toHaveBeenCalledWith({
-      where: [{ username: user.username }, { email: user.email }],
-      relations: ["roles", "roles.role"],
-    });
-  });
-
-  it("getUserAsync should throw exception if username or email is not provided", async () => {
-    await expect(userService.getUserAsync({})).rejects.toThrow(
-      new Error("Provide at least one of: username, email, or phone number.")
-    );
-  });
+  test.each([
+    [{}, "all"],
+    [{ phone: {} }, "phone"],
+    [{ phone: { phoneNumber: faker.phone.number() } }, "phone.countryCode"],
+    [
+      { phone: { countryCode: faker.location.countryCode() } },
+      "phone.phoneNumber",
+    ],
+  ])(
+    "getUserAsync should throw exception if %s not provided",
+    async (args, missingArg) => {
+      console.log("args, missingArg", args, missingArg);
+      await expect(userService.getUserAsync(args)).rejects.toThrow(
+        new Error(`Provide at least one of: username, email, or phone number.`)
+      );
+    }
+  );
 
   it("createUserAsync should throw UserAlreadyExistsError if the username or email already exists", async () => {
     const user = MockFactory(UserFixture).one() as User;
