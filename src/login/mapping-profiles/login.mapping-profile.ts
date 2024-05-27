@@ -17,16 +17,3 @@ export class LoginProfile extends AutomapperProfile {
     };
   }
 }
-
-@Injectable()
-export class LoginPhoneOtpProfile extends AutomapperProfile {
-  constructor(@InjectMapper() mapper: Mapper) {
-    super(mapper);
-  }
-
-  override get profile() {
-    return (mapper: Mapper) => {
-      createMap(mapper, LoginOtpPhoneRequest);
-    };
-  }
-}
