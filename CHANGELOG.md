@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.1.0...v2.2.0) (2024-05-27)
+
+
+### Features
+
+* Add fake OTP result for user not found ([f0a598f](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f0a598f89de973ade2bc43103fe17f2f1642b2cc))
+* Add fake OTP result for user not found ([430ce04](https://github.com/BrewInteractive/authentication-service-nestjs/commit/430ce048c47debc833d9b8aafd65ea08d4f8f590))
+* Add faker library for generating fake OTP results ([3fcbab6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3fcbab6e08ab953ef168bc2742084760c54b4a72))
+* Add faker library for generating fake OTP results ([736fed4](https://github.com/BrewInteractive/authentication-service-nestjs/commit/736fed482e000aa8e40cfec84527fff4ac2f49df))
+* Fix error handling in SendLoginOtpEmailController ([4a8579d](https://github.com/BrewInteractive/authentication-service-nestjs/commit/4a8579d6dc461421625b802af6d4a23a2e1a3644))
+* Fix error handling in SendLoginOtpEmailController ([618be7a](https://github.com/BrewInteractive/authentication-service-nestjs/commit/618be7a82ef38e7dc59ff61908f635bafdff578e))
+* Handle invalid credentials in SendLoginOtpEmailController ([3b5f639](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3b5f639c116126b27ecec726a2ee0b438b7136f0))
+* Handle invalid credentials in SendLoginOtpEmailController ([971eb4e](https://github.com/BrewInteractive/authentication-service-nestjs/commit/971eb4edfbb3b09b67f1a2fcad8494f3fdea4a37))
+* Refactor error classes to extend ExtendedError ([3163c54](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3163c54e5c9cb15a32876c38a230d90ee0ed0aff))
+* Refactor OTP service to support phone OTPs and create `createPhoneOtpAsync` method ([7c704c2](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7c704c27c4a308a48150b624ed605ba5c089de3b))
+* Refactor SendLoginOtpEmailController to handle user not found scenario ([b9d1e68](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b9d1e68e658f1b6965481b1281464d18e380c8e3))
+* Refactor SendLoginOtpEmailController to handle user not found scenario ([fbe1e9c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/fbe1e9c9d80b9a9ee4f6b6924b499d8fe5624454))
+* Remove duplicate import in otp.service.ts ([7cbef3e](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7cbef3e7ecfe8f80b700effc8e6bd73f239b28f9))
+* Remove unused imports in otp.service.spec.ts ([0cb982c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/0cb982cba5d78aa9aa7d045ec3904f7bc700b6f3))
+
 ## [2.1.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.0.1...v2.1.0) (2024-05-24)
 
 
