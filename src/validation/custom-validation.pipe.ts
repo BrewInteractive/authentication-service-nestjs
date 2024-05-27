@@ -3,8 +3,10 @@ import {
   ValidationError,
   ValidationPipe,
 } from "@nestjs/common";
-import { ValidationErrorExtensions } from "../error/error-extension/validation-error.extention";
+
 import { ExtendedError } from "../dto";
+import { ValidationErrorExtensions } from "../error/error-extension/validation-error.extention";
+import { appConfig } from "../config";
 
 export class CustomValidationPipe extends ValidationPipe {
   createExceptionFactory() {
@@ -19,6 +21,7 @@ export class CustomValidationPipe extends ValidationPipe {
         cause: {
           message: "Validation failed",
           extensions: {
+            code: appConfig().errorCodePrefix + "009",
             fields,
           },
         } as ExtendedError<ValidationErrorExtensions>,
