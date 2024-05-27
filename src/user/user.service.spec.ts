@@ -165,10 +165,20 @@ describe("UserService", () => {
       { phone: { countryCode: faker.location.countryCode() } },
       "phone.phoneNumber",
     ],
+    [{ username: "" }, "username"],
+    [{ email: "" }, "email"],
+    [{ username: "", email: "" }, "username and email"],
+    [
+      { phone: { phoneNumber: faker.phone.number(), countryCode: "" } },
+      "phone.countryCode",
+    ],
+    [
+      { phone: { phoneNumber: "", countryCode: faker.location.countryCode() } },
+      "phone.phoneNumber",
+    ],
   ])(
     "getUserAsync should throw exception if %s not provided",
     async (args, missingArg) => {
-      console.log("args, missingArg", args, missingArg);
       await expect(userService.getUserAsync(args)).rejects.toThrow(
         new Error(`Provide at least one of: username, email, or phone number.`)
       );
