@@ -7,8 +7,6 @@ import { Otp } from "../entities";
 import { OtpFixture } from "../../test/fixtures";
 import { OtpNotFoundError } from "../error";
 import { OtpService } from "./otp.service";
-import { channel } from "diagnostics_channel";
-import exp from "constants";
 import { faker } from "@faker-js/faker";
 
 describe("OtpService", () => {
@@ -210,5 +208,11 @@ describe("OtpService", () => {
     ).rejects.toThrow(OtpNotFoundError);
 
     expect(otpRepository.update).not.toHaveBeenCalled();
+  });
+
+  it("should return fake otp result", async () => {
+    const actualResult = otpService.createFakeOtpResult();
+    expect(actualResult).toHaveProperty("isSent");
+    expect(actualResult).toHaveProperty("expiresAt");
   });
 });
