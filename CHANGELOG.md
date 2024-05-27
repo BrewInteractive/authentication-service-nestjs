@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.2.0...v2.3.0) (2024-05-27)
+
+
+### Features
+
+* Generate random OTP result when sending OTP ([f4b8322](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f4b832241c74f6ea605f1d9b211e814695472f13))
+* Remove unused import in otp.service.ts ([3db4e8e](https://github.com/BrewInteractive/authentication-service-nestjs/commit/3db4e8ef02b96866c2e728561827317ab222646a))
+
 ## [2.2.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.1.0...v2.2.0) (2024-05-27)
 
 
