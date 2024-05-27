@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SendOtpResult } from "./dto";
 import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
+import { faker } from "@faker-js/faker";
 import { OtpValue } from "../utils/otp-value";
 
 @Injectable()
@@ -16,19 +17,46 @@ export class OtpService {
     private readonly configService: ConfigService
   ) {}
 
-  async validateEmailOtpAsync(
-    email: string,
+  async validateOtpAsync(
+    channel: {
+      email?: string;
+      phone?: {
+        country_code: string;
+        phone_number: string;
+      };
+    },
     otpValue: string
   ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
         value: otpValue,
-        channel: JsonContains({ email }),
+        channel: JsonContains(channel),
         expiresAt: MoreThan(new Date()),
       },
     });
-
     return !!otpEntity;
+  }
+
+  async validateEmailOtpAsync(
+    email: string,
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync({ email }, otpValue);
+  }
+
+  async validatePhoneOtpAsync(
+    phone: {
+      country_code: string;
+      phone_number: string;
+    },
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync(
+      {
+        phone,
+      },
+      otpValue
+    );
   }
 
   async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
@@ -88,6 +116,16 @@ export class OtpService {
       isSent: true,
       expiresAt: otpEntity.expiresAt,
       otpValue: otpEntity.value,
+    };
+  }
+
+  createFakeOtpResult(): SendOtpResult {
+    return {
+      isSent: faker.datatype.boolean(),
+      expiresAt: new Date(
+        new Date().getTime() +
+          this.configService.get<number>("otp.expiresIn") * 1000
+      ),
     };
   }
 }
