@@ -32,9 +32,7 @@ export class UserService {
     if (
       !options.username &&
       !options.email &&
-      (!options.phone ||
-        !options.phone.phoneNumber ||
-        !options.phone.countryCode)
+      (!options.phone?.phoneNumber || !options.phone?.countryCode)
     )
       throw new Error(
         "Provide at least one of: username, email, or phone number."

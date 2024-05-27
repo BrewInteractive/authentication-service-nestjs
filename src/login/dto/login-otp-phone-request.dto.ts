@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, Validate } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 import { AutoMap } from "@automapper/classes";
 import { PhoneRequestDto } from "./phone.dto";
