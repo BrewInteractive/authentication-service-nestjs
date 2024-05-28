@@ -4,9 +4,10 @@ import { Injectable } from "@nestjs/common";
 import { Otp } from "../entities";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SendOtpResult } from "./dto";
-import { uid } from "uid";
 import { ConfigService } from "@nestjs/config";
 import { OtpNotFoundError } from "../error";
+import { OtpValue } from "../utils/otp-value";
+import { randomInt } from "crypto";
 
 @Injectable()
 export class OtpService {
@@ -16,19 +17,46 @@ export class OtpService {
     private readonly configService: ConfigService
   ) {}
 
-  async validateEmailOtpAsync(
-    email: string,
+  async validateOtpAsync(
+    channel: {
+      email?: string;
+      phone?: {
+        country_code: string;
+        phone_number: string;
+      };
+    },
     otpValue: string
   ): Promise<boolean> {
     const otpEntity = await this.otpRepository.findOne({
       where: {
         value: otpValue,
-        channel: JsonContains({ email }),
+        channel: JsonContains(channel),
         expiresAt: MoreThan(new Date()),
       },
     });
-
     return !!otpEntity;
+  }
+
+  async validateEmailOtpAsync(
+    email: string,
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync({ email }, otpValue);
+  }
+
+  async validatePhoneOtpAsync(
+    phone: {
+      country_code: string;
+      phone_number: string;
+    },
+    otpValue: string
+  ): Promise<boolean> {
+    return await this.validateOtpAsync(
+      {
+        phone,
+      },
+      otpValue
+    );
   }
 
   async createEmailOtpAsync(email: string): Promise<SendOtpResult> {
@@ -44,7 +72,13 @@ export class OtpService {
     return await this.createOtpAsync({ phone: phone });
   }
 
-  async expireOtpAsync(channel: { email?: string }): Promise<void> {
+  async expireOtpAsync(channel: {
+    email?: string;
+    phone?: {
+      country_code: string;
+      phone_number: string;
+    };
+  }): Promise<void> {
     const entity = await this.otpRepository.findOne({
       where: {
         channel: JsonContains(channel),
@@ -76,7 +110,7 @@ export class OtpService {
     if (activeOtp) return { isSent: false, expiresAt: activeOtp.expiresAt };
 
     const otpEntity = await this.otpRepository.save({
-      value: uid(6).toUpperCase(),
+      value: OtpValue.generate(6),
       channel,
       expiresAt: new Date(
         new Date().getTime() +
@@ -88,6 +122,16 @@ export class OtpService {
       isSent: true,
       expiresAt: otpEntity.expiresAt,
       otpValue: otpEntity.value,
+    };
+  }
+
+  createFakeOtpResult(): SendOtpResult {
+    return {
+      isSent: randomInt(0, 2) === 1,
+      expiresAt: new Date(
+        new Date().getTime() +
+          this.configService.get<number>("otp.expiresIn") * 1000
+      ),
     };
   }
 }

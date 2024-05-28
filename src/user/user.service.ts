@@ -7,6 +7,7 @@ import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
+import { InvalidArgumentError } from "../error/invalid-argument-error";
 
 @Injectable()
 export class UserService {
@@ -24,26 +25,25 @@ export class UserService {
   async getUserAsync(options: {
     username?: string;
     email?: string;
-    phoneNumber?: string;
-    countryCode?: string;
+    phone?: {
+      phoneNumber?: string;
+      countryCode?: string;
+    };
   }): Promise<User | null> {
     if (
       !options.username &&
       !options.email &&
-      (!options.phoneNumber || !options.countryCode)
+      (!options.phone?.phoneNumber || !options.phone?.countryCode)
     )
-      throw new Error(
+      throw new InvalidArgumentError(
         "Provide at least one of: username, email, or phone number."
       );
 
     const whereClause = [] as FindOptionsWhere<User>[];
     if (options.username) whereClause.push({ username: options.username });
     if (options.email) whereClause.push({ email: options.email });
-    if (options.phoneNumber && options.countryCode) {
-      whereClause.push({
-        phoneNumber: options.phoneNumber,
-        countryCode: options.countryCode,
-      });
+    if (options.phone) {
+      whereClause.push(options.phone);
     }
 
     return await this.userRepository.findOne({

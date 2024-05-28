@@ -35,6 +35,11 @@ class EmailSubjectsConfigurationsFixture {
   loginOtp: string;
 }
 
+class SendGridEmailConfigFixture {
+  @Mock()
+  apiKey: string;
+}
+
 export class EmailConfigFixture {
   @Mock(EmailServiceType.AWS)
   emailService: string;
@@ -50,4 +55,7 @@ export class EmailConfigFixture {
 
   @Mock(EmailSubjectsConfigurationsFixture)
   emailSubjects: EmailSubjectsConfigurationsFixture;
+
+  @Mock(SendGridEmailConfigFixture)
+  sendgrid: SendGridEmailConfigFixture;
 }

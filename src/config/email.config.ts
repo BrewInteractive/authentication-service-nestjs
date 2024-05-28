@@ -19,4 +19,8 @@ export const emailConfig = () => ({
       pass: process.env.SMTP_PASSWORD,
     },
   },
+
+  sendgrid: {
+    apiKey: process.env.SENDGRID_API_KEY,
+  },
 });
