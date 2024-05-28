@@ -13,7 +13,7 @@ export class SignUpRequestFixture extends SignUpRequest {
   password: string;
 
   @Mock(PhoneRequestFixture)
-  phone: PhoneRequestFixture;
+  phone: PhoneRequestFixture | null;
 
   @Mock((faker) => faker.name.firstName())
   firstName: string;
