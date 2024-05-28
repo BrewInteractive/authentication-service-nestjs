@@ -91,7 +91,6 @@ export class UserService {
     const existingUser = await this.getUserAsync({
       username: user.username,
       email: user.email,
-      phone: { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
     });
 
     if (existingUser) throw new UserAlreadyExistsError();

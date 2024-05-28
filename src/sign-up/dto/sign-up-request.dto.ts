@@ -8,26 +8,20 @@ import {
 } from "class-validator";
 
 import { AutoMap } from "@automapper/classes";
-import { PhoneRequestDto } from "../../login/dto/phone.dto";
 import { authenticationConfig } from "../../config";
 
 export class SignUpRequest {
-  @ValidateIf((o) => !o.email && !o.phone)
+  @ValidateIf((o) => !o.email)
   @IsNotEmpty()
   @IsString()
   @AutoMap()
   username: string;
 
-  @ValidateIf((o) => !o.username && !o.phone)
+  @ValidateIf((o) => !o.username)
   @IsNotEmpty()
   @IsEmail()
   @AutoMap()
   email: string;
-
-  @ValidateIf((o) => !o.email && !o.username)
-  @IsNotEmpty()
-  @AutoMap()
-  phone: PhoneRequestDto;
 
   @Matches(authenticationConfig().passwordRegex, {
     message: "password is too weak",
