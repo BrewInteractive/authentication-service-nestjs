@@ -6,6 +6,7 @@ import { InvalidRefreshTokenError } from "../error";
 import { MockFactory } from "mockingbird";
 import { RefreshTokenController } from "./refresh-token.controller";
 import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
+import { RefreshTokenResponse } from "./dto";
 import { TokenModule } from "../token/token.module";
 import { TokenService } from "../token/token.service";
 import { Tokens } from "../dto";
@@ -64,7 +65,7 @@ describe("RefreshTokenController", () => {
 
     const actualResult = await controller.refreshTokens(refreshTokenRequest);
 
-    expect(actualResult).toStrictEqual(expectedResult);
+    expect(actualResult).toStrictEqual(expectedResult as RefreshTokenResponse);
   });
 
   it("should throw UnauthorizedException if the refresh token is invalid", async () => {
