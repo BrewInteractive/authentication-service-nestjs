@@ -48,6 +48,22 @@ export class SignUpProfile extends AutomapperProfile {
                 },
               ];
           })
+        ),
+        forMember(
+          (dest) => dest.phoneNumber,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.phoneNumber;
+            }
+          })
+        ),
+        forMember(
+          (dest) => dest.countryCode,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.countryCode;
+            }
+          })
         )
       );
     };

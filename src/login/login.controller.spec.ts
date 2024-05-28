@@ -149,4 +149,16 @@ describe("LoginController", () => {
       exception
     );
   });
+
+  it("should throw error for unhandled errors", async () => {
+    const loginRequestDto = MockFactory(LoginRequestFixture).one();
+
+    jest
+      .spyOn(userService, "validateUserAsync")
+      .mockRejectedValueOnce(new Error("mock error"));
+
+    await expect(loginController.loginAsync(loginRequestDto)).rejects.toThrow(
+      new Error("Internal Server Error")
+    );
+  });
 });

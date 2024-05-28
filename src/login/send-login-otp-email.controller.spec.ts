@@ -204,11 +204,6 @@ describe("SendLoginOtpEmailController", () => {
       SendLoginOtpEmailRequestFixture
     ).one();
 
-    const expectedResult = {
-      isSent: false,
-      expiresAt: faker.date.future(),
-    } as SendOtpResult;
-
     jest
       .spyOn(userService, "getUserAsync")
       .mockRejectedValueOnce(new Error("mock error"));
@@ -217,6 +212,6 @@ describe("SendLoginOtpEmailController", () => {
       sendLoginOtpEmailController.sendLoginOtpEmailAsync(
         mockSendLoginOtpEmailRequestDto
       )
-    ).rejects.toThrow(new Error("mock error"));
+    ).rejects.toThrow(new Error("Internal Server Error"));
   });
 });

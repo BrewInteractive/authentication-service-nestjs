@@ -34,6 +34,7 @@ describe("Signup Dto Validation", () => {
     const errors = await validate(user);
 
     expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("should fail validation when SignUpDto has empty password field", async () => {

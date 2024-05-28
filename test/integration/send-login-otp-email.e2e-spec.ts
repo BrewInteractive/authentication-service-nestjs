@@ -2,14 +2,17 @@ import * as request from "supertest";
 
 import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
-import { OtpFixture, UserFixture } from "../fixtures";
+import {
+  OtpFixture,
+  SendLoginOtpEmailRequestFixture,
+  UserFixture,
+} from "../fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AppModule } from "../../src/app.module";
 import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { MockFactory } from "mockingbird";
 import { Otp } from "../../src/entities";
-import { SendLoginOtpEmailRequestFixture } from "../fixtures/login/send-otp-email-login-request.fixture";
 import { User } from "../../src/entities/user.entity";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";

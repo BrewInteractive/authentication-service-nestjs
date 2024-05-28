@@ -140,4 +140,18 @@ describe("LoginOtpEmailController", () => {
       loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
     ).rejects.toThrow(expectedResult);
   });
+
+  it("should throw error for unhandled errors", async () => {
+    const mockLoginOtpEmailRequestDto = MockFactory(
+      LoginOtpEmailRequestFixture
+    ).one();
+
+    jest
+      .spyOn(otpService, "validateEmailOtpAsync")
+      .mockRejectedValueOnce(new Error("mock error"));
+
+    await expect(
+      loginOtpEmailController.loginAsync(mockLoginOtpEmailRequestDto)
+    ).rejects.toThrow(new Error("Internal Server Error"));
+  });
 });

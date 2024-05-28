@@ -7,7 +7,7 @@ import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
-import { InvalidArgumentError } from "../error/invalid-argument-error";
+import { InvalidArgumentError } from "../error/invalid-argument.error";
 
 @Injectable()
 export class UserService {
@@ -91,6 +91,7 @@ export class UserService {
     const existingUser = await this.getUserAsync({
       username: user.username,
       email: user.email,
+      phone: { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
     });
 
     if (existingUser) throw new UserAlreadyExistsError();

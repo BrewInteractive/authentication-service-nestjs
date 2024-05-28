@@ -82,4 +82,20 @@ describe("RefreshTokenController", () => {
       UnauthorizedException
     );
   });
+
+  it("should throw error for unhandled errors", async () => {
+    const refreshTokenRequest: RefreshTokenRequest = {
+      refreshToken: "invalidMockRefreshToken",
+    };
+
+    jest
+      .spyOn(tokenService, "refreshTokensAsync")
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+    await expect(controller.refreshTokens(refreshTokenRequest)).rejects.toThrow(
+      new Error("Internal Server Error")
+    );
+  });
 });
