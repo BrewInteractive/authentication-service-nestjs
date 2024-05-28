@@ -96,7 +96,7 @@ describe("OtpService", () => {
       .spyOn(otpRepository, "findOne")
       .mockResolvedValue(Promise.resolve(null));
     const phone = {
-      country_code: faker.address.countryCode(),
+      country_code: faker.location.countryCode(),
       phone_number: faker.phone.number(),
     };
     const value = faker.string.sample(6);
