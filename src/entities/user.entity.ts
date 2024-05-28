@@ -10,12 +10,14 @@ import {
   Entity,
   OneToMany,
   PrimaryColumn,
+  Unique,
   UpdateDateColumn,
 } from "typeorm";
 import { UserResetPasswordRequest } from "./user-reset-password-request.entity";
 
 @Entity({ name: "users" })
 @Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
+@Unique(["phoneNumber", "countryCode"])
 export class User {
   @PrimaryColumn()
   id: string;
@@ -36,11 +38,11 @@ export class User {
   email?: string;
 
   @AutoMap()
-  @Column({ name: "country_code", unique: true, nullable: true })
+  @Column({ name: "country_code", nullable: true })
   countryCode?: string;
 
   @AutoMap()
-  @Column({ name: "phone_number", unique: true, nullable: true })
+  @Column({ name: "phone_number", nullable: true })
   phoneNumber?: string;
 
   @AutoMap()
