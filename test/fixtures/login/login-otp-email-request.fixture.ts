@@ -4,6 +4,7 @@ import { LoginRequest } from "../../../src/login/dto/login-request.dto";
 import { Mock } from "mockingbird";
 import { PhoneRequestDto } from "../../../src/login/dto/phone.dto";
 import { SendLoginOtpEmailRequest } from "../../../src/login/dto/send-login-otp-email-request.dto";
+import { SendLoginOtpPhoneRequest } from "../../../src/login/dto/send-login-otp-phone-request.dto";
 
 export class LoginOtpEmailRequestFixture extends LoginOtpEmailRequest {
   @Mock((faker) => faker.internet.email())
@@ -43,4 +44,9 @@ export class LoginOtpPhoneRequestFixture extends LoginOtpPhoneRequest {
 export class SendLoginOtpEmailRequestFixture extends SendLoginOtpEmailRequest {
   @Mock((faker) => faker.internet.email())
   email: string;
+}
+
+export class SendLoginOtpPhoneRequestFixture extends SendLoginOtpPhoneRequest {
+  @Mock(PhoneRequestFixture)
+  phone: PhoneRequestFixture;
 }

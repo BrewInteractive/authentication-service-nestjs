@@ -1,5 +1,6 @@
-import { CustomValidationPipe } from "./custom-validation.pipe";
 import { BadRequestException, ValidationError } from "@nestjs/common";
+
+import { CustomValidationPipe } from "./custom-validation.pipe";
 
 describe("CustomValidationPipe", () => {
   let customValidationPipe: CustomValidationPipe;
@@ -37,6 +38,7 @@ describe("CustomValidationPipe", () => {
     expect(result).toBeInstanceOf(BadRequestException);
     expect(result["cause"]).toEqual({
       extensions: {
+        code: "ERR009",
         fields: [
           "field1: Field1 should not be empty, Field1 should be at least 5 characters",
           "field2: Field2 should not be empty, Field2 should be at most 10 characters",

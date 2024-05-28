@@ -1,4 +1,4 @@
-import { ValidationErrorExtensions } from "./validation-error.extention";
+import { ValidationErrorExtensions } from "./validation-error.extension";
 
 describe("ValidationErrorExtensions", () => {
   it("should create an instance", () => {
