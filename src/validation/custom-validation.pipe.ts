@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 
 import { ExtendedError } from "../dto";
-import { ValidationErrorExtensions } from "../error/error-extension/validation-error.extention";
+import { ValidationErrorExtensions } from "../error/error-extension/validation-error.extension";
 import { appConfig } from "../config";
 
 export class CustomValidationPipe extends ValidationPipe {
