@@ -93,8 +93,8 @@ describe("SendLoginOtpEmailController", () => {
 
     const mockValidUser = MockFactory(UserFixture)
       .mutate({
-        countryCode: mockSendLoginOtpPhoneRequestDto.countryCode,
-        phoneNumber: mockSendLoginOtpPhoneRequestDto.phoneNumber,
+        countryCode: mockSendLoginOtpPhoneRequestDto.phone.countryCode,
+        phoneNumber: mockSendLoginOtpPhoneRequestDto.phone.phoneNumber,
       })
       .one();
 
@@ -132,8 +132,8 @@ describe("SendLoginOtpEmailController", () => {
 
     const mockValidUser = MockFactory(UserFixture)
       .mutate({
-        countryCode: mockSendLoginOtpEmailRequestDto.countryCode,
-        phoneNumber: mockSendLoginOtpEmailRequestDto.phoneNumber,
+        countryCode: mockSendLoginOtpEmailRequestDto.phone.countryCode,
+        phoneNumber: mockSendLoginOtpEmailRequestDto.phone.phoneNumber,
       })
       .one();
 
@@ -168,16 +168,29 @@ describe("SendLoginOtpEmailController", () => {
       SendLoginOtpPhoneRequestFixture
     ).one();
 
-    const cause = new InvalidCredentialsError();
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: false,
+        expiresAt: faker.date.future(),
+      })
+      .omit("otpValue")
+      .one();
 
-    const expectedResult = new UnauthorizedException(null, { cause });
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+
+    jest
+      .spyOn(otpService, "createFakeOtpResult")
+      .mockReturnValue(mockSendOtpResult);
 
     await expect(
       sendLoginOtpPhoneController.sendLoginOtpPhoneAsync(
         mockSendLoginOtpPhoneRequestDto
       )
-    ).rejects.toThrow(expectedResult);
+    ).resolves.toEqual(expectedResult);
   });
 });

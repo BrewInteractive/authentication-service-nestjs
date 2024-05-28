@@ -30,23 +30,22 @@ export class SendLoginOtpPhoneController {
   ): Promise<SendLoginOtpPhoneResponse> {
     try {
       const user = await this.userService.getUserAsync({
-        countryCode: sendLoginOtpPhoneRequest.countryCode,
-        phoneNumber: sendLoginOtpPhoneRequest.phoneNumber,
+        phone: sendLoginOtpPhoneRequest.phone,
       });
 
       if (!user) throw new InvalidCredentialsError();
 
       const sendOtpResult = await this.otpService.createPhoneOtpAsync({
-        phone_number: sendLoginOtpPhoneRequest.phoneNumber,
-        country_code: sendLoginOtpPhoneRequest.countryCode,
+        phone_number: sendLoginOtpPhoneRequest.phone.phoneNumber,
+        country_code: sendLoginOtpPhoneRequest.phone.countryCode,
       });
 
       if (sendOtpResult.isSent === true) {
         this.eventEmitter.emit("otp.sms.created", {
           otpValue: sendOtpResult.otpValue,
           phoneNumber:
-            sendLoginOtpPhoneRequest.countryCode +
-            sendLoginOtpPhoneRequest.phoneNumber,
+            sendLoginOtpPhoneRequest.phone.countryCode +
+            sendLoginOtpPhoneRequest.phone.phoneNumber,
           authenticationAction: AuthenticationAction.LOGIN,
         });
       }
@@ -57,7 +56,9 @@ export class SendLoginOtpPhoneController {
       };
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
-        throw new UnauthorizedException(null, { cause: error });
+        return this.otpService.createFakeOtpResult();
+
+      throw error;
     }
   }
 }

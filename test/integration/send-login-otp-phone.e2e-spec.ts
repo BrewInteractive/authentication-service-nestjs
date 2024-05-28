@@ -4,6 +4,7 @@ import { DataSource, Repository } from "typeorm";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import {
   OtpFixture,
+  PhoneRequestFixture,
   SendLoginOtpPhoneRequestFixture,
   UserFixture,
 } from "../fixtures";
@@ -62,18 +63,24 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       await userRepository.save(user);
       await otpRepository.save(otp);
 
-      const sendLoginOtpEmailRequest = MockFactory(
-        SendLoginOtpPhoneRequestFixture
-      )
+      const phone = MockFactory(PhoneRequestFixture)
         .mutate({
           phoneNumber: user.phoneNumber,
           countryCode: user.countryCode,
         })
         .one();
 
+      const sendLoginOtpPhoneRequest = MockFactory(
+        SendLoginOtpPhoneRequestFixture
+      )
+        .mutate({
+          phone: phone,
+        })
+        .one();
+
       const responseEmail = await request(app.getHttpServer())
         .post("/send-login-otp-phone")
-        .send(sendLoginOtpEmailRequest)
+        .send(sendLoginOtpPhoneRequest)
         .expect(201);
 
       expect(responseEmail.body.isSent).toEqual(false);
@@ -86,12 +93,18 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       let user = MockFactory(UserFixture).one().hashPassword();
       await userRepository.save(user);
 
+      const phone = MockFactory(PhoneRequestFixture)
+        .mutate({
+          phoneNumber: user.phoneNumber,
+          countryCode: user.countryCode,
+        })
+        .one();
+
       const sendLoginOtpPhoneRequest = MockFactory(
         SendLoginOtpPhoneRequestFixture
       )
         .mutate({
-          countryCode: user.countryCode,
-          phoneNumber: user.phoneNumber,
+          phone: phone,
         })
         .one();
 
@@ -106,7 +119,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       );
     });
 
-    it("should return invalid credentials error when no user with given phone exists", async () => {
+    it("should return fake otp result when no user with given email exists", async () => {
       const sendLoginOtpPhoneRequest = MockFactory(
         SendLoginOtpPhoneRequestFixture
       ).one();
@@ -114,9 +127,10 @@ describe("SendLoginOtpEmailController (e2e)", () => {
       const response = await request(app.getHttpServer())
         .post("/send-login-otp-phone")
         .send(sendLoginOtpPhoneRequest)
-        .expect(401);
+        .expect(201);
 
-      expect(response.body.message).toEqual("Invalid credentials.");
+      expect(response.body).toHaveProperty("expiresAt");
+      expect(response.body).toHaveProperty("isSent");
     });
   });
 });
