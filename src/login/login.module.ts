@@ -1,5 +1,6 @@
 import { LoginController } from "./login.controller";
 import { LoginOtpEmailController } from "./login-otp-email.controller";
+import { LoginOtpPhoneController } from "./login-otp-phone.controller";
 import { LoginProfile } from "./mapping-profiles/login.mapping-profile";
 import { Module } from "@nestjs/common";
 import { OtpModule } from "../otp/otp.module";
@@ -12,6 +13,7 @@ import { UserModule } from "../user/user.module";
   controllers: [
     LoginController,
     LoginOtpEmailController,
+    LoginOtpPhoneController,
     SendLoginOtpEmailController,
   ],
   providers: [LoginProfile],
