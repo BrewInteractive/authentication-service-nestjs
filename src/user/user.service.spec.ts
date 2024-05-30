@@ -1,5 +1,4 @@
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
-import { PhoneModule, faker } from "@faker-js/faker";
 import { User, UserRole } from "../entities";
 
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
@@ -10,6 +9,7 @@ import { Repository } from "typeorm";
 import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
 import { UserService } from "./user.service";
+import { faker } from "@faker-js/faker";
 
 const bcrypt = require("bcrypt");
 

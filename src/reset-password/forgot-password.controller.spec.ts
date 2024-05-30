@@ -149,4 +149,14 @@ describe("ForgotPasswordController", () => {
       forgotPasswordController.forgotPasswordAsync(resetPasswordRequestDto)
     ).rejects.toThrow(BadRequestException);
   });
+
+  it("should throw error for unhandled errors", async () => {
+    const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
+
+    jest.spyOn(userService, "getUserAsync").mockRejectedValueOnce(new Error());
+
+    await expect(
+      forgotPasswordController.forgotPasswordAsync(resetPasswordRequestDto)
+    ).rejects.toThrow(new Error("Internal Server Error"));
+  });
 });

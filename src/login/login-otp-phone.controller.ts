@@ -4,6 +4,7 @@ import {
   Body,
   Controller,
   Inject,
+  InternalServerErrorException,
   Post,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -55,6 +56,8 @@ export class LoginOtpPhoneController {
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
         throw new UnauthorizedException(null, { cause: error });
+
+      throw new InternalServerErrorException();
     }
   }
 }

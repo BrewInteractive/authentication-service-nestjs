@@ -110,7 +110,6 @@ describe("LoginOtpPhoneController", () => {
     const loginOtpPhoneRequestDto = MockFactory(
       LoginOtpPhoneRequestFixture
     ).one();
-    console.log(loginOtpPhoneRequestDto);
 
     const expectedResult = new UnauthorizedException(null, {
       cause: new InvalidCredentialsError(),
@@ -140,5 +139,19 @@ describe("LoginOtpPhoneController", () => {
     await expect(
       loginOtpPhoneController.loginAsync(mockLoginOtpPhoneRequestDto)
     ).rejects.toThrow(expectedResult);
+  });
+
+  it("should throw error for unhandled errors", async () => {
+    const mockLoginOtpPhoneRequestDto = MockFactory(
+      LoginOtpPhoneRequestFixture
+    ).one();
+
+    jest
+      .spyOn(otpService, "validatePhoneOtpAsync")
+      .mockRejectedValueOnce(new Error("mock error"));
+
+    await expect(
+      loginOtpPhoneController.loginAsync(mockLoginOtpPhoneRequestDto)
+    ).rejects.toThrow(new Error("Internal Server Error"));
   });
 });
