@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.3.0...v2.4.0) (2024-05-30)
+
+
+### Features
+
+* Add LoginPhoneOtpProfile for mapping LoginOtpPhoneRequest ([c982f88](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c982f8883cec7afb83efb01f3757bd8629d7e4ff))
+* Add RefreshTokenResponse to refresh token controller ([8092428](https://github.com/BrewInteractive/authentication-service-nestjs/commit/809242882beb3175c45a6165683a3eaeb46df60b))
+* add send login otp phone controller and its tests. ([f875c63](https://github.com/BrewInteractive/authentication-service-nestjs/commit/f875c63ae9210ca28d467e650c0695e5698685bb))
+* create sendgrid email provider ([72e752b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/72e752bbdce02702e7cd89d8a51f03276437f11a))
+* Remove LoginOtpPhoneRequest from LoginProfile ([e606817](https://github.com/BrewInteractive/authentication-service-nestjs/commit/e606817b240fcd1431fb27cba111f9741c2ed0db))
+
+
+### Bug Fixes
+
+* change send login otp phone request to adapt phone dto. ([c8d1105](https://github.com/BrewInteractive/authentication-service-nestjs/commit/c8d11052b5d522aeebbe7389fc0474686d490640))
+* create migration to make country code and phone number to be unique together. ([0a522dd](https://github.com/BrewInteractive/authentication-service-nestjs/commit/0a522ddd368369ac332e83aea5601a40417887de))
+* edit jest.setup ([e110788](https://github.com/BrewInteractive/authentication-service-nestjs/commit/e110788718014c5315f0626d75a7e43623a508af))
+* edit jest.setup.ts ([239e1f0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/239e1f0f1e018fd68365cec676ca5f3e4d6187a5))
+* fixed typo in filename. ([d669005](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d6690058845ecab4c5f0068c92bfce68445c38de))
+* unused import ([9d1e7b6](https://github.com/BrewInteractive/authentication-service-nestjs/commit/9d1e7b65fca8d1db11d6798deb79d3e9c2f03471))
+
 ## [2.3.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.2.0...v2.3.0) (2024-05-27)
 
 
