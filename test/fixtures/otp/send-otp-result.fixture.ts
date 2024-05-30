@@ -1,5 +1,5 @@
 import { Mock } from "mockingbird";
-import { SendOtpResult } from "../../../src/otp/dto/send-otp-result.dto";
+import { SendOtpResult } from "../../../src/otp/dto";
 
 export class SendOtpResultFixture extends SendOtpResult {
   @Mock()

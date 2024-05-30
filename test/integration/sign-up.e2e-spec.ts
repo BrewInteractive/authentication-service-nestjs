@@ -104,12 +104,14 @@ describe("SignUpController (e2e)", () => {
         })
         .one();
       signUpRequestDto.username = null;
+      signUpRequestDto.phone = null;
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
         .send(signUpRequestDto)
         .expect(400);
 
+      expect(response.status).toBe(400);
       expect(response.body.message).toContain("email must be an email");
     });
 

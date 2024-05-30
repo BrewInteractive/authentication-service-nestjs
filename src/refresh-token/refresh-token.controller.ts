@@ -7,9 +7,8 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { TokenService } from "../token/token.service";
-import { RefreshTokenRequest } from "./dto/refresh-token-request.dto";
-import { RefreshTokenResponse } from "./dto/refresh-token-response.dto";
 import { InvalidRefreshTokenError } from "../error";
+import { RefreshTokenRequest, RefreshTokenResponse } from "./dto";
 
 @Controller("refresh-token")
 export class RefreshTokenController {
