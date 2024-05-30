@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   ConflictException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
@@ -43,6 +44,8 @@ export class SignUpController {
     } catch (error) {
       if (error instanceof UserAlreadyExistsError)
         throw new ConflictException(null, { cause: error });
+
+      throw new InternalServerErrorException();
     }
   }
 }

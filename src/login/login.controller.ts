@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   UnauthorizedException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { LoginRequest } from "./dto/login-request.dto";
 import { UserService } from "../user/user.service";
@@ -36,6 +37,8 @@ export class LoginController {
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
         throw new UnauthorizedException(null, { cause: error });
+
+      throw new InternalServerErrorException();
     }
   }
 }

@@ -120,4 +120,16 @@ describe("SignUpController", () => {
       signUpController.signUpAsync(signUpRequestDto)
     ).rejects.toThrow(ConflictException);
   });
+
+  it("should throw error for unhandled errors", async () => {
+    const signUpRequestDto = MockFactory(SignUpRequestFixture).one();
+
+    jest.spyOn(userService, "createUserAsync").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(
+      signUpController.signUpAsync(signUpRequestDto)
+    ).rejects.toThrow(new Error("Internal Server Error"));
+  });
 });

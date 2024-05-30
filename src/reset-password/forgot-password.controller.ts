@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   BadRequestException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { ResetPasswordService } from "./reset-password.service";
@@ -61,6 +62,8 @@ export class ForgotPasswordController {
         error instanceof ActiveResetPasswordRequestExistsError
       )
         throw new BadRequestException(null, { cause: error });
+
+      throw new InternalServerErrorException();
     }
   }
 }

@@ -1,4 +1,10 @@
-import { Inject, Controller, Post, Body } from "@nestjs/common";
+import {
+  Inject,
+  Controller,
+  Post,
+  Body,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { SendLoginOtpEmailRequest } from "./dto/send-login-otp-email-request.dto";
@@ -49,7 +55,7 @@ export class SendLoginOtpEmailController {
       if (error instanceof InvalidCredentialsError)
         return this.otpService.createFakeOtpResult();
 
-      throw error;
+      throw new InternalServerErrorException();
     }
   }
 }

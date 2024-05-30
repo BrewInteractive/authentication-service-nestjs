@@ -4,6 +4,7 @@ import {
   Body,
   Inject,
   UnauthorizedException,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { TokenService } from "../token/token.service";
 import { InvalidRefreshTokenError } from "../error";
@@ -26,6 +27,8 @@ export class RefreshTokenController {
     } catch (error) {
       if (error instanceof InvalidRefreshTokenError)
         throw new UnauthorizedException(null, { cause: error });
+
+      throw new InternalServerErrorException();
     }
   }
 }
