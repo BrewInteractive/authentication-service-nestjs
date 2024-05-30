@@ -11,7 +11,6 @@ import { MockFactory } from "mockingbird";
 import { User } from "../../src/entities/user.entity";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
-import { sign } from "crypto";
 
 describe("SignUpController (e2e)", () => {
   let app: INestApplication;
@@ -106,7 +105,6 @@ describe("SignUpController (e2e)", () => {
         .one();
       signUpRequestDto.username = null;
       signUpRequestDto.phone = null;
-      console.log(signUpRequestDto);
 
       const response = await request(app.getHttpServer())
         .post("/sign-up")
