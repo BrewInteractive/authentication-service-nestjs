@@ -11,10 +11,10 @@ import * as crypto from "crypto";
 import { Tokens } from "../dto";
 import { ConfigService } from "@nestjs/config";
 import { InvalidRefreshTokenError } from "../error";
+import * as lodash from "lodash";
 
 @Injectable({})
 export class TokenService {
-  private customClaims: {};
   private customClaimImporters: ICustomClaimsImporter[] = [];
 
   constructor(
@@ -22,17 +22,16 @@ export class TokenService {
     private readonly refreshTokenRepository: Repository<RefreshToken>,
     private readonly configService: ConfigService
   ) {
-    this.customClaims = {};
+    this.customClaimImporters.push(new UserCustomClaimsImporter());
   }
 
   private async createIdTokenAsync(
     user: User,
     expiresIn: number | string = this.configService.get("jwt.expiresIn")
   ): Promise<string> {
-    this.customClaimImporters.push(new UserCustomClaimsImporter());
-    await this.applyCustomClaimImportersAsync(user);
+    const customClaims = await this.applyCustomClaimImportersAsync(user);
 
-    return jwt.sign(this.customClaims, this.configService.get("jwt.secret"), {
+    return jwt.sign(customClaims, this.configService.get("jwt.secret"), {
       algorithm: this.configService.get("jwt.algorithm"),
       audience: this.configService.get("jwt.audience"),
       issuer: this.configService.get("jwt.issuer"),
@@ -71,25 +70,20 @@ export class TokenService {
   }
 
   private async applyCustomClaimImportersAsync(user: User) {
+    let mergedCustomClaims = {};
     for (const customClaimImporter of this.customClaimImporters) {
       const customClaims = await customClaimImporter.getCustomClaimsAsync(user);
-      customClaims.forEach((customClaim) => {
-        this.addCustomClaim(customClaim);
-      });
+      const customClaimsObject = this.transformClaimsToObject(customClaims);
+      mergedCustomClaims = lodash.merge(mergedCustomClaims, customClaimsObject);
     }
+    return mergedCustomClaims;
   }
 
-  addCustomClaim(customClaim: CustomClaim) {
-    if (
-      !this.customClaims[customClaim.name] ||
-      typeof this.customClaims[customClaim.name] !== "object"
-    )
-      this.customClaims[customClaim.name] = customClaim.value;
-    else
-      this.customClaims[customClaim.name] = {
-        ...this.customClaims[customClaim.name],
-        ...customClaim.value,
-      };
+  transformClaimsToObject(claims: CustomClaim[]): Record<string, any> {
+    return claims.reduce((acc, claim) => {
+      acc[claim.name] = claim.value;
+      return acc;
+    }, {});
   }
 
   async refreshTokensAsync(refreshToken: string): Promise<Tokens> {
