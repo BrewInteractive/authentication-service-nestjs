@@ -92,7 +92,7 @@ describe("SendLoginOtpEmailController", () => {
     const mockValidUser = MockFactory(UserFixture)
       .mutate({
         countryCode: mockSendLoginOtpPhoneRequestDto.phone.countryCode,
-        phoneNumber: mockSendLoginOtpPhoneRequestDto.phone.phoneNumber,
+        phoneNumber: mockSendLoginOtpPhoneRequestDto.phone.number,
       })
       .one();
 
@@ -131,7 +131,7 @@ describe("SendLoginOtpEmailController", () => {
     const mockValidUser = MockFactory(UserFixture)
       .mutate({
         countryCode: mockSendLoginOtpEmailRequestDto.phone.countryCode,
-        phoneNumber: mockSendLoginOtpEmailRequestDto.phone.phoneNumber,
+        phoneNumber: mockSendLoginOtpEmailRequestDto.phone.number,
       })
       .one();
 

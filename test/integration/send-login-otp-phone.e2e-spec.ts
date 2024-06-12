@@ -65,7 +65,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
 
       const phone = MockFactory(PhoneRequestFixture)
         .mutate({
-          phoneNumber: user.phoneNumber,
+          number: user.phoneNumber,
           countryCode: user.countryCode,
         })
         .one();
@@ -95,7 +95,7 @@ describe("SendLoginOtpEmailController (e2e)", () => {
 
       const phone = MockFactory(PhoneRequestFixture)
         .mutate({
-          phoneNumber: user.phoneNumber,
+          number: user.phoneNumber,
           countryCode: user.countryCode,
         })
         .one();

@@ -10,6 +10,7 @@ import { AppModule } from "../../src/app.module";
 import { HttpExceptionFilter } from "../../src/filter/http-exception.filter";
 import { LoginOtpPhoneRequest } from "../../src/login/dto/login-otp-phone-request.dto";
 import { MockFactory } from "mockingbird";
+import { PhoneRequestDto } from "../../src/login/dto/phone.dto";
 import { faker } from "@faker-js/faker";
 import { setupTestDataSourceAsync } from "../test-db";
 
@@ -55,16 +56,17 @@ describe("LoginOtpPhoneController (e2e)", () => {
         .one();
       await userRepository.save(createdUser);
       await otpRepository.save(createdOtp);
+      const requestDto = {
+        phone: {
+          number: createdUser.phoneNumber!,
+          countryCode: createdUser.countryCode!,
+        } as PhoneRequestDto,
+        otpValue: createdOtp.value,
+      } as LoginOtpPhoneRequest;
 
       const response = await request(app.getHttpServer())
         .post("/login-otp-phone")
-        .send({
-          phone: {
-            phoneNumber: createdUser.phoneNumber!,
-            countryCode: createdUser.countryCode!,
-          },
-          otpValue: createdOtp.value,
-        })
+        .send(requestDto)
         .expect(201);
 
       expect(response.body).toHaveProperty("idToken");
@@ -119,11 +121,11 @@ describe("LoginOtpPhoneController (e2e)", () => {
         .post("/login-otp-phone")
         .send({
           phone: {
-            phoneNumber: createdUser.phoneNumber!,
+            number: createdUser.phoneNumber!,
             countryCode: createdUser.countryCode!,
-          },
+          } as PhoneRequestDto,
           otpValue: unexpiredOtp.value,
-        })
+        } as LoginOtpPhoneRequest)
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials.");
@@ -132,16 +134,17 @@ describe("LoginOtpPhoneController (e2e)", () => {
     it("should return error if there is no user", async () => {
       const unexpiredOtp = MockFactory(OtpFixture).one().withPhoneChannel();
       await otpRepository.save(unexpiredOtp);
+      const requestDto = {
+        phone: {
+          number: unexpiredOtp.channel.phone?.phone_number,
+          countryCode: unexpiredOtp.channel.phone?.country_code,
+        } as PhoneRequestDto,
+        otpValue: unexpiredOtp.value,
+      } as LoginOtpPhoneRequest;
 
       const response = await request(app.getHttpServer())
         .post("/login-otp-phone")
-        .send({
-          phone: {
-            phoneNumber: unexpiredOtp.channel.phone?.phone_number,
-            countryCode: unexpiredOtp.channel.phone?.country_code,
-          },
-          otpValue: unexpiredOtp.value,
-        } as LoginOtpPhoneRequest)
+        .send(requestDto)
         .expect(401);
 
       expect(response.body.message).toEqual("Invalid credentials.");

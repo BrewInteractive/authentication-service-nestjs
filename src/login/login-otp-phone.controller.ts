@@ -32,7 +32,7 @@ export class LoginOtpPhoneController {
     try {
       const phone = {
         country_code: loginOtpPhoneRequest.phone.countryCode,
-        phone_number: loginOtpPhoneRequest.phone.phoneNumber,
+        phone_number: loginOtpPhoneRequest.phone.number,
       };
 
       const isOtpValid = await this.otpService.validatePhoneOtpAsync(
@@ -56,7 +56,7 @@ export class LoginOtpPhoneController {
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
         throw new UnauthorizedException(null, { cause: error });
-
+      console.log("login-otp-phone", error);
       throw new InternalServerErrorException();
     }
   }

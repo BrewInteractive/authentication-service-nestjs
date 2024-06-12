@@ -30,7 +30,7 @@ export class PhoneRequestFixture extends PhoneRequestDto {
   countryCode: string;
 
   @Mock((faker) => faker.datatype.string(10))
-  phoneNumber: string;
+  number: string;
 }
 
 export class LoginOtpPhoneRequestFixture extends LoginOtpPhoneRequest {

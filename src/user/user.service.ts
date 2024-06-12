@@ -8,6 +8,7 @@ import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handle
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
 import { InvalidArgumentError } from "../error/invalid-argument.error";
+import { IGetUser } from "./interfaces/get-user.interface";
 
 @Injectable()
 export class UserService {
@@ -22,18 +23,11 @@ export class UserService {
     private readonly userRoleRepository: Repository<UserRole>
   ) {}
 
-  async getUserAsync(options: {
-    username?: string;
-    email?: string;
-    phone?: {
-      phoneNumber?: string;
-      countryCode?: string;
-    };
-  }): Promise<User | null> {
+  async getUserAsync(options: IGetUser): Promise<User | null> {
     if (
       !options.username &&
       !options.email &&
-      (!options.phone?.phoneNumber || !options.phone?.countryCode)
+      (!options.phone?.number || !options.phone?.countryCode)
     )
       throw new InvalidArgumentError(
         "Provide at least one of: username, email, or phone number."
@@ -43,7 +37,10 @@ export class UserService {
     if (options.username) whereClause.push({ username: options.username });
     if (options.email) whereClause.push({ email: options.email });
     if (options.phone) {
-      whereClause.push(options.phone);
+      whereClause.push({
+        phoneNumber: options.phone.number,
+        countryCode: options.phone.countryCode,
+      });
     }
 
     return await this.userRepository.findOne({
@@ -91,7 +88,7 @@ export class UserService {
     const existingUser = await this.getUserAsync({
       username: user.username,
       email: user.email,
-      phone: { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+      phone: { number: user.phoneNumber, countryCode: user.countryCode },
     });
 
     if (existingUser) throw new UserAlreadyExistsError();

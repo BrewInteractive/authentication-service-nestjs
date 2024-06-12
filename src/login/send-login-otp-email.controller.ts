@@ -54,7 +54,7 @@ export class SendLoginOtpEmailController {
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
         return this.otpService.createFakeOtpResult();
-
+      console.log("send-login-otp-email", error);
       throw new InternalServerErrorException();
     }
   }

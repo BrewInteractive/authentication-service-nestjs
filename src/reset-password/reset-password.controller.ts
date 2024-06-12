@@ -43,7 +43,7 @@ export class ResetPasswordController {
     } catch (error) {
       if (error instanceof InvalidResetPasswordRequestError)
         throw new BadRequestException(null, { cause: error });
-
+      console.log("reset-password", error);
       throw new InternalServerErrorException();
     }
   }

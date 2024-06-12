@@ -53,7 +53,7 @@ export class SignUpProfile extends AutomapperProfile {
           (dest) => dest.phoneNumber,
           mapFrom((src) => {
             if (src.phone) {
-              return src.phone.phoneNumber;
+              return src.phone.number;
             }
           })
         ),
