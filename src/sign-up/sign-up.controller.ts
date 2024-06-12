@@ -44,7 +44,7 @@ export class SignUpController {
     } catch (error) {
       if (error instanceof UserAlreadyExistsError)
         throw new ConflictException(null, { cause: error });
-
+      console.log("sign-up", error);
       throw new InternalServerErrorException();
     }
   }

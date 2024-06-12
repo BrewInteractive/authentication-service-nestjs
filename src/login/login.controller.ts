@@ -37,7 +37,7 @@ export class LoginController {
     } catch (error) {
       if (error instanceof InvalidCredentialsError)
         throw new UnauthorizedException(null, { cause: error });
-
+      console.log("login", error);
       throw new InternalServerErrorException();
     }
   }

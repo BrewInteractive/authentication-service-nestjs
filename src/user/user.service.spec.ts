@@ -1,10 +1,12 @@
 import { InvalidCredentialsError, UserAlreadyExistsError } from "../error";
 import { User, UserRole } from "../entities";
 
+import { IGetUser } from "./interfaces/get-user.interface";
 import { IPostRegisterUserHandler } from "./interfaces/post-register-user-handler.interface";
 import { IPreRegisterUserHandler } from "./interfaces/pre-register-user-handler.interface";
 import { IUserValidator } from "./interfaces/user-validator.interface";
 import { MockFactory } from "mockingbird";
+import { PhoneRequestDto } from "../login/dto/phone.dto";
 import { Repository } from "typeorm";
 import { Test } from "@nestjs/testing";
 import { UserFixture } from "../../test/fixtures/user/user.fixture";
@@ -111,7 +113,7 @@ describe("UserService", () => {
 
     const actualResult = await userService.getUserAsync({
       phone: {
-        phoneNumber: expectedResult.phoneNumber,
+        number: expectedResult.phoneNumber,
         countryCode: expectedResult.countryCode,
       },
     });
@@ -136,7 +138,7 @@ describe("UserService", () => {
 
     const actualResult = await userService.getUserAsync({
       phone: {
-        phoneNumber: expectedResult.phoneNumber,
+        number: expectedResult.phoneNumber,
         countryCode: expectedResult.countryCode,
       },
       email: expectedResult.email,
@@ -158,23 +160,40 @@ describe("UserService", () => {
   });
 
   test.each([
-    [{}, "all"],
-    [{ phone: {} }, "phone"],
-    [{ phone: { phoneNumber: faker.phone.number() } }, "phone.countryCode"],
+    [{} as IGetUser, "all"],
+    [{ phone: {} } as IGetUser, "phone"],
     [
-      { phone: { countryCode: faker.location.countryCode() } },
-      "phone.phoneNumber",
-    ],
-    [{ username: "" }, "username"],
-    [{ email: "" }, "email"],
-    [{ username: "", email: "" }, "username and email"],
-    [
-      { phone: { phoneNumber: faker.phone.number(), countryCode: "" } },
+      {
+        phone: { number: faker.phone.number() } as PhoneRequestDto,
+      } as IGetUser,
       "phone.countryCode",
     ],
     [
-      { phone: { phoneNumber: "", countryCode: faker.location.countryCode() } },
+      {
+        phone: { countryCode: faker.location.countryCode() } as PhoneRequestDto,
+      } as IGetUser,
       "phone.phoneNumber",
+    ],
+    [{ username: "" } as IGetUser, "username"],
+    [{ email: "" } as IGetUser, "email"],
+    [{ username: "", email: "" } as IGetUser, "username and email"],
+    [
+      {
+        phone: {
+          number: faker.phone.number(),
+          countryCode: "",
+        } as PhoneRequestDto,
+      } as IGetUser,
+      "phone.countryCode",
+    ],
+    [
+      {
+        phone: {
+          number: "",
+          countryCode: faker.location.countryCode(),
+        } as PhoneRequestDto,
+      } as IGetUser,
+      "phone.number",
     ],
   ])(
     "getUserAsync should throw exception if %s not provided",

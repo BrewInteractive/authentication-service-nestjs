@@ -30,7 +30,7 @@ export class SendLoginOtpPhoneController {
       if (!user) throw new InvalidCredentialsError();
 
       const sendOtpResult = await this.otpService.createPhoneOtpAsync({
-        phone_number: sendLoginOtpPhoneRequest.phone.phoneNumber,
+        phone_number: sendLoginOtpPhoneRequest.phone.number,
         country_code: sendLoginOtpPhoneRequest.phone.countryCode,
       });
 
@@ -39,7 +39,7 @@ export class SendLoginOtpPhoneController {
           otpValue: sendOtpResult.otpValue,
           phoneNumber:
             sendLoginOtpPhoneRequest.phone.countryCode +
-            sendLoginOtpPhoneRequest.phone.phoneNumber,
+            sendLoginOtpPhoneRequest.phone.number,
           authenticationAction: AuthenticationAction.LOGIN,
         });
       }

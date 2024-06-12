@@ -62,7 +62,7 @@ export class ForgotPasswordController {
         error instanceof ActiveResetPasswordRequestExistsError
       )
         throw new BadRequestException(null, { cause: error });
-
+      console.log("forgot-password", error);
       throw new InternalServerErrorException();
     }
   }

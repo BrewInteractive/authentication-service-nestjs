@@ -6,7 +6,7 @@ describe("Phone Validation", () => {
   it("should be verified", async () => {
     const phoneDto: PhoneRequestDto = {
       countryCode: faker.string.numeric(3),
-      phoneNumber: faker.phone.number(),
+      number: faker.phone.number(),
     };
     const errors = await validate(phoneDto);
     expect(errors.length).toBe(0);

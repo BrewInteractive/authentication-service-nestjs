@@ -8,7 +8,7 @@ describe("SendLoginOtpPhoneRequest", () => {
     const request = new SendLoginOtpPhoneRequest();
     const phone = new PhoneRequestDto();
     phone.countryCode = faker.location.countryCode();
-    phone.phoneNumber = faker.phone.number();
+    phone.number = faker.phone.number();
     request.phone = phone;
 
     const errors = await validate(request);
@@ -19,7 +19,7 @@ describe("SendLoginOtpPhoneRequest", () => {
     const request = new SendLoginOtpPhoneRequest();
     const phone = new PhoneRequestDto();
     phone.countryCode = "";
-    phone.phoneNumber = faker.phone.number();
+    phone.number = faker.phone.number();
     request.phone = phone;
 
     const errors = await validate(request.phone);
@@ -30,7 +30,7 @@ describe("SendLoginOtpPhoneRequest", () => {
     const request = new SendLoginOtpPhoneRequest();
     const phone = new PhoneRequestDto();
     phone.countryCode = faker.location.countryCode();
-    phone.phoneNumber = "";
+    phone.number = "";
     request.phone = phone;
 
     const errors = await validate(request.phone);

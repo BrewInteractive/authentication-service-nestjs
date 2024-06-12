@@ -8,5 +8,5 @@ export class PhoneRequestDto {
 
   @IsNotEmpty()
   @AutoMap()
-  phoneNumber: string;
+  number: string;
 }

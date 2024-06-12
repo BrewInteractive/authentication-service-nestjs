@@ -27,7 +27,7 @@ export class RefreshTokenController {
     } catch (error) {
       if (error instanceof InvalidRefreshTokenError)
         throw new UnauthorizedException(null, { cause: error });
-
+      console.log("refresh-token", error);
       throw new InternalServerErrorException();
     }
   }

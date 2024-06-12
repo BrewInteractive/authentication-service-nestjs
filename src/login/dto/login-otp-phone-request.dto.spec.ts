@@ -8,7 +8,7 @@ describe("LoginOtpPhoneRequest Validation", () => {
     const loginOtpPhoneRequest = new LoginOtpPhoneRequest();
     loginOtpPhoneRequest.phone = {
       countryCode: faker.string.numeric(3),
-      phoneNumber: faker.phone.number(),
+      number: faker.phone.number(),
     } as PhoneRequestDto;
     loginOtpPhoneRequest.otpValue = faker.string.sample(6);
     const errors = await validate(loginOtpPhoneRequest);
