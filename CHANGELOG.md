@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.4.1...v2.4.2) (2024-07-05)
+
+
+### Bug Fixes
+
+* fix for token custom claims ([7f3a73a](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7f3a73acddbb6e434a638734694f32e832ec4720))
+
 ### [2.4.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.4.0...v2.4.1) (2024-06-12)
 
 ## [2.4.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.3.0...v2.4.0) (2024-05-30)
