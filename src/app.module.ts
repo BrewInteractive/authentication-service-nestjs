@@ -12,7 +12,7 @@ import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { LoginModule } from "./login/login.module";
-import { NotificationModule } from "./notification/notification.module";
+import { AuthNotificationModule } from "./notification/auth-notification.module";
 import { PluginModule } from "@brewww/nestjs-plugin-module";
 import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 import { ResetPasswordModule } from "./reset-password/reset-password.module";
@@ -43,10 +43,16 @@ import { smsConfig } from "./config/sms.config";
     TypeOrmModule.forRoot(dataSourceOptions),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, authenticationConfig, emailConfig, serverConfig, smsConfig],
+      load: [
+        appConfig,
+        authenticationConfig,
+        emailConfig,
+        serverConfig,
+        smsConfig,
+      ],
     }),
     RefreshTokenModule,
-    NotificationModule,
+    AuthNotificationModule,
   ],
   providers: [AppService],
   exports: [AppService],

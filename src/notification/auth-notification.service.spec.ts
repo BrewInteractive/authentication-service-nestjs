@@ -10,14 +10,14 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AuthenticationAction } from "../enum";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
-import { EmailModule } from "../email/email.module";
-import { EmailService } from "../email/email.service";
+import { EmailModule } from "@brewww/nestjs-notification-module/dist/email/email.module";
+import { EmailService } from "@brewww/nestjs-notification-module/dist/email/email.service";
 import { MockFactory } from "mockingbird";
-import { NotificationService } from "./notification.service";
+import { AuthNotificationService } from "./auth-notification.service";
 import { OtpEmailTemplateNotFoundError } from "./error";
 import { OtpSmsTemplateNotFoundError } from "./error/otp-sms-template-not-found.error.ts";
-import { SmsModule } from "../sms/sms.module";
-import { SmsService } from "../sms/sms.service";
+import { SmsModule } from "@brewww/nestjs-notification-module/dist/sms/sms.module";
+import { SmsService } from "@brewww/nestjs-notification-module/dist/sms/sms.service";
 import { TemplateModule } from "../template/template.module";
 import { TemplateService } from "../template/template.service";
 import { classes } from "@automapper/classes";
@@ -25,7 +25,7 @@ import { error } from "console";
 import { faker } from "@faker-js/faker";
 
 describe("NotificationService", () => {
-  let notificationService: NotificationService;
+  let authNotificationService: AuthNotificationService;
   let templateService: TemplateService;
   let emailService: EmailService;
   let smsService: SmsService;
@@ -45,17 +45,19 @@ describe("NotificationService", () => {
           load: [() => mockEmailConfig, () => mockSmsConfig],
         }),
       ],
-      providers: [NotificationService],
+      providers: [AuthNotificationService],
     }).compile();
 
-    notificationService = module.get<NotificationService>(NotificationService);
+    authNotificationService = module.get<AuthNotificationService>(
+      AuthNotificationService
+    );
     templateService = module.get<TemplateService>("TemplateService");
     emailService = module.get<EmailService>("EmailService");
     smsService = module.get<SmsService>("SmsService");
   });
 
   it("should be defined", () => {
-    expect(notificationService).toBeDefined();
+    expect(authNotificationService).toBeDefined();
   });
 
   it("should send login otp email", async () => {
@@ -76,7 +78,9 @@ describe("NotificationService", () => {
       .spyOn(emailService, "sendEmailAsync")
       .mockResolvedValue();
 
-    await notificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent);
+    await authNotificationService.onOtpEmailCreatedAsync(
+      mockOtpEmailCreatedEvent
+    );
 
     expect(templateSpy).toHaveBeenCalledWith("en");
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
@@ -105,7 +109,7 @@ describe("NotificationService", () => {
       .mockResolvedValue();
 
     await expect(
-      notificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
+      authNotificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
     ).rejects.toThrow(expectedError);
 
     expect(templateSpy).toHaveBeenCalledWith("en");
@@ -130,7 +134,7 @@ describe("NotificationService", () => {
       .spyOn(emailService, "sendEmailAsync")
       .mockResolvedValue();
 
-    await notificationService.onResetPasswordEmailCreatedAsync(
+    await authNotificationService.onResetPasswordEmailCreatedAsync(
       resetPasswordEmailCreatedEvent
     );
 
@@ -170,7 +174,7 @@ describe("NotificationService", () => {
       .mockResolvedValue();
 
     // Act
-    await notificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
+    await authNotificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
 
     // Assert
     expect(templateSpy).toHaveBeenCalledWith("en");
@@ -200,7 +204,7 @@ describe("NotificationService", () => {
 
     // Act
     await expect(
-      notificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent)
+      authNotificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent)
     ).rejects.toThrow(expectedError);
 
     // Assert

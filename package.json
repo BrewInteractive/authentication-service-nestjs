@@ -40,6 +40,7 @@
     "@automapper/nestjs": "^8.8.1",
     "@automapper/types": "^6.3.1",
     "@aws-sdk/client-ses": "3.427.0",
+    "@brewww/nestjs-notification-module": "^0.3.0",
     "@brewww/nestjs-plugin-module": "^1.0.6",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
