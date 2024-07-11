@@ -45,6 +45,9 @@ export class User {
   @Column({ name: "phone_number", nullable: true })
   phoneNumber?: string;
 
+  @Column({ name: "phone_verified", default: false })
+  phoneVerified: boolean;
+
   @AutoMap()
   @Column({ name: "first_name" })
   firstName: string;
@@ -53,10 +56,10 @@ export class User {
   @Column({ name: "last_name" })
   lastName: string;
 
-  @Column({ name: "password_hash" })
+  @Column({ name: "password_hash", nullable: true })
   passwordHash: string;
 
-  @Column({ name: "password_salt" })
+  @Column({ name: "password_salt", nullable: true })
   passwordSalt: string;
 
   @Column({ name: "email_verified", default: false })
