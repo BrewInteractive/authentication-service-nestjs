@@ -10,13 +10,13 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { instance, mock } from "ts-mockito";
 
 import { ConfigService } from "@nestjs/config";
-import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { InvalidRefreshTokenError } from "../error";
 import { MockFactory } from "mockingbird";
 import { Repository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Tokens } from "../dto";
+import { UserCustomClaimsImporter } from "./concrete/user-custom-claims-importer.type";
 
 jest.mock("jsonwebtoken");
 
@@ -145,18 +145,6 @@ describe("TokenService", () => {
     );
   });
 
-  it("should add custom claims to the TokenService instance", () => {
-    const expectedCustomClaims = {
-      claim1: "test",
-      claim2: { objKey1: "test", objKey2: "test" },
-    };
-    tokenService.addCustomClaim(new CustomClaim("claim1", "test"));
-    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey1: "test" }));
-    tokenService.addCustomClaim(new CustomClaim("claim2", { objKey2: "test" }));
-
-    expect(tokenService["customClaims"]).toEqual(expectedCustomClaims);
-  });
-
   it("should add custom claim importer", () => {
     const mockedCustomClaimImporter: ICustomClaimsImporter =
       mock<ICustomClaimsImporter>();
@@ -202,5 +190,29 @@ describe("TokenService", () => {
     await expect(() => tokenService.refreshTokensAsync(token)).rejects.toThrow(
       InvalidRefreshTokenError
     );
+  });
+
+  it("importer should only have one", async () => {
+    const user = MockFactory(UserFixture).one() as User;
+    const expectedTokens = MockFactory(TokensFixture).one() as Tokens;
+
+    (jwt.sign as jest.Mock).mockImplementation(() => expectedTokens.idToken);
+
+    jest.spyOn(refreshTokenRepository, "save").mockResolvedValue({
+      refreshToken: expectedTokens.refreshToken,
+    } as RefreshToken);
+
+    await tokenService.createTokensAsync(
+      user,
+      configService.get("jwt.expiresIn")
+    );
+    await tokenService.createTokensAsync(
+      user,
+      configService.get("jwt.expiresIn")
+    );
+
+    expect(tokenService["customClaimImporters"]).toEqual([
+      new UserCustomClaimsImporter(),
+    ]);
   });
 });
