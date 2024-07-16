@@ -1,4 +1,5 @@
 import {
+  Otp,
   RefreshToken,
   User,
   UserResetPasswordRequest,
@@ -11,6 +12,7 @@ import { SignUpModule } from "./sign-up.module";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 
 describe("SignUpModule", () => {
   let signUpModule: SignUpModule;
@@ -25,6 +27,7 @@ describe("SignUpModule", () => {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
+        EventEmitterModule.forRoot(),
       ],
     })
       .overrideProvider(getRepositoryToken(UserRole))
@@ -42,6 +45,11 @@ describe("SignUpModule", () => {
         save: jest.fn(),
       })
       .overrideProvider(getRepositoryToken(RefreshToken))
+      .useValue({
+        save: jest.fn(),
+        findOne: jest.fn(),
+      })
+      .overrideProvider(getRepositoryToken(Otp))
       .useValue({
         save: jest.fn(),
         findOne: jest.fn(),
