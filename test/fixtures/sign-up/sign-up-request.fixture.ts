@@ -1,6 +1,9 @@
 import { Mock } from "mockingbird";
 import { PhoneRequestFixture } from "../login";
-import { SignUpRequest } from "../../../src/sign-up/dto";
+import {
+  SignUpRequest,
+  SendSignUpOtpPhoneRequest,
+} from "../../../src/sign-up/dto";
 
 export class SignUpRequestFixture extends SignUpRequest {
   @Mock((faker) => faker.internet.userName())
@@ -23,4 +26,9 @@ export class SignUpRequestFixture extends SignUpRequest {
 
   @Mock()
   appData: object;
+}
+
+export class SendSignUpOtpPhoneRequestFixture extends SendSignUpOtpPhoneRequest {
+  @Mock(PhoneRequestFixture)
+  phone: PhoneRequestFixture;
 }

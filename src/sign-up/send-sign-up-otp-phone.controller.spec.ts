@@ -28,7 +28,7 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { ConflictException } from "@nestjs/common";
 import { UserAlreadyExistsError } from "../error";
 
-describe("SendSignUpOtpEmailController", () => {
+describe("SendSignUpOtpPhoneController", () => {
   let sendSignUpOtpPhoneController: SendSignUpOtpPhoneController;
   let otpService: OtpService;
   let userService: UserService;
@@ -117,7 +117,7 @@ describe("SendSignUpOtpEmailController", () => {
   });
 
   it("should return send otp result with active otp", async () => {
-    const mockSendSignUpOtpEmailRequestDto = MockFactory(
+    const mockSendSignUpOtpPhoneRequestDto = MockFactory(
       SendSignUpOtpPhoneRequestFixture
     ).one();
 
@@ -140,7 +140,7 @@ describe("SendSignUpOtpEmailController", () => {
 
     await expect(
       sendSignUpOtpPhoneController.sendSignUpOtpPhoneAsync(
-        mockSendSignUpOtpEmailRequestDto
+        mockSendSignUpOtpPhoneRequestDto
       )
     ).resolves.toEqual(expectedResult);
   });
