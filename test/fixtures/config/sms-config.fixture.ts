@@ -1,6 +1,17 @@
 import { Mock } from "mockingbird";
-import { SmsServiceType } from "../../../src/sms/enum/sms-service-type.enum";
-import { MutluCellSmsConfigFixture } from "../sms/mutlucell-sms-config.fixture";
+import { MutluCellSmsConfig } from "../../../node_modules/@brewww/nestjs-notification-module/dist/sms/providers/mutlucell/mutlucell-sms.config";
+import { SmsServiceType } from "../../../node_modules/@brewww/nestjs-notification-module/dist/sms/enum/sms-service-type.enum";
+
+export class MutluCellSmsConfigFixture extends MutluCellSmsConfig {
+  @Mock((faker) => faker.internet.userName())
+  username: string;
+  @Mock((faker) => faker.internet.password())
+  password: string;
+  @Mock((faker) => faker.random.words)
+  originator: string;
+  @Mock((faker) => faker.internet.url())
+  apiUrl: string;
+}
 
 export class SmsConfigFixture {
   @Mock(SmsServiceType.MUTLUCELL)
