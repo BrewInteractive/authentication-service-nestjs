@@ -1,4 +1,3 @@
-import { EmailService } from "../email/email.service";
 import { Inject, Injectable } from "@nestjs/common";
 import { TemplateService } from "../template/template.service";
 import { OnEvent } from "@nestjs/event-emitter";
@@ -10,16 +9,16 @@ import {
   OtpEmailCreatedEvent,
   OtpSmsCreatedEvent,
 } from "./dto";
-import { SmsService } from "../sms/sms.service";
 import { OtpSmsTemplateNotFoundError } from "./error/otp-sms-template-not-found.error.ts";
+import { NotificationService } from "@brewww/nestjs-notification-module/";
 
 @Injectable()
-export class NotificationService {
+export class AuthNotificationService {
   constructor(
     @Inject("TemplateService")
     private readonly templateService: TemplateService,
-    @Inject("EmailService") private readonly emailService: EmailService,
-    @Inject("SmsService") private readonly smsService: SmsService,
+    @Inject("NotificationService")
+    private readonly notificationService: NotificationService,
     private readonly configService: ConfigService
   ) {}
 
@@ -51,7 +50,7 @@ export class NotificationService {
     );
 
     if (sms) {
-      this.smsService.sendSmsAsync({
+      this.notificationService.sendSms({
         message: sms.message,
         phoneNumber: otpSmsCreatedEvent.phoneNumber,
       });
@@ -121,7 +120,7 @@ export class NotificationService {
     to: string,
     content: string
   ): Promise<void> {
-    return await this.emailService.sendEmailAsync({
+    return await this.notificationService.sendEmail({
       from: this.configService.get<string>("emailFrom"),
       to,
       subject,
