@@ -1,7 +1,8 @@
-import { AwsEmailConfig, SmtpEmailConfig } from "../../../src/email/providers";
-
-import { EmailServiceType } from "../../../src/email/enum/email-service-type.enum";
+import { AwsEmailConfig } from "../../../node_modules/@brewww/nestjs-notification-module/dist/email/providers/aws/aws-email.config";
+import { EmailServiceType } from "../../../node_modules/@brewww/nestjs-notification-module/dist/email/enum/email-service-type.enum";
 import { Mock } from "mockingbird";
+import { SendgridConfig } from "../../../node_modules/@brewww/nestjs-notification-module/dist/email/providers/sendgrid/sendgrid.config";
+import { SmtpEmailConfig } from "../../../node_modules/@brewww/nestjs-notification-module/dist/email/providers/smtp/smtp-email.config";
 
 class AwsEmailConfigFixture extends AwsEmailConfig {
   @Mock()
@@ -22,24 +23,38 @@ class SmtpAuthEmailConfigFixture {
   pass: string;
 }
 
-class SmtpEmailConfigFixture extends SmtpEmailConfig {
-  @Mock((faker) => faker.internet.url())
-  host: string;
-
-  @Mock(SmtpAuthEmailConfigFixture)
-  auth: SmtpAuthEmailConfigFixture;
-}
-
 class EmailSubjectsConfigurationsFixture {
   @Mock()
   loginOtp: string;
 }
 
-class SendGridEmailConfigFixture {
+class SendGridEmailConfigFixture extends SendgridConfig {
   @Mock()
   apiKey: string;
 }
+export class AuthSmtpEmailConfigFixture {
+  user: string;
+  pass: string;
+}
 
+export class SmtpEmailConfigFixture extends SmtpEmailConfig {
+  @Mock()
+  host: string;
+
+  @Mock()
+  port: string;
+
+  @Mock(AuthSmtpEmailConfigFixture)
+  auth: AuthSmtpEmailConfigFixture;
+
+  @Mock()
+  secure: boolean;
+
+  @Mock()
+  tls: {
+    rejectUnauthorized: boolean;
+  };
+}
 export class EmailConfigFixture {
   @Mock(EmailServiceType.AWS)
   emailService: string;
