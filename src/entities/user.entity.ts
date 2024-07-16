@@ -57,10 +57,10 @@ export class User {
   lastName: string;
 
   @Column({ name: "password_hash", nullable: true })
-  passwordHash: string;
+  passwordHash?: string;
 
   @Column({ name: "password_salt", nullable: true })
-  passwordSalt: string;
+  passwordSalt?: string;
 
   @Column({ name: "email_verified", default: false })
   emailVerified: boolean;
