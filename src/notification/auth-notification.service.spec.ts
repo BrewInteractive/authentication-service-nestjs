@@ -7,21 +7,19 @@ import {
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
+import { AuthNotificationService } from "./auth-notification.service";
 import { AuthenticationAction } from "../enum";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
-import { EmailModule } from "@brewww/nestjs-notification-module/dist/email/email.module";
 import { EmailService } from "@brewww/nestjs-notification-module/dist/email/email.service";
 import { MockFactory } from "mockingbird";
-import { AuthNotificationService } from "./auth-notification.service";
+import { NotificationModule } from "@brewww/nestjs-notification-module";
 import { OtpEmailTemplateNotFoundError } from "./error";
 import { OtpSmsTemplateNotFoundError } from "./error/otp-sms-template-not-found.error.ts";
-import { SmsModule } from "@brewww/nestjs-notification-module/dist/sms/sms.module";
 import { SmsService } from "@brewww/nestjs-notification-module/dist/sms/sms.service";
 import { TemplateModule } from "../template/template.module";
 import { TemplateService } from "../template/template.service";
 import { classes } from "@automapper/classes";
-import { error } from "console";
 import { faker } from "@faker-js/faker";
 
 describe("NotificationService", () => {
@@ -34,8 +32,7 @@ describe("NotificationService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        EmailModule,
-        SmsModule,
+        NotificationModule,
         TemplateModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
