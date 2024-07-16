@@ -15,7 +15,6 @@ describe("AuthNotificationModule", () => {
     const mockSmsConfig = MockFactory(SmsConfigFixture).one();
     const app = await Test.createTestingModule({
       imports: [
-        AuthNotificationModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
@@ -23,6 +22,7 @@ describe("AuthNotificationModule", () => {
           isGlobal: true,
           load: [() => mockEmailConfig, () => mockSmsConfig],
         }),
+        AuthNotificationModule,
       ],
     }).compile();
 

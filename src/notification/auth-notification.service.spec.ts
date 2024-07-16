@@ -32,7 +32,6 @@ describe("NotificationService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        NotificationModule,
         TemplateModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
@@ -41,6 +40,7 @@ describe("NotificationService", () => {
           isGlobal: true,
           load: [() => mockEmailConfig, () => mockSmsConfig],
         }),
+        NotificationModule,
       ],
       providers: [AuthNotificationService],
     }).compile();
