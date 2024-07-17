@@ -3,19 +3,18 @@ import { EmailConfigFixture, SmsConfigFixture } from "../../test/fixtures";
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
 import { MockFactory } from "mockingbird";
-import { NotificationModule } from "./notification.module";
+import { AuthNotificationModule } from "./auth-notification.module";
 import { Test } from "@nestjs/testing";
 import { classes } from "@automapper/classes";
 
-describe("NotificationModule", () => {
-  let notificationModule: NotificationModule;
+describe("AuthNotificationModule", () => {
+  let authNotificationModule: AuthNotificationModule;
 
   beforeEach(async () => {
     const mockEmailConfig = MockFactory(EmailConfigFixture).one();
     const mockSmsConfig = MockFactory(SmsConfigFixture).one();
     const app = await Test.createTestingModule({
       imports: [
-        NotificationModule,
         AutomapperModule.forRoot({
           strategyInitializer: classes(),
         }),
@@ -23,13 +22,16 @@ describe("NotificationModule", () => {
           isGlobal: true,
           load: [() => mockEmailConfig, () => mockSmsConfig],
         }),
+        AuthNotificationModule,
       ],
     }).compile();
 
-    notificationModule = app.get<NotificationModule>(NotificationModule);
+    authNotificationModule = app.get<AuthNotificationModule>(
+      AuthNotificationModule
+    );
   });
 
   it("Should be defined", () => {
-    expect(notificationModule).toBeDefined();
+    expect(authNotificationModule).toBeDefined();
   });
 });
