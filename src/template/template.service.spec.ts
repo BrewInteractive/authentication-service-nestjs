@@ -1,5 +1,4 @@
 import * as Handlebars from "handlebars";
-
 import { TemplateService } from "./template.service";
 import { faker } from "@faker-js/faker";
 import { readFileSync } from "fs";
@@ -82,6 +81,38 @@ describe("TemplateService", () => {
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
       `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
+      "utf8"
+    );
+  });
+
+  it("should return signup otp email template", () => {
+    // Arrange
+    const locale = faker.rawDefinitions.metadata.language;
+    const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
+    const mockReadFileSync = readFileSync as jest.Mock;
+    mockReadFileSync.mockReturnValue(mockHtmlTemplate);
+    // Act
+    const html = templateService.getSignupOtpEmailTemplate(locale);
+    // Assert
+    expect(html).toBeDefined();
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      `${__dirname}/templates/html/${locale}/sign-up-otp.html`,
+      "utf8"
+    );
+  });
+
+  it("should return signup otp sms template", () => {
+    // Arrange
+    const locale = faker.rawDefinitions.metadata.language;
+    const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
+    const mockReadFileSync = readFileSync as jest.Mock;
+    mockReadFileSync.mockReturnValue(mockHtmlTemplate);
+    // Act
+    const html = templateService.getSignUpOtpSmsTemplate(locale);
+    // Assert
+    expect(html).toBeDefined();
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      `${__dirname}/templates/text/${locale}/sign-up-otp-sms.txt`,
       "utf8"
     );
   });
