@@ -7,14 +7,14 @@ import { readFileSync } from "fs";
 export class TemplateService {
   public getLoginOtpEmailTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/templates/html/${locale}/otp.html`,
+      `${__dirname}/templates/html/${locale}/login-otp.html`,
       "utf8"
     );
   }
 
   public getLoginOtpSmsTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/templates/text/${locale}/otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
       "utf8"
     );
   }
@@ -33,14 +33,14 @@ export class TemplateService {
 
    public getSignupOtpEmailTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/templates/html/${locale}/otp.html`,
+      `${__dirname}/templates/html/${locale}/sign-up-otp.html`,
       "utf8"
     );
   }
 
     public getSignUpOtpSmsTemplate(locale: string): string {
     return readFileSync(
-      `${__dirname}/templates/text/${locale}/otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/sign-up-otp-sms.txt`,
       "utf8"
     );
   }

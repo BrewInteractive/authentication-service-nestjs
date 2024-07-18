@@ -24,7 +24,7 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/html/${locale}/otp.html`,
+      `${__dirname}/templates/html/${locale}/login-otp.html`,
       "utf8"
     );
   });
@@ -80,7 +80,7 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/text/${locale}/otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
       "utf8"
     );
   });
@@ -96,7 +96,7 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/html/${locale}/otp.html`,
+      `${__dirname}/templates/html/${locale}/sign-up-otp.html`,
       "utf8"
     );
   });
@@ -112,7 +112,7 @@ describe("TemplateService", () => {
     // Assert
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
-      `${__dirname}/templates/text/${locale}/otp-sms.txt`,
+      `${__dirname}/templates/text/${locale}/sign-up-otp-sms.txt`,
       "utf8"
     );
   });
