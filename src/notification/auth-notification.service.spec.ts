@@ -142,9 +142,11 @@ describe("NotificationService", () => {
     expect(emailSpy).toBeCalled();
   });
 
-  it("should send otp sms", async () => {
+  it("should send otp sms for LOGIN action", async () => {
     // Arrange
-    const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture).one();
+    const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture)
+      .mutate({ authenticationAction: AuthenticationAction.LOGIN })
+      .one();
 
     const mockTemplate = faker.lorem.paragraphs(3);
     const compiledMockTemplate = faker.lorem.paragraphs(3);
@@ -181,11 +183,46 @@ describe("NotificationService", () => {
     expect(sendSmsAsyncSpy).toHaveBeenCalledWith(mockSms);
   });
 
+  it("should send otp sms for SIGNUP action", async () => {
+    // Arrange
+    const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture)
+      .mutate({ authenticationAction: AuthenticationAction.SIGNUP })
+      .one();
+
+    const mockTemplate = faker.lorem.paragraphs(3);
+    const compiledMockTemplate = faker.lorem.paragraphs(3);
+
+    const mockSms = {
+      message: compiledMockTemplate,
+      phoneNumber: mockOtpSmsCreatedEvent.phoneNumber,
+    };
+
+    const sendSmsAsyncSpy = jest
+      .spyOn(smsService, "sendSmsAsync")
+      .mockResolvedValue();
+
+    const templateSpy = jest
+      .spyOn(templateService, "getSignUpOtpSmsTemplate")
+      .mockReturnValue(mockTemplate);
+
+    const injectDataSpy = jest
+      .spyOn(templateService, "injectData")
+      .mockReturnValue(compiledMockTemplate);
+
+    // Act
+    await authNotificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
+
+    // Assert
+    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
+      otpValue: mockOtpSmsCreatedEvent.otpValue,
+    });
+    expect(sendSmsAsyncSpy).toHaveBeenCalledWith(mockSms);
+  });
+
   it("should not send otp sms because the template is not found", async () => {
     // Arrange
     const mockOtpSmsCreatedEvent = MockFactory(OtpSmsCreatedEventFixture).one();
-
-    const mockTemplate = faker.lorem.paragraphs(3);
 
     const templateSpy = jest
       .spyOn(templateService, "getLoginOtpSmsTemplate")
