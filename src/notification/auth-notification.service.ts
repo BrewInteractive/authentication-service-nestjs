@@ -85,6 +85,8 @@ export class AuthNotificationService {
     let template = null;
     if (authenticationAction === AuthenticationAction.LOGIN)
       template = this.templateService.getLoginOtpEmailTemplate("en");
+    if (authenticationAction === AuthenticationAction.SIGNUP)
+      template = this.templateService.getSignupOtpEmailTemplate("en");
 
     if (template == null)
       throw new OtpEmailTemplateNotFoundError(authenticationAction);
