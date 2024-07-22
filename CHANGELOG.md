@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.4.2...v2.5.0) (2024-07-22)
+
+
+### Features
+
+* Add phone verified and alter password fields in users ([331f8ff](https://github.com/BrewInteractive/authentication-service-nestjs/commit/331f8ffcbf893a9ac64cc7c14632e252dc741484))
+* add POST /send-signup-otp-email endpoint ([2f6171a](https://github.com/BrewInteractive/authentication-service-nestjs/commit/2f6171ae5f189e0494672636eddd71f9a23ce3fc))
+* add POST /send-signup-otp-phone endpoint ([6df564b](https://github.com/BrewInteractive/authentication-service-nestjs/commit/6df564b2d47f6a4119e2c057b24ddbc286d2bc1e))
+* add sign-up otp email e2e test with auth notification sign-up template ([8f6d6fb](https://github.com/BrewInteractive/authentication-service-nestjs/commit/8f6d6fb3cf13abf87e56bb93ae4cc2f9482a1ba6))
+* add sign-up otp phone e2e test with auth notification sign-up template ([6da1ce7](https://github.com/BrewInteractive/authentication-service-nestjs/commit/6da1ce7b36b7fdbd01832b27ed6d1e365f7d45a4))
+* add sign-up-otp-phone and email endpoint ([d9f1895](https://github.com/BrewInteractive/authentication-service-nestjs/commit/d9f189518afba411645524a8e13d417aa91f0405))
+* add signup otp templates ([7257d2a](https://github.com/BrewInteractive/authentication-service-nestjs/commit/7257d2a409a7f61abaa7c57d426561ef0cbc5547))
+* Drop user identifier constraint and add with phone number and country code in PostgreSQL migrations ([b01d153](https://github.com/BrewInteractive/authentication-service-nestjs/commit/b01d153184b454e4b00753362a3869de92530417))
+
+
+### Bug Fixes
+
+* lint, format and fix duplicate roles mapping ([36bc244](https://github.com/BrewInteractive/authentication-service-nestjs/commit/36bc244b0a590ffc292fd266234eccd007f14feb))
+
 ### [2.4.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.4.1...v2.4.2) (2024-07-05)
 
 
