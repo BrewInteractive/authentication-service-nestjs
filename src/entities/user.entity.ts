@@ -1,7 +1,5 @@
-import { AutoMap } from "@automapper/classes";
-import { SnowflakeId } from "../utils/snowflake-id";
 import * as crypto from "crypto";
-import { UserRole } from "./user-role.entity";
+
 import {
   BeforeInsert,
   Check,
@@ -13,10 +11,16 @@ import {
   Unique,
   UpdateDateColumn,
 } from "typeorm";
+
+import { AutoMap } from "@automapper/classes";
+import { SnowflakeId } from "../utils/snowflake-id";
 import { UserResetPasswordRequest } from "./user-reset-password-request.entity";
+import { UserRole } from "./user-role.entity";
 
 @Entity({ name: "users" })
-@Check(`"email" IS NOT NULL OR "username" IS NOT NULL`)
+@Check(
+  `"email" IS NOT NULL OR "username" IS NOT NULL OR ("phone_number" IS NOT NULL AND "country_code" IS NOT NULL)`
+)
 @Unique(["phoneNumber", "countryCode"])
 export class User {
   @PrimaryColumn()
