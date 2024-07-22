@@ -24,7 +24,10 @@ import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { SignUpProfile } from "./mapping-profiles/sign-up.mapping-profile";
-import { InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
+import {
+  InternalServerErrorException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { UserAlreadyExistsError } from "../error";
 
 describe("SignUpOtpPhoneController", () => {
@@ -127,7 +130,9 @@ describe("SignUpOtpPhoneController", () => {
     ).one();
 
     jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
-    jest.spyOn(otpService, "validatePhoneOtpAsync").mockResolvedValueOnce(false);
+    jest
+      .spyOn(otpService, "validatePhoneOtpAsync")
+      .mockResolvedValueOnce(false);
 
     await expect(
       signUpOtpPhoneController.signUpAsync(mockSignUpPhoneRequestDto)

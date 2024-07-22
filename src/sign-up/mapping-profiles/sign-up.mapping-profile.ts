@@ -17,111 +17,94 @@ export class SignUpProfile extends AutomapperProfile {
     this.salt = bcrypt.genSaltSync();
   }
 
+  private mapRoles<T>() {
+    return mapFrom<
+      T,
+      User,
+      {
+        role: {
+          name: string;
+        };
+      }[]
+    >(() => {
+      if (!authenticationConfig().userDefaultRole) return null;
+      else
+        return [
+          {
+            role: {
+              name: authenticationConfig().userDefaultRole,
+            },
+          },
+        ];
+    });
+  }
+
   override get profile() {
-    return (mapper) => {      
-       createMap(
-      mapper,
-      SignUpRequest,
-      User,
-      forMember(
-        (dest) => dest.passwordSalt,
-        mapFrom(() => {
-          return this.salt;
-        })
-      ),
-      forMember(
-        (dest) => dest.passwordHash,
-        mapFrom((src: SignUpRequest) => {
-          const salt = this.salt;
-          const hash = bcrypt.hashSync(src.password, salt);
-          return hash;
-        })
-      ),
-      forMember(
-        (dest) => dest.roles,
-        mapFrom(() => {
-          if (!authenticationConfig().userDefaultRole) return null;
-          else
-            return [
-              {
-                role: {
-                  name: authenticationConfig().userDefaultRole,
-                },
-              },
-            ];
-        })
-      ),
-      forMember(
-        (dest) => dest.phoneNumber,
-        mapFrom((src) => {
-          if (src.phone) {
-            return src.phone.number;
-          }
-        })
-      ),
-      forMember(
-        (dest) => dest.countryCode,
-        mapFrom((src) => {
-          if (src.phone) {
-            return src.phone.countryCode;
-          }
-        })
-      )
-    );
-       createMap(
-      mapper,
-      SignUpOtpEmailRequest,
-      User,
-      forMember(
-        (dest) => dest.roles,
-        mapFrom(() => {
-          if (!authenticationConfig().userDefaultRole) return null;
-          else
-            return [
-              {
-                role: {
-                  name: authenticationConfig().userDefaultRole,
-                },
-              },
-            ];
-        })
-      ),
-    );
-     createMap(
-      mapper,
-      SignUpOtpPhoneRequest,
-      User,
-      forMember(
-        (dest) => dest.roles,
-        mapFrom(() => {
-          if (!authenticationConfig().userDefaultRole) return null;
-          else
-            return [
-              {
-                role: {
-                  name: authenticationConfig().userDefaultRole,
-                },
-              },
-            ];
-        })
-      ),
-      forMember(
-        (dest) => dest.phoneNumber,
-        mapFrom((src) => {
-          if (src.phone) {
-            return src.phone.number;
-          }
-        })
-      ),
-      forMember(
-        (dest) => dest.countryCode,
-        mapFrom((src) => {
-          if (src.phone) {
-            return src.phone.countryCode;
-          }
-        })
-      )
-    );
+    return (mapper) => {
+      createMap(
+        mapper,
+        SignUpRequest,
+        User,
+        forMember(
+          (dest) => dest.passwordSalt,
+          mapFrom(() => {
+            return this.salt;
+          })
+        ),
+        forMember(
+          (dest) => dest.passwordHash,
+          mapFrom((src: SignUpRequest) => {
+            const salt = this.salt;
+            const hash = bcrypt.hashSync(src.password, salt);
+            return hash;
+          })
+        ),
+        forMember((dest) => dest.roles, this.mapRoles<SignUpRequest>()),
+        forMember(
+          (dest) => dest.phoneNumber,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.number;
+            }
+          })
+        ),
+        forMember(
+          (dest) => dest.countryCode,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.countryCode;
+            }
+          })
+        )
+      );
+      createMap(
+        mapper,
+        SignUpOtpEmailRequest,
+        User,
+        forMember((dest) => dest.roles, this.mapRoles<SignUpOtpEmailRequest>())
+      );
+      createMap(
+        mapper,
+        SignUpOtpPhoneRequest,
+        User,
+        forMember((dest) => dest.roles, this.mapRoles<SignUpOtpPhoneRequest>()),
+        forMember(
+          (dest) => dest.phoneNumber,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.number;
+            }
+          })
+        ),
+        forMember(
+          (dest) => dest.countryCode,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone.countryCode;
+            }
+          })
+        )
+      );
     };
   }
 }
