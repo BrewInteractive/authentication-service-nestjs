@@ -23,6 +23,7 @@ import { UserModule } from "./user/user.module";
 import { classes } from "@automapper/classes";
 import { dataSourceOptions } from "../db/data-source";
 import { smsConfig } from "./config/sms.config";
+import { TemplateModule } from "./template/template.module";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { smsConfig } from "./config/sms.config";
         forwardRef(() => AppModule),
         forwardRef(() => TokenModule),
         forwardRef(() => UserModule),
+        forwardRef(() => TemplateModule),
       ],
     }),
     AutomapperModule.forRoot({
