@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.5.0...v2.6.0) (2024-08-21)
+
+
+### Features
+
+* Add TemplateModule to app.module.ts ([312c7ff](https://github.com/BrewInteractive/authentication-service-nestjs/commit/312c7ff17c88b53190545fdff26e0d8d4e574ad5))
+
 ## [2.5.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.4.2...v2.5.0) (2024-07-22)
 
 
