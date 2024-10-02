@@ -16,7 +16,7 @@ export class UserCustomClaimsImporter implements ICustomClaimsImporter {
       customClaims.push(
         new CustomClaim(
           "roles",
-          user.roles.map((userRole) => userRole.role.name)
+          user.roles.map((userRole) => userRole.role.name ?? userRole.role)
         )
       );
 
