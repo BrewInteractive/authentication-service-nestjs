@@ -23,7 +23,10 @@ export class RefreshToken {
   @Column({ name: "expires_at" })
   expiresAt?: Date;
 
-  @ManyToOne((type: User) => User, (user) => user.id, { nullable: false })
+  @ManyToOne((type: User) => User, (user) => user.id, {
+    nullable: false,
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "user_id" })
   user: User;
 

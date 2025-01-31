@@ -21,6 +21,7 @@ export class UserRole {
   @ManyToOne((type: User) => User, (user) => user.id, {
     nullable: false,
     createForeignKeyConstraints: true,
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
   user: User;
