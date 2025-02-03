@@ -1,9 +1,13 @@
 import * as bcrypt from "bcrypt";
 
 import { Mock, MockFactory } from "mockingbird";
+import {
+  RefreshToken,
+  UserResetPasswordRequest,
+  UserRole,
+} from "../../../src/entities";
 
 import { User } from "../../../src/entities/user.entity";
-import { UserRole } from "../../../src/entities/user-role.entity";
 import { UserRoleFixture } from "./user-role.fixture";
 
 export class UserFixture extends User {
@@ -46,6 +50,10 @@ export class UserFixture extends User {
   countryCode?: string;
 
   roles: Array<UserRole>;
+
+  userResetPasswordRequests: UserResetPasswordRequest[];
+
+  refreshTokens: RefreshToken[];
 
   withRoles(size: number = 2) {
     this.roles = MockFactory(UserRoleFixture).many(size);
