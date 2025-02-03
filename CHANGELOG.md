@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.6.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.6.1...v2.6.2) (2025-02-03)
+
+
+### Bug Fixes
+
+* fix for delete user error ([29d59a0](https://github.com/BrewInteractive/authentication-service-nestjs/commit/29d59a0981a95c92b60b20d342a619ac59379bbd))
+* fix for token service ([97717f2](https://github.com/BrewInteractive/authentication-service-nestjs/commit/97717f253526287e52111bcd77b47b773cd59326))
+
 ### [2.6.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.6.0...v2.6.1) (2024-10-02)
 
 
