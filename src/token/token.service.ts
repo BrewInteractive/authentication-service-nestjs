@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-
+import type { StringValue } from "ms";
 import { CustomClaim } from "./concrete/custom-claim.type";
 import { ICustomClaimsImporter } from "./interfaces/custom-claims-importer.interface";
 import { Injectable } from "@nestjs/common";
@@ -35,7 +35,7 @@ export class TokenService {
       algorithm: this.configService.get("jwt.algorithm"),
       audience: this.configService.get("jwt.audience"),
       issuer: this.configService.get("jwt.issuer"),
-      expiresIn,
+      expiresIn: expiresIn as number | StringValue,
     });
   }
 

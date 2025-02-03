@@ -13,6 +13,7 @@ import {
 } from "typeorm";
 
 import { AutoMap } from "@automapper/classes";
+import { RefreshToken } from "./refresh-token.entity";
 import { SnowflakeId } from "../utils/snowflake-id";
 import { UserResetPasswordRequest } from "./user-reset-password-request.entity";
 import { UserRole } from "./user-role.entity";
@@ -75,7 +76,7 @@ export class User {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
-  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  @OneToMany(() => UserRole, (userRole) => userRole.user, { cascade: true })
   roles: Array<UserRole>;
 
   @Column({ name: "profile_picture", nullable: true })
@@ -83,7 +84,15 @@ export class User {
 
   @OneToMany(
     () => UserResetPasswordRequest,
-    (userResetPasswordRequest) => userResetPasswordRequest.user
+    (userResetPasswordRequest) => userResetPasswordRequest.user,
+    {
+      cascade: true,
+    }
   )
   userResetPasswordRequests: UserResetPasswordRequest[];
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    cascade: true,
+  })
+  refreshTokens: RefreshToken[];
 }
