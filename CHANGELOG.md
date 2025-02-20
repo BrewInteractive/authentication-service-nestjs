@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.6.2...v2.7.0) (2025-02-20)
+
+
+### Features
+
+* add language param for notification ([321542c](https://github.com/BrewInteractive/authentication-service-nestjs/commit/321542c0948fc57edb9f6b45960bd3a8367a5209))
+
 ### [2.6.2](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.6.1...v2.6.2) (2025-02-03)
 
 
