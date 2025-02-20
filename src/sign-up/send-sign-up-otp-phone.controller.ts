@@ -48,6 +48,7 @@ export class SendSignUpOtpPhoneController {
             sendSignUpOtpPhoneRequest.phone.countryCode +
             sendSignUpOtpPhoneRequest.phone.number,
           authenticationAction: AuthenticationAction.SIGNUP,
+          locale: sendSignUpOtpPhoneRequest?.locale,
         });
       }
 

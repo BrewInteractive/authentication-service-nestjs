@@ -77,6 +77,30 @@ describe("ResetPasswordController", () => {
     expect(actualResult).toStrictEqual(expectedResult);
   });
 
+  it("should return OkResponse when resetPasswordAsync is called (with locale)", async () => {
+    const resetPasswordRequestDto = MockFactory(ResetPasswordFixture)
+      .one()
+      .withLocale();
+    const user = MockFactory(UserFixture).one();
+
+    const expectedResult = new OkResponse();
+
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockResolvedValueOnce(Promise.resolve(user));
+
+    const actualResult = await resetPasswordController.resetPasswordAsync(
+      resetPasswordRequestDto
+    );
+
+    expect(resetPasswordService.resetPasswordAsync).toHaveBeenCalledWith(
+      user,
+      resetPasswordRequestDto.newPassword,
+      resetPasswordRequestDto.key
+    );
+    expect(actualResult).toStrictEqual(expectedResult);
+  });
+
   it("should throw BadRequestException if InvalidResetPasswordRequestError is caught due null user", async () => {
     const resetPasswordRequestDto = MockFactory(ResetPasswordFixture).one();
 

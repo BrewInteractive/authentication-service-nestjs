@@ -6,27 +6,27 @@ import {
   UserRole,
 } from "../entities";
 import {
-  SendSignUpOtpPhoneRequestFixture,
   SendOtpResultFixture,
+  SendSignUpOtpPhoneRequestFixture,
   UserFixture,
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { ConflictException } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
 import { SendSignUpOtpPhoneController } from "./send-sign-up-otp-phone.controller";
 import { TokenModule } from "../token/token.module";
+import { UserAlreadyExistsError } from "../error";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { ConflictException } from "@nestjs/common";
-import { UserAlreadyExistsError } from "../error";
 
 describe("SendSignUpOtpPhoneController", () => {
   let sendSignUpOtpPhoneController: SendSignUpOtpPhoneController;
@@ -90,6 +90,38 @@ describe("SendSignUpOtpPhoneController", () => {
     const mockSendSignUpOtpPhoneRequestDto = MockFactory(
       SendSignUpOtpPhoneRequestFixture
     ).one();
+
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: true,
+        expiresAt: faker.date.future(),
+        otpValue: faker.word.noun(),
+      })
+      .one();
+
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+    jest
+      .spyOn(otpService, "createPhoneOtpAsync")
+      .mockResolvedValueOnce(mockSendOtpResult);
+
+    await expect(
+      sendSignUpOtpPhoneController.sendSignUpOtpPhoneAsync(
+        mockSendSignUpOtpPhoneRequestDto
+      )
+    ).resolves.toEqual(expectedResult);
+  });
+
+  it("should return send otp result with no active otp (with locale)", async () => {
+    const mockSendSignUpOtpPhoneRequestDto = MockFactory(
+      SendSignUpOtpPhoneRequestFixture
+    )
+      .one()
+      .withLocale();
 
     const mockSendOtpResult = MockFactory(SendOtpResultFixture)
       .mutate({

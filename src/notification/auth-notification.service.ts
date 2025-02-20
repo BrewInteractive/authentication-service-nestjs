@@ -14,13 +14,18 @@ import { NotificationService } from "@brewww/nestjs-notification-module/";
 
 @Injectable()
 export class AuthNotificationService {
+  private readonly defaultLocale: string;
   constructor(
     @Inject("TemplateService")
     private readonly templateService: TemplateService,
     @Inject("NotificationService")
     private readonly notificationService: NotificationService,
     private readonly configService: ConfigService
-  ) {}
+  ) {
+    this.defaultLocale = this.configService.get<string>(
+      "notificationDefaultLocale"
+    );
+  }
 
   @OnEvent("otp.email.created")
   async onOtpEmailCreatedAsync(
@@ -28,7 +33,8 @@ export class AuthNotificationService {
   ): Promise<void> {
     const email = this.getOtpEmailByAuthAction(
       otpEmailCreatedEvent.otpValue,
-      otpEmailCreatedEvent.authenticationAction
+      otpEmailCreatedEvent.authenticationAction,
+      otpEmailCreatedEvent?.locale ?? this.defaultLocale
     );
 
     if (email) {
@@ -46,7 +52,8 @@ export class AuthNotificationService {
   ): Promise<void> {
     const sms = this.getOtpSmsByAuthAction(
       otpSmsCreatedEvent.otpValue,
-      otpSmsCreatedEvent.authenticationAction
+      otpSmsCreatedEvent.authenticationAction,
+      otpSmsCreatedEvent?.locale ?? this.defaultLocale
     );
 
     if (sms) {
@@ -62,7 +69,9 @@ export class AuthNotificationService {
     resetPasswordCreatedEvent: ResetPasswordCreatedEvent
   ): Promise<void> {
     const resetPasswordEmailTemplate =
-      this.templateService.getResetPasswordEmailTemplate("en");
+      this.templateService.getResetPasswordEmailTemplate(
+        resetPasswordCreatedEvent?.locale ?? this.defaultLocale
+      );
 
     const emailContent = this.templateService.injectData(
       resetPasswordEmailTemplate,
@@ -80,13 +89,14 @@ export class AuthNotificationService {
 
   private getOtpEmailByAuthAction(
     otpValue: string,
-    authenticationAction: AuthenticationAction
+    authenticationAction: AuthenticationAction,
+    locale: string
   ): { subject: string; content: string } {
     let template = null;
     if (authenticationAction === AuthenticationAction.LOGIN)
-      template = this.templateService.getLoginOtpEmailTemplate("en");
+      template = this.templateService.getLoginOtpEmailTemplate(locale);
     if (authenticationAction === AuthenticationAction.SIGNUP)
-      template = this.templateService.getSignupOtpEmailTemplate("en");
+      template = this.templateService.getSignupOtpEmailTemplate(locale);
 
     if (template == null)
       throw new OtpEmailTemplateNotFoundError(authenticationAction);
@@ -101,13 +111,14 @@ export class AuthNotificationService {
 
   private getOtpSmsByAuthAction(
     otpValue: string,
-    authenticationAction: AuthenticationAction
+    authenticationAction: AuthenticationAction,
+    locale: string
   ): { message: string } {
     let template: string = null;
     if (authenticationAction === AuthenticationAction.LOGIN)
-      template = this.templateService.getLoginOtpSmsTemplate("en");
+      template = this.templateService.getLoginOtpSmsTemplate(locale);
     if (authenticationAction === AuthenticationAction.SIGNUP)
-      template = this.templateService.getSignUpOtpSmsTemplate("en");
+      template = this.templateService.getSignUpOtpSmsTemplate(locale);
     if (template == null)
       throw new OtpSmsTemplateNotFoundError(authenticationAction);
 

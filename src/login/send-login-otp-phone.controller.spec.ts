@@ -123,6 +123,47 @@ describe("SendLoginOtpEmailController", () => {
     ).resolves.toEqual(expectedResult);
   });
 
+  it("should return send otp result with no active otp (with locale)", async () => {
+    const mockSendLoginOtpPhoneRequestDto = MockFactory(
+      SendLoginOtpPhoneRequestFixture
+    )
+      .one()
+      .withLocale();
+
+    const mockValidUser = MockFactory(UserFixture)
+      .mutate({
+        countryCode: mockSendLoginOtpPhoneRequestDto.phone.countryCode,
+        phoneNumber: mockSendLoginOtpPhoneRequestDto.phone.number,
+      })
+      .one();
+
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: true,
+        expiresAt: faker.date.future(),
+        otpValue: faker.word.noun(),
+      })
+      .one();
+
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
+
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockResolvedValueOnce(mockValidUser);
+    jest
+      .spyOn(otpService, "createPhoneOtpAsync")
+      .mockResolvedValueOnce(mockSendOtpResult);
+
+    await expect(
+      sendLoginOtpPhoneController.sendLoginOtpPhoneAsync(
+        mockSendLoginOtpPhoneRequestDto
+      )
+    ).resolves.toEqual(expectedResult);
+  });
+
   it("should return send otp result with active otp", async () => {
     const mockSendLoginOtpEmailRequestDto = MockFactory(
       SendLoginOtpPhoneRequestFixture

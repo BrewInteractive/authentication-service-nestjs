@@ -4,4 +4,5 @@ export class OtpEmailCreatedEvent {
   otpValue: string;
   emailAddress: string;
   authenticationAction: AuthenticationAction;
+  locale?: string;
 }

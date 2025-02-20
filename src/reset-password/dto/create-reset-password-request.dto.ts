@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 import { AutoMap } from "@automapper/classes";
 
@@ -8,4 +8,9 @@ export class CreateResetPasswordRequest {
   @IsEmail()
   @AutoMap()
   email: string;
+
+  @IsOptional()
+  @IsString()
+  @AutoMap()
+  locale?: string;
 }

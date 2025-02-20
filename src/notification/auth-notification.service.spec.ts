@@ -6,6 +6,7 @@ import {
   SmsConfigFixture,
 } from "../../test/fixtures";
 import { Test, TestingModule } from "@nestjs/testing";
+
 import { AuthNotificationService } from "./auth-notification.service";
 import { AuthenticationAction } from "../enum";
 import { AutomapperModule } from "@automapper/nestjs";
@@ -28,6 +29,8 @@ describe("NotificationService", () => {
   let smsService: SmsService;
   const mockEmailConfig = MockFactory(EmailConfigFixture).one();
   const mockSmsConfig = MockFactory(SmsConfigFixture).one();
+  const mockDefaultLocale = faker.lorem.word();
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -37,7 +40,13 @@ describe("NotificationService", () => {
         }),
         ConfigModule.forRoot({
           isGlobal: true,
-          load: [() => mockEmailConfig, () => mockSmsConfig],
+          load: [
+            () => mockEmailConfig,
+            () => mockSmsConfig,
+            () => ({
+              notificationDefaultLocale: mockDefaultLocale,
+            }),
+          ],
         }),
         NotificationModule,
       ],
@@ -78,7 +87,36 @@ describe("NotificationService", () => {
       mockOtpEmailCreatedEvent
     );
 
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
+    expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
+      otpValue: mockOtpEmailCreatedEvent.otpValue,
+    });
+    expect(emailSpy).toBeCalled();
+  });
+
+  it("should send login otp email (with locale)", async () => {
+    const mockOtpEmailCreatedEvent = MockFactory(OtpEmailCreatedEventFixture)
+      .one()
+      .withLocale();
+    const mockTemplate = "<p>{{otpValue}}</p>";
+
+    const templateSpy = jest
+      .spyOn(templateService, "getLoginOtpEmailTemplate")
+      .mockReturnValue(mockTemplate);
+
+    const injectDataSpy = jest
+      .spyOn(templateService, "injectData")
+      .mockReturnValue(mockTemplate);
+
+    const emailSpy = jest
+      .spyOn(emailService, "sendEmailAsync")
+      .mockResolvedValue();
+
+    await authNotificationService.onOtpEmailCreatedAsync(
+      mockOtpEmailCreatedEvent
+    );
+
+    expect(templateSpy).toHaveBeenCalledWith(mockOtpEmailCreatedEvent.locale);
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
       otpValue: mockOtpEmailCreatedEvent.otpValue,
     });
@@ -108,7 +146,7 @@ describe("NotificationService", () => {
       authNotificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
     ).rejects.toThrow(expectedError);
 
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
     expect(emailSpy).not.toBeCalled();
   });
 
@@ -136,7 +174,39 @@ describe("NotificationService", () => {
       mockOtpEmailCreatedEvent
     );
 
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
+    expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
+      otpValue: mockOtpEmailCreatedEvent.otpValue,
+    });
+    expect(emailSpy).toBeCalled();
+  });
+
+  it("should send signup otp email (with locale)", async () => {
+    const mockOtpEmailCreatedEvent = MockFactory(OtpEmailCreatedEventFixture)
+      .mutate({
+        authenticationAction: AuthenticationAction.SIGNUP,
+      })
+      .one()
+      .withLocale();
+    const mockTemplate = "<p>{{otpValue}}</p>";
+
+    const templateSpy = jest
+      .spyOn(templateService, "getSignupOtpEmailTemplate")
+      .mockReturnValue(mockTemplate);
+
+    const injectDataSpy = jest
+      .spyOn(templateService, "injectData")
+      .mockReturnValue(mockTemplate);
+
+    const emailSpy = jest
+      .spyOn(emailService, "sendEmailAsync")
+      .mockResolvedValue();
+
+    await authNotificationService.onOtpEmailCreatedAsync(
+      mockOtpEmailCreatedEvent
+    );
+
+    expect(templateSpy).toHaveBeenCalledWith(mockOtpEmailCreatedEvent.locale);
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
       otpValue: mockOtpEmailCreatedEvent.otpValue,
     });
@@ -166,7 +236,7 @@ describe("NotificationService", () => {
       authNotificationService.onOtpEmailCreatedAsync(mockOtpEmailCreatedEvent)
     ).rejects.toThrow(expectedError);
 
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
     expect(emailSpy).not.toBeCalled();
   });
 
@@ -192,7 +262,7 @@ describe("NotificationService", () => {
       resetPasswordEmailCreatedEvent
     );
 
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
     expect(injectDataSpy).toHaveBeenCalledWith(resetPasswordTemplate, {
       resetLink: resetPasswordEmailCreatedEvent.resetLink,
     });
@@ -229,7 +299,7 @@ describe("NotificationService", () => {
     await authNotificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
 
     // Assert
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
       otpValue: mockOtpSmsCreatedEvent.otpValue,
     });
@@ -266,7 +336,7 @@ describe("NotificationService", () => {
     await authNotificationService.onOtpSmsCreatedAsync(mockOtpSmsCreatedEvent);
 
     // Assert
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
     expect(injectDataSpy).toHaveBeenCalledWith(mockTemplate, {
       otpValue: mockOtpSmsCreatedEvent.otpValue,
     });
@@ -296,6 +366,6 @@ describe("NotificationService", () => {
 
     // Assert
     expect(sendSmsAsyncSpy).not.toBeCalled();
-    expect(templateSpy).toHaveBeenCalledWith("en");
+    expect(templateSpy).toHaveBeenCalledWith(mockDefaultLocale);
   });
 });

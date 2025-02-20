@@ -14,19 +14,19 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 import { AutomapperModule } from "@automapper/nestjs";
 import { ConfigModule } from "@nestjs/config";
+import { ConflictException } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { MockFactory } from "mockingbird";
 import { OtpModule } from "../otp/otp.module";
 import { OtpService } from "../otp/otp.service";
+import { SendSignUpOtpEmailController } from "./send-sign-up-otp-email.controller";
 import { TokenModule } from "../token/token.module";
+import { UserAlreadyExistsError } from "../error";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { classes } from "@automapper/classes";
 import { faker } from "@faker-js/faker";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { SendSignUpOtpEmailController } from "./send-sign-up-otp-email.controller";
-import { ConflictException } from "@nestjs/common";
-import { UserAlreadyExistsError } from "../error";
 
 describe("SendSignUpOtpEmailController", () => {
   let sendSignUpOtpEmailController: SendSignUpOtpEmailController;
@@ -90,6 +90,38 @@ describe("SendSignUpOtpEmailController", () => {
     const mockSendSignUpOtpEmailRequestDto = MockFactory(
       SendSignUpOtpEmailRequestFixture
     ).one();
+
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture)
+      .mutate({
+        isSent: true,
+        expiresAt: faker.date.future(),
+        otpValue: faker.word.noun(),
+      })
+      .one();
+
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+    jest
+      .spyOn(otpService, "createEmailOtpAsync")
+      .mockResolvedValueOnce(mockSendOtpResult);
+
+    await expect(
+      sendSignUpOtpEmailController.sendSignUpOtpEmailAsync(
+        mockSendSignUpOtpEmailRequestDto
+      )
+    ).resolves.toEqual(expectedResult);
+  });
+
+  it("should return send otp result with no active otp and without user (with locale)", async () => {
+    const mockSendSignUpOtpEmailRequestDto = MockFactory(
+      SendSignUpOtpEmailRequestFixture
+    )
+      .one()
+      .withLocale();
 
     const mockSendOtpResult = MockFactory(SendOtpResultFixture)
       .mutate({

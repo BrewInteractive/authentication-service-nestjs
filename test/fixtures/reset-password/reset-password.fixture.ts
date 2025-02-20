@@ -9,4 +9,11 @@ export class ResetPasswordFixture {
 
   @Mock((faker) => faker.datatype.string(16))
   key: string;
+
+  locale: string;
+
+  withLocale(locale?: string) {
+    this.locale = locale ?? "en";
+    return this;
+  }
 }

@@ -5,4 +5,5 @@ export const appConfig = () => ({
   name,
   description,
   errorCodePrefix: process.env.ERROR_CODE_PREFIX || "ERR",
+  notificationDefaultLocale: process.env.NOTIFICATION_DEFAULT_LOCALE || "en",
 });

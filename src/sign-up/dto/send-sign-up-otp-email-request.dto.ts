@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional } from "class-validator";
 
 import { AutoMap } from "@automapper/classes";
 
@@ -7,4 +7,9 @@ export class SendSignUpOtpEmailRequest {
   @IsEmail()
   @AutoMap()
   email: string;
+
+  @IsNotEmpty()
+  @AutoMap()
+  @IsOptional()
+  locale?: string;
 }

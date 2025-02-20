@@ -44,6 +44,7 @@ export class SendLoginOtpEmailController {
           otpValue: sendOtpResult.otpValue,
           emailAddress: sendLoginOtpEmailRequest.email,
           authenticationAction: AuthenticationAction.LOGIN,
+          locale: sendLoginOtpEmailRequest?.locale,
         });
       }
 

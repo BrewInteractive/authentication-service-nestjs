@@ -1,10 +1,11 @@
-import { Mock } from "mockingbird";
-import { PhoneRequestFixture } from "../login";
 import {
-  SendSignUpOtpPhoneRequest,
   SendSignUpOtpEmailRequest,
+  SendSignUpOtpPhoneRequest,
   SignUpRequest,
 } from "../../../src/sign-up/dto";
+
+import { Mock } from "mockingbird";
+import { PhoneRequestFixture } from "../login";
 
 export class SignUpRequestFixture extends SignUpRequest {
   @Mock((faker) => faker.internet.userName())
@@ -32,8 +33,18 @@ export class SignUpRequestFixture extends SignUpRequest {
 export class SendSignUpOtpPhoneRequestFixture extends SendSignUpOtpPhoneRequest {
   @Mock(PhoneRequestFixture)
   phone: PhoneRequestFixture;
+
+  withLocale(locale?: string) {
+    this.locale = locale ?? "en";
+    return this;
+  }
 }
 export class SendSignUpOtpEmailRequestFixture extends SendSignUpOtpEmailRequest {
   @Mock((faker) => faker.internet.email())
   email: string;
+
+  withLocale(locale?: string) {
+    this.locale = locale ?? "en";
+    return this;
+  }
 }

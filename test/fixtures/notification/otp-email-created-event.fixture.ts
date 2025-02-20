@@ -15,6 +15,11 @@ export class OtpEmailCreatedEventFixture extends OtpEmailCreatedEvent {
 
   @Mock(AuthenticationAction.LOGIN)
   authenticationAction: AuthenticationAction;
+
+  withLocale(locale?: string) {
+    this.locale = locale ?? "en";
+    return this;
+  }
 }
 
 export class OtpSmsCreatedEventFixture extends OtpSmsCreatedEvent {
@@ -26,4 +31,9 @@ export class OtpSmsCreatedEventFixture extends OtpSmsCreatedEvent {
 
   @Mock(AuthenticationAction.LOGIN)
   authenticationAction: AuthenticationAction;
+
+  withLocale(locale?: string) {
+    this.locale = locale ?? "en";
+    return this;
+  }
 }

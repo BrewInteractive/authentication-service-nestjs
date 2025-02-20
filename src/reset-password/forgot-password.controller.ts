@@ -48,6 +48,7 @@ export class ForgotPasswordController {
         resetLink:
           this.configService.get("resetPassword.url") +
           userResetPasswordRequest.key,
+        locale: createResetPasswordRequest?.locale,
       };
 
       this.eventEmitter.emit(
