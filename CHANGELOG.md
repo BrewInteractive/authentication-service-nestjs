@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.7.0...v2.7.1) (2025-02-24)
+
 ## [2.7.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.6.2...v2.7.0) (2025-02-20)
 
 
