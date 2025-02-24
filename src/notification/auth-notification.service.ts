@@ -34,7 +34,8 @@ export class AuthNotificationService {
     const email = this.getOtpEmailByAuthAction(
       otpEmailCreatedEvent.otpValue,
       otpEmailCreatedEvent.authenticationAction,
-      otpEmailCreatedEvent?.locale ?? this.defaultLocale
+      otpEmailCreatedEvent?.locale ?? this.defaultLocale,
+      otpEmailCreatedEvent?.appData
     );
 
     if (email) {
@@ -53,7 +54,8 @@ export class AuthNotificationService {
     const sms = this.getOtpSmsByAuthAction(
       otpSmsCreatedEvent.otpValue,
       otpSmsCreatedEvent.authenticationAction,
-      otpSmsCreatedEvent?.locale ?? this.defaultLocale
+      otpSmsCreatedEvent?.locale ?? this.defaultLocale,
+      otpSmsCreatedEvent?.appData
     );
 
     if (sms) {
@@ -90,7 +92,8 @@ export class AuthNotificationService {
   private getOtpEmailByAuthAction(
     otpValue: string,
     authenticationAction: AuthenticationAction,
-    locale: string
+    locale: string,
+    appData?: object
   ): { subject: string; content: string } {
     let template = null;
     if (authenticationAction === AuthenticationAction.LOGIN)
@@ -104,6 +107,7 @@ export class AuthNotificationService {
     return {
       content: this.templateService.injectData(template, {
         otpValue,
+        appData,
       }),
       subject: this.configService.get<string>("emailSubjects.loginOtp"),
     };
@@ -112,7 +116,8 @@ export class AuthNotificationService {
   private getOtpSmsByAuthAction(
     otpValue: string,
     authenticationAction: AuthenticationAction,
-    locale: string
+    locale: string,
+    appData?: object
   ): { message: string } {
     let template: string = null;
     if (authenticationAction === AuthenticationAction.LOGIN)
@@ -125,6 +130,7 @@ export class AuthNotificationService {
     return {
       message: this.templateService.injectData(template, {
         otpValue,
+        appData,
       }),
     };
   }

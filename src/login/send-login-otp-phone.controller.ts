@@ -42,6 +42,7 @@ export class SendLoginOtpPhoneController {
             sendLoginOtpPhoneRequest.phone.number,
           authenticationAction: AuthenticationAction.LOGIN,
           locale: sendLoginOtpPhoneRequest.locale,
+          appData: sendLoginOtpPhoneRequest?.appData,
         });
       }
 

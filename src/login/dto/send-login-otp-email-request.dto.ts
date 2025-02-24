@@ -12,4 +12,7 @@ export class SendLoginOtpEmailRequest {
   @AutoMap()
   @IsOptional()
   locale?: string;
+
+  @IsOptional()
+  appData?: object;
 }

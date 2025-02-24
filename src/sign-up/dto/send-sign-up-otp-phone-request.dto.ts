@@ -12,4 +12,7 @@ export class SendSignUpOtpPhoneRequest {
   @AutoMap()
   @IsOptional()
   locale?: string;
+
+  @IsOptional()
+  appData?: object;
 }

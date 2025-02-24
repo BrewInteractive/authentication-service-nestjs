@@ -5,4 +5,5 @@ export class OtpSmsCreatedEvent {
   otpValue: string;
   authenticationAction: AuthenticationAction;
   locale?: string;
+  appData?: object;
 }

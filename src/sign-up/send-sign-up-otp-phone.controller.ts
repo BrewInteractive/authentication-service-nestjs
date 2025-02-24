@@ -49,6 +49,7 @@ export class SendSignUpOtpPhoneController {
             sendSignUpOtpPhoneRequest.phone.number,
           authenticationAction: AuthenticationAction.SIGNUP,
           locale: sendSignUpOtpPhoneRequest?.locale,
+          appData: sendSignUpOtpPhoneRequest?.appData,
         });
       }
 
