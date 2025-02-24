@@ -1,29 +1,31 @@
 import * as Handlebars from "handlebars";
 
+import { existsSync, readFileSync } from "fs";
+
 import { Injectable } from "@nestjs/common";
-import { readFileSync } from "fs";
 
 @Injectable()
 export class TemplateService {
+  private readonly DEFAULT_LOCALE = "en";
+
   public getLoginOtpEmailTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/html/${locale}/login-otp.html`,
-      "utf8"
-    );
+    return this.getTemplate("login-otp.html", locale, "html");
   }
 
   public getLoginOtpSmsTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/text/${locale}/login-otp-sms.txt`,
-      "utf8"
-    );
+    return this.getTemplate("login-otp-sms.txt", locale, "text");
   }
 
   public getResetPasswordEmailTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/html/${locale}/reset-password.html`,
-      "utf8"
-    );
+    return this.getTemplate("reset-password.html", locale, "html");
+  }
+
+  public getSignupOtpEmailTemplate(locale: string): string {
+    return this.getTemplate("sign-up-otp.html", locale, "html");
+  }
+
+  public getSignUpOtpSmsTemplate(locale: string): string {
+    return this.getTemplate("sign-up-otp-sms.txt", locale, "text");
   }
 
   public injectData<T>(htmlTemplate: string, data: T): string {
@@ -31,17 +33,17 @@ export class TemplateService {
     return templateFn(data);
   }
 
-  public getSignupOtpEmailTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/html/${locale}/sign-up-otp.html`,
-      "utf8"
-    );
-  }
-
-  public getSignUpOtpSmsTemplate(locale: string): string {
-    return readFileSync(
-      `${__dirname}/templates/text/${locale}/sign-up-otp-sms.txt`,
-      "utf8"
-    );
+  private getTemplate(
+    file: string,
+    locale: string,
+    type: "html" | "text"
+  ): string {
+    const path = `${__dirname}/templates/${type}/${locale}/${file}`;
+    if (existsSync(path)) return readFileSync(path, "utf8");
+    else
+      return readFileSync(
+        `${__dirname}/templates/${type}/${this.DEFAULT_LOCALE}/${file}`,
+        "utf8"
+      );
   }
 }

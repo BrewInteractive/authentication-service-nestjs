@@ -1,7 +1,9 @@
 import * as Handlebars from "handlebars";
+
+import { existsSync, readFileSync } from "fs";
+
 import { TemplateService } from "./template.service";
 import { faker } from "@faker-js/faker";
-import { readFileSync } from "fs";
 
 jest.mock("fs");
 jest.mock("handlebars");
@@ -65,6 +67,24 @@ describe("TemplateService", () => {
     expect(html).toBeDefined();
     expect(mockReadFileSync).toHaveBeenCalledWith(
       `${__dirname}/templates/html/${locale}/reset-password.html`,
+      "utf8"
+    );
+  });
+
+  it("should return reset password email template (without default locale)", () => {
+    // Arrange
+    const locale = faker.lorem.word();
+    const mockHtmlTemplate: string = faker.lorem.paragraphs(3);
+    const mockReadFileSync = readFileSync as jest.Mock;
+    mockReadFileSync.mockReturnValue(mockHtmlTemplate);
+    const mockExistsSync = existsSync as jest.Mock;
+    mockExistsSync.mockReturnValue(false);
+    // Act
+    const html = templateService.getResetPasswordEmailTemplate(locale);
+    // Assert
+    expect(html).toBeDefined();
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      `${__dirname}/templates/html/en/reset-password.html`,
       "utf8"
     );
   });
