@@ -6,7 +6,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class TemplateService {
-  private readonly DEFAULT_LOCALE = "en";
+  public DEFAULT_LOCALE = "en";
 
   public getLoginOtpEmailTemplate(locale: string): string {
     return this.getTemplate("login-otp.html", locale, "html");
