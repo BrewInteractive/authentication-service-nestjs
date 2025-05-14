@@ -4,10 +4,9 @@ import { validate } from "class-validator";
 
 describe("Phone Validation", () => {
   it("should be verified", async () => {
-    const phoneDto: PhoneRequestDto = {
-      countryCode: faker.string.numeric(3),
-      number: faker.phone.number(),
-    };
+    const phoneDto = new PhoneRequestDto();
+    phoneDto.countryCode = faker.string.numeric(3);
+    phoneDto.number = faker.phone.number();
     const errors = await validate(phoneDto);
     expect(errors.length).toBe(0);
   });

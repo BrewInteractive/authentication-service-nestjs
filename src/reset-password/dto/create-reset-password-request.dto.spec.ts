@@ -18,9 +18,8 @@ describe("CreateResetPasswordRequest Dto Validation", () => {
   });
 
   it("should fail validation when email is valid", async () => {
-    const resetPasswordRequest: CreateResetPasswordRequest = {
-      email: faker.internet.email(),
-    };
+    const resetPasswordRequest = new CreateResetPasswordRequest();
+    resetPasswordRequest.email = faker.internet.email();
 
     const errors = await validate(resetPasswordRequest);
 
