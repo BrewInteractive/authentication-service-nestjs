@@ -85,6 +85,8 @@ export class UserService {
   }
 
   async createUserAsync(user: User, appData?: object): Promise<User> {
+    user = await this.applyPreRegisterUserHandlersAsync(user, appData);
+
     const existingUser = await this.getUserAsync({
       username: user.username,
       email: user.email,
@@ -93,7 +95,6 @@ export class UserService {
 
     if (existingUser) throw new UserAlreadyExistsError();
 
-    user = await this.applyPreRegisterUserHandlersAsync(user, appData);
     user = await this.insertUserAsync(user);
     user = await this.applyPostRegisterUserHandlersAsync(user, appData);
 
