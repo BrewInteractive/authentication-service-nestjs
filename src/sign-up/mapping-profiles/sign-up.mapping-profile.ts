@@ -81,7 +81,23 @@ export class SignUpProfile extends AutomapperProfile {
         mapper,
         SignUpOtpEmailRequest,
         User,
-        forMember((dest) => dest.roles, this.mapRoles<SignUpOtpEmailRequest>())
+        forMember((dest) => dest.roles, this.mapRoles<SignUpOtpEmailRequest>()),
+        forMember(
+          (dest) => dest.phoneNumber,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone?.number;
+            }
+          })
+        ),
+        forMember(
+          (dest) => dest.countryCode,
+          mapFrom((src) => {
+            if (src.phone) {
+              return src.phone?.countryCode;
+            }
+          })
+        )
       );
       createMap(
         mapper,

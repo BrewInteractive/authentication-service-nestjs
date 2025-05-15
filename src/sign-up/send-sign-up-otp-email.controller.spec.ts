@@ -216,4 +216,57 @@ describe("SendSignUpOtpEmailController", () => {
       )
     ).rejects.toThrow(new Error("Internal Server Error"));
   });
+
+  it("should send otp successfully with phone number", async () => {
+    const mockSendSignUpOtpEmailRequestDto = MockFactory(
+      SendSignUpOtpEmailRequestFixture
+    )
+      .one()
+      .withPhone();
+
+    const mockSendOtpResult = MockFactory(SendOtpResultFixture).one();
+    const expectedResult = {
+      isSent: mockSendOtpResult.isSent,
+      expiresAt: mockSendOtpResult.expiresAt,
+    };
+
+    jest.spyOn(userService, "getUserAsync").mockResolvedValueOnce(null);
+
+    jest
+      .spyOn(otpService, "createEmailOtpAsync")
+      .mockResolvedValueOnce(mockSendOtpResult);
+
+    await expect(
+      sendSignUpOtpEmailController.sendSignUpOtpEmailAsync(
+        mockSendSignUpOtpEmailRequestDto
+      )
+    ).resolves.toEqual(expectedResult);
+  });
+
+  it("should throw UserAlreadyExists with user (with phone)", async () => {
+    const mockSendSignUpOtpEmailRequestDto = MockFactory(
+      SendSignUpOtpEmailRequestFixture
+    )
+      .one()
+      .withPhone();
+
+    const mockValidUser = MockFactory(UserFixture)
+      .mutate({
+        phoneNumber: mockSendSignUpOtpEmailRequestDto.phone.number,
+        countryCode: mockSendSignUpOtpEmailRequestDto.phone.countryCode,
+      })
+      .one();
+
+    jest
+      .spyOn(userService, "getUserAsync")
+      .mockResolvedValueOnce(mockValidUser);
+
+    await expect(
+      sendSignUpOtpEmailController.sendSignUpOtpEmailAsync(
+        mockSendSignUpOtpEmailRequestDto
+      )
+    ).rejects.toThrowError(
+      new ConflictException(null, { cause: new UserAlreadyExistsError() })
+    );
+  });
 });

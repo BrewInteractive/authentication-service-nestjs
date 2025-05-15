@@ -1,6 +1,13 @@
-import { IsEmail, IsNotEmpty, IsOptional } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from "class-validator";
 
 import { AutoMap } from "@automapper/classes";
+import { PhoneRequestDto } from "./phone.dto";
+import { Type } from "class-transformer";
 
 export class SendSignUpOtpEmailRequest {
   @IsNotEmpty()
@@ -13,6 +20,11 @@ export class SendSignUpOtpEmailRequest {
   @IsOptional()
   locale?: string;
 
-  @IsOptional()
   appData?: object;
+
+  @IsOptional()
+  @AutoMap()
+  @ValidateNested()
+  @Type(() => PhoneRequestDto)
+  phone?: PhoneRequestDto;
 }

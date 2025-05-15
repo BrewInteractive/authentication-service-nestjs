@@ -1,10 +1,10 @@
+import { Mock, MockFactory } from "mockingbird";
 import {
   SendSignUpOtpEmailRequest,
   SendSignUpOtpPhoneRequest,
   SignUpRequest,
 } from "../../../src/sign-up/dto";
 
-import { Mock } from "mockingbird";
 import { PhoneRequestFixture } from "../login";
 
 export class SignUpRequestFixture extends SignUpRequest {
@@ -45,6 +45,11 @@ export class SendSignUpOtpEmailRequestFixture extends SendSignUpOtpEmailRequest 
 
   withLocale(locale?: string) {
     this.locale = locale ?? "en";
+    return this;
+  }
+
+  withPhone() {
+    this.phone = MockFactory(PhoneRequestFixture).one();
     return this;
   }
 }

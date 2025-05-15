@@ -1,5 +1,10 @@
-import { Mock } from "mockingbird";
-import { SignUpOtpEmailRequest } from "../../../src/sign-up/dto";
+import { Mock, MockFactory } from "mockingbird";
+import {
+  PhoneRequestDto,
+  SignUpOtpEmailRequest,
+} from "../../../src/sign-up/dto";
+
+import { PhoneRequestFixture } from "../login";
 
 export class SignUpOtpEmailRequestFixture extends SignUpOtpEmailRequest {
   @Mock((faker) => faker.internet.email())
@@ -16,4 +21,11 @@ export class SignUpOtpEmailRequestFixture extends SignUpOtpEmailRequest {
 
   @Mock()
   appData: object;
+
+  phone: PhoneRequestDto;
+
+  withPhone() {
+    this.phone = MockFactory(PhoneRequestFixture).one();
+    return this;
+  }
 }

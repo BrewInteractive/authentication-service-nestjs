@@ -24,4 +24,15 @@ describe("SendLoginOtpEmailRequest validation", () => {
       isEmail: "email must be an email",
     });
   });
+
+  it("should fail validation when phone is not provided", async () => {
+    const request = new SendSignUpOtpEmailRequest();
+    request.phone = {
+      number: faker.phone.number(),
+      countryCode: faker.string.numeric(3),
+    };
+    const errors = await validate(request);
+
+    expect(errors.length).toBe(1);
+  });
 });

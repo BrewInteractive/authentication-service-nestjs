@@ -36,6 +36,7 @@ export class SignUpOtpEmailController {
     try {
       const haveUser = await this.userService.getUserAsync({
         email: signUpOtpEmailRequest.email,
+        phone: signUpOtpEmailRequest.phone,
       });
 
       if (haveUser) throw new UserAlreadyExistsError();

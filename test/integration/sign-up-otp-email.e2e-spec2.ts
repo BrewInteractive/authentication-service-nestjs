@@ -65,6 +65,27 @@ describe("SignUpOtpEmailController (e2e)", () => {
       expect(response.body).toHaveProperty("refreshToken");
     });
 
+    it("should return tokens if otp is valid and user does not exist (with phone)", async () => {
+      const signUpOtpEmailRequest = MockFactory(SignUpOtpEmailRequestFixture)
+        .one()
+        .withPhone();
+      const createdOtp = MockFactory(OtpFixture)
+        .mutate({
+          channel: { email: signUpOtpEmailRequest.email },
+          value: signUpOtpEmailRequest.otpValue,
+        })
+        .one();
+      await otpRepository.save(createdOtp);
+
+      const response = await request(app.getHttpServer())
+        .post("/sign-up-otp-email")
+        .send(signUpOtpEmailRequest)
+        .expect(201);
+
+      expect(response.body).toHaveProperty("idToken");
+      expect(response.body).toHaveProperty("refreshToken");
+    });
+
     it("should return User is already exists error if user already exists", async () => {
       const createdUser = MockFactory(UserFixture).one();
       await userRepository.save(createdUser);

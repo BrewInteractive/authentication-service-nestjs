@@ -54,6 +54,24 @@ describe("SendSignUpOtpEmailController (e2e)", () => {
       );
     });
 
+    it("should return send otp result when no user with given email exists (with phone)", async () => {
+      const sendSignUpOtpEmailRequest = MockFactory(
+        SendSignUpOtpEmailRequestFixture
+      )
+        .one()
+        .withPhone();
+
+      const response = await request(app.getHttpServer())
+        .post("/send-sign-up-otp-email")
+        .send(sendSignUpOtpEmailRequest)
+        .expect(201);
+
+      expect(response.body.isSent).toEqual(true);
+      expect(new Date(response.body.expiresAt).getTime()).toBeGreaterThan(
+        new Date().getTime()
+      );
+    });
+
     it("should return already exists error when user with given email already exists", async () => {
       const user = MockFactory(UserFixture).one();
       await userRepository.save(user);

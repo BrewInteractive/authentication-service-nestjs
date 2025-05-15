@@ -31,6 +31,7 @@ export class SendSignUpOtpEmailController {
     try {
       const user = await this.userService.getUserAsync({
         email: sendSignUpOtpEmailRequest.email,
+        phone: sendSignUpOtpEmailRequest.phone,
       });
 
       if (user) {
