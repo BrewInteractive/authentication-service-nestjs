@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.7.5...v2.8.0) (2025-05-15)
+
+
+### Features
+
+* add phone property in sing-up endpoints ([5384ed5](https://github.com/BrewInteractive/authentication-service-nestjs/commit/5384ed58f6105f19fcab8b979a369860aee86b0a))
+
 ### [2.7.5](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.7.4...v2.7.5) (2025-05-14)
 
 ### [2.7.4](https://github.com/BrewInteractive/authentication-service-nestjs/compare/v2.7.3...v2.7.4) (2025-05-14)
